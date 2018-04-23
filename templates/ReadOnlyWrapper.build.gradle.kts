@@ -85,9 +85,9 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
      * @since   0.1.0
      */
 	@Override
-	public ${type.box} getValue() {
-		return this.property.getValue();
-	}
+    public ${type.box} getValue() {
+        return this.property.getValue();
+    }
 
     /**
      * {@inheritDoc}
@@ -115,9 +115,9 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
      * @since   0.1.0
      */
 	@Override
-	public boolean addListener(ChangeListener<${type.box}> listener) {
-		return this.property.addListener(listener);
-	}
+    public boolean addListener(ChangeListener<${type.box}> listener) {
+        return this.property.addListener(listener);
+    }
 
     /**
      * {@inheritDoc}
@@ -134,10 +134,10 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
      *
      * @since   0.1.0
      */
-	@Override
-	public boolean removeListener(ChangeListener<${type.box}> listener) {
-		return this.property.removeListener(listener);
-	}
+    @Override
+    public boolean removeListener(ChangeListener<${type.box}> listener) {
+        return this.property.removeListener(listener);
+    }
 
 }"""
     }

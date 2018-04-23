@@ -75,9 +75,9 @@ public final class ReadOnlyDoubleProperty implements ReadableDoubleProperty {
      * @since   0.1.0
      */
 	@Override
-	public Double getValue() {
-		return this.property.getValue();
-	}
+    public Double getValue() {
+        return this.property.getValue();
+    }
 
     /**
      * {@inheritDoc}
@@ -105,9 +105,9 @@ public final class ReadOnlyDoubleProperty implements ReadableDoubleProperty {
      * @since   0.1.0
      */
 	@Override
-	public boolean addListener(ChangeListener<Double> listener) {
-		return this.property.addListener(listener);
-	}
+    public boolean addListener(ChangeListener<Double> listener) {
+        return this.property.addListener(listener);
+    }
 
     /**
      * {@inheritDoc}
@@ -124,9 +124,9 @@ public final class ReadOnlyDoubleProperty implements ReadableDoubleProperty {
      *
      * @since   0.1.0
      */
-	@Override
-	public boolean removeListener(ChangeListener<Double> listener) {
-		return this.property.removeListener(listener);
-	}
+    @Override
+    public boolean removeListener(ChangeListener<Double> listener) {
+        return this.property.removeListener(listener);
+    }
 
 }

@@ -75,9 +75,9 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
 	@Override
-	public Float getValue() {
-		return this.property.getValue();
-	}
+    public Float getValue() {
+        return this.property.getValue();
+    }
 
     /**
      * {@inheritDoc}
@@ -105,9 +105,9 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
 	@Override
-	public boolean addListener(ChangeListener<Float> listener) {
-		return this.property.addListener(listener);
-	}
+    public boolean addListener(ChangeListener<Float> listener) {
+        return this.property.addListener(listener);
+    }
 
     /**
      * {@inheritDoc}
@@ -124,9 +124,9 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      *
      * @since   0.1.0
      */
-	@Override
-	public boolean removeListener(ChangeListener<Float> listener) {
-		return this.property.removeListener(listener);
-	}
+    @Override
+    public boolean removeListener(ChangeListener<Float> listener) {
+        return this.property.removeListener(listener);
+    }
 
 }

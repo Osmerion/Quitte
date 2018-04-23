@@ -52,7 +52,7 @@ public interface ReadableObjectProperty<T> extends ReadableProperty<T>, Observab
      * @since   0.1.0
      */
     default ReadableObjectProperty<T> asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyObjectProperty<T>(this) : this);
+        return (this.isWritable() ? new ReadOnlyObjectProperty<>(this) : this);
     }
 
     /**

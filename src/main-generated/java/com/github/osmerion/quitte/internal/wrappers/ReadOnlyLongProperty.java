@@ -75,9 +75,9 @@ public final class ReadOnlyLongProperty implements ReadableLongProperty {
      * @since   0.1.0
      */
 	@Override
-	public Long getValue() {
-		return this.property.getValue();
-	}
+    public Long getValue() {
+        return this.property.getValue();
+    }
 
     /**
      * {@inheritDoc}
@@ -105,9 +105,9 @@ public final class ReadOnlyLongProperty implements ReadableLongProperty {
      * @since   0.1.0
      */
 	@Override
-	public boolean addListener(ChangeListener<Long> listener) {
-		return this.property.addListener(listener);
-	}
+    public boolean addListener(ChangeListener<Long> listener) {
+        return this.property.addListener(listener);
+    }
 
     /**
      * {@inheritDoc}
@@ -124,9 +124,9 @@ public final class ReadOnlyLongProperty implements ReadableLongProperty {
      *
      * @since   0.1.0
      */
-	@Override
-	public boolean removeListener(ChangeListener<Long> listener) {
-		return this.property.removeListener(listener);
-	}
+    @Override
+    public boolean removeListener(ChangeListener<Long> listener) {
+        return this.property.removeListener(listener);
+    }
 
 }

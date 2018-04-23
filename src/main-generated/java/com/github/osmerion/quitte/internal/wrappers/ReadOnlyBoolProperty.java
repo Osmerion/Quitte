@@ -75,9 +75,9 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
      * @since   0.1.0
      */
 	@Override
-	public Boolean getValue() {
-		return this.property.getValue();
-	}
+    public Boolean getValue() {
+        return this.property.getValue();
+    }
 
     /**
      * {@inheritDoc}
@@ -105,9 +105,9 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
      * @since   0.1.0
      */
 	@Override
-	public boolean addListener(ChangeListener<Boolean> listener) {
-		return this.property.addListener(listener);
-	}
+    public boolean addListener(ChangeListener<Boolean> listener) {
+        return this.property.addListener(listener);
+    }
 
     /**
      * {@inheritDoc}
@@ -124,9 +124,9 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
      *
      * @since   0.1.0
      */
-	@Override
-	public boolean removeListener(ChangeListener<Boolean> listener) {
-		return this.property.removeListener(listener);
-	}
+    @Override
+    public boolean removeListener(ChangeListener<Boolean> listener) {
+        return this.property.removeListener(listener);
+    }
 
 }
