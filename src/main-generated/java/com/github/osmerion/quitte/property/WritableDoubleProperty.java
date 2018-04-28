@@ -42,6 +42,16 @@ import com.github.osmerion.quitte.value.*;
  */
 public interface WritableDoubleProperty extends WritableProperty<Double>, ReadableDoubleProperty, WritableDoubleValue {
 
-
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableDoubleValue observable);
 
 }

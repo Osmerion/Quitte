@@ -52,7 +52,17 @@ import com.github.osmerion.quitte.value.*;
  */
 public interface Writable${type.abbrevName}Property$typeParams extends WritableProperty<${type.box}>, Readable${type.abbrevName}Property$typeParams, Writable${type.abbrevName}Value$typeParams {
 
-
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     *
+     * @since   0.1.0
+     */
+    void bind(Observable${type.abbrevName}Value$typeParams observable);
 
 }"""
     }
