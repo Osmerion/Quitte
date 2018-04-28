@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableShortProperty extends WritableProperty<Short> implements ReadableShortProperty, WritableShortValue {
+public interface WritableShortProperty extends WritableProperty<Short>, ReadableShortProperty, WritableShortValue {
 
 
 

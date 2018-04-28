@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableIntProperty extends WritableProperty<Integer> implements ReadableIntProperty, WritableIntValue {
+public interface WritableIntProperty extends WritableProperty<Integer>, ReadableIntProperty, WritableIntValue {
 
 
 

@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableFloatProperty extends WritableProperty<Float> implements ReadableFloatProperty, WritableFloatValue {
+public interface WritableFloatProperty extends WritableProperty<Float>, ReadableFloatProperty, WritableFloatValue {
 
 
 

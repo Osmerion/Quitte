@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableDoubleProperty extends WritableProperty<Double> implements ReadableDoubleProperty, WritableDoubleValue {
+public interface WritableDoubleProperty extends WritableProperty<Double>, ReadableDoubleProperty, WritableDoubleValue {
 
 
 

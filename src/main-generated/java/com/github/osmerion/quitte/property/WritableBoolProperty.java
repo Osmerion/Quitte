@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableBoolProperty extends WritableProperty<Boolean> implements ReadableBoolProperty, WritableBoolValue {
+public interface WritableBoolProperty extends WritableProperty<Boolean>, ReadableBoolProperty, WritableBoolValue {
 
 
 

@@ -50,7 +50,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class Writable${type.abbrevName}Property$typeParams extends WritableProperty<${type.box}> implements Readable${type.abbrevName}Property$typeParams, Writable${type.abbrevName}Value$typeParams {
+public interface Writable${type.abbrevName}Property$typeParams extends WritableProperty<${type.box}>, Readable${type.abbrevName}Property$typeParams, Writable${type.abbrevName}Value$typeParams {
 
 
 

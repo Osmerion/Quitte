@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableByteProperty extends WritableProperty<Byte> implements ReadableByteProperty, WritableByteValue {
+public interface WritableByteProperty extends WritableProperty<Byte>, ReadableByteProperty, WritableByteValue {
 
 
 

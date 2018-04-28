@@ -40,7 +40,7 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public abstract class WritableLongProperty extends WritableProperty<Long> implements ReadableLongProperty, WritableLongValue {
+public interface WritableLongProperty extends WritableProperty<Long>, ReadableLongProperty, WritableLongValue {
 
 
 
