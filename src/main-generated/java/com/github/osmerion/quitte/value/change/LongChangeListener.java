@@ -59,7 +59,7 @@ public interface LongChangeListener {
     void onChanged(ObservableLongValue observable, long oldValue, long newValue);
 
     /**
-     * Wraps the given listener into a specialized one that is {@link Object#equal(Object) equal} to the given one and
+     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
      * shares a hashcode with it.
      *
      * @param listener  the listener to be wrapped
