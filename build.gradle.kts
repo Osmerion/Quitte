@@ -39,6 +39,7 @@ plugins {
 val templates = mutableListOf<Template>()
 project.extra["templates"] = templates
 
+apply(from = "templates/AbstractProperty.build.gradle.kts")
 apply(from = "templates/ChangeListener.build.gradle.kts")
 apply(from = "templates/ChangeListenerWrapper.build.gradle.kts")
 apply(from = "templates/ObservableValue.build.gradle.kts")

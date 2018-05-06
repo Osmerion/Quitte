@@ -29,24 +29,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.osmerion.quitte.internal.wrappers;
+package com.github.osmerion.quitte.property;
 
-import com.github.osmerion.quitte.property.*;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import com.github.osmerion.quitte.internal.binding.*;
+import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
 /**
- * A specialized read-only {@code float} property.
+ * A basic implementation for a specialized writable {@code short} property.
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
+public abstract class AbstractShortProperty implements WritableShortProperty {
 
-    protected final ReadableFloatProperty property;
+    private final CopyOnWriteArraySet<ShortChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    private Binding binding;
 
-    public ReadOnlyFloatProperty(ReadableFloatProperty property) {
-        this.property = property;
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableValue<Short> observable) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new GenericBinding<>(this, observable);
     }
 
     /**
@@ -55,8 +67,10 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public ReadableFloatProperty asReadOnlyProperty() {
-        return this;
+    public final synchronized void bind(ObservableShortValue observable) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new BindingImpl(this, observable);
     }
 
     /**
@@ -65,28 +79,8 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public float get() {
-        return this.property.get();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-	@Override
-    public Float getValue() {
-        return this.property.getValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-	@Override
-    public boolean isBound() {
-        return this.property.isBound();
+    public final synchronized boolean isBound() {
+        return (this.binding != null);
     }
 
     /**
@@ -95,8 +89,11 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean isWritable() {
-        return false;
+    public final synchronized void unbind() {
+        if (this.binding == null) throw new IllegalStateException();
+
+        this.binding.release();
+        this.binding = null;
     }
 
     /**
@@ -105,18 +102,8 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean addListener(FloatChangeListener listener) {
-        return this.property.addListener(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-	@Override
-    public boolean addListener(ChangeListener<Float> listener) {
-        return this.property.addListener(listener);
+    public final boolean addListener(ShortChangeListener listener) {
+        return this.changeListeners.add(listener);
     }
 
     /**
@@ -125,8 +112,8 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(FloatChangeListener listener) {
-        return this.property.removeListener(listener);
+    public final boolean addListener(ChangeListener<Short> listener) {
+        return this.changeListeners.add(ShortChangeListener.wrap(listener));
     }
 
     /**
@@ -135,8 +122,37 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(ChangeListener<Float> listener) {
-        return this.property.removeListener(listener);
+    public final boolean removeListener(ShortChangeListener listener) {
+        return this.changeListeners.remove(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final boolean removeListener(ChangeListener<Short> listener) {
+        //noinspection SuspiciousMethodCalls
+        return this.changeListeners.remove(listener);
+    }
+
+    private static final class BindingImpl implements Binding {
+
+        private ObservableShortValue boundTo;
+        private ShortChangeListener bindingListener;
+
+        private BindingImpl(WritableShortProperty property, ObservableShortValue observable) {
+            this.boundTo = observable;
+            property.set(observable.get());
+            observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
+        }
+
+        @Override
+        public void release() {
+            this.boundTo.removeListener(this.bindingListener);
+        }
+
     }
 
 }

@@ -84,6 +84,16 @@ public final class ReadOnlyObjectProperty<T> implements ReadableObjectProperty<T
      *
      * @since   0.1.0
      */
+	@Override
+    public boolean isBound() {
+        return this.property.isBound();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
     @Override
     public boolean isWritable() {
         return false;

@@ -84,6 +84,16 @@ public final class ReadOnlyByteProperty implements ReadableByteProperty {
      *
      * @since   0.1.0
      */
+	@Override
+    public boolean isBound() {
+        return this.property.isBound();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
     @Override
     public boolean isWritable() {
         return false;
