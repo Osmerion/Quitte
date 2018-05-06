@@ -94,7 +94,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @since   0.1.0
      */
-    boolean addListener(${type.abbrevName}ChangeListener listener);
+    boolean addListener(${type.abbrevName}ChangeListener$typeParams listener);
 
     /**
      * {@inheritDoc}
@@ -120,7 +120,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @since   0.1.0
      */
-    boolean removeListener(${type.abbrevName}ChangeListener listener);
+    boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener);
 
 }"""
     }

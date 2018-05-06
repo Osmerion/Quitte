@@ -87,7 +87,7 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      *
      * @since   0.1.0
      */
-    boolean addListener(ObjectChangeListener listener);
+    boolean addListener(ObjectChangeListener<T> listener);
 
     /**
      * {@inheritDoc}
@@ -113,6 +113,6 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      *
      * @since   0.1.0
      */
-    boolean removeListener(ObjectChangeListener listener);
+    boolean removeListener(ObjectChangeListener<T> listener);
 
 }
