@@ -65,7 +65,7 @@ public final class Wrapping${type.abbrevName}ChangeListener$typeParams implement
     }
 
     @Override
-    public void onChanged(Observable${type.abbrevName}Value observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue) {
+    public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue) {
         this.listener.onChanged(observable, oldValue, newValue);
     }
 

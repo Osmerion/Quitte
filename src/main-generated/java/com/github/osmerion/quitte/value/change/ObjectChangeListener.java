@@ -58,7 +58,7 @@ public interface ObjectChangeListener<T> {
      *
      * @since   0.1.0
      */
-    void onChanged(ObservableObjectValue observable, @Nullable T oldValue, @Nullable T newValue);
+    void onChanged(ObservableObjectValue<T> observable, @Nullable T oldValue, @Nullable T newValue);
 
     /**
      * Wraps the given listener into a specialized one that is {@link Object#equal(Object) equal} to the given one and

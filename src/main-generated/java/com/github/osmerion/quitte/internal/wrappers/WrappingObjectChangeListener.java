@@ -58,7 +58,7 @@ public final class WrappingObjectChangeListener<T> implements ObjectChangeListen
     }
 
     @Override
-    public void onChanged(ObservableObjectValue observable, @Nullable T oldValue, @Nullable T newValue) {
+    public void onChanged(ObservableObjectValue<T> observable, @Nullable T oldValue, @Nullable T newValue) {
         this.listener.onChanged(observable, oldValue, newValue);
     }
 
