@@ -137,6 +137,10 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         return this.changeListeners.remove(listener);
     }
 
+    protected final void notifyListeners(T prevValue, T newValue) {
+        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+    }
+
     private static final class BindingImpl<T> implements Binding {
 
         private ObservableObjectValue<T> boundTo;

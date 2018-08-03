@@ -137,6 +137,10 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
         return this.changeListeners.remove(listener);
     }
 
+    protected final void notifyListeners(short prevValue, short newValue) {
+        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+    }
+
     private static final class BindingImpl implements Binding {
 
         private ObservableShortValue boundTo;

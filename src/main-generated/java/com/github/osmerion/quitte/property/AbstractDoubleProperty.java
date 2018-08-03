@@ -137,6 +137,10 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
         return this.changeListeners.remove(listener);
     }
 
+    protected final void notifyListeners(double prevValue, double newValue) {
+        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+    }
+
     private static final class BindingImpl implements Binding {
 
         private ObservableDoubleValue boundTo;

@@ -137,6 +137,10 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
         return this.changeListeners.remove(listener);
     }
 
+    protected final void notifyListeners(int prevValue, int newValue) {
+        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+    }
+
     private static final class BindingImpl implements Binding {
 
         private ObservableIntValue boundTo;

@@ -137,6 +137,10 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
         return this.changeListeners.remove(listener);
     }
 
+    protected final void notifyListeners(byte prevValue, byte newValue) {
+        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+    }
+
     private static final class BindingImpl implements Binding {
 
         private ObservableByteValue boundTo;

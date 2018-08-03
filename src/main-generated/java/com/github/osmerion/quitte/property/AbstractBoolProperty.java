@@ -137,6 +137,10 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
         return this.changeListeners.remove(listener);
     }
 
+    protected final void notifyListeners(boolean prevValue, boolean newValue) {
+        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+    }
+
     private static final class BindingImpl implements Binding {
 
         private ObservableBoolValue boundTo;

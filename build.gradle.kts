@@ -47,6 +47,7 @@ apply(from = "templates/ChangeListenerWrapper.build.gradle.kts")
 apply(from = "templates/ObservableValue.build.gradle.kts")
 apply(from = "templates/ReadableProperty.build.gradle.kts")
 apply(from = "templates/ReadOnlyWrapper.build.gradle.kts")
+apply(from = "templates/SimpleProperty.build.gradle.kts")
 apply(from = "templates/WritableProperty.build.gradle.kts")
 apply(from = "templates/WritableValue.build.gradle.kts")
 
