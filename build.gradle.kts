@@ -28,12 +28,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+import osmerion.build.*
 import java.io.*
 
 plugins {
     java
-    maven
     signing
+    `maven-publish`
+    id("com.zyxist.chainsaw")
 }
 
 val templates = mutableListOf<Template>()
@@ -52,7 +54,7 @@ group = "com.github.osmerion"
 val artifactName = "quitte"
 val nextVersion = "0.1.0"
 version = when (deployment.type) {
-    BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
+    osmerion.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
     else -> nextVersion
 }
 
@@ -68,7 +70,7 @@ java {
 }
 
 tasks {
-    "generate" {
+    create("generate") {
         doLast {
             fun String.toComment(indent: String = "") =
                 if (lines().size == 1)
@@ -107,7 +109,7 @@ tasks {
         }
     }
 
-    val sourcesJar = "sourcesJar"(Jar::class) {
+    create<Jar>("sourcesJar") {
         baseName = artifactName
         classifier = "sources"
         from(java.sourceSets["main"].allSource)
@@ -115,109 +117,70 @@ tasks {
 
     val javadoc = "javadoc"(Javadoc::class)
 
-    val javadocJar = "javadocJar"(Jar::class) {
+    create<Jar>("javadocJar") {
         dependsOn(javadoc)
 
         baseName = artifactName
         classifier = "javadoc"
-        from(javadoc.outputs)
+        from(javadoc.get().outputs)
     }
+}
 
-    val signArchives = "signArchives" {
-        dependsOn(sourcesJar, javadocJar)
+publishing {
+    repositories {
+        maven {
+            url = uri(deployment.repo)
+
+            credentials {
+                username = deployment.user
+                password = deployment.password
+            }
+        }
     }
+    (publications) {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
 
-    "uploadArchives"(Upload::class) {
-        dependsOn(signArchives)
+            artifactId = artifactName
 
-        repositories {
-            withConvention(MavenRepositoryHandlerConvention::class) {
-                mavenDeployer {
-                    withGroovyBuilder {
-                        "repository"("url" to deployment.repo) {
-                            "authentication"(
-                                "userName" to deployment.user,
-                                "password" to deployment.password
-                            )
-                        }
+            pom {
+                name.set(project.name)
+                description.set("")
+                packaging = "jar"
+                url.set("https://github.com/Osmerion/Quitte")
+
+                licenses {
+                    license {
+                        name.set("BSD3")
+                        url.set("https://github.com/Osmerion/Quitte/blob/master/LICENSE")
+                        distribution.set("repo")
                     }
+                }
 
-                    if (deployment.type === BuildType.RELEASE) beforeDeployment { signing.signPom(this) }
-
-                    pom.project {
-                        withGroovyBuilder {
-                            "artifactId"(artifactName)
-
-                            "name"(project.name)
-                            "description"("A minimal Java library which provides an efficient and modular EventBus solution for Java 9 and above.")
-                            "packaging"("jar")
-                            "url"("https://github.com/Osmerion/Quitte")
-
-                            "licenses" {
-                                "license" {
-                                    "name"("BSD3")
-                                    "url"("https://github.com/Osmerion/Quitte/blob/master/LICENSE")
-                                    "distribution"("repo")
-                                }
-                            }
-
-                            "developers" {
-                                "developer" {
-                                    "id"("TheMrMilchmann")
-                                    "name"("Leon Linhart")
-                                    "email"("themrmilchmann@gmail.com")
-                                    "url"("https://github.com/TheMrMilchmann")
-                                }
-                            }
-
-                            "scm" {
-                                "connection"("scm:git:git://github.com/Osmerion/Quitte.git")
-                                "developerConnection"("scm:git:git://github.com/Osmerion/Quitte.git")
-                                "url"("https://github.com/Osmerion/Quitte.git")
-                            }
-                        }
+                developers {
+                    developer {
+                        id.set("TheMrMilchmann")
+                        name.set("Leon Linhart")
+                        email.set("themrmilchmann@gmail.com")
+                        url.set("https://github.com/TheMrMilchmann")
                     }
+                }
+
+                scm {
+                    connection.set("scm:git:git://github.com/Osmerion/Quitte.git")
+                    developerConnection.set("scm:git:git://github.com/Osmerion/Quitte.git")
+                    url.set("https://github.com/Osmerion/Quitte.git")
                 }
             }
         }
     }
 }
 
-val Project.deployment: Deployment
-    get() = when {
-        hasProperty("release") -> Deployment(
-            BuildType.RELEASE,
-            "https://oss.sonatype.org/service/local/staging/deploy/maven2/",
-            getProperty("sonatypeUsername"),
-            getProperty("sonatypePassword")
-        )
-        hasProperty("snapshot") -> Deployment(
-            BuildType.SNAPSHOT,
-            "https://oss.sonatype.org/content/repositories/snapshots/",
-            getProperty("sonatypeUsername"),
-            getProperty("sonatypePassword")
-        )
-        else -> Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
-    }
-
-fun Project.getProperty(k: String) =
-    if (extra.has(k))
-        extra[k] as String
-    else
-        System.getenv(k)
-
-enum class BuildType {
-    LOCAL,
-    SNAPSHOT,
-    RELEASE
+signing {
+    sign(publishing.publications)
 }
-
-data class Deployment(
-    val type: BuildType,
-    val repo: String,
-    val user: String? = null,
-    val password: String? = null
-)
 
 repositories {
 	jcenter()
@@ -228,4 +191,5 @@ dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     testCompile("org.testng:testng:6.14.3")
+    testCompile("com.google.code.findbugs:jsr305:3.0.2")
 }
