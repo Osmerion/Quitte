@@ -42,6 +42,12 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
 
     protected double value;
 
+    public SimpleDoubleProperty() {}
+
+    public SimpleDoubleProperty(double value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *

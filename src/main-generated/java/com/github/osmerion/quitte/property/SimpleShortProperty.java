@@ -42,6 +42,12 @@ public class SimpleShortProperty extends AbstractShortProperty {
 
     protected short value;
 
+    public SimpleShortProperty() {}
+
+    public SimpleShortProperty(short value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *

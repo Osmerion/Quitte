@@ -42,6 +42,12 @@ public class SimpleByteProperty extends AbstractByteProperty {
 
     protected byte value;
 
+    public SimpleByteProperty() {}
+
+    public SimpleByteProperty(byte value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *

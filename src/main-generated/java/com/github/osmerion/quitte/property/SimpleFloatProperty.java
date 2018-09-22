@@ -42,6 +42,12 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
 
     protected float value;
 
+    public SimpleFloatProperty() {}
+
+    public SimpleFloatProperty(float value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *

@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import javax.annotation.Nullable;
+
 /**
  * A generic writable property.
  *
@@ -41,6 +43,12 @@ package com.github.osmerion.quitte.property;
 public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
 
     protected T value;
+
+    public SimpleObjectProperty() {}
+
+    public SimpleObjectProperty(@Nullable T value) {
+        this.value = value;
+    }
 
     /**
      * {@inheritDoc}

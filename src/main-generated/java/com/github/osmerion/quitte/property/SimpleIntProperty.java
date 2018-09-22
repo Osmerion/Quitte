@@ -42,6 +42,12 @@ public class SimpleIntProperty extends AbstractIntProperty {
 
     protected int value;
 
+    public SimpleIntProperty() {}
+
+    public SimpleIntProperty(int value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *

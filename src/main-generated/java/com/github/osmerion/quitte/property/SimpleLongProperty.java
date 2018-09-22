@@ -42,6 +42,12 @@ public class SimpleLongProperty extends AbstractLongProperty {
 
     protected long value;
 
+    public SimpleLongProperty() {}
+
+    public SimpleLongProperty(long value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *

@@ -36,7 +36,7 @@ Type.values().forEach {
 
     template("${packageName.replace('.', '/')}/Simple${type.abbrevName}Property") {
         """package $packageName;
-
+${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 /**
  * ${if (type === Type.OBJECT)
             "A generic writable property."
@@ -51,6 +51,12 @@ Type.values().forEach {
 public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeParams {
 
     protected ${type.raw} value;
+
+    public Simple${type.abbrevName}Property() {}
+
+    public Simple${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        this.value = value;
+    }
 
     /**
      * {@inheritDoc}

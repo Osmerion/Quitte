@@ -42,6 +42,12 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
 
     protected boolean value;
 
+    public SimpleBoolProperty() {}
+
+    public SimpleBoolProperty(boolean value) {
+        this.value = value;
+    }
+
     /**
      * {@inheritDoc}
      *
