@@ -63,8 +63,8 @@ public interface Writable${type.abbrevName}Value$typeParams extends WritableValu
      * @return  the previous value
      *
      * @since   0.1.0
-     */
-    ${type.raw} set(${type.raw} value);
+     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
     /**
      * {@inheritDoc}

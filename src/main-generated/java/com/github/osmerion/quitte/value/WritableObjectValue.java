@@ -54,7 +54,8 @@ public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObje
      *
      * @since   0.1.0
      */
-    T set(T value);
+    @Nullable
+    T set(@Nullable T value);
 
     /**
      * {@inheritDoc}
