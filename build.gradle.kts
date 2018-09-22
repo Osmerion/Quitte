@@ -113,7 +113,7 @@ tasks {
     create<Jar>("sourcesJar") {
         baseName = artifactName
         classifier = "sources"
-        from(java.sourceSets["main"].allSource)
+        from(sourceSets["main"].allSource)
     }
 
     val javadoc = "javadoc"(Javadoc::class)
