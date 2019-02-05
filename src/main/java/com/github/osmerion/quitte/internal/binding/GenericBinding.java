@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Leon Linhart,
+ * Copyright (c) 2018-2019 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

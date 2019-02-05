@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Leon Linhart,
+ * Copyright (c) 2018-2019 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,7 +60,9 @@ open class Generate : DefaultTask() {
                 "$indent/* $this */"
             else
                 "$indent/*\n${StringBuilder().apply {
-                    this@format.lines().forEach { appendln("$indent * $it") }
+                    this@format.lines().forEach {
+                        appendln("$indent *${if (it.isNotEmpty()) " $it" else ""}")
+                    }
                 }}$indent */"
 
         val licenseHeader = header.readText(Charsets.UTF_8).format()
