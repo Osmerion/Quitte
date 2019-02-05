@@ -28,10 +28,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-plugins {
-    `kotlin-dsl`
+package com.github.osmerion.quitte.build
+
+import org.gradle.api.*
+import org.gradle.kotlin.dsl.*
+
+val Project.deployment: Deployment
+    get() = when {
+        hasProperty("release") -> Deployment(
+            BuildType.RELEASE,
+            "https://oss.sonatype.org/service/local/staging/deploy/maven2/",
+            getProperty("sonatypeUsername"),
+            getProperty("sonatypePassword")
+        )
+        hasProperty("snapshot") -> Deployment(
+            BuildType.SNAPSHOT,
+            "https://oss.sonatype.org/content/repositories/snapshots/",
+            getProperty("sonatypeUsername"),
+            getProperty("sonatypePassword")
+        )
+        else -> Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
+    }
+
+fun Project.getProperty(k: String) =
+    if (extra.has(k))
+        extra[k] as String
+    else
+        System.getenv(k)
+
+enum class BuildType {
+    LOCAL,
+    SNAPSHOT,
+    RELEASE
 }
 
-repositories {
-    mavenCentral()
-}
+data class Deployment(
+    val type: BuildType,
+    val repo: String,
+    val user: String? = null,
+    val password: String? = null
+)

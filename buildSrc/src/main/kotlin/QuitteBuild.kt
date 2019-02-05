@@ -28,6 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+import com.github.osmerion.quitte.build.codegen.*
 import org.gradle.api.*
 import org.gradle.kotlin.dsl.*
 
@@ -45,15 +46,6 @@ enum class Type(
     FLOAT("Float", "0.0F"),
     DOUBLE("Double", "0.0D"),
     OBJECT("Object", "null", "T")
-}
-
-data class Template(
-    val path: String,
-    private val factory: () -> String
-) {
-
-    val content = factory.invoke()
-
 }
 
 fun Project.template(path: String, factory: () -> String) {

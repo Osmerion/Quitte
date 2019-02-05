@@ -28,10 +28,50 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-plugins {
-    `kotlin-dsl`
-}
+package com.github.osmerion.quitte.build.tasks
 
-repositories {
-    mavenCentral()
+import com.github.osmerion.quitte.build.codegen.*
+import org.gradle.api.*
+import org.gradle.api.tasks.*
+import java.io.*
+
+open class Generate : DefaultTask() {
+
+    @InputFile
+    lateinit var input: File
+
+    @InputFile
+    lateinit var header: File
+
+    @OutputFiles
+    lateinit var outputs: List<File>
+
+    @Internal
+    var templates: List<Template>? = null
+        set(value) {
+            outputs = value!!.map { File(project.rootDir, "src/main-generated/java/${it.path}.java") }
+            field = value
+        }
+
+    @TaskAction
+    fun generate() {
+        fun String.format(indent: String = "") =
+            if (lines().size == 1)
+                "$indent/* $this */"
+            else
+                "$indent/*\n${StringBuilder().apply {
+                    this@format.lines().forEach { appendln("$indent * $it") }
+                }}$indent */"
+
+        val licenseHeader = header.readText(Charsets.UTF_8).format()
+
+        templates!!.forEach {
+            File(project.rootDir, "src/main-generated/java/${it.path}.java").apply {
+                parentFile.mkdirs()
+                writeText("$licenseHeader\n${it.content}", Charsets.UTF_8)
+            }
+        }
+
+    }
+
 }

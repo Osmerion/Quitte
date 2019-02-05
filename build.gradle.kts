@@ -28,7 +28,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import osmerion.build.*
+import com.github.osmerion.quitte.build.*
+import com.github.osmerion.quitte.build.codegen.*
+import com.github.osmerion.quitte.build.tasks.*
 import java.io.*
 
 plugins {
@@ -41,21 +43,11 @@ plugins {
 val templates = mutableListOf<Template>()
 project.extra["templates"] = templates
 
-apply(from = "templates/AbstractProperty.build.gradle.kts")
-apply(from = "templates/ChangeListener.build.gradle.kts")
-apply(from = "templates/ChangeListenerWrapper.build.gradle.kts")
-apply(from = "templates/ObservableValue.build.gradle.kts")
-apply(from = "templates/ReadableProperty.build.gradle.kts")
-apply(from = "templates/ReadOnlyWrapper.build.gradle.kts")
-apply(from = "templates/SimpleProperty.build.gradle.kts")
-apply(from = "templates/WritableProperty.build.gradle.kts")
-apply(from = "templates/WritableValue.build.gradle.kts")
-
 group = "com.github.osmerion"
 val artifactName = "quitte"
 val nextVersion = "0.1.0"
 version = when (deployment.type) {
-    osmerion.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
+    com.github.osmerion.quitte.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
     else -> nextVersion
 }
 
@@ -71,33 +63,8 @@ java {
 }
 
 tasks {
-    create("generate") {
-        doLast {
-            fun String.toComment(indent: String = "") =
-                if (lines().size == 1)
-                    "$indent/* $this */"
-                else
-                    "$indent/*\n${StringBuilder().apply {
-                        this@toComment.lines().forEach { appendln("$indent * $it") }
-                    }}$indent */"
-
-            val licenseHeader = File(projectDir, ".dev/resources/LICENSE_HEADER_GEN").readText(Charsets.UTF_8).toComment()
-
-            templates.forEach {
-                File(projectDir, "src/main-generated/java/${it.path}.java").apply {
-                    parentFile.mkdirs()
-                    writeText("$licenseHeader\n${it.content}", Charsets.UTF_8)
-                }
-            }
-        }
-    }
-
-    "test"(Test::class) {
-        useTestNG()
-    }
-
     "jar"(Jar::class) {
-        baseName = artifactName
+        archiveBaseName.set(artifactName)
 
         manifest {
             attributes(mapOf(
@@ -111,8 +78,8 @@ tasks {
     }
 
     create<Jar>("sourcesJar") {
-        baseName = artifactName
-        classifier = "sources"
+        archiveBaseName.set(artifactName)
+        archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
@@ -121,9 +88,33 @@ tasks {
     create<Jar>("javadocJar") {
         dependsOn(javadoc)
 
-        baseName = artifactName
-        classifier = "javadoc"
+        archiveBaseName.set(artifactName)
+        archiveClassifier.set("javadoc")
         from(javadoc.get().outputs)
+    }
+}
+
+file("src/templates").let { templateDir ->
+    val templateDirPath = templateDir.toPath()
+    val compileTask = tasks.getByName("compileJava")
+
+    fileTree(templateDir).forEach { templateSource ->
+        val mangledName = templateDirPath.relativize(templateSource.toPath()).toString()
+            .replace(File.separatorChar, '$')
+            .removeSuffix(".build.gradle.kts")
+
+        tasks.create("generate$$mangledName", Generate::class) {
+            compileTask.dependsOn(this)
+
+            project.extra["templates"] = mutableListOf<Template>()
+            apply(from = templateSource)
+
+            @Suppress("UNCHECKED_CAST")
+            templates = project.extra["templates"] as List<Template>
+
+            input = templateSource
+            header = file(".dev/resources/LICENSE_HEADER_GEN")
+        }
     }
 }
 
@@ -184,13 +175,11 @@ signing {
 }
 
 repositories {
-	jcenter()
     mavenCentral()
 }
 
 dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    testCompile("org.testng:testng:6.14.3")
     testCompile("com.google.code.findbugs:jsr305:3.0.2")
 }
