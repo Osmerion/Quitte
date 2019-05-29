@@ -138,7 +138,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     }
 
     protected final void notifyListeners(long prevValue, long newValue) {
-        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+        this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
 
     private static final class BindingImpl implements Binding {

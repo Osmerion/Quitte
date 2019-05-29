@@ -148,7 +148,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     }
 
     protected final void notifyListeners(${type.raw} prevValue, ${type.raw} newValue) {
-        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+        this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
 
     private static final class BindingImpl$typeParams implements Binding {

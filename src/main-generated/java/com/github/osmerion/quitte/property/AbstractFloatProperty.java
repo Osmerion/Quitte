@@ -138,7 +138,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     }
 
     protected final void notifyListeners(float prevValue, float newValue) {
-        this.changeListeners.stream().forEach(it -> it.onChanged(this, prevValue, newValue));
+        this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
 
     private static final class BindingImpl implements Binding {
