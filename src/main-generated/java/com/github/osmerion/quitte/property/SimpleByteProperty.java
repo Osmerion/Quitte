@@ -44,8 +44,8 @@ public class SimpleByteProperty extends AbstractByteProperty {
 
     public SimpleByteProperty() {}
 
-    public SimpleByteProperty(byte value) {
-        this.value = value;
+    public SimpleByteProperty(byte initial) {
+        this.value = initial;
     }
 
     /**

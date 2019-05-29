@@ -44,8 +44,8 @@ public class SimpleIntProperty extends AbstractIntProperty {
 
     public SimpleIntProperty() {}
 
-    public SimpleIntProperty(int value) {
-        this.value = value;
+    public SimpleIntProperty(int initial) {
+        this.value = initial;
     }
 
     /**

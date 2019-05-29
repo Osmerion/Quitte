@@ -44,8 +44,8 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
 
     public SimpleBoolProperty() {}
 
-    public SimpleBoolProperty(boolean value) {
-        this.value = value;
+    public SimpleBoolProperty(boolean initial) {
+        this.value = initial;
     }
 
     /**

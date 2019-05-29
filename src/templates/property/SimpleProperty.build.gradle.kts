@@ -54,8 +54,8 @@ public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.
 
     public Simple${type.abbrevName}Property() {}
 
-    public Simple${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
-        this.value = value;
+    public Simple${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} initial) {
+        this.value = initial;
     }
 
     /**

@@ -44,8 +44,8 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
 
     public SimpleDoubleProperty() {}
 
-    public SimpleDoubleProperty(double value) {
-        this.value = value;
+    public SimpleDoubleProperty(double initial) {
+        this.value = initial;
     }
 
     /**

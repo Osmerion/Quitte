@@ -46,8 +46,8 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
 
     public SimpleObjectProperty() {}
 
-    public SimpleObjectProperty(@Nullable T value) {
-        this.value = value;
+    public SimpleObjectProperty(@Nullable T initial) {
+        this.value = initial;
     }
 
     /**

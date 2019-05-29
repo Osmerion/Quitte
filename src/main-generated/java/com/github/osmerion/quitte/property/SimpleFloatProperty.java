@@ -44,8 +44,8 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
 
     public SimpleFloatProperty() {}
 
-    public SimpleFloatProperty(float value) {
-        this.value = value;
+    public SimpleFloatProperty(float initial) {
+        this.value = initial;
     }
 
     /**

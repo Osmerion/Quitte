@@ -44,8 +44,8 @@ public class SimpleLongProperty extends AbstractLongProperty {
 
     public SimpleLongProperty() {}
 
-    public SimpleLongProperty(long value) {
-        this.value = value;
+    public SimpleLongProperty(long initial) {
+        this.value = initial;
     }
 
     /**

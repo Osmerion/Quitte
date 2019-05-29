@@ -44,8 +44,8 @@ public class SimpleShortProperty extends AbstractShortProperty {
 
     public SimpleShortProperty() {}
 
-    public SimpleShortProperty(short value) {
-        this.value = value;
+    public SimpleShortProperty(short initial) {
+        this.value = initial;
     }
 
     /**
