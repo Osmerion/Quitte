@@ -92,7 +92,7 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Boolean> listener) {
+    default boolean addBoxedListener(ChangeListener<Boolean> listener) {
         return this.addListener(BoolChangeListener.wrap(requireNonNull(listener)));
     }
 

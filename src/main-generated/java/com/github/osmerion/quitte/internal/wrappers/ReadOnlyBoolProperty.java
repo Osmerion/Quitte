@@ -115,8 +115,9 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
      * @since   0.1.0
      */
 	@Override
-    public boolean addListener(ChangeListener<Boolean> listener) {
-        return this.property.addListener(listener);
+    @Deprecated
+    public boolean addBoxedListener(ChangeListener<Boolean> listener) {
+        return this.property.addBoxedListener(listener);
     }
 
     /**
@@ -135,8 +136,9 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(ChangeListener<Boolean> listener) {
-        return this.property.removeListener(listener);
+    @Deprecated
+    public boolean removeBoxedListener(ChangeListener<Boolean> listener) {
+        return this.property.removeBoxedListener(listener);
     }
 
 }

@@ -92,7 +92,7 @@ public interface ObservableShortValue extends ObservableValue<Short> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Short> listener) {
+    default boolean addBoxedListener(ChangeListener<Short> listener) {
         return this.addListener(ShortChangeListener.wrap(requireNonNull(listener)));
     }
 

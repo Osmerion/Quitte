@@ -112,7 +112,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Boolean> listener) {
+    public final boolean addBoxedListener(ChangeListener<Boolean> listener) {
         return this.changeListeners.add(BoolChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Boolean> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Boolean> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

@@ -115,8 +115,9 @@ public final class ReadOnlyLongProperty implements ReadableLongProperty {
      * @since   0.1.0
      */
 	@Override
-    public boolean addListener(ChangeListener<Long> listener) {
-        return this.property.addListener(listener);
+    @Deprecated
+    public boolean addBoxedListener(ChangeListener<Long> listener) {
+        return this.property.addBoxedListener(listener);
     }
 
     /**
@@ -135,8 +136,9 @@ public final class ReadOnlyLongProperty implements ReadableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(ChangeListener<Long> listener) {
-        return this.property.removeListener(listener);
+    @Deprecated
+    public boolean removeBoxedListener(ChangeListener<Long> listener) {
+        return this.property.removeBoxedListener(listener);
     }
 
 }

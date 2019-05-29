@@ -112,7 +112,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Integer> listener) {
+    public final boolean addBoxedListener(ChangeListener<Integer> listener) {
         return this.changeListeners.add(IntChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Integer> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Integer> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

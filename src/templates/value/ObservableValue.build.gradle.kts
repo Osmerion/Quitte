@@ -102,7 +102,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<${type.box}> listener) {
+    default boolean addBoxedListener(ChangeListener<${type.box}> listener) {
         return this.addListener(${type.abbrevName}ChangeListener.wrap(requireNonNull(listener)));
     }
 

@@ -112,7 +112,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Short> listener) {
+    public final boolean addBoxedListener(ChangeListener<Short> listener) {
         return this.changeListeners.add(ShortChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Short> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Short> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

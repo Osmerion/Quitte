@@ -112,7 +112,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<T> listener) {
+    public final boolean addBoxedListener(ChangeListener<T> listener) {
         return this.changeListeners.add(ObjectChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<T> listener) {
+    public final boolean removeBoxedListener(ChangeListener<T> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

@@ -122,7 +122,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<${type.box}> listener) {
+    public final boolean addBoxedListener(ChangeListener<${type.box}> listener) {
         return this.changeListeners.add(${type.abbrevName}ChangeListener.wrap(listener));
     }
 
@@ -142,7 +142,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<${type.box}> listener) {
+    public final boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

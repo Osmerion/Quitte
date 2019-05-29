@@ -75,11 +75,11 @@ public interface ObservableValue<T> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeBoxedListener(ChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(ChangeListener<T> listener);
+    boolean addBoxedListener(ChangeListener<T> listener);
 
     /**
      * Detaches all listeners that are {@link Object#equals(Object) equal} to the given listener from this observable
@@ -91,10 +91,10 @@ public interface ObservableValue<T> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addBoxedListener(ChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(ChangeListener<T> listener);
+    boolean removeBoxedListener(ChangeListener<T> listener);
 
 }

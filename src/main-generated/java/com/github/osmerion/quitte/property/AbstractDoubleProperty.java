@@ -112,7 +112,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Double> listener) {
+    public final boolean addBoxedListener(ChangeListener<Double> listener) {
         return this.changeListeners.add(DoubleChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Double> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Double> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

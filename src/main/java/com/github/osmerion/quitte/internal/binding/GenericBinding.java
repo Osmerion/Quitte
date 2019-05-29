@@ -42,12 +42,12 @@ public final class GenericBinding<T> implements Binding {
     public GenericBinding(WritableProperty<T> property, ObservableValue<T> observable) {
         this.boundTo = observable;
         property.setValue(observable.getValue());
-        observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
+        observable.addBoxedListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
     }
 
     @Override
     public void release() {
-        this.boundTo.removeListener(this.bindingListener);
+        this.boundTo.removeBoxedListener(this.bindingListener);
     }
 
 }

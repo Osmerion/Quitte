@@ -92,7 +92,7 @@ public interface ObservableLongValue extends ObservableValue<Long> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Long> listener) {
+    default boolean addBoxedListener(ChangeListener<Long> listener) {
         return this.addListener(LongChangeListener.wrap(requireNonNull(listener)));
     }
 

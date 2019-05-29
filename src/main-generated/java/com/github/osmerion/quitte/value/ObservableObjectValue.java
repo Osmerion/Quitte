@@ -95,7 +95,7 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<T> listener) {
+    default boolean addBoxedListener(ChangeListener<T> listener) {
         return this.addListener(ObjectChangeListener.wrap(requireNonNull(listener)));
     }
 

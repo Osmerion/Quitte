@@ -92,7 +92,7 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Double> listener) {
+    default boolean addBoxedListener(ChangeListener<Double> listener) {
         return this.addListener(DoubleChangeListener.wrap(requireNonNull(listener)));
     }
 

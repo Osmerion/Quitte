@@ -92,7 +92,7 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Byte> listener) {
+    default boolean addBoxedListener(ChangeListener<Byte> listener) {
         return this.addListener(ByteChangeListener.wrap(requireNonNull(listener)));
     }
 

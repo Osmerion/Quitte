@@ -112,7 +112,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Byte> listener) {
+    public final boolean addBoxedListener(ChangeListener<Byte> listener) {
         return this.changeListeners.add(ByteChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Byte> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Byte> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

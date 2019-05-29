@@ -92,7 +92,7 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Integer> listener) {
+    default boolean addBoxedListener(ChangeListener<Integer> listener) {
         return this.addListener(IntChangeListener.wrap(requireNonNull(listener)));
     }
 

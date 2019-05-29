@@ -112,7 +112,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Float> listener) {
+    public final boolean addBoxedListener(ChangeListener<Float> listener) {
         return this.changeListeners.add(FloatChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Float> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Float> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

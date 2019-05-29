@@ -112,7 +112,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ChangeListener<Long> listener) {
+    public final boolean addBoxedListener(ChangeListener<Long> listener) {
         return this.changeListeners.add(LongChangeListener.wrap(listener));
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ChangeListener<Long> listener) {
+    public final boolean removeBoxedListener(ChangeListener<Long> listener) {
         //noinspection SuspiciousMethodCalls
         return this.changeListeners.remove(listener);
     }

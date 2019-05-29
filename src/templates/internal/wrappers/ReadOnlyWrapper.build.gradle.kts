@@ -125,8 +125,9 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
      * @since   0.1.0
      */
 	@Override
-    public boolean addListener(ChangeListener<${type.box}> listener) {
-        return this.property.addListener(listener);
+    @Deprecated
+    public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
+        return this.property.addBoxedListener(listener);
     }
 
     /**
@@ -145,8 +146,9 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(ChangeListener<${type.box}> listener) {
-        return this.property.removeListener(listener);
+    @Deprecated
+    public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
+        return this.property.removeBoxedListener(listener);
     }
 
 }"""

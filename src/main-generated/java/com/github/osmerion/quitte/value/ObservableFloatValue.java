@@ -92,7 +92,7 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
      * @since   0.1.0
      */
     @Override
-    default boolean addListener(ChangeListener<Float> listener) {
+    default boolean addBoxedListener(ChangeListener<Float> listener) {
         return this.addListener(FloatChangeListener.wrap(requireNonNull(listener)));
     }
 
