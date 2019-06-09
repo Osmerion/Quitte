@@ -37,6 +37,7 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Writable${type.abbrevName}Property") {
         """package $packageName;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
 
 /**
@@ -63,7 +64,29 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableP
      * @since   0.1.0
      */
     void bind(Observable${type.abbrevName}Value$typeParams observable);
+${Type.values().joinToString(separator = "") { sourceType ->
+            val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
+            val transformTypeParams = when {
+                sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
+                sourceType === Type.OBJECT -> "<S>"
+                type === Type.OBJECT -> "<T>"
+                else -> ""
+            }
 
+            """
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bind(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform);
+"""}}
 }"""
     }
 }

@@ -38,7 +38,9 @@ Type.values().forEach {
         """package $packageName;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
@@ -77,12 +79,45 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
+    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new MutatingBinding<>(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
     public final synchronized void bind(Observable${type.abbrevName}Value$typeParams observable) {
         if (this.binding != null) throw new IllegalStateException();
 
-        this.binding = new BindingImpl${if (type === Type.OBJECT) "<>" else ""}(this, observable);
+        this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this, observable, it -> it);
+    }
+${Type.values().joinToString(separator = "") { sourceType ->
+    val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
+    val transformTypeParams = when {
+        sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
+        sourceType === Type.OBJECT -> "<S>"
+        type === Type.OBJECT -> "<T>"
+        else -> ""
     }
 
+    """
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bind(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this, observable, transform);
+    }
+"""}}
     /**
      * {@inheritDoc}
      *
@@ -149,24 +184,6 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
 
     protected final void notifyListeners(${type.raw} prevValue, ${type.raw} newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
-    }
-
-    private static final class BindingImpl$typeParams implements Binding {
-
-        private Observable${type.abbrevName}Value$typeParams boundTo;
-        private ${type.abbrevName}ChangeListener$typeParams bindingListener;
-
-        private BindingImpl(Writable${type.abbrevName}Property$typeParams property, Observable${type.abbrevName}Value$typeParams observable) {
-            this.boundTo = observable;
-            property.set(observable.get());
-            observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
-        }
-
-        @Override
-        public void release() {
-            this.boundTo.removeListener(this.bindingListener);
-        }
-
     }
 
 }"""

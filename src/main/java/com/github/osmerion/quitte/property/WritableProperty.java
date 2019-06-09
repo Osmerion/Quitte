@@ -30,6 +30,7 @@
  */
 package com.github.osmerion.quitte.property;
 
+import java.util.function.Function;
 import com.github.osmerion.quitte.value.ObservableValue;
 import com.github.osmerion.quitte.value.WritableValue;
 
@@ -55,6 +56,8 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
      * @since   0.1.0
      */
     void bind(ObservableValue<T> observable);
+
+    <S> void bind(ObservableValue<S> observable, Function<S, T> transform);
 
     /**
      * Unbinds this property.

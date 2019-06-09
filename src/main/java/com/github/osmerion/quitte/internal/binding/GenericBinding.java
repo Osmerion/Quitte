@@ -36,18 +36,18 @@ import com.github.osmerion.quitte.value.change.ChangeListener;
 
 public final class GenericBinding<T> implements Binding {
 
-    private ObservableValue<T> boundTo;
-    private ChangeListener<T> bindingListener;
+    private final ObservableValue<T> source;
+    private final ChangeListener<T> listener;
 
-    public GenericBinding(WritableProperty<T> property, ObservableValue<T> observable) {
-        this.boundTo = observable;
-        property.setValue(observable.getValue());
-        observable.addBoxedListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
+    public GenericBinding(WritableProperty<T> target, ObservableValue<T> source) {
+        this.source = source;
+        target.setValue(source.getValue());
+        this.source.addBoxedListener(this.listener = (o, oldValue, newValue) -> target.setValue(newValue));
     }
 
     @Override
     public void release() {
-        this.boundTo.removeBoxedListener(this.bindingListener);
+        this.source.removeBoxedListener(this.listener);
     }
 
 }

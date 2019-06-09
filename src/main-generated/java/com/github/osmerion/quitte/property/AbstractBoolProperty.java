@@ -32,7 +32,9 @@
 package com.github.osmerion.quitte.property;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
@@ -67,10 +69,118 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
+    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, Boolean> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new MutatingBinding<>(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
     public final synchronized void bind(ObservableBoolValue observable) {
         if (this.binding != null) throw new IllegalStateException();
 
-        this.binding = new BindingImpl(this, observable);
+        this.binding = new Bool2BoolBinding(this, observable, it -> it);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableBoolValue observable, Bool2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Bool2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableByteValue observable, Byte2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Byte2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableShortValue observable, Short2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Short2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableIntValue observable, Int2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Int2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableLongValue observable, Long2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Long2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableFloatValue observable, Float2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Float2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableDoubleValue observable, Double2BoolFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Double2BoolBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized <S> void bind(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Object2BoolBinding<>(this, observable, transform);
     }
 
     /**
@@ -139,24 +249,6 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
 
     protected final void notifyListeners(boolean prevValue, boolean newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
-    }
-
-    private static final class BindingImpl implements Binding {
-
-        private ObservableBoolValue boundTo;
-        private BoolChangeListener bindingListener;
-
-        private BindingImpl(WritableBoolProperty property, ObservableBoolValue observable) {
-            this.boundTo = observable;
-            property.set(observable.get());
-            observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
-        }
-
-        @Override
-        public void release() {
-            this.boundTo.removeListener(this.bindingListener);
-        }
-
     }
 
 }

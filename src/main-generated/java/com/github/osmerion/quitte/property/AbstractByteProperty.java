@@ -32,7 +32,9 @@
 package com.github.osmerion.quitte.property;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
@@ -67,10 +69,118 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
+    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, Byte> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new MutatingBinding<>(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
     public final synchronized void bind(ObservableByteValue observable) {
         if (this.binding != null) throw new IllegalStateException();
 
-        this.binding = new BindingImpl(this, observable);
+        this.binding = new Byte2ByteBinding(this, observable, it -> it);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableBoolValue observable, Bool2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Bool2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableByteValue observable, Byte2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Byte2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableShortValue observable, Short2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Short2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableIntValue observable, Int2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Int2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableLongValue observable, Long2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Long2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableFloatValue observable, Float2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Float2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableDoubleValue observable, Double2ByteFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Double2ByteBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized <S> void bind(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Object2ByteBinding<>(this, observable, transform);
     }
 
     /**
@@ -139,24 +249,6 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
 
     protected final void notifyListeners(byte prevValue, byte newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
-    }
-
-    private static final class BindingImpl implements Binding {
-
-        private ObservableByteValue boundTo;
-        private ByteChangeListener bindingListener;
-
-        private BindingImpl(WritableByteProperty property, ObservableByteValue observable) {
-            this.boundTo = observable;
-            property.set(observable.get());
-            observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
-        }
-
-        @Override
-        public void release() {
-            this.boundTo.removeListener(this.bindingListener);
-        }
-
     }
 
 }

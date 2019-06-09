@@ -32,7 +32,9 @@
 package com.github.osmerion.quitte.property;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
@@ -67,10 +69,118 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
+    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, Short> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new MutatingBinding<>(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
     public final synchronized void bind(ObservableShortValue observable) {
         if (this.binding != null) throw new IllegalStateException();
 
-        this.binding = new BindingImpl(this, observable);
+        this.binding = new Short2ShortBinding(this, observable, it -> it);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableBoolValue observable, Bool2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Bool2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableByteValue observable, Byte2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Byte2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableShortValue observable, Short2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Short2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableIntValue observable, Int2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Int2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableLongValue observable, Long2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Long2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableFloatValue observable, Float2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Float2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableDoubleValue observable, Double2ShortFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Double2ShortBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized <S> void bind(ObservableObjectValue<S> observable, Object2ShortFunction<S> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Object2ShortBinding<>(this, observable, transform);
     }
 
     /**
@@ -139,24 +249,6 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
 
     protected final void notifyListeners(short prevValue, short newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
-    }
-
-    private static final class BindingImpl implements Binding {
-
-        private ObservableShortValue boundTo;
-        private ShortChangeListener bindingListener;
-
-        private BindingImpl(WritableShortProperty property, ObservableShortValue observable) {
-            this.boundTo = observable;
-            property.set(observable.get());
-            observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
-        }
-
-        @Override
-        public void release() {
-            this.boundTo.removeListener(this.bindingListener);
-        }
-
     }
 
 }

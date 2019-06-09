@@ -32,7 +32,9 @@
 package com.github.osmerion.quitte.property;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
@@ -67,10 +69,118 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
+    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, Float> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new MutatingBinding<>(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
     public final synchronized void bind(ObservableFloatValue observable) {
         if (this.binding != null) throw new IllegalStateException();
 
-        this.binding = new BindingImpl(this, observable);
+        this.binding = new Float2FloatBinding(this, observable, it -> it);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableBoolValue observable, Bool2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Bool2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableByteValue observable, Byte2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Byte2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableShortValue observable, Short2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Short2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableIntValue observable, Int2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Int2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableLongValue observable, Long2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Long2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableFloatValue observable, Float2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Float2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized void bind(ObservableDoubleValue observable, Double2FloatFunction transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Double2FloatBinding(this, observable, transform);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final synchronized <S> void bind(ObservableObjectValue<S> observable, Object2FloatFunction<S> transform) {
+        if (this.binding != null) throw new IllegalStateException();
+
+        this.binding = new Object2FloatBinding<>(this, observable, transform);
     }
 
     /**
@@ -139,24 +249,6 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
 
     protected final void notifyListeners(float prevValue, float newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
-    }
-
-    private static final class BindingImpl implements Binding {
-
-        private ObservableFloatValue boundTo;
-        private FloatChangeListener bindingListener;
-
-        private BindingImpl(WritableFloatProperty property, ObservableFloatValue observable) {
-            this.boundTo = observable;
-            property.set(observable.get());
-            observable.addListener(this.bindingListener = (o, oldValue, newValue) -> property.setValue(newValue));
-        }
-
-        @Override
-        public void release() {
-            this.boundTo.removeListener(this.bindingListener);
-        }
-
     }
 
 }

@@ -31,6 +31,7 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
 
 /**
@@ -53,5 +54,109 @@ public interface WritableBoolProperty extends WritableProperty<Boolean>, Readabl
      * @since   0.1.0
      */
     void bind(ObservableBoolValue observable);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableBoolValue observable, Bool2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableByteValue observable, Byte2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableShortValue observable, Short2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableIntValue observable, Int2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableLongValue observable, Long2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableFloatValue observable, Float2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    void bind(ObservableDoubleValue observable, Double2BoolFunction transform);
+
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    <S> void bind(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform);
 
 }
