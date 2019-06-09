@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018-2019 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,13 +29,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-module com.github.osmerion.quitte {
+package com.github.osmerion.quitte.functional;
 
-    requires static jsr305;
+/**
+ * Represents a function that accepts one argument and produces a result.
+ *
+ * @param <R>   the type of the result of the function
+ *
+ * @see java.util.function.Function
+ *
+ * @since   0.1.0
+ *
+ * @author  Leon Linhart
+ */
+@FunctionalInterface
+public interface Long2ObjectFunction<R> {
 
-    exports com.github.osmerion.quitte.functional;
-    exports com.github.osmerion.quitte.property;
-    exports com.github.osmerion.quitte.value;
-    exports com.github.osmerion.quitte.value.change;
+    /**
+     * Applies this function to the given argument.
+     *
+     * @param t the function argument
+     *
+     * @return  the function result
+     *
+     * @since   0.1.0
+     */
+    R apply(long t);
 
 }
