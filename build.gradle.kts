@@ -171,6 +171,7 @@ publishing {
 }
 
 signing {
+    isRequired = (deployment.type === com.github.osmerion.quitte.build.BuildType.RELEASE)
     sign(publishing.publications)
 }
 
