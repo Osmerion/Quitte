@@ -37,7 +37,7 @@ plugins {
     java
     signing
     `maven-publish`
-    id("com.zyxist.chainsaw")
+    id("org.javamodularity.moduleplugin") version "1.6.0"
 }
 
 val templates = mutableListOf<Template>()
@@ -180,6 +180,4 @@ repositories {
 
 dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-
-    testCompile("com.google.code.findbugs:jsr305:3.0.2")
 }
