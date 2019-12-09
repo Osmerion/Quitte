@@ -63,7 +63,7 @@ java {
 }
 
 tasks {
-    "jar"(Jar::class) {
+    jar {
         archiveBaseName.set(artifactName)
 
         manifest {
@@ -129,7 +129,7 @@ publishing {
             }
         }
     }
-    (publications) {
+    publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
             artifact(tasks["sourcesJar"])
