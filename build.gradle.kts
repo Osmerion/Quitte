@@ -52,8 +52,8 @@ version = when (deployment.type) {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_12
-    targetCompatibility = JavaVersion.VERSION_12
+    sourceCompatibility = JavaVersion.VERSION_13
+    targetCompatibility = JavaVersion.VERSION_13
 
     val mainGen = mkdir(File(projectDir, "src/main-generated/java/"))
     val testGen = mkdir(File(projectDir, "src/test-generated/java/"))
