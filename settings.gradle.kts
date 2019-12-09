@@ -29,3 +29,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 rootProject.name = "Quitte"
+
+pluginManagement {
+    repositories {
+        maven(url = "https://jitpack.io")
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            when (requested.id.id) {
+                "org.javamodularity.moduleplugin" -> useModule("com.github.java9-modularity:gradle-modules-plugin:9afced2")
+            }
+        }
+    }
+}
