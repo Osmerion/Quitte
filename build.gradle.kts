@@ -180,5 +180,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    compileOnly(group = "com.google.code.findbugs", name = "jsr305", version = "3.0.2")
 }
