@@ -54,7 +54,7 @@ fun Project.getProperty(k: String) =
     if (extra.has(k))
         extra[k] as String
     else
-        System.getenv(k)
+        System.getenv(k) ?: ""
 
 enum class BuildType {
     LOCAL,
