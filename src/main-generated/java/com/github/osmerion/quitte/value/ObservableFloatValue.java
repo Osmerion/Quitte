@@ -80,7 +80,7 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(FloatChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(FloatChangeListener)
      *
      * @since   0.1.0
      */

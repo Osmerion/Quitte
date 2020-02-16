@@ -80,7 +80,7 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(ByteChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(ByteChangeListener)
      *
      * @since   0.1.0
      */

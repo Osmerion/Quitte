@@ -80,7 +80,7 @@ public interface ObservableShortValue extends ObservableValue<Short> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(ShortChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableShortValue extends ObservableValue<Short> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(ShortChangeListener)
      *
      * @since   0.1.0
      */

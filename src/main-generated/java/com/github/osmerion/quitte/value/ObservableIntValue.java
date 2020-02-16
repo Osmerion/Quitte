@@ -80,7 +80,7 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(IntChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(IntChangeListener)
      *
      * @since   0.1.0
      */

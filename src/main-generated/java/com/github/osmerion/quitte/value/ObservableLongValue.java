@@ -80,7 +80,7 @@ public interface ObservableLongValue extends ObservableValue<Long> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(LongChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableLongValue extends ObservableValue<Long> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(LongChangeListener)
      *
      * @since   0.1.0
      */

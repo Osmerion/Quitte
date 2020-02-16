@@ -90,7 +90,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(${type.abbrevName}ChangeListener)
      *
      * @since   0.1.0
      */
@@ -116,7 +116,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(${type.abbrevName}ChangeListener)
      *
      * @since   0.1.0
      */

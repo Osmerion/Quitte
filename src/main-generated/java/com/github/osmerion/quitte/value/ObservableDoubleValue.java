@@ -80,7 +80,7 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(DoubleChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(DoubleChangeListener)
      *
      * @since   0.1.0
      */

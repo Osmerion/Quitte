@@ -80,7 +80,7 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ChangeListener)
+     * @see #removeListener(BoolChangeListener)
      *
      * @since   0.1.0
      */
@@ -106,7 +106,7 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ChangeListener)
+     * @see #addListener(BoolChangeListener)
      *
      * @since   0.1.0
      */
