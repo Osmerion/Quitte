@@ -3,9 +3,9 @@
 
 A collection of specialized value wrappers.
 
-Quitte was originally designed as a replacement for JavaFX beans for [Osmerion](https://github.com/Osmerion/Osmerion).
-This library does not provide any advanced functionality on its own. However, it can be useful when observable values or
-properties are needed.
+Quitte was originally designed as a replacement for JavaFX properties for [Osmerion](https://github.com/Osmerion/Osmerion).
+This library does not provide any advanced functionality on its own. However, it can be useful when observable values,
+properties, or specialized types are needed.
 
 
 ## License
