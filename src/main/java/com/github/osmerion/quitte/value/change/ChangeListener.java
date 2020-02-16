@@ -56,5 +56,4 @@ public interface ChangeListener<T> {
      */
     void onChanged(ObservableValue<? extends T> observable, @Nullable T oldValue, @Nullable T newValue);
 
-
 }
