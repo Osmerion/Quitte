@@ -11,7 +11,7 @@ properties are needed.
 ## License
 
 ```
-Copyright (c) 2018-2019 Leon Linhart,
+Copyright (c) 2018-2020 Leon Linhart,
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
