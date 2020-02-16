@@ -94,9 +94,12 @@ tasks {
     }
 }
 
+val generate = tasks.create("generate") {
+    tasks.compileJava.get().dependsOn(this)
+}
+
 file("src/templates").let { templateDir ->
     val templateDirPath = templateDir.toPath()
-    val compileTask = tasks.getByName("compileJava")
 
     fileTree(templateDir).forEach { templateSource ->
         val mangledName = templateDirPath.relativize(templateSource.toPath()).toString()
@@ -104,7 +107,7 @@ file("src/templates").let { templateDir ->
             .removeSuffix(".build.gradle.kts")
 
         tasks.create("generate$$mangledName", Generate::class) {
-            compileTask.dependsOn(this)
+            generate.dependsOn(this)
 
             project.extra["templates"] = mutableListOf<Template>()
             apply(from = templateSource)
