@@ -42,8 +42,13 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
 
     protected double value;
 
-    public SimpleDoubleProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleDoubleProperty(double initial) {
         this.value = initial;
     }

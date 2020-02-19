@@ -42,8 +42,13 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
 
     protected boolean value;
 
-    public SimpleBoolProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleBoolProperty(boolean initial) {
         this.value = initial;
     }

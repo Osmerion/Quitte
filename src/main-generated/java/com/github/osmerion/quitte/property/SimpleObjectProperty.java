@@ -45,8 +45,13 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
     @Nullable
     protected T value;
 
-    public SimpleObjectProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleObjectProperty(@Nullable T initial) {
         this.value = initial;
     }

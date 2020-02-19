@@ -52,8 +52,13 @@ public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected ${type.raw} value;
 
-    public Simple${type.abbrevName}Property() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public Simple${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} initial) {
         this.value = initial;
     }

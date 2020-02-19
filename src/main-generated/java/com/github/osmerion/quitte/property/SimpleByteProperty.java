@@ -42,8 +42,13 @@ public class SimpleByteProperty extends AbstractByteProperty {
 
     protected byte value;
 
-    public SimpleByteProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleByteProperty(byte initial) {
         this.value = initial;
     }

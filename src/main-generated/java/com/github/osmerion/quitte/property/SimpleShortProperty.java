@@ -42,8 +42,13 @@ public class SimpleShortProperty extends AbstractShortProperty {
 
     protected short value;
 
-    public SimpleShortProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleShortProperty(short initial) {
         this.value = initial;
     }

@@ -42,8 +42,13 @@ public class SimpleLongProperty extends AbstractLongProperty {
 
     protected long value;
 
-    public SimpleLongProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleLongProperty(long initial) {
         this.value = initial;
     }

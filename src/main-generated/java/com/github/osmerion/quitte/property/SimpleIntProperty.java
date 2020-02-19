@@ -42,8 +42,13 @@ public class SimpleIntProperty extends AbstractIntProperty {
 
     protected int value;
 
-    public SimpleIntProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleIntProperty(int initial) {
         this.value = initial;
     }

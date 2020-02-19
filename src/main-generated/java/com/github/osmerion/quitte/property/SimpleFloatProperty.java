@@ -42,8 +42,13 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
 
     protected float value;
 
-    public SimpleFloatProperty() {}
-
+    /**
+     * Creates a new property with the given initial value.
+     *
+     * @param initial   the initial value for the property
+     *
+     * @since   0.1.0
+     */
     public SimpleFloatProperty(float initial) {
         this.value = initial;
     }
