@@ -34,6 +34,8 @@ package com.github.osmerion.quitte.property;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
@@ -49,6 +51,8 @@ import com.github.osmerion.quitte.value.change.*;
 public abstract class AbstractBoolProperty implements WritableBoolProperty {
 
     private final CopyOnWriteArraySet<BoolChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    
+    @Nullable
     private Binding binding;
 
     /**

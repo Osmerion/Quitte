@@ -44,7 +44,7 @@ Type.values().forEach { sourceType ->
 
         template("${packageName.replace('.', '/')}/$className") {
             """package $packageName;
-
+${if (targetType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 /**
  * Represents a function that accepts one argument and produces a result.
  *${when {
@@ -78,8 +78,8 @@ public interface $className$typeParams {
      * @return  the function result
      *
      * @since   0.1.0
-     */
-    $targetTypeName apply($sourceTypeName t);
+     */${if (targetType === Type.OBJECT) "\n    @Nullable" else ""}
+    $targetTypeName apply(${if (sourceType === Type.OBJECT) "@Nullable " else ""}$sourceTypeName t);
 
 }"""
         }

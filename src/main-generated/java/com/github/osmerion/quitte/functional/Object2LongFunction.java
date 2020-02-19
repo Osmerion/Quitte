@@ -54,6 +54,6 @@ public interface Object2LongFunction<T> {
      *
      * @since   0.1.0
      */
-    long apply(T t);
+    long apply(@Nullable T t);
 
 }

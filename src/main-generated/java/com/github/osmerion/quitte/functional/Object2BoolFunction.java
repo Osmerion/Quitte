@@ -54,6 +54,6 @@ public interface Object2BoolFunction<T> {
      *
      * @since   0.1.0
      */
-    boolean apply(T t);
+    boolean apply(@Nullable T t);
 
 }

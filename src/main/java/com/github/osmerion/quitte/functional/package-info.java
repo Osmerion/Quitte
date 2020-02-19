@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
- * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,31 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+@NonNullApi
 package com.github.osmerion.quitte.functional;
 
-/**
- * Represents a function that accepts one argument and produces a result.
- *
- * @param <T>   the type of the input to the function
- *
- * @see java.util.function.Function
- *
- * @since   0.1.0
- *
- * @author  Leon Linhart
- */
-@FunctionalInterface
-public interface Object2DoubleFunction<T> {
-
-    /**
-     * Applies this function to the given argument.
-     *
-     * @param t the function argument
-     *
-     * @return  the function result
-     *
-     * @since   0.1.0
-     */
-    double apply(@Nullable T t);
-
-}
+import com.github.osmerion.quitte.internal.NonNullApi;

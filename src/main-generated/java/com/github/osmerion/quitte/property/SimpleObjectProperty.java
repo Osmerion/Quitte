@@ -42,6 +42,7 @@ import javax.annotation.Nullable;
  */
 public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
 
+    @Nullable
     protected T value;
 
     public SimpleObjectProperty() {}
@@ -56,6 +57,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      * @since   0.1.0
      */
     @Override
+    @Nullable
     public T get() {
         return this.value;
     }
@@ -66,7 +68,8 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      * @since   0.1.0
      */
     @Override
-    public T set(T value) {
+    @Nullable
+    public T set(@Nullable T value) {
         T prev = this.value;
         this.value = value;
         this.notifyListeners(prev, value);

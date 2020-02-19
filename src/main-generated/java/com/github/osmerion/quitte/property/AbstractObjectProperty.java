@@ -34,6 +34,8 @@ package com.github.osmerion.quitte.property;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
@@ -49,6 +51,8 @@ import com.github.osmerion.quitte.value.change.*;
 public abstract class AbstractObjectProperty<T> implements WritableObjectProperty<T> {
 
     private final CopyOnWriteArraySet<ObjectChangeListener<T>> changeListeners = new CopyOnWriteArraySet<>();
+    
+    @Nullable
     private Binding binding;
 
     /**
@@ -247,7 +251,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(T prevValue, T newValue) {
+    protected final void notifyListeners(@Nullable T prevValue, @Nullable T newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
 

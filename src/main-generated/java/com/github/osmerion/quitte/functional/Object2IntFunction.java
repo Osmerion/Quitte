@@ -54,6 +54,6 @@ public interface Object2IntFunction<T> {
      *
      * @since   0.1.0
      */
-    int apply(T t);
+    int apply(@Nullable T t);
 
 }

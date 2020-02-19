@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.functional;
 
+import javax.annotation.Nullable;
+
 /**
  * Represents a function that accepts one argument and produces a result.
  *
@@ -56,6 +58,7 @@ public interface Object2ObjectFunction<T, R> {
      *
      * @since   0.1.0
      */
-    R apply(T t);
+    @Nullable
+    R apply(@Nullable T t);
 
 }

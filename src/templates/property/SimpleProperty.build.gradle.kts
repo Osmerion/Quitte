@@ -49,7 +49,7 @@ ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
  * @author  Leon Linhart
  */
 public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeParams {
-
+${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected ${type.raw} value;
 
     public Simple${type.abbrevName}Property() {}
@@ -63,7 +63,7 @@ public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.
      *
      * @since   0.1.0
      */
-    @Override
+    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     public ${type.raw} get() {
         return this.value;
     }
@@ -73,8 +73,8 @@ public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.
      *
      * @since   0.1.0
      */
-    @Override
-    public ${type.raw} set(${type.raw} value) {
+    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    public ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         ${type.raw} prev = this.value;
         this.value = value;
         this.notifyListeners(prev, value);

@@ -54,6 +54,6 @@ public interface Object2FloatFunction<T> {
      *
      * @since   0.1.0
      */
-    float apply(T t);
+    float apply(@Nullable T t);
 
 }

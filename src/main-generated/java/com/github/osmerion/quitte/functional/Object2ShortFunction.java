@@ -54,6 +54,6 @@ public interface Object2ShortFunction<T> {
      *
      * @since   0.1.0
      */
-    short apply(T t);
+    short apply(@Nullable T t);
 
 }

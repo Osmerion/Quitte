@@ -54,6 +54,6 @@ public interface Object2ByteFunction<T> {
      *
      * @since   0.1.0
      */
-    byte apply(T t);
+    byte apply(@Nullable T t);
 
 }

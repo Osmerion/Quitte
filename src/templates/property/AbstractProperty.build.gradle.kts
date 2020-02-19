@@ -40,6 +40,8 @@ Type.values().forEach {
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
@@ -59,6 +61,8 @@ import com.github.osmerion.quitte.value.change.*;
 public abstract class Abstract${type.abbrevName}Property$typeParams implements Writable${type.abbrevName}Property$typeParams {
 
     private final CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeParams> changeListeners = new CopyOnWriteArraySet<>();
+    
+    @Nullable
     private Binding binding;
 
     /**
@@ -182,7 +186,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(${type.raw} prevValue, ${type.raw} newValue) {
+    protected final void notifyListeners(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} prevValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
 
