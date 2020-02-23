@@ -31,6 +31,7 @@
 package com.github.osmerion.quitte.collections;
 
 import java.util.Set;
+import com.github.osmerion.quitte.internal.collections.UnmodifiableObservableSet;
 import com.github.osmerion.quitte.internal.collections.WrappingObservableSet;
 
 /**
@@ -62,6 +63,24 @@ public interface ObservableSet<E> extends Set<E> {
      */
     static <T> ObservableSet<T> of(Set<T> set) {
         return new WrappingObservableSet<>(set);
+    }
+
+    /**
+     * Returns an unmodifiable view of the specified {@link ObservableSet}.
+     *
+     * @param <T>   the type of the set's elements
+     * @param set   the set to wrap
+     *
+     * @return  an unmodifiable view of the specified set
+     *
+     * @throws NullPointerException if the given set is {@code null}
+     *
+     * @see java.util.Collections#unmodifiableSet(Set) 
+     * 
+     * @since   0.1.0
+     */
+    static <T> ObservableSet<T> unmodifiableViewOf(ObservableSet<T> set) {
+        return new UnmodifiableObservableSet<>(set);
     }
 
     /**
