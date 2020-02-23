@@ -28,7 +28,55 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@NonNullApi
-package com.github.osmerion.quitte.collections.change;
+package com.github.osmerion.quitte.collections;
 
-import com.github.osmerion.quitte.internal.NonNullApi;
+import java.lang.ref.WeakReference;
+import java.util.Objects;
+
+/**
+ * TODO doc
+ *
+ * @param <E>
+ *
+ * @see WeakReference
+ *
+ * @since   0.1.0
+ *
+ * @author  Leon Linhart
+ */
+public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
+
+    private final WeakReference<SetChangeListener<E>> ref;
+
+    /**
+     * TODO doc
+     *
+     * @param ref
+     *
+     * @throws NullPointerException
+     *
+     * @since   0.1.0
+     */
+    public WeakSetChangeListener(SetChangeListener<E> ref) {
+        this.ref = new WeakReference<>(Objects.requireNonNull(ref));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @implNote    TODO doc
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public void onChanged(SetChangeListener.Change<? extends E> change) {
+        SetChangeListener<E> listener = this.ref.get();
+
+        if (listener != null) {
+            listener.onChanged(change);
+        } else {
+            change.removeListener(this);
+        }
+    }
+
+}
