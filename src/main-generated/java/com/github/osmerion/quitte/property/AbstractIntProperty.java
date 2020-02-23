@@ -50,10 +50,10 @@ import com.github.osmerion.quitte.value.change.*;
  */
 public abstract class AbstractIntProperty implements WritableIntProperty {
 
-    private final CopyOnWriteArraySet<IntChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<IntChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private Binding binding;
+    private transient Binding binding;
 
     /**
      * {@inheritDoc}

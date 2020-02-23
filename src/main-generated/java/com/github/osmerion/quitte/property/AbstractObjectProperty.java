@@ -50,10 +50,10 @@ import com.github.osmerion.quitte.value.change.*;
  */
 public abstract class AbstractObjectProperty<T> implements WritableObjectProperty<T> {
 
-    private final CopyOnWriteArraySet<ObjectChangeListener<T>> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<ObjectChangeListener<T>> changeListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private Binding binding;
+    private transient Binding binding;
 
     /**
      * {@inheritDoc}

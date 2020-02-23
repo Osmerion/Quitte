@@ -50,10 +50,10 @@ import com.github.osmerion.quitte.value.change.*;
  */
 public abstract class AbstractFloatProperty implements WritableFloatProperty {
 
-    private final CopyOnWriteArraySet<FloatChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<FloatChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private Binding binding;
+    private transient Binding binding;
 
     /**
      * {@inheritDoc}

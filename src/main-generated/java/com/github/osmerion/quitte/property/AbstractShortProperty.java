@@ -50,10 +50,10 @@ import com.github.osmerion.quitte.value.change.*;
  */
 public abstract class AbstractShortProperty implements WritableShortProperty {
 
-    private final CopyOnWriteArraySet<ShortChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<ShortChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private Binding binding;
+    private transient Binding binding;
 
     /**
      * {@inheritDoc}

@@ -50,10 +50,10 @@ import com.github.osmerion.quitte.value.change.*;
  */
 public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
 
-    private final CopyOnWriteArraySet<DoubleChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<DoubleChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private Binding binding;
+    private transient Binding binding;
 
     /**
      * {@inheritDoc}
