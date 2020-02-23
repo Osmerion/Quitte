@@ -44,7 +44,7 @@ Type.values().forEach { sourceType ->
 
         template("${packageName.replace('.', '/')}/$className") {
             """package $packageName;
-${if (targetType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+${if (sourceType === Type.OBJECT || targetType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 /**
  * Represents a function that accepts one argument and produces a result.
  *${when {

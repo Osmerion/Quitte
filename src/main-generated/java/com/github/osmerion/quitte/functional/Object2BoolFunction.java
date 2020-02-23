@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.functional;
 
+import javax.annotation.Nullable;
+
 /**
  * Represents a function that accepts one argument and produces a result.
  *
