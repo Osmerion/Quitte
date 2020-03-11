@@ -40,7 +40,7 @@ package com.github.osmerion.quitte.property;
  */
 public class SimpleLongProperty extends AbstractLongProperty {
 
-    protected long value;
+    private long value;
 
     /**
      * Creates a new property with the given initial value.
@@ -59,7 +59,7 @@ public class SimpleLongProperty extends AbstractLongProperty {
      * @since   0.1.0
      */
     @Override
-    public long get() {
+    protected final long getImpl() {
         return this.value;
     }
 
@@ -69,12 +69,21 @@ public class SimpleLongProperty extends AbstractLongProperty {
      * @since   0.1.0
      */
     @Override
-    public long set(long value) {
-        long prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected final void setImpl(long value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
+    protected long validate(long value) {
+        return value;
     }
 
 }

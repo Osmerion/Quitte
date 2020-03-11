@@ -251,8 +251,46 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(short prevValue, short newValue) {
+    private void notifyListeners(short prevValue, short newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public short get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final short set(short value) {
+        short prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract short getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(short value);
 
 }

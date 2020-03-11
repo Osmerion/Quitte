@@ -251,8 +251,46 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(long prevValue, long newValue) {
+    private void notifyListeners(long prevValue, long newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public long get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final long set(long value) {
+        long prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract long getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(long value);
 
 }

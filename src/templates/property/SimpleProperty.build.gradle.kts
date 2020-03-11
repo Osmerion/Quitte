@@ -50,7 +50,7 @@ ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
  */
 public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeParams {
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected ${type.raw} value;
+    private ${type.raw} value;
 
     /**
      * Creates a new property with the given initial value.
@@ -69,7 +69,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @since   0.1.0
      */
     @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    public ${type.raw} get() {
+    protected final ${type.raw} getImpl() {
         return this.value;
     }
 
@@ -78,13 +78,22 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    public ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
-        ${type.raw} prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    @Override
+    protected final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    protected ${type.raw} validate(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        return value;
     }
 
 }"""

@@ -251,8 +251,46 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(byte prevValue, byte newValue) {
+    private void notifyListeners(byte prevValue, byte newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public byte get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final byte set(byte value) {
+        byte prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract byte getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(byte value);
 
 }

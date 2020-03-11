@@ -31,6 +31,11 @@
  */
 package com.github.osmerion.quitte.property;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.VarHandle;
+
 /**
  * A specialized writable {@code float} property.
  *
@@ -40,7 +45,7 @@ package com.github.osmerion.quitte.property;
  */
 public class SimpleFloatProperty extends AbstractFloatProperty {
 
-    protected float value;
+    private float value;
 
     /**
      * Creates a new property with the given initial value.
@@ -59,7 +64,7 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public float get() {
+    protected final float getImpl() {
         return this.value;
     }
 
@@ -69,12 +74,21 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public float set(float value) {
-        float prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected final void setImpl(float value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
+    protected float validate(float value) {
+        return value;
     }
 
 }

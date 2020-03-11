@@ -251,8 +251,46 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(double prevValue, double newValue) {
+    private void notifyListeners(double prevValue, double newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public double get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final double set(double value) {
+        double prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract double getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(double value);
 
 }

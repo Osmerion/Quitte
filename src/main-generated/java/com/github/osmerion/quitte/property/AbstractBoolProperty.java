@@ -251,8 +251,46 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(boolean prevValue, boolean newValue) {
+    private void notifyListeners(boolean prevValue, boolean newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public boolean get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final boolean set(boolean value) {
+        boolean prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract boolean getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(boolean value);
 
 }

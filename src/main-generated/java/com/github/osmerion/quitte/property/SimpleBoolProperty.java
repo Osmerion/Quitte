@@ -40,7 +40,7 @@ package com.github.osmerion.quitte.property;
  */
 public class SimpleBoolProperty extends AbstractBoolProperty {
 
-    protected boolean value;
+    private boolean value;
 
     /**
      * Creates a new property with the given initial value.
@@ -59,7 +59,7 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean get() {
+    protected final boolean getImpl() {
         return this.value;
     }
 
@@ -69,12 +69,21 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public boolean set(boolean value) {
-        boolean prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected final void setImpl(boolean value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
+    protected boolean validate(boolean value) {
+        return value;
     }
 
 }

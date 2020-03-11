@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
 public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
 
     @Nullable
-    protected T value;
+    private T value;
 
     /**
      * Creates a new property with the given initial value.
@@ -63,7 +63,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      */
     @Override
     @Nullable
-    public T get() {
+    protected final T getImpl() {
         return this.value;
     }
 
@@ -73,13 +73,22 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      * @since   0.1.0
      */
     @Override
+    protected final void setImpl(@Nullable T value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
     @Nullable
-    public T set(@Nullable T value) {
-        T prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected T validate(@Nullable T value) {
+        return value;
     }
 
 }

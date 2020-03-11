@@ -40,7 +40,7 @@ package com.github.osmerion.quitte.property;
  */
 public class SimpleDoubleProperty extends AbstractDoubleProperty {
 
-    protected double value;
+    private double value;
 
     /**
      * Creates a new property with the given initial value.
@@ -59,7 +59,7 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public double get() {
+    protected final double getImpl() {
         return this.value;
     }
 
@@ -69,12 +69,21 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public double set(double value) {
-        double prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected final void setImpl(double value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
+    protected double validate(double value) {
+        return value;
     }
 
 }

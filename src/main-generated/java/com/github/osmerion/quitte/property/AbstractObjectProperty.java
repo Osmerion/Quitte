@@ -251,8 +251,49 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(@Nullable T prevValue, @Nullable T newValue) {
+    private void notifyListeners(@Nullable T prevValue, @Nullable T newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    @Nullable
+    public T get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    @Nullable
+    public final T set(@Nullable T value) {
+        T prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    @Nullable
+    protected abstract T getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(@Nullable T value);
 
 }

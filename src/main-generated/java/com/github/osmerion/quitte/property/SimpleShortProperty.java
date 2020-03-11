@@ -40,7 +40,7 @@ package com.github.osmerion.quitte.property;
  */
 public class SimpleShortProperty extends AbstractShortProperty {
 
-    protected short value;
+    private short value;
 
     /**
      * Creates a new property with the given initial value.
@@ -59,7 +59,7 @@ public class SimpleShortProperty extends AbstractShortProperty {
      * @since   0.1.0
      */
     @Override
-    public short get() {
+    protected final short getImpl() {
         return this.value;
     }
 
@@ -69,12 +69,21 @@ public class SimpleShortProperty extends AbstractShortProperty {
      * @since   0.1.0
      */
     @Override
-    public short set(short value) {
-        short prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected final void setImpl(short value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
+    protected short validate(short value) {
+        return value;
     }
 
 }

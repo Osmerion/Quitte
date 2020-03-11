@@ -40,7 +40,7 @@ package com.github.osmerion.quitte.property;
  */
 public class SimpleByteProperty extends AbstractByteProperty {
 
-    protected byte value;
+    private byte value;
 
     /**
      * Creates a new property with the given initial value.
@@ -59,7 +59,7 @@ public class SimpleByteProperty extends AbstractByteProperty {
      * @since   0.1.0
      */
     @Override
-    public byte get() {
+    protected final byte getImpl() {
         return this.value;
     }
 
@@ -69,12 +69,21 @@ public class SimpleByteProperty extends AbstractByteProperty {
      * @since   0.1.0
      */
     @Override
-    public byte set(byte value) {
-        byte prev = this.value;
-        this.value = value;
-        this.notifyListeners(prev, value);
-
-        return prev;
+    protected final void setImpl(byte value) {
+        this.value = this.validate(value);
+    }
+    
+    /**
+     * Validates the given value.
+     *
+     * @param value the value to validate
+     *
+     * @return  the validated value
+     *
+     * @since   0.1.0
+     */
+    protected byte validate(byte value) {
+        return value;
     }
 
 }

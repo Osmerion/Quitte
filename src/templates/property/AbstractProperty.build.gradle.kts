@@ -186,9 +186,47 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         return this.changeListeners.remove(listener);
     }
 
-    protected final void notifyListeners(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} prevValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    private void notifyListeners(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} prevValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
         this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    public ${type.raw} get() {
+        return this.getImpl();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    public final ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        ${type.raw} prev = this.getImpl();
+        this.setImpl(value);
+        this.notifyListeners(prev, value);
+
+        return prev;
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    protected abstract ${type.raw} getImpl();
+
+    /**
+     * TODO doc
+     *
+     * @since   0.1.0
+     */
+    protected abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
 }"""
     }
