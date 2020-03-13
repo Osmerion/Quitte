@@ -188,10 +188,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
              *
              * TODO: This is rarely useful. Reconsider if this check should be performed.
              */
-            //noinspection ConstantConditions
-            if (!this.removed.remove(element)) {
-                this.added.add(element);
-            }
+            if (this.removed != null && !this.removed.remove(element)) this.added.add(element);
         }
 
         /**
@@ -209,10 +206,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
              *
              * TODO: This is rarely useful. Reconsider if this check should be performed.
              */
-            //noinspection ConstantConditions
-            if (!this.added.remove(old)) {
-                this.removed.add(old);
-            }
+            if (this.added != null && !this.added.remove(old)) this.removed.add(old);
         }
 
     }
