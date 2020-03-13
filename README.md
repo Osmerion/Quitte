@@ -101,8 +101,8 @@ To reduce the amount duplication when generating specialized types, Quitte uses
 a simple code-generation mechanism. The templates are simple Gradle Kotlin DSL
 scripts which are located under `src/templates` and discovered automatically.
 
-The generated code is published to the repository for easier to follow git
-history.
+The generated code is published to the repository to make it easier to follow
+changes using the git history.
 
 
 ## License
