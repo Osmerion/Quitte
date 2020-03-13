@@ -162,13 +162,13 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                 AbstractObservableSet.this.changeBuilder = null;
                 if (this.added == null && this.removed == null) return;
 
-                SetChangeListener.Change<E> change = new SetChangeListener.Change<E>(this.added, this.removed, AbstractObservableSet.this::removeChangeListener);
+                SetChangeListener.Change<E> change = new SetChangeListener.Change<>(this.added, this.removed);
 
                 for (Iterator<SetChangeListener<? super E>> itr = AbstractObservableSet.this.listeners.iterator(); itr.hasNext(); ) {
                     SetChangeListener<? super E> listener = itr.next();
-                    if (listener instanceof WeakSetChangeListener) itr.remove();
-
                     listener.onChanged(change);
+
+                    if (listener instanceof WeakSetChangeListener && ((WeakSetChangeListener<?>) listener).wasGarbageCollected()) itr.remove();
                 }
             }
         }

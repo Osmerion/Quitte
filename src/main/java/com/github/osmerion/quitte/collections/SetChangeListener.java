@@ -32,13 +32,12 @@ package com.github.osmerion.quitte.collections;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 /**
- * A listener that may be used to subscribe to changes to an {@link ObservableSet}.
+ * A listener that may be used to subscribe to changes to one or more {@link ObservableSet ObservableSets}.
  *
- * @param <E>   the type of the set's elements
+ * @param <E>   the type of an observed set's elements
  *
  * @since   0.1.0
  *
@@ -68,17 +67,11 @@ public interface SetChangeListener<E> {
      */
     final class Change<E> {
 
-        private final Consumer<SetChangeListener<? super E>> removeFun;
         private final Set<E> added, removed;
 
-        Change(@Nullable Set<E> added, @Nullable Set<E> removed, Consumer<SetChangeListener<? super E>> removeFun) {
-            this.removeFun = removeFun;
+        Change(@Nullable Set<E> added, @Nullable Set<E> removed) {
             this.added = added != null ? Collections.unmodifiableSet(added) : Collections.emptySet();
             this.removed = removed != null ? Collections.unmodifiableSet(removed) : Collections.emptySet();
-        }
-
-        void removeListener(SetChangeListener<? super E> listener) {
-            this.removeFun.accept(listener);
         }
 
         /**

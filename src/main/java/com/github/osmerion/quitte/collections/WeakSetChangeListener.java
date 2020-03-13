@@ -34,9 +34,12 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 /**
- * TODO doc
+ * A {@code WeakSetChangeListener} may be used to wrap a listener that should only be referenced weakly from an
+ * {@link ObservableSet}.
  *
- * @param <E>
+ * <p>This listener does not keep a strong reference to the wrapped listener.</p>
+ *
+ * @param <E>   the type of an observed set's elements
  *
  * @see WeakReference
  *
@@ -48,23 +51,26 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
 
     private final WeakReference<SetChangeListener<E>> ref;
 
+    private boolean wasGarbageCollected;
+
     /**
-     * TODO doc
+     * Wraps the given {@link SetChangeListener listener}.
      *
-     * @param ref
+     * @param listener  the listener to wrap
      *
-     * @throws NullPointerException
+     * @throws NullPointerException if the given listener is {@code null}
      *
      * @since   0.1.0
      */
-    public WeakSetChangeListener(SetChangeListener<E> ref) {
-        this.ref = new WeakReference<>(Objects.requireNonNull(ref));
+    public WeakSetChangeListener(SetChangeListener<E> listener) {
+        this.ref = new WeakReference<>(Objects.requireNonNull(listener));
+        this.wasGarbageCollected = false;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @implNote    TODO doc
+     * @implNote    At the time of writing, this is the only place where the "alive-check" happens.
      *
      * @since   0.1.0
      */
@@ -75,8 +81,17 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
         if (listener != null) {
             listener.onChanged(change);
         } else {
-            change.removeListener(this);
+            this.wasGarbageCollected = true;
         }
+    }
+
+    /**
+     * Returns whether or not the underlying listener was garbage collected.
+     *
+     * @return  whether or not the underlying listener was garbage collected
+     */
+    boolean wasGarbageCollected() {
+        return this.wasGarbageCollected;
     }
 
 }
