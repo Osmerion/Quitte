@@ -45,8 +45,6 @@ import com.github.osmerion.quitte.value.change.*;
  * @see ChangeListener
  * @see ShortChangeListener
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class WrappingShortChangeListener implements ShortChangeListener {

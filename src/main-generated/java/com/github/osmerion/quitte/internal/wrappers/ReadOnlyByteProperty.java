@@ -37,8 +37,6 @@ import com.github.osmerion.quitte.value.change.*;
 /**
  * A specialized read-only {@code byte} property.
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class ReadOnlyByteProperty implements ReadableByteProperty {
@@ -49,92 +47,47 @@ public final class ReadOnlyByteProperty implements ReadableByteProperty {
         this.property = property;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public ReadableByteProperty asReadOnlyProperty() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public byte get() {
         return this.property.get();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public Byte getValue() {
         return this.property.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public boolean isBound() {
         return this.property.isBound();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean isWritable() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean addListener(ByteChangeListener listener) {
         return this.property.addListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     @Deprecated
     public boolean addBoxedListener(ChangeListener<Byte> listener) {
         return this.property.addBoxedListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean removeListener(ByteChangeListener listener) {
         return this.property.removeListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     @Deprecated
     public boolean removeBoxedListener(ChangeListener<Byte> listener) {

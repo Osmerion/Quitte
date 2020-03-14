@@ -47,8 +47,6 @@ import com.github.osmerion.quitte.value.change.*;
             "A specialized read-only {@code ${type.raw}} property."
         }
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class ReadOnly${type.abbrevName}Property$typeParams implements Readable${type.abbrevName}Property$typeParams {
@@ -59,92 +57,47 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
         this.property = property;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public Readable${type.abbrevName}Property$typeParams asReadOnlyProperty() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public ${type.raw} get() {
         return this.property.get();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public ${type.box} getValue() {
         return this.property.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public boolean isBound() {
         return this.property.isBound();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean isWritable() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean addListener(${type.abbrevName}ChangeListener listener) {
         return this.property.addListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     @Deprecated
     public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
         return this.property.addBoxedListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean removeListener(${type.abbrevName}ChangeListener listener) {
         return this.property.removeListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     @Deprecated
     public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {

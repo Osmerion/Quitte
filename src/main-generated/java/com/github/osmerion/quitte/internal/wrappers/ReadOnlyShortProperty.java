@@ -37,8 +37,6 @@ import com.github.osmerion.quitte.value.change.*;
 /**
  * A specialized read-only {@code short} property.
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class ReadOnlyShortProperty implements ReadableShortProperty {
@@ -49,92 +47,47 @@ public final class ReadOnlyShortProperty implements ReadableShortProperty {
         this.property = property;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public ReadableShortProperty asReadOnlyProperty() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public short get() {
         return this.property.get();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public Short getValue() {
         return this.property.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public boolean isBound() {
         return this.property.isBound();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean isWritable() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean addListener(ShortChangeListener listener) {
         return this.property.addListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     @Deprecated
     public boolean addBoxedListener(ChangeListener<Short> listener) {
         return this.property.addBoxedListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean removeListener(ShortChangeListener listener) {
         return this.property.removeListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     @Deprecated
     public boolean removeBoxedListener(ChangeListener<Short> listener) {

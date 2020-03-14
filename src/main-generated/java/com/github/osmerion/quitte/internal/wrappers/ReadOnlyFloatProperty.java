@@ -37,8 +37,6 @@ import com.github.osmerion.quitte.value.change.*;
 /**
  * A specialized read-only {@code float} property.
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
@@ -49,92 +47,47 @@ public final class ReadOnlyFloatProperty implements ReadableFloatProperty {
         this.property = property;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public ReadableFloatProperty asReadOnlyProperty() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public float get() {
         return this.property.get();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public Float getValue() {
         return this.property.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public boolean isBound() {
         return this.property.isBound();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean isWritable() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean addListener(FloatChangeListener listener) {
         return this.property.addListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     @Deprecated
     public boolean addBoxedListener(ChangeListener<Float> listener) {
         return this.property.addBoxedListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean removeListener(FloatChangeListener listener) {
         return this.property.removeListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     @Deprecated
     public boolean removeBoxedListener(ChangeListener<Float> listener) {

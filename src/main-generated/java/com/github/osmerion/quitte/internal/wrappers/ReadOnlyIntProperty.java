@@ -37,8 +37,6 @@ import com.github.osmerion.quitte.value.change.*;
 /**
  * A specialized read-only {@code int} property.
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class ReadOnlyIntProperty implements ReadableIntProperty {
@@ -49,92 +47,47 @@ public final class ReadOnlyIntProperty implements ReadableIntProperty {
         this.property = property;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public ReadableIntProperty asReadOnlyProperty() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public int get() {
         return this.property.get();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public Integer getValue() {
         return this.property.getValue();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     public boolean isBound() {
         return this.property.isBound();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean isWritable() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean addListener(IntChangeListener listener) {
         return this.property.addListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
 	@Override
     @Deprecated
     public boolean addBoxedListener(ChangeListener<Integer> listener) {
         return this.property.addBoxedListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     public boolean removeListener(IntChangeListener listener) {
         return this.property.removeListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
     @Deprecated
     public boolean removeBoxedListener(ChangeListener<Integer> listener) {

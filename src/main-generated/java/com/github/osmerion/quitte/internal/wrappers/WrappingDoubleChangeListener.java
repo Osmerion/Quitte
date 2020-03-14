@@ -45,8 +45,6 @@ import com.github.osmerion.quitte.value.change.*;
  * @see ChangeListener
  * @see DoubleChangeListener
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class WrappingDoubleChangeListener implements DoubleChangeListener {

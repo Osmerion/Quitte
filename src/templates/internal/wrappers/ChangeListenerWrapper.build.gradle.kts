@@ -52,8 +52,6 @@ import com.github.osmerion.quitte.value.change.*;
  * @see ChangeListener
  * @see ${type.abbrevName}ChangeListener
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class Wrapping${type.abbrevName}ChangeListener$typeParams implements ${type.abbrevName}ChangeListener$typeParams {

@@ -45,8 +45,6 @@ import com.github.osmerion.quitte.value.change.*;
  * @see ChangeListener
  * @see FloatChangeListener
  *
- * @since   0.1.0
- *
  * @author  Leon Linhart
  */
 public final class WrappingFloatChangeListener implements FloatChangeListener {
