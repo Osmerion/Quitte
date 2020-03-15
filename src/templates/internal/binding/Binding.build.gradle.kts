@@ -46,7 +46,6 @@ Type.values().forEach { sourceType ->
             """package $packageName;
 
 import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -55,10 +54,10 @@ public final class $className$typeParams implements Binding {
     private final Observable${sourceType.abbrevName}Value$sourceTypeParams source;
     private final ${sourceType.abbrevName}ChangeListener$sourceTypeParams listener;
 
-    public $className(Writable${targetType.abbrevName}Property$targetTypeParams target, Observable${sourceType.abbrevName}Value$sourceTypeParams source, ${sourceType.abbrevName}2${targetType.abbrevName}Function$typeParams transform) {
+    public $className(${targetType.abbrevName}Consumer$targetTypeParams target, Observable${sourceType.abbrevName}Value$sourceTypeParams source, ${sourceType.abbrevName}2${targetType.abbrevName}Function$typeParams transform) {
         this.source = source;
-        target.set(transform.apply(source.get()));
-        this.source.addListener(this.listener = (observable, oldValue, newValue) -> target.set(transform.apply(newValue)));
+        target.accept(transform.apply(source.get()));
+        this.source.addListener(this.listener = new Weak${sourceType.abbrevName}ChangeListener${if (sourceType === Type.OBJECT) "<>" else ""}((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
     }
 
     @Override

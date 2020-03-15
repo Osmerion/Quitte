@@ -32,7 +32,6 @@
 package com.github.osmerion.quitte.internal.binding;
 
 import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -41,10 +40,10 @@ public final class Object2IntBinding<T> implements Binding {
     private final ObservableObjectValue<T> source;
     private final ObjectChangeListener<T> listener;
 
-    public Object2IntBinding(WritableIntProperty target, ObservableObjectValue<T> source, Object2IntFunction<T> transform) {
+    public Object2IntBinding(IntConsumer target, ObservableObjectValue<T> source, Object2IntFunction<T> transform) {
         this.source = source;
-        target.set(transform.apply(source.get()));
-        this.source.addListener(this.listener = (observable, oldValue, newValue) -> target.set(transform.apply(newValue)));
+        target.accept(transform.apply(source.get()));
+        this.source.addListener(this.listener = new WeakObjectChangeListener<>((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
     }
 
     @Override

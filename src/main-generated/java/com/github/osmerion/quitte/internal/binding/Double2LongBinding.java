@@ -32,7 +32,6 @@
 package com.github.osmerion.quitte.internal.binding;
 
 import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -41,10 +40,10 @@ public final class Double2LongBinding implements Binding {
     private final ObservableDoubleValue source;
     private final DoubleChangeListener listener;
 
-    public Double2LongBinding(WritableLongProperty target, ObservableDoubleValue source, Double2LongFunction transform) {
+    public Double2LongBinding(LongConsumer target, ObservableDoubleValue source, Double2LongFunction transform) {
         this.source = source;
-        target.set(transform.apply(source.get()));
-        this.source.addListener(this.listener = (observable, oldValue, newValue) -> target.set(transform.apply(newValue)));
+        target.accept(transform.apply(source.get()));
+        this.source.addListener(this.listener = new WeakDoubleChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
     }
 
     @Override

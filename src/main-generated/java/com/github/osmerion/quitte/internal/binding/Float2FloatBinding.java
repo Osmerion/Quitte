@@ -32,7 +32,6 @@
 package com.github.osmerion.quitte.internal.binding;
 
 import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -41,10 +40,10 @@ public final class Float2FloatBinding implements Binding {
     private final ObservableFloatValue source;
     private final FloatChangeListener listener;
 
-    public Float2FloatBinding(WritableFloatProperty target, ObservableFloatValue source, Float2FloatFunction transform) {
+    public Float2FloatBinding(FloatConsumer target, ObservableFloatValue source, Float2FloatFunction transform) {
         this.source = source;
-        target.set(transform.apply(source.get()));
-        this.source.addListener(this.listener = (observable, oldValue, newValue) -> target.set(transform.apply(newValue)));
+        target.accept(transform.apply(source.get()));
+        this.source.addListener(this.listener = new WeakFloatChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
     }
 
     @Override

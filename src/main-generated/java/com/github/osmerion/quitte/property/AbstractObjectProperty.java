@@ -87,7 +87,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableObjectValue<T> observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Object2ObjectBinding<>(this, observable, it -> it);
+        this.binding = new Object2ObjectBinding<>(this::setInternal, observable, it -> it);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableBoolValue observable, Bool2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Bool2ObjectBinding<>(this, observable, transform);
+        this.binding = new Bool2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -109,7 +109,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableByteValue observable, Byte2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Byte2ObjectBinding<>(this, observable, transform);
+        this.binding = new Byte2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -120,7 +120,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableShortValue observable, Short2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Short2ObjectBinding<>(this, observable, transform);
+        this.binding = new Short2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableIntValue observable, Int2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Int2ObjectBinding<>(this, observable, transform);
+        this.binding = new Int2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -142,7 +142,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableLongValue observable, Long2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Long2ObjectBinding<>(this, observable, transform);
+        this.binding = new Long2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableFloatValue observable, Float2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Float2ObjectBinding<>(this, observable, transform);
+        this.binding = new Float2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -164,7 +164,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized void bindTo(ObservableDoubleValue observable, Double2ObjectFunction<T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Double2ObjectBinding<>(this, observable, transform);
+        this.binding = new Double2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -175,7 +175,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2ObjectFunction<S, T> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Object2ObjectBinding<>(this, observable, transform);
+        this.binding = new Object2ObjectBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -295,6 +295,12 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Override
     @Nullable
     public final T set(@Nullable T value) {
+        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        return this.setInternal(value);
+    }
+
+    @Nullable
+    private final T setInternal(@Nullable T value) {
         T prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

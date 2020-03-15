@@ -87,7 +87,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableLongValue observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Long2LongBinding(this, observable, it -> it);
+        this.binding = new Long2LongBinding(this::setInternal, observable, it -> it);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableBoolValue observable, Bool2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Bool2LongBinding(this, observable, transform);
+        this.binding = new Bool2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -109,7 +109,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableByteValue observable, Byte2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Byte2LongBinding(this, observable, transform);
+        this.binding = new Byte2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -120,7 +120,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableShortValue observable, Short2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Short2LongBinding(this, observable, transform);
+        this.binding = new Short2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableIntValue observable, Int2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Int2LongBinding(this, observable, transform);
+        this.binding = new Int2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -142,7 +142,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableLongValue observable, Long2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Long2LongBinding(this, observable, transform);
+        this.binding = new Long2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableFloatValue observable, Float2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Float2LongBinding(this, observable, transform);
+        this.binding = new Float2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -164,7 +164,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableDoubleValue observable, Double2LongFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Double2LongBinding(this, observable, transform);
+        this.binding = new Double2LongBinding(this::setInternal, observable, transform);
     }
 
     /**
@@ -175,7 +175,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2LongFunction<S> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Object2LongBinding<>(this, observable, transform);
+        this.binding = new Object2LongBinding<>(this::setInternal, observable, transform);
     }
 
     /**
@@ -293,6 +293,11 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      */
     @Override
     public final long set(long value) {
+        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        return this.setInternal(value);
+    }
+
+    private final long setInternal(long value) {
         long prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

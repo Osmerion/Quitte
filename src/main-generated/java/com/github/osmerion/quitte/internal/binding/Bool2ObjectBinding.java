@@ -32,7 +32,6 @@
 package com.github.osmerion.quitte.internal.binding;
 
 import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -41,10 +40,10 @@ public final class Bool2ObjectBinding<R> implements Binding {
     private final ObservableBoolValue source;
     private final BoolChangeListener listener;
 
-    public Bool2ObjectBinding(WritableObjectProperty<R> target, ObservableBoolValue source, Bool2ObjectFunction<R> transform) {
+    public Bool2ObjectBinding(ObjectConsumer<R> target, ObservableBoolValue source, Bool2ObjectFunction<R> transform) {
         this.source = source;
-        target.set(transform.apply(source.get()));
-        this.source.addListener(this.listener = (observable, oldValue, newValue) -> target.set(transform.apply(newValue)));
+        target.accept(transform.apply(source.get()));
+        this.source.addListener(this.listener = new WeakBoolChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
     }
 
     @Override

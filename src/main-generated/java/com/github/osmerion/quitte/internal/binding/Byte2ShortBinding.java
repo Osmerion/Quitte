@@ -32,7 +32,6 @@
 package com.github.osmerion.quitte.internal.binding;
 
 import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -41,10 +40,10 @@ public final class Byte2ShortBinding implements Binding {
     private final ObservableByteValue source;
     private final ByteChangeListener listener;
 
-    public Byte2ShortBinding(WritableShortProperty target, ObservableByteValue source, Byte2ShortFunction transform) {
+    public Byte2ShortBinding(ShortConsumer target, ObservableByteValue source, Byte2ShortFunction transform) {
         this.source = source;
-        target.set(transform.apply(source.get()));
-        this.source.addListener(this.listener = (observable, oldValue, newValue) -> target.set(transform.apply(newValue)));
+        target.accept(transform.apply(source.get()));
+        this.source.addListener(this.listener = new WeakByteChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
     }
 
     @Override

@@ -97,7 +97,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     @Override
     public final synchronized void bindTo(Observable${type.abbrevName}Value$typeParams observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this, observable, it -> it);
+        this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this::setInternal, observable, it -> it);
     }
 ${Type.values().joinToString(separator = "") { sourceType ->
     val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
@@ -117,7 +117,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     @Override
     public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this, observable, transform);
+        this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this::setInternal, observable, transform);
     }
 """}}
     /**
@@ -235,6 +235,11 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      */
     @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     public final ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        return this.setInternal(value);
+    }
+${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    private final ${type.raw} setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         ${type.raw} prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);
