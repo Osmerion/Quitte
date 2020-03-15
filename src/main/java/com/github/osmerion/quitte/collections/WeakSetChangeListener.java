@@ -51,7 +51,7 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
 
     private final WeakReference<SetChangeListener<E>> ref;
 
-    private boolean isInvalid;
+    private boolean wasGarbageCollected;
 
     /**
      * Wraps the given {@link SetChangeListener listener}.
@@ -64,13 +64,11 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
      */
     public WeakSetChangeListener(SetChangeListener<E> listener) {
         this.ref = new WeakReference<>(Objects.requireNonNull(listener));
-        this.isInvalid = false;
+        this.wasGarbageCollected = false;
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @implNote    At the time of writing, this is the only place where the "alive-check" happens.
      *
      * @since   0.1.0
      */
@@ -80,9 +78,8 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
 
         if (listener != null) {
             listener.onChanged(change);
-            this.isInvalid = listener.isInvalid();
         } else {
-            this.isInvalid = true;
+            this.wasGarbageCollected = true;
         }
     }
 
@@ -95,7 +92,10 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
      */
     @Override
     public boolean isInvalid() {
-        return this.isInvalid;
+        if (this.wasGarbageCollected) return true;
+
+        var listener = this.ref.get();
+        return (listener != null && listener.isInvalid());
     }
 
 }
