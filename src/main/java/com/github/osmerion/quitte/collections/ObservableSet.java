@@ -93,7 +93,7 @@ public interface ObservableSet<E> extends Set<E>, Observable {
      *
      * @since   0.1.0
      */
-    void addChangeListener(SetChangeListener<? super E> listener);
+    void addListener(SetChangeListener<? super E> listener);
 
     /**
      * Removes the given listener from this set. If the given listener has not been added to this set before, nothing
@@ -105,6 +105,6 @@ public interface ObservableSet<E> extends Set<E>, Observable {
      *
      * @since   0.1.0
      */
-    void removeChangeListener(SetChangeListener<? super E> listener);
+    void removeListener(SetChangeListener<? super E> listener);
 
 }

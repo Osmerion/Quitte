@@ -57,12 +57,12 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     private transient ChangeBuilder changeBuilder;
 
     @Override
-    public void addChangeListener(SetChangeListener<? super E> listener) {
+    public void addListener(SetChangeListener<? super E> listener) {
         this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
     @Override
-    public void removeChangeListener(SetChangeListener<? super E> listener) {
+    public void removeListener(SetChangeListener<? super E> listener) {
         this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
