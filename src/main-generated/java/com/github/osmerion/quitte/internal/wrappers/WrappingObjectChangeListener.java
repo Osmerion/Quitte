@@ -61,6 +61,11 @@ public final class WrappingObjectChangeListener<T> implements ObjectChangeListen
     }
 
     @Override
+    public boolean isInvalid() {
+        return this.listener.isInvalid();
+    }
+
+    @Override
     public boolean equals(@Nullable Object other) {
         return other == this.listener || other == this;
     }

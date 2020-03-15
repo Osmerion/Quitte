@@ -56,4 +56,15 @@ public interface ChangeListener<T> {
      */
     void onChanged(ObservableValue<? extends T> observable, @Nullable T oldValue, @Nullable T newValue);
 
+    /**
+     * Returns whether or not this listener is invalid.
+     *
+     * @return  whether or not this listener is invalid
+     *
+     * @since   0.1.0
+     */
+    default boolean isInvalid() {
+        return false;
+    }
+
 }

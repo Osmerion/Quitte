@@ -36,6 +36,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
@@ -51,6 +52,7 @@ import com.github.osmerion.quitte.value.change.*;
 public abstract class AbstractShortProperty implements WritableShortProperty {
 
     private final transient CopyOnWriteArraySet<ShortChangeListener> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
     private transient Binding binding;
@@ -251,8 +253,38 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
         return this.changeListeners.remove(listener);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    public final boolean addListener(InvalidationListener listener) {
+        return this.invalidationListeners.add(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    public final boolean removeListener(InvalidationListener listener) {
+        return this.invalidationListeners.remove(listener);
+    }
+
     private void notifyListeners(short prevValue, short newValue) {
-        this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
+        for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+            
+            listener.onChanged(this, prevValue, newValue);
+            if (listener.isInvalid()) itr.remove();
+        }
+    
+        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+            
+            listener.onInvalidation(this);
+            if (listener.isInvalid()) itr.remove();
+        }
     }
 
     /**

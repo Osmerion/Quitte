@@ -42,6 +42,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
@@ -61,6 +62,7 @@ import com.github.osmerion.quitte.value.change.*;
 public abstract class Abstract${type.abbrevName}Property$typeParams implements Writable${type.abbrevName}Property$typeParams {
 
     private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeParams> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
     private transient Binding binding;
@@ -186,8 +188,38 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         return this.changeListeners.remove(listener);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    public final boolean addListener(InvalidationListener listener) {
+        return this.invalidationListeners.add(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    public final boolean removeListener(InvalidationListener listener) {
+        return this.invalidationListeners.remove(listener);
+    }
+
     private void notifyListeners(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} prevValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
-        this.changeListeners.forEach(it -> it.onChanged(this, prevValue, newValue));
+        for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+            
+            listener.onChanged(this, prevValue, newValue);
+            if (listener.isInvalid()) itr.remove();
+        }
+    
+        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+            
+            listener.onInvalidation(this);
+            if (listener.isInvalid()) itr.remove();
+        }
     }
 
     /**

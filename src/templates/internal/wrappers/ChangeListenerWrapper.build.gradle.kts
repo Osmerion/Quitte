@@ -68,6 +68,11 @@ public final class Wrapping${type.abbrevName}ChangeListener$typeParams implement
     }
 
     @Override
+    public boolean isInvalid() {
+        return this.listener.isInvalid();
+    }
+
+    @Override
     public boolean equals(@Nullable Object other) {
         return other == this.listener || other == this;
     }
