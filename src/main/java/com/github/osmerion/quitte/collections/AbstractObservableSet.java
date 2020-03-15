@@ -32,7 +32,6 @@ package com.github.osmerion.quitte.collections;
 
 import java.util.AbstractSet;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -56,11 +55,21 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     @Nullable
     private transient ChangeBuilder changeBuilder;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
     @Override
     public void addListener(SetChangeListener<? super E> listener) {
         this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
     @Override
     public void removeListener(SetChangeListener<? super E> listener) {
         this.changeListeners.remove(Objects.requireNonNull(listener));
