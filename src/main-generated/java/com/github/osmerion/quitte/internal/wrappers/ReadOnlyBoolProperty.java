@@ -31,6 +31,7 @@
  */
 package com.github.osmerion.quitte.internal.wrappers;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -78,7 +79,6 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
     }
 
 	@Override
-    @Deprecated
     public boolean addBoxedListener(ChangeListener<Boolean> listener) {
         return this.property.addBoxedListener(listener);
     }
@@ -89,9 +89,18 @@ public final class ReadOnlyBoolProperty implements ReadableBoolProperty {
     }
 
     @Override
-    @Deprecated
     public boolean removeBoxedListener(ChangeListener<Boolean> listener) {
         return this.property.removeBoxedListener(listener);
+    }
+
+    @Override
+    public final boolean addListener(InvalidationListener listener) {
+        return this.property.addListener(listener);
+    }
+
+    @Override
+    public final boolean removeListener(InvalidationListener listener) {
+        return this.property.removeListener(listener);
     }
 
 }

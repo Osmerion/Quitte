@@ -37,6 +37,7 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/ReadOnly${type.abbrevName}Property") {
         """package $packageName;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -88,7 +89,6 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
     }
 
 	@Override
-    @Deprecated
     public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
         return this.property.addBoxedListener(listener);
     }
@@ -99,9 +99,18 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
     }
 
     @Override
-    @Deprecated
     public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
         return this.property.removeBoxedListener(listener);
+    }
+
+    @Override
+    public final boolean addListener(InvalidationListener listener) {
+        return this.property.addListener(listener);
+    }
+
+    @Override
+    public final boolean removeListener(InvalidationListener listener) {
+        return this.property.removeListener(listener);
     }
 
 }"""
