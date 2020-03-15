@@ -297,7 +297,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         return this.setInternal(value);
     }
 
-    private final float setInternal(float value) {
+    private float setInternal(float value) {
         float prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

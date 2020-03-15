@@ -297,7 +297,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
         return this.setInternal(value);
     }
 
-    private final boolean setInternal(boolean value) {
+    private boolean setInternal(boolean value) {
         boolean prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

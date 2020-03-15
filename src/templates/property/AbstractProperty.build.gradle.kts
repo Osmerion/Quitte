@@ -239,7 +239,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         return this.setInternal(value);
     }
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    private final ${type.raw} setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    private ${type.raw} setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         ${type.raw} prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

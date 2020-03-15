@@ -297,7 +297,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
         return this.setInternal(value);
     }
 
-    private final byte setInternal(byte value) {
+    private byte setInternal(byte value) {
         byte prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

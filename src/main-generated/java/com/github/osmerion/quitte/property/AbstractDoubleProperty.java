@@ -297,7 +297,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
         return this.setInternal(value);
     }
 
-    private final double setInternal(double value) {
+    private double setInternal(double value) {
         double prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

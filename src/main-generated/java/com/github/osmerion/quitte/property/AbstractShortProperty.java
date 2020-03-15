@@ -297,7 +297,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
         return this.setInternal(value);
     }
 
-    private final short setInternal(short value) {
+    private short setInternal(short value) {
         short prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

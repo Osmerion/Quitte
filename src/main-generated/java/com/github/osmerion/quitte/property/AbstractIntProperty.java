@@ -297,7 +297,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
         return this.setInternal(value);
     }
 
-    private final int setInternal(int value) {
+    private int setInternal(int value) {
         int prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

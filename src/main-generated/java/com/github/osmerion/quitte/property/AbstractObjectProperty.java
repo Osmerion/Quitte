@@ -300,7 +300,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     }
 
     @Nullable
-    private final T setInternal(@Nullable T value) {
+    private T setInternal(@Nullable T value) {
         T prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);

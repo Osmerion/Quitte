@@ -297,7 +297,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
         return this.setInternal(value);
     }
 
-    private final long setInternal(long value) {
+    private long setInternal(long value) {
         long prev = this.getImpl();
         this.setImpl(value);
         this.notifyListeners(prev, value);
