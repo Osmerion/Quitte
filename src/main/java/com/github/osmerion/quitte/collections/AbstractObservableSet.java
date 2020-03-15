@@ -32,9 +32,9 @@ package com.github.osmerion.quitte.collections;
 
 import java.util.AbstractSet;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
 import com.github.osmerion.quitte.InvalidationListener;
 
@@ -49,8 +49,8 @@ import com.github.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private transient final Set<SetChangeListener<? super E>> changeListeners = new LinkedHashSet<>(1);
-    private transient final Set<InvalidationListener> invalidationListeners = new LinkedHashSet<>(1);
+    private transient final Set<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final Set<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
     private transient ChangeBuilder changeBuilder;
