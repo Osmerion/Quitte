@@ -32,6 +32,7 @@ module com.github.osmerion.quitte {
 
     requires static jsr305;
 
+    exports com.github.osmerion.quitte;
     exports com.github.osmerion.quitte.collections;
     exports com.github.osmerion.quitte.functional;
     exports com.github.osmerion.quitte.property;
