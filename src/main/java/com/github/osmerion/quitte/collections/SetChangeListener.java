@@ -56,6 +56,17 @@ public interface SetChangeListener<E> {
     void onChanged(Change<? extends E> change);
 
     /**
+     * Returns whether or not this listener is invalid.
+     *
+     * @return  whether or not this listener is invalid
+     *
+     * @since   0.1.0
+     */
+    default boolean isInvalid() {
+        return false;
+    }
+
+    /**
      * A change done to an {@link ObservableSet}.
      *
      * <p>Note that adding an element that is already in a set does not modify the set and therefor no change will be

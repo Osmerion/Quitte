@@ -166,9 +166,9 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
 
                 for (Iterator<SetChangeListener<? super E>> itr = AbstractObservableSet.this.listeners.iterator(); itr.hasNext(); ) {
                     SetChangeListener<? super E> listener = itr.next();
-                    listener.onChanged(change);
 
-                    if (listener instanceof WeakSetChangeListener && ((WeakSetChangeListener<?>) listener).wasGarbageCollected()) itr.remove();
+                    listener.onChanged(change);
+                    if (listener.isInvalid()) itr.remove();
                 }
             }
         }

@@ -51,7 +51,7 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
 
     private final WeakReference<SetChangeListener<E>> ref;
 
-    private boolean wasGarbageCollected;
+    private boolean isInvalid;
 
     /**
      * Wraps the given {@link SetChangeListener listener}.
@@ -64,7 +64,7 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
      */
     public WeakSetChangeListener(SetChangeListener<E> listener) {
         this.ref = new WeakReference<>(Objects.requireNonNull(listener));
-        this.wasGarbageCollected = false;
+        this.isInvalid = false;
     }
 
     /**
@@ -80,18 +80,22 @@ public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
 
         if (listener != null) {
             listener.onChanged(change);
+            this.isInvalid = listener.isInvalid();
         } else {
-            this.wasGarbageCollected = true;
+            this.isInvalid = true;
         }
     }
 
     /**
-     * Returns whether or not the underlying listener was garbage collected.
+     * Returns whether or not the underlying listener was garbage collected or has become invalid.
      *
-     * @return  whether or not the underlying listener was garbage collected
+     * @return  whether or not the underlying listener was garbage collected or has become invalid
+     *
+     * @since   0.1.0
      */
-    boolean wasGarbageCollected() {
-        return this.wasGarbageCollected;
+    @Override
+    public boolean isInvalid() {
+        return this.isInvalid;
     }
 
 }
