@@ -59,6 +59,17 @@ public interface FloatChangeListener {
     void onChanged(ObservableFloatValue observable, float oldValue, float newValue);
 
     /**
+     * Returns whether or not this listener is invalid.
+     *
+     * @return  whether or not this listener is invalid
+     *
+     * @since   0.1.0
+     */
+    default boolean isInvalid() {
+        return false;
+    }
+
+    /**
      * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
      * shares a hashcode with it.
      *
