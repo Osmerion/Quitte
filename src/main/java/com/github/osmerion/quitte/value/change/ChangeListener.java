@@ -38,6 +38,8 @@ import com.github.osmerion.quitte.value.ObservableValue;
  *
  * <p><b>Specialized versions of this interface should be used whenever possible.</b></p>
  *
+ * @param <T>   the type of the observed value
+ *
  * @since   0.1.0
  *
  * @author  Leon Linhart
