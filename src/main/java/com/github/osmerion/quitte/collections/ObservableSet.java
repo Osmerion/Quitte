@@ -31,6 +31,7 @@
 package com.github.osmerion.quitte.collections;
 
 import java.util.Set;
+import com.github.osmerion.quitte.Observable;
 import com.github.osmerion.quitte.internal.collections.UnmodifiableObservableSet;
 import com.github.osmerion.quitte.internal.collections.WrappingObservableSet;
 
@@ -43,7 +44,7 @@ import com.github.osmerion.quitte.internal.collections.WrappingObservableSet;
  *
  * @author  Leon Linhart
  */
-public interface ObservableSet<E> extends Set<E> {
+public interface ObservableSet<E> extends Set<E>, Observable {
 
     /**
      * Returns an observable view of the specified set. Query operations on the returned set "read and write through"

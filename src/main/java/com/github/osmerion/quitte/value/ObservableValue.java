@@ -32,6 +32,7 @@ package com.github.osmerion.quitte.value;
 
 import javax.annotation.Nullable;
 
+import com.github.osmerion.quitte.Observable;
 import com.github.osmerion.quitte.value.change.ChangeListener;
 
 /**
@@ -45,7 +46,7 @@ import com.github.osmerion.quitte.value.change.ChangeListener;
  *
  * @author  Leon Linhart
  */
-public interface ObservableValue<T> {
+public interface ObservableValue<T> extends Observable {
 
     /**
      * Returns the value represented by this object.

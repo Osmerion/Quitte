@@ -37,6 +37,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
+import com.github.osmerion.quitte.InvalidationListener;
 
 /**
  * A basic implementation for {@link ObservableSet}.
@@ -49,19 +50,40 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private transient final Set<SetChangeListener<? super E>> listeners = new LinkedHashSet<>(1);
+    private transient final Set<SetChangeListener<? super E>> changeListeners = new LinkedHashSet<>(1);
+    private transient final Set<InvalidationListener> invalidationListeners = new LinkedHashSet<>(1);
 
     @Nullable
     private transient ChangeBuilder changeBuilder;
 
     @Override
     public void addChangeListener(SetChangeListener<? super E> listener) {
-        this.listeners.add(Objects.requireNonNull(listener));
+        this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
     @Override
     public void removeChangeListener(SetChangeListener<? super E> listener) {
-        this.listeners.remove(Objects.requireNonNull(listener));
+        this.changeListeners.remove(Objects.requireNonNull(listener));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final boolean addListener(InvalidationListener listener) {
+        return this.invalidationListeners.add(Objects.requireNonNull(listener));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public boolean removeListener(InvalidationListener listener) {
+        return this.invalidationListeners.remove(Objects.requireNonNull(listener));
     }
 
     /**
@@ -162,12 +184,19 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                 AbstractObservableSet.this.changeBuilder = null;
                 if (this.added == null && this.removed == null) return;
 
-                SetChangeListener.Change<E> change = new SetChangeListener.Change<>(this.added, this.removed);
+                var change = new SetChangeListener.Change<>(this.added, this.removed);
 
-                for (Iterator<SetChangeListener<? super E>> itr = AbstractObservableSet.this.listeners.iterator(); itr.hasNext(); ) {
-                    SetChangeListener<? super E> listener = itr.next();
+                for (var itr = AbstractObservableSet.this.changeListeners.iterator(); itr.hasNext(); ) {
+                    var listener = itr.next();
 
                     listener.onChanged(change);
+                    if (listener.isInvalid()) itr.remove();
+                }
+
+                for (var itr = AbstractObservableSet.this.invalidationListeners.iterator(); itr.hasNext(); ) {
+                    var listener = itr.next();
+
+                    listener.onInvalidation(AbstractObservableSet.this);
                     if (listener.isInvalid()) itr.remove();
                 }
             }
