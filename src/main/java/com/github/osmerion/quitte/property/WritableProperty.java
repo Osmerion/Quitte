@@ -55,9 +55,21 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
      *
      * @since   0.1.0
      */
-    void bind(ObservableValue<T> observable);
+    void bindTo(ObservableValue<T> observable);
 
-    <S> void bind(ObservableValue<S> observable, Function<S, T> transform);
+    /**
+     * Binds this property to the given observable value.
+     *
+     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
+     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     *
+     * @param <S>           the type of the value of the given observable
+     * @param observable    the observable to bind this property to
+     * @param transform     the transform function to be applied to the value before updating this property
+     *
+     * @since   0.1.0
+     */
+    <S> void bindTo(ObservableValue<S> observable, Function<S, T> transform);
 
     /**
      * Unbinds this property.

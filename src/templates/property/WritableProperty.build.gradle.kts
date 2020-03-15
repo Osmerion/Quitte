@@ -63,7 +63,7 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableP
      *
      * @since   0.1.0
      */
-    void bind(Observable${type.abbrevName}Value$typeParams observable);
+    void bindTo(Observable${type.abbrevName}Value$typeParams observable);
 ${Type.values().joinToString(separator = "") { sourceType ->
             val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
             val transformTypeParams = when {
@@ -79,13 +79,13 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
      * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
-     *
+     *${if (sourceType === Type.OBJECT) "\n     * @param <S>           the type of the value of the given observable" else ""}
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property
      *
      * @since   0.1.0
      */
-    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bind(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform);
+    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform);
 """}}
 }"""
     }

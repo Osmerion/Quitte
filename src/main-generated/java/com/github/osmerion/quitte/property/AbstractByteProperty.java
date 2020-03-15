@@ -63,9 +63,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableValue<Byte> observable) {
+    public final synchronized void bindTo(ObservableValue<Byte> observable) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new GenericBinding<>(this, observable);
     }
 
@@ -75,9 +74,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, Byte> transform) {
+    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, Byte> transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new MutatingBinding<>(this, observable, transform);
     }
 
@@ -87,9 +85,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableByteValue observable) {
+    public final synchronized void bindTo(ObservableByteValue observable) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Byte2ByteBinding(this, observable, it -> it);
     }
 
@@ -99,9 +96,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableBoolValue observable, Bool2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableBoolValue observable, Bool2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Bool2ByteBinding(this, observable, transform);
     }
 
@@ -111,9 +107,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableByteValue observable, Byte2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableByteValue observable, Byte2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Byte2ByteBinding(this, observable, transform);
     }
 
@@ -123,9 +118,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableShortValue observable, Short2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableShortValue observable, Short2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Short2ByteBinding(this, observable, transform);
     }
 
@@ -135,9 +129,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableIntValue observable, Int2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableIntValue observable, Int2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Int2ByteBinding(this, observable, transform);
     }
 
@@ -147,9 +140,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableLongValue observable, Long2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableLongValue observable, Long2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Long2ByteBinding(this, observable, transform);
     }
 
@@ -159,9 +151,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableFloatValue observable, Float2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableFloatValue observable, Float2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Float2ByteBinding(this, observable, transform);
     }
 
@@ -171,9 +162,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableDoubleValue observable, Double2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableDoubleValue observable, Double2ByteFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Double2ByteBinding(this, observable, transform);
     }
 
@@ -183,9 +173,8 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bind(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform) {
+    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new Object2ByteBinding<>(this, observable, transform);
     }
 

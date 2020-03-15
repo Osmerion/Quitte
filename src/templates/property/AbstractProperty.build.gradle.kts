@@ -73,9 +73,8 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(ObservableValue<${type.box}> observable) {
+    public final synchronized void bindTo(ObservableValue<${type.box}> observable) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new GenericBinding<>(this, observable);
     }
 
@@ -85,9 +84,8 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bind(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
+    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new MutatingBinding<>(this, observable, transform);
     }
 
@@ -97,9 +95,8 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bind(Observable${type.abbrevName}Value$typeParams observable) {
+    public final synchronized void bindTo(Observable${type.abbrevName}Value$typeParams observable) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this, observable, it -> it);
     }
 ${Type.values().joinToString(separator = "") { sourceType ->
@@ -118,9 +115,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bind(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
+    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
         if (this.binding != null) throw new IllegalStateException();
-
         this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this, observable, transform);
     }
 """}}
