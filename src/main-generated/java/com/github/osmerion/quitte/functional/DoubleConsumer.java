@@ -52,6 +52,6 @@ public interface DoubleConsumer {
      *
      * @since   0.1.0
      */
-    void get(double t);
+    void accept(double t);
 
 }

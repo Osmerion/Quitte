@@ -52,6 +52,6 @@ public interface BoolConsumer {
      *
      * @since   0.1.0
      */
-    void get(boolean t);
+    void accept(boolean t);
 
 }

@@ -52,6 +52,6 @@ public interface ShortConsumer {
      *
      * @since   0.1.0
      */
-    void get(short t);
+    void accept(short t);
 
 }

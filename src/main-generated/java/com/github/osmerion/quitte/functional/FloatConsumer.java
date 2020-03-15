@@ -52,6 +52,6 @@ public interface FloatConsumer {
      *
      * @since   0.1.0
      */
-    void get(float t);
+    void accept(float t);
 
 }

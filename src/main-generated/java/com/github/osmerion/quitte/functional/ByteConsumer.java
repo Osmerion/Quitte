@@ -52,6 +52,6 @@ public interface ByteConsumer {
      *
      * @since   0.1.0
      */
-    void get(byte t);
+    void accept(byte t);
 
 }

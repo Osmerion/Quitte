@@ -52,6 +52,6 @@ public interface LongConsumer {
      *
      * @since   0.1.0
      */
-    void get(long t);
+    void accept(long t);
 
 }

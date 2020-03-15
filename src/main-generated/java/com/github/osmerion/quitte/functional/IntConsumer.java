@@ -52,6 +52,6 @@ public interface IntConsumer {
      *
      * @since   0.1.0
      */
-    void get(int t);
+    void accept(int t);
 
 }

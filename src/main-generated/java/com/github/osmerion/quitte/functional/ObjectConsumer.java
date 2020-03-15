@@ -56,6 +56,6 @@ public interface ObjectConsumer<T> {
      *
      * @since   0.1.0
      */
-    void get(@Nullable T t);
+    void accept(@Nullable T t);
 
 }

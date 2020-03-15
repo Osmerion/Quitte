@@ -67,7 +67,7 @@ public interface $className$typeParams {
      *
      * @since   0.1.0
      */
-    void get(${if (sourceType === Type.OBJECT) "@Nullable " else ""}$sourceTypeName t);
+    void accept(${if (sourceType === Type.OBJECT) "@Nullable " else ""}$sourceTypeName t);
 
 }"""
     }
