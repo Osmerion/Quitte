@@ -48,8 +48,8 @@ enum class Type(
     OBJECT("Object", "null", "T")
 }
 
-fun Project.template(path: String, factory: () -> String) {
+fun Project.template(path: String, isTest: Boolean = false, factory: () -> String) {
     val tmpl = Template(path, factory)
     @Suppress("UNCHECKED_CAST")
-    (project.extra["templates"] as MutableList<Template>).add(tmpl)
+    (project.extra["${if (isTest) "test" else "main"}Templates"] as MutableList<Template>).add(tmpl)
 }

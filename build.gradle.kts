@@ -115,6 +115,8 @@ listOf("main", "test").forEach { templateCategory ->
         tasks.create("generate$${templateCategory.let { "${it.substring(0, 1).toUpperCase()}${it.substring(1)}" }}$$mangledName", Generate::class) {
             generate.dependsOn(this)
 
+            templateCat = templateCategory
+
             project.extra["${templateCategory}Templates"] = mutableListOf<Template>()
             apply(from = templateSource)
 

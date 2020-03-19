@@ -46,10 +46,13 @@ open class Generate : DefaultTask() {
     @OutputFiles
     lateinit var outputs: List<File>
 
+    @Input
+    lateinit var templateCat: String
+
     @Internal
     var templates: List<Template>? = null
         set(value) {
-            outputs = value!!.map { File(project.rootDir, "src/main-generated/java/${it.path}.java") }
+            outputs = value!!.map { File(project.rootDir, "src/$templateCat-generated/java/${it.path}.java") }
             field = value
         }
 
@@ -68,7 +71,7 @@ open class Generate : DefaultTask() {
         val licenseHeader = header.readText(Charsets.UTF_8).format()
 
         templates!!.forEach {
-            File(project.rootDir, "src/main-generated/java/${it.path}.java").apply {
+            File(project.rootDir, "src/$templateCat-generated/java/${it.path}.java").apply {
                 parentFile.mkdirs()
                 writeText("$licenseHeader\n${it.content}", Charsets.UTF_8)
             }
