@@ -40,9 +40,6 @@ plugins {
     id("org.javamodularity.moduleplugin") version "1.6.0"
 }
 
-val templates = mutableListOf<Template>()
-project.extra["templates"] = templates
-
 group = "com.github.osmerion"
 val artifactName = "quitte"
 val nextVersion = "0.1.0"
@@ -106,7 +103,8 @@ val generate = tasks.create("generate") {
     tasks.compileJava.get().dependsOn(this)
 }
 
-file("src/templates").let { templateDir ->
+listOf("main", "test").forEach { templateCategory ->
+    val templateDir = file("src/$templateCategory-templates")
     val templateDirPath = templateDir.toPath()
 
     fileTree(templateDir).forEach { templateSource ->
@@ -117,11 +115,11 @@ file("src/templates").let { templateDir ->
         tasks.create("generate$$mangledName", Generate::class) {
             generate.dependsOn(this)
 
-            project.extra["templates"] = mutableListOf<Template>()
+            project.extra["${templateCategory}Templates"] = mutableListOf<Template>()
             apply(from = templateSource)
 
             @Suppress("UNCHECKED_CAST")
-            templates = project.extra["templates"] as List<Template>
+            templates = project.extra["${templateCategory}Templates"] as List<Template>
 
             input = templateSource
             header = file(".dev/resources/LICENSE_HEADER_GEN")
