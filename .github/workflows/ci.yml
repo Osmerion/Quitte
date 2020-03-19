@@ -1,0 +1,17 @@
+name: CI
+on: push
+
+jobs:
+  jdk13:
+    name: OpenJDK 13 (Ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: '13'
+            - name: Gradle Build
+      - name: Gradle Build
+        run: |
+          ./gradlew --version --console=plain
+          ./gradlew build -Psnapshot --info -S --console=plain
