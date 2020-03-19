@@ -112,7 +112,7 @@ listOf("main", "test").forEach { templateCategory ->
             .replace(File.separatorChar, '$')
             .removeSuffix(".build.gradle.kts")
 
-        tasks.create("generate$$mangledName", Generate::class) {
+        tasks.create("generate$${templateCategory.let { "${it.substring(0, 1).toUpperCase()}${it.substring(1)}" }}$$mangledName", Generate::class) {
             generate.dependsOn(this)
 
             project.extra["${templateCategory}Templates"] = mutableListOf<Template>()
