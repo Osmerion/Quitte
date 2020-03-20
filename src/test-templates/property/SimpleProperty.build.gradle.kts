@@ -77,10 +77,10 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
         AtomicInteger counter = new AtomicInteger(0);
     
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener(new ${type.abbrevName}ChangeListener$typeParams() {
+        property.addListener(new ${type.abbrevName}ChangeListener$typeDiamonds() {
 
             @Override
-            public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue) {
+            public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} oldValue, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} newValue) {
                 counter.incrementAndGet();
             }
             

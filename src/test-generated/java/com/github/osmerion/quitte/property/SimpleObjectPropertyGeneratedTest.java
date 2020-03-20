@@ -71,10 +71,10 @@ public final class SimpleObjectPropertyGeneratedTest {
         AtomicInteger counter = new AtomicInteger(0);
     
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener(new ObjectChangeListener<Object>() {
+        property.addListener(new ObjectChangeListener<>() {
 
             @Override
-            public void onChanged(ObservableObjectValue<Object> observable, @Nullable T oldValue, @Nullable T newValue) {
+            public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {
                 counter.incrementAndGet();
             }
             
