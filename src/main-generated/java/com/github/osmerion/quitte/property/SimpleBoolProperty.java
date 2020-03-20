@@ -70,19 +70,34 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
      */
     @Override
     protected final void setImpl(boolean value) {
-        this.value = this.validate(value);
+        this.value = value;
     }
     
     /**
-     * Validates the given value.
-     *
-     * @param value the value to validate
-     *
-     * @return  the validated value
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    protected boolean validate(boolean value) {
+    @Override
+    protected final boolean setImplDeferrable(boolean value) {
+        var prev = this.getImpl();
+        value = this.intercept(value);
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */
+    protected boolean intercept(boolean value) {
         return value;
     }
 

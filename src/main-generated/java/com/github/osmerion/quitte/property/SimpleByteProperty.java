@@ -70,19 +70,34 @@ public class SimpleByteProperty extends AbstractByteProperty {
      */
     @Override
     protected final void setImpl(byte value) {
-        this.value = this.validate(value);
+        this.value = value;
     }
     
     /**
-     * Validates the given value.
-     *
-     * @param value the value to validate
-     *
-     * @return  the validated value
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    protected byte validate(byte value) {
+    @Override
+    protected final boolean setImplDeferrable(byte value) {
+        var prev = this.getImpl();
+        value = this.intercept(value);
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */
+    protected byte intercept(byte value) {
         return value;
     }
 

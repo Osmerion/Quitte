@@ -74,20 +74,35 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      */
     @Override
     protected final void setImpl(@Nullable T value) {
-        this.value = this.validate(value);
+        this.value = value;
     }
     
     /**
-     * Validates the given value.
+     * {@inheritDoc}
      *
-     * @param value the value to validate
+     * @since   0.1.0
+     */
+    @Override
+    protected final boolean setImplDeferrable(@Nullable T value) {
+        var prev = this.getImpl();
+        value = this.intercept(value);
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    /**
+     * Intercepts values before updating this property.
      *
-     * @return  the validated value
+     * @param value the value
+     *
+     * @return  the result
      *
      * @since   0.1.0
      */
     @Nullable
-    protected T validate(@Nullable T value) {
+    protected T intercept(@Nullable T value) {
         return value;
     }
 

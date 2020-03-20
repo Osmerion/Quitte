@@ -260,22 +260,6 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         return this.invalidationListeners.remove(listener);
     }
 
-    private void notifyListeners(@Nullable T prevValue, @Nullable T newValue) {
-        for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {
-            var listener = itr.next();
-            
-            listener.onChanged(this, prevValue, newValue);
-            if (listener.isInvalid()) itr.remove();
-        }
-    
-        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
-            var listener = itr.next();
-            
-            listener.onInvalidation(this);
-            if (listener.isInvalid()) itr.remove();
-        }
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -302,14 +286,21 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     @Nullable
     private T setInternal(@Nullable T value) {
         T prev = this.getImpl();
-        this.setImpl(value);
-        this.notifyListeners(prev, value);
+
+        if (this.setImplDeferrable(value)) {
+            for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
+                var listener = itr.next();
+                
+                listener.onInvalidation(this);
+                if (listener.isInvalid()) itr.remove();
+            }
+        }
 
         return prev;
     }
 
     /**
-     * TODO doc
+     * <b>This method must provide raw setter access and should not be called directly.</b>
      *
      * @since   0.1.0
      */
@@ -317,10 +308,45 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     protected abstract T getImpl();
 
     /**
-     * TODO doc
+     * <b>This method must provide raw setter access and should not be called directly.</b>
+     *
+     * @param value the value
      *
      * @since   0.1.0
      */
     protected abstract void setImpl(@Nullable T value);
+
+    /**
+     * Attempts to set the value of this property and returns whether or not the current value was invalidated.
+     *
+     * @return  whether or not the value has been invalidated
+     *
+     * @since   0.1.0
+     */
+    protected boolean setImplDeferrable(@Nullable T value) {
+        var prev = this.getImpl();
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    protected final void invalidate() {
+        
+    }
+
+    protected final void updateValue(@Nullable T value) {
+        var prev = this.getImpl();
+        if (prev == value) return;
+        
+        this.setImpl(value);
+
+        for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+
+            listener.onChanged(this, prev, this.getImpl());
+            if (listener.isInvalid()) itr.remove();
+        }
+    }
 
 }

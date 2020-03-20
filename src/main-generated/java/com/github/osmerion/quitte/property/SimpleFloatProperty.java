@@ -70,19 +70,34 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
      */
     @Override
     protected final void setImpl(float value) {
-        this.value = this.validate(value);
+        this.value = value;
     }
     
     /**
-     * Validates the given value.
-     *
-     * @param value the value to validate
-     *
-     * @return  the validated value
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    protected float validate(float value) {
+    @Override
+    protected final boolean setImplDeferrable(float value) {
+        var prev = this.getImpl();
+        value = this.intercept(value);
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */
+    protected float intercept(float value) {
         return value;
     }
 

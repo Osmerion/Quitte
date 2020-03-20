@@ -80,19 +80,34 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      */
     @Override
     protected final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
-        this.value = this.validate(value);
+        this.value = value;
     }
     
     /**
-     * Validates the given value.
+     * {@inheritDoc}
      *
-     * @param value the value to validate
+     * @since   0.1.0
+     */
+    @Override
+    protected final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        var prev = this.getImpl();
+        value = this.intercept(value);
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    /**
+     * Intercepts values before updating this property.
      *
-     * @return  the validated value
+     * @param value the value
+     *
+     * @return  the result
      *
      * @since   0.1.0
      */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected ${type.raw} validate(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    protected ${type.raw} intercept(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         return value;
     }
 

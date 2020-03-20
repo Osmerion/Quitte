@@ -70,19 +70,34 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
      */
     @Override
     protected final void setImpl(double value) {
-        this.value = this.validate(value);
+        this.value = value;
     }
     
     /**
-     * Validates the given value.
-     *
-     * @param value the value to validate
-     *
-     * @return  the validated value
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    protected double validate(double value) {
+    @Override
+    protected final boolean setImplDeferrable(double value) {
+        var prev = this.getImpl();
+        value = this.intercept(value);
+        if (prev == value) return false;
+    
+        this.updateValue(value);
+        return true;
+    }
+    
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */
+    protected double intercept(double value) {
         return value;
     }
 
