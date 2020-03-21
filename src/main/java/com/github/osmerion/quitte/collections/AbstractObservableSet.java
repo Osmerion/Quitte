@@ -49,8 +49,8 @@ import com.github.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private transient final Set<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
-    private transient final Set<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
     private transient ChangeBuilder changeBuilder;
@@ -195,18 +195,14 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
 
                 var change = new SetChangeListener.Change<>(this.added, this.removed);
 
-                for (var itr = AbstractObservableSet.this.changeListeners.iterator(); itr.hasNext(); ) {
-                    var listener = itr.next();
-
+                for (SetChangeListener<? super E> listener : AbstractObservableSet.this.changeListeners) {
                     listener.onChanged(change);
-                    if (listener.isInvalid()) itr.remove();
+                    if (listener.isInvalid()) AbstractObservableSet.this.changeListeners.remove(listener);
                 }
 
-                for (var itr = AbstractObservableSet.this.invalidationListeners.iterator(); itr.hasNext(); ) {
-                    var listener = itr.next();
-
+                for (var listener : AbstractObservableSet.this.invalidationListeners) {
                     listener.onInvalidation(AbstractObservableSet.this);
-                    if (listener.isInvalid()) itr.remove();
+                    if (listener.isInvalid()) AbstractObservableSet.this.invalidationListeners.remove(listener);
                 }
             }
         }

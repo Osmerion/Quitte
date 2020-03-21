@@ -332,11 +332,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
     }
 
     protected final void invalidate() {
-        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
-            var listener = itr.next();
-
+        for (var listener : this.invalidationListeners) {
             listener.onInvalidation(this);
-            if (listener.isInvalid()) itr.remove();
+            if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
     }
 
@@ -354,11 +352,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
 
         this.setImpl(value);
 
-        for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {
-            var listener = itr.next();
-
+        for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
-            if (listener.isInvalid()) itr.remove();
+            if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
     }
 

@@ -267,11 +267,9 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     protected final void invalidate() {
-        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
-            var listener = itr.next();
-
+        for (var listener : this.invalidationListeners) {
             listener.onInvalidation(this);
-            if (listener.isInvalid()) itr.remove();
+            if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
     }
 
@@ -289,11 +287,9 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
 
         this.setImpl(value);
 
-        for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {
-            var listener = itr.next();
-
+        for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
-            if (listener.isInvalid()) itr.remove();
+            if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
     }
 
