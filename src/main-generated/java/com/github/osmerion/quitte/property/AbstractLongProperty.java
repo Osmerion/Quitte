@@ -346,16 +346,21 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
         return Objects.requireNonNull(this.binding).get();
     }
 
-    protected final void updateValue(long value) {
+    protected final boolean updateValue(long value) {
         var prev = this.getImpl();
-        if (prev == value) return;
+        if (prev == value) return false;
 
         this.setImpl(value);
+        this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
+        
+        return true;
     }
+
+    protected void onChanged(long oldValue, long newValue) {}
 
 }

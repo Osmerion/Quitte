@@ -281,17 +281,22 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         return Objects.requireNonNull(this.binding).get();
     }
 
-    protected final void updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    protected final boolean updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         var prev = this.getImpl();
-        if (prev == value) return;
+        if (prev == value) return false;
 
         this.setImpl(value);
+        this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
+        
+        return true;
     }
+
+    protected void onChanged(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
 
 }"""
     }
