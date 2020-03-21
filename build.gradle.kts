@@ -60,6 +60,10 @@ java {
 }
 
 tasks {
+    withType<JavaCompile> {
+        options.compilerArgs.add("--enable-preview")
+    }
+
     jar {
         archiveBaseName.set(artifactName)
 
