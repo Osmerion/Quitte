@@ -48,10 +48,19 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
     /**
      * Binds this property to the given observable value.
      *
-     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
-     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
+     * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
+     * hold a strong reference to this property.</p>
+     *
+     * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
+     * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
+     *
+     * <p>If the underlying property is set to {@code null} and this property does not support {@code null}, a
+     * {@link NullPointerException} is thrown when this property's value is updated to reflect the changes.</p>
      *
      * @param observable    the observable to bind this property to
+     *
+     * @throws  IllegalStateException   if this property is already bound
      *
      * @since   0.1.0
      */
@@ -60,12 +69,19 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
     /**
      * Binds this property to the given observable value.
      *
-     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
-     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
+     * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
+     * hold a strong reference to this property.</p>
+     *
+     * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
+     * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
+     *
+     * <p>If the given transform function returns {@code null} and this property does not support {@code null}, a
+     * {@link NullPointerException} is thrown when this properties value is updated to reflect the changes.</p>
      *
      * @param <S>           the type of the value of the given observable
      * @param observable    the observable to bind this property to
-     * @param transform     the transform function to be applied to the value before updating this property
+     * @param transform     the transform function to be applied to the value before updating this property's value
      *
      * @since   0.1.0
      */
@@ -73,6 +89,8 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
 
     /**
      * Unbinds this property.
+     *
+     * <p>If this property {@link #isBound() is unbound}, this method does nothing.</p>
      *
      * @since   0.1.0
      */

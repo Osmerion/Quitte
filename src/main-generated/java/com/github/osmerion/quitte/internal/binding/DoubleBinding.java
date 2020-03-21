@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,25 +31,42 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
-import java.util.function.Function;
-import com.github.osmerion.quitte.property.WritableProperty;
-import com.github.osmerion.quitte.value.ObservableValue;
-import com.github.osmerion.quitte.value.change.ChangeListener;
+import com.github.osmerion.quitte.*;
+import com.github.osmerion.quitte.functional.*;
+import com.github.osmerion.quitte.value.*;
 
-public final class MutatingBinding<S, T> implements Binding {
+/**
+ * A specialized {@code double} binding.
+ *
+ * @author  Leon Linhart
+ */
+public interface DoubleBinding extends Binding {
 
-    private final ObservableValue<S> source;
-    private final ChangeListener<S> listener;
+    double get();
 
-    public MutatingBinding(WritableProperty<T> target, ObservableValue<S> source, Function<S, T> transform) {
-        this.source = source;
-        target.setValue(transform.apply(source.getValue()));
-        this.source.addBoxedListener(this.listener = ((observable, oldValue, newValue) -> target.setValue(transform.apply(newValue))));
-    }
+    final class Generic<T> implements DoubleBinding {
 
-    @Override
-    public void release() {
-        this.source.removeBoxedListener(this.listener);
+        private final ObservableValue<T> source;
+        private final InvalidationListener listener;
+        private final Object2DoubleFunction<T> transform;
+
+        public Generic(Runnable invalidator, ObservableValue<T> source, Object2DoubleFunction<T> transform) {
+            this.source = source;
+            this.transform = transform;
+            
+            this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+        }
+
+        @Override
+        public double get() {
+            return this.transform.apply(this.source.getValue());
+        }
+
+        @Override
+        public void release() {
+            this.source.removeListener(this.listener);
+        }
+
     }
 
 }

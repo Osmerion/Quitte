@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Long2IntBinding implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Long2IntBinding implements IntBinding {
 
     private final ObservableLongValue source;
-    private final LongChangeListener listener;
+    private final InvalidationListener listener;
+    private final Long2IntFunction transform;
 
-    public Long2IntBinding(IntConsumer target, ObservableLongValue source, Long2IntFunction transform) {
+    public Long2IntBinding(Runnable invalidator, ObservableLongValue source, Long2IntFunction transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakLongChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public int get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

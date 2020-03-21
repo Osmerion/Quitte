@@ -37,6 +37,7 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Abstract${type.abbrevName}Property") {
         """package $packageName;
 
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
@@ -65,7 +66,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private transient Binding binding;
+    private transient ${type.abbrevName}Binding$typeParams binding;
 
     /**
      * {@inheritDoc}
@@ -75,7 +76,8 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     @Override
     public final synchronized void bindTo(ObservableValue<${type.box}> observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new GenericBinding<>(this, observable);
+        this.binding = new ${type.abbrevName}Binding.Generic<>(this::onBindingInvalidated, observable, ${if (type === Type.OBJECT) "it -> it" else "Objects::requireNonNull"});
+        this.onBindingInvalidated();
     }
 
     /**
@@ -86,7 +88,8 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     @Override
     public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new MutatingBinding<>(this, observable, transform);
+        this.binding = new ${type.abbrevName}Binding.Generic<>(this::onBindingInvalidated, observable, ${if (type === Type.OBJECT) "transform::apply" else "it -> Objects.requireNonNull(transform.apply(it))"});
+        this.onBindingInvalidated();
     }
 
     /**
@@ -97,7 +100,8 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     @Override
     public final synchronized void bindTo(Observable${type.abbrevName}Value$typeParams observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this::setInternal, observable, it -> it);
+        this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, it -> it);
+        this.onBindingInvalidated();
     }
 ${Type.values().joinToString(separator = "") { sourceType ->
     val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
@@ -117,7 +121,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     @Override
     public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this::setInternal, observable, transform);
+        this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 """}}
     /**
@@ -224,16 +229,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     }
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     private ${type.raw} setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
-        ${type.raw} prev = this.getImpl();
-
-        if (this.setImplDeferrable(value)) {
-            for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
-                var listener = itr.next();
-                
-                listener.onInvalidation(this);
-                if (listener.isInvalid()) itr.remove();
-            }
-        }
+        var prev = this.getImpl();
+        if (this.setImplDeferrable(value)) this.invalidate();
 
         return prev;
     }
@@ -268,15 +265,28 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         this.updateValue(value);
         return true;
     }
-    
+
     protected final void invalidate() {
-        
+        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+
+            listener.onInvalidation(this);
+            if (listener.isInvalid()) itr.remove();
+        }
+    }
+
+    protected void onBindingInvalidated() {
+        this.setInternal(this.getBoundValue());
+    }
+${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    protected final ${type.raw} getBoundValue() {
+        return Objects.requireNonNull(this.binding).get();
     }
 
     protected final void updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         var prev = this.getImpl();
         if (prev == value) return;
-        
+
         this.setImpl(value);
 
         for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {

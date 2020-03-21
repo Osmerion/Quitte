@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Double2ByteBinding implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Double2ByteBinding implements ByteBinding {
 
     private final ObservableDoubleValue source;
-    private final DoubleChangeListener listener;
+    private final InvalidationListener listener;
+    private final Double2ByteFunction transform;
 
-    public Double2ByteBinding(ByteConsumer target, ObservableDoubleValue source, Double2ByteFunction transform) {
+    public Double2ByteBinding(Runnable invalidator, ObservableDoubleValue source, Double2ByteFunction transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakDoubleChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public byte get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

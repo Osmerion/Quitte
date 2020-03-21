@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Double2FloatBinding implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Double2FloatBinding implements FloatBinding {
 
     private final ObservableDoubleValue source;
-    private final DoubleChangeListener listener;
+    private final InvalidationListener listener;
+    private final Double2FloatFunction transform;
 
-    public Double2FloatBinding(FloatConsumer target, ObservableDoubleValue source, Double2FloatFunction transform) {
+    public Double2FloatBinding(Runnable invalidator, ObservableDoubleValue source, Double2FloatFunction transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakDoubleChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public float get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

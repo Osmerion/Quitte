@@ -56,8 +56,12 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableP
     /**
      * Binds this property to the given observable value.
      *
-     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
-     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
+     * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
+     * hold a strong reference to this property.</p>
+     *
+     * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
+     * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
      *
      * @param observable    the observable to bind this property to
      *
@@ -77,11 +81,15 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     /**
      * Binds this property to the given observable value.
      *
-     * <p>While a property is bound, its value will be equal to the observable value. Any attempt to set the value of a
-     * bound property explicitly will fail. A bound property may be unbound by calling {@link #unbind()}.</p>
+     * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
+     * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
+     * hold a strong reference to this property.</p>
+     *
+     * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
+     * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
      *${if (sourceType === Type.OBJECT) "\n     * @param <S>           the type of the value of the given observable" else ""}
      * @param observable    the observable to bind this property to
-     * @param transform     the transform function to be applied to the value before updating this property
+     * @param transform     the transform function to be applied to the value before updating this property's value
      *
      * @since   0.1.0
      */

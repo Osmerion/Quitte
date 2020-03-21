@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Bool2ObjectBinding<R> implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Bool2ObjectBinding<R> implements ObjectBinding<R> {
 
     private final ObservableBoolValue source;
-    private final BoolChangeListener listener;
+    private final InvalidationListener listener;
+    private final Bool2ObjectFunction<R> transform;
 
-    public Bool2ObjectBinding(ObjectConsumer<R> target, ObservableBoolValue source, Bool2ObjectFunction<R> transform) {
+    public Bool2ObjectBinding(Runnable invalidator, ObservableBoolValue source, Bool2ObjectFunction<R> transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakBoolChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public R get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

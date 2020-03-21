@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Bool2ShortBinding implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Bool2ShortBinding implements ShortBinding {
 
     private final ObservableBoolValue source;
-    private final BoolChangeListener listener;
+    private final InvalidationListener listener;
+    private final Bool2ShortFunction transform;
 
-    public Bool2ShortBinding(ShortConsumer target, ObservableBoolValue source, Bool2ShortFunction transform) {
+    public Bool2ShortBinding(Runnable invalidator, ObservableBoolValue source, Bool2ShortFunction transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakBoolChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public short get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

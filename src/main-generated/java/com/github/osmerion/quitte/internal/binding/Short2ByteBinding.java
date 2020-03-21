@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Short2ByteBinding implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Short2ByteBinding implements ByteBinding {
 
     private final ObservableShortValue source;
-    private final ShortChangeListener listener;
+    private final InvalidationListener listener;
+    private final Short2ByteFunction transform;
 
-    public Short2ByteBinding(ByteConsumer target, ObservableShortValue source, Short2ByteFunction transform) {
+    public Short2ByteBinding(Runnable invalidator, ObservableShortValue source, Short2ByteFunction transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakShortChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public byte get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

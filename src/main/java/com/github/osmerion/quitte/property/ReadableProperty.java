@@ -51,9 +51,11 @@ public interface ReadableProperty<T> extends ObservableValue<T> {
     ReadableProperty<T> asReadOnlyProperty();
 
     /**
-     * Returns {@code true} if this property is bound to an observable value, or {@code false otherwise}.
+     * Returns {@code true} if this property is bound to an {@link ObservableValue}, or {@code false} otherwise.
      *
-     * @return  {@code true} if this property is bound to an observable value, or {@code false otherwise}
+     * <p>While a property is bound, its value will depend on the value of the observable it is bound to.</p>
+     *
+     * @return  {@code true} if this property is bound to an {@code ObservableValue}, or {@code false} otherwise
      *
      * @since   0.1.0
      */

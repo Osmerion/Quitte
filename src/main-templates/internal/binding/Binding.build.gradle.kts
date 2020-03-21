@@ -30,42 +30,56 @@
  */
 val packageName = "com.github.osmerion.quitte.internal.binding"
 
-Type.values().forEach { sourceType ->
-    Type.values().forEach { targetType ->
-        val className = "${sourceType.abbrevName}2${targetType.abbrevName}Binding"
-        val sourceTypeParams = if (sourceType === Type.OBJECT) "<T>" else ""
-        val targetTypeParams = if (targetType === Type.OBJECT) "<R>" else ""
-        val typeParams = when {
-            sourceType === Type.OBJECT && targetType === Type.OBJECT -> "<T, R>"
-            sourceType === Type.OBJECT -> "<T>"
-            targetType === Type.OBJECT -> "<R>"
-            else -> ""
-        }
+Type.values().forEach {
+    val type = it
+    val typeParams = if (type === Type.OBJECT) "<T>" else ""
+    val valAnno = if (type === Type.OBJECT) "@Nullable " else ""
 
-        template("${packageName.replace('.', '/')}/$className") {
-            """package $packageName;
+    template("${packageName.replace('.', '/')}/${type.abbrevName}Binding") {
+        """package $packageName;${if (type === Type.OBJECT) "\n\nimport javax.annotation.Nullable;" else ""}
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class $className$typeParams implements Binding {
+/**
+ * ${if (type === Type.OBJECT)
+            "A generic binding."
+        else
+            "A specialized {@code ${type.raw}} binding."
+        }
+ *
+ * @author  Leon Linhart
+ */
+public interface ${type.abbrevName}Binding$typeParams extends Binding {
+${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    ${type.raw} get();
 
-    private final Observable${sourceType.abbrevName}Value$sourceTypeParams source;
-    private final ${sourceType.abbrevName}ChangeListener$sourceTypeParams listener;
+    final class Generic${if (type === Type.OBJECT) "<T, R>" else "<T>" } implements ${type.abbrevName}Binding${if (type === Type.OBJECT) "<R>" else "" } {
 
-    public $className(${targetType.abbrevName}Consumer$targetTypeParams target, Observable${sourceType.abbrevName}Value$sourceTypeParams source, ${sourceType.abbrevName}2${targetType.abbrevName}Function$typeParams transform) {
-        this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new Weak${sourceType.abbrevName}ChangeListener${if (sourceType === Type.OBJECT) "<>" else ""}((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
-    }
+        private final ObservableValue<T> source;
+        private final InvalidationListener listener;
+        private final Object2${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform;
 
-    @Override
-    public void release() {
-        this.source.removeListener(this.listener);
+        public Generic(Runnable invalidator, ObservableValue<T> source, Object2${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform) {
+            this.source = source;
+            this.transform = transform;
+            
+            this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+        }
+
+        @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
+        public ${if (type === Type.OBJECT) "R" else type.raw } get() {
+            return this.transform.apply(this.source.getValue());
+        }
+
+        @Override
+        public void release() {
+            this.source.removeListener(this.listener);
+        }
+
     }
 
 }"""
-        }
     }
 }

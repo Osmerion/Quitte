@@ -31,19 +31,31 @@
  */
 package com.github.osmerion.quitte.internal.binding;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
-public final class Byte2BoolBinding implements Binding {
+/**
+ * A specialized binding implementation.
+ *
+ * @author  Leon Linhart
+ */
+public final class Byte2BoolBinding implements BoolBinding {
 
     private final ObservableByteValue source;
-    private final ByteChangeListener listener;
+    private final InvalidationListener listener;
+    private final Byte2BoolFunction transform;
 
-    public Byte2BoolBinding(BoolConsumer target, ObservableByteValue source, Byte2BoolFunction transform) {
+    public Byte2BoolBinding(Runnable invalidator, ObservableByteValue source, Byte2BoolFunction transform) {
         this.source = source;
-        target.accept(transform.apply(source.get()));
-        this.source.addListener(this.listener = new WeakByteChangeListener((observable, oldValue, newValue) -> target.accept(transform.apply(newValue))));
+        this.transform = transform;
+        
+        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+    }
+
+    @Override
+    public boolean get() {
+        return this.transform.apply(this.source.get());
     }
 
     @Override

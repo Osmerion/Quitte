@@ -36,31 +36,37 @@ import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.value.*;
 
 /**
- * A specialized binding implementation.
+ * A specialized {@code long} binding.
  *
  * @author  Leon Linhart
  */
-public final class Byte2LongBinding implements LongBinding {
+public interface LongBinding extends Binding {
 
-    private final ObservableByteValue source;
-    private final InvalidationListener listener;
-    private final Byte2LongFunction transform;
+    long get();
 
-    public Byte2LongBinding(Runnable invalidator, ObservableByteValue source, Byte2LongFunction transform) {
-        this.source = source;
-        this.transform = transform;
-        
-        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
-    }
+    final class Generic<T> implements LongBinding {
 
-    @Override
-    public long get() {
-        return this.transform.apply(this.source.get());
-    }
+        private final ObservableValue<T> source;
+        private final InvalidationListener listener;
+        private final Object2LongFunction<T> transform;
 
-    @Override
-    public void release() {
-        this.source.removeListener(this.listener);
+        public Generic(Runnable invalidator, ObservableValue<T> source, Object2LongFunction<T> transform) {
+            this.source = source;
+            this.transform = transform;
+            
+            this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+        }
+
+        @Override
+        public long get() {
+            return this.transform.apply(this.source.getValue());
+        }
+
+        @Override
+        public void release() {
+            this.source.removeListener(this.listener);
+        }
+
     }
 
 }

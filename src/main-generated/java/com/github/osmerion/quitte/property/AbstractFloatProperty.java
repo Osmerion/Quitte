@@ -31,6 +31,7 @@
  */
 package com.github.osmerion.quitte.property;
 
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
@@ -55,7 +56,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
     
     @Nullable
-    private transient Binding binding;
+    private transient FloatBinding binding;
 
     /**
      * {@inheritDoc}
@@ -65,7 +66,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableValue<Float> observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new GenericBinding<>(this, observable);
+        this.binding = new FloatBinding.Generic<>(this::onBindingInvalidated, observable, Objects::requireNonNull);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -76,7 +78,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, Float> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new MutatingBinding<>(this, observable, transform);
+        this.binding = new FloatBinding.Generic<>(this::onBindingInvalidated, observable, it -> Objects.requireNonNull(transform.apply(it)));
+        this.onBindingInvalidated();
     }
 
     /**
@@ -87,7 +90,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableFloatValue observable) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Float2FloatBinding(this::setInternal, observable, it -> it);
+        this.binding = new Float2FloatBinding(this::onBindingInvalidated, observable, it -> it);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -98,7 +102,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableBoolValue observable, Bool2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Bool2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Bool2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -109,7 +114,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableByteValue observable, Byte2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Byte2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Byte2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -120,7 +126,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableShortValue observable, Short2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Short2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Short2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -131,7 +138,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableIntValue observable, Int2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Int2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Int2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -142,7 +150,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableLongValue observable, Long2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Long2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Long2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -153,7 +162,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableFloatValue observable, Float2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Float2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Float2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -164,7 +174,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized void bindTo(ObservableDoubleValue observable, Double2FloatFunction transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Double2FloatBinding(this::setInternal, observable, transform);
+        this.binding = new Double2FloatBinding(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -175,7 +186,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     @Override
     public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2FloatFunction<S> transform) {
         if (this.binding != null) throw new IllegalStateException();
-        this.binding = new Object2FloatBinding<>(this::setInternal, observable, transform);
+        this.binding = new Object2FloatBinding<>(this::onBindingInvalidated, observable, transform);
+        this.onBindingInvalidated();
     }
 
     /**
@@ -282,16 +294,8 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
     }
 
     private float setInternal(float value) {
-        float prev = this.getImpl();
-
-        if (this.setImplDeferrable(value)) {
-            for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
-                var listener = itr.next();
-                
-                listener.onInvalidation(this);
-                if (listener.isInvalid()) itr.remove();
-            }
-        }
+        var prev = this.getImpl();
+        if (this.setImplDeferrable(value)) this.invalidate();
 
         return prev;
     }
@@ -326,15 +330,28 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     protected final void invalidate() {
-        
+        for (var itr = this.invalidationListeners.iterator(); itr.hasNext(); ) {
+            var listener = itr.next();
+
+            listener.onInvalidation(this);
+            if (listener.isInvalid()) itr.remove();
+        }
+    }
+
+    protected void onBindingInvalidated() {
+        this.setInternal(this.getBoundValue());
+    }
+
+    protected final float getBoundValue() {
+        return Objects.requireNonNull(this.binding).get();
     }
 
     protected final void updateValue(float value) {
         var prev = this.getImpl();
         if (prev == value) return;
-        
+
         this.setImpl(value);
 
         for (var itr = this.changeListeners.iterator(); itr.hasNext(); ) {

@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
- * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,7 +28,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.osmerion.quitte.internal.binding;
+val packageName = "com.github.osmerion.quitte.internal.binding"
+
+Type.values().forEach { sourceType ->
+    Type.values().forEach { targetType ->
+        val className = "${sourceType.abbrevName}2${targetType.abbrevName}Binding"
+        val sourceTypeParams = if (sourceType === Type.OBJECT) "<T>" else ""
+        val targetTypeParams = if (targetType === Type.OBJECT) "<R>" else ""
+        val typeParams = when {
+            sourceType === Type.OBJECT && targetType === Type.OBJECT -> "<T, R>"
+            sourceType === Type.OBJECT -> "<T>"
+            targetType === Type.OBJECT -> "<R>"
+            else -> ""
+        }
+
+        template("${packageName.replace('.', '/')}/$className") {
+            """package $packageName;
 
 import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
@@ -40,13 +54,13 @@ import com.github.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public final class Byte2LongBinding implements LongBinding {
+public final class $className$typeParams implements ${targetType.abbrevName}Binding$targetTypeParams {
 
-    private final ObservableByteValue source;
+    private final Observable${sourceType.abbrevName}Value$sourceTypeParams source;
     private final InvalidationListener listener;
-    private final Byte2LongFunction transform;
+    private final ${sourceType.abbrevName}2${targetType.abbrevName}Function$typeParams transform;
 
-    public Byte2LongBinding(Runnable invalidator, ObservableByteValue source, Byte2LongFunction transform) {
+    public $className(Runnable invalidator, Observable${sourceType.abbrevName}Value$sourceTypeParams source, ${sourceType.abbrevName}2${targetType.abbrevName}Function$typeParams transform) {
         this.source = source;
         this.transform = transform;
         
@@ -54,7 +68,7 @@ public final class Byte2LongBinding implements LongBinding {
     }
 
     @Override
-    public long get() {
+    public ${if (targetType === Type.OBJECT) "R" else targetType.raw} get() {
         return this.transform.apply(this.source.get());
     }
 
@@ -63,4 +77,7 @@ public final class Byte2LongBinding implements LongBinding {
         this.source.removeListener(this.listener);
     }
 
+}"""
+        }
+    }
 }
