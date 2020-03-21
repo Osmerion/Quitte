@@ -31,7 +31,6 @@
  */
 package com.github.osmerion.quitte.property;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
@@ -52,118 +51,256 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class SimpleObjectPropertyGeneratedTest {
 
     @Test
-    public void testChangeListener() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener((observable, oldValue, newValue) -> {
-            flag.set(true);
-            assertEquals(TestValues.ObjectValue_1, oldValue);
-            assertEquals(TestValues.ObjectValue_2, newValue);
-        });
-        
-        property.set(TestValues.ObjectValue_2);
-        assertTrue(flag.get());
+    public void testInitialGetConsistency() {
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_2);
+        assertEquals(TestValues.ObjectValue_2, property.get());
     }
 
     @Test
-    public void testChangeListenerInvalidation() {
-        AtomicInteger counter = new AtomicInteger(0);
-    
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener(new ObjectChangeListener<>() {
-
-            @Override
-            public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {
-                counter.incrementAndGet();
-            }
-            
-            @Override
-            public boolean isInvalid() {
-                return true;
-            }
-
-        });
-        property.set(TestValues.ObjectValue_2);
-        property.set(TestValues.ObjectValue_1);
-
-        assertEquals(1, counter.get());
-    }
-
-    @Test
-    @DisplayName("ChangeListener on set invocation with previous value")
-    public void testChangeListenerSkipped() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener((observable, oldValue, newValue) -> flag.set(true));
-        
-        property.set(TestValues.ObjectValue_1);
-        assertFalse(flag.get());
-    }
-
-    @Test
-    public void testInvalidationListener() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener(observable -> flag.set(true));
-        
-        property.set(TestValues.ObjectValue_2);
-        assertTrue(flag.get());
-    }
-
-    @Test
-    public void testInvalidationListenerInvalidation() {
-        AtomicInteger counter = new AtomicInteger(0);
-    
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener(new InvalidationListener() {
-
-            @Override
-            public void onInvalidation(Observable observable) {
-                counter.incrementAndGet();
-            }
-            
-            @Override
-            public boolean isInvalid() {
-                return true;
-            }
-
-        });
-        property.set(TestValues.ObjectValue_2);
-        property.set(TestValues.ObjectValue_1);
-
-        assertEquals(1, counter.get());
-    }
-
-    @Test
-    @DisplayName("InvalidationListener on set invocation with previous value")
-    public void testInvalidationListenerSkipped() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
-        property.addListener(observable -> flag.set(true));
-        
-        property.set(TestValues.ObjectValue_1);
-        assertFalse(flag.get());
-    }
-
-    @Test
-    @DisplayName("set-get consistency")
     public void testSetGetConsistency() {
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
         assertEquals(TestValues.ObjectValue_1, property.get());
-        
+
         property.set(TestValues.ObjectValue_2);
         assertEquals(TestValues.ObjectValue_2, property.get());
     }
 
     @Test
-    @DisplayName("SimpleObjectProperty#set() return value")
     public void testSetReturn() {
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
         assertEquals(TestValues.ObjectValue_1, property.set(TestValues.ObjectValue_2));
+    }
+
+    @Test
+    public void testChangeListenerSetGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        property.addListener((observable, oldValue, newValue) -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.ObjectValue_1, oldValue);
+            assertEquals(TestValues.ObjectValue_2, newValue);
+            assertEquals(TestValues.ObjectValue_2, property.get());
+        });
+
+        property.set(TestValues.ObjectValue_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerSkippedOnSet() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        property.set(TestValues.ObjectValue_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSetGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        property.addListener((observable -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.ObjectValue_2, property.get());
+        }));
+
+        property.set(TestValues.ObjectValue_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSkippedOnSet() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        property.addListener(observable -> callCounter.getAndIncrement());
+
+        property.set(TestValues.ObjectValue_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_2);
+        wrapper.addListener((observable, oldValue, newValue) -> {
+            switch (callCounter.getAndIncrement()) {
+                case 0 -> {
+                    assertEquals(TestValues.ObjectValue_2, oldValue);
+                    assertEquals(TestValues.ObjectValue_1, newValue);
+                    assertEquals(TestValues.ObjectValue_1, property.get());
+                }
+                case 1 -> {
+                    assertEquals(TestValues.ObjectValue_1, oldValue);
+                    assertEquals(TestValues.ObjectValue_2, newValue);
+                    assertEquals(TestValues.ObjectValue_2, property.get());
+                }
+                default -> throw new IllegalStateException();
+            }
+        });
+
+        wrapper.bindTo(property);
+
+        property.set(TestValues.ObjectValue_2);
+        assertEquals(2, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerSkippedOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        wrapper.bindTo(property);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_2);
+        wrapper.addListener(observable -> {
+            switch (callCounter.getAndIncrement()) {
+                case 0 -> assertEquals(TestValues.ObjectValue_1, property.get());
+                case 1 -> assertEquals(TestValues.ObjectValue_2, property.get());
+                default -> throw new IllegalStateException();
+            }
+        });
+
+        wrapper.bindTo(property);
+
+        property.set(TestValues.ObjectValue_2);
+        assertEquals(2, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSkippedOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        wrapper.addListener(observable -> callCounter.getAndIncrement());
+
+        wrapper.bindTo(property);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerBindingUpdatedGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        wrapper.bindTo(property);
+
+        wrapper.addListener((observable, oldValue, newValue) -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.ObjectValue_1, oldValue);
+            assertEquals(TestValues.ObjectValue_2, newValue);
+            assertEquals(TestValues.ObjectValue_2, property.get());
+        });
+
+        property.set(TestValues.ObjectValue_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerSkippedOnBindingUpdated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        property.set(TestValues.ObjectValue_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerBindingUpdatedGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        wrapper.bindTo(property);
+
+        wrapper.addListener(observable -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.ObjectValue_2, property.get());
+        });
+
+        property.set(TestValues.ObjectValue_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSkippedOnBindingUpdated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        wrapper.addListener(observable -> callCounter.getAndIncrement());
+
+        property.set(TestValues.ObjectValue_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidatedChangeListenerRemoval() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        property.addListener(new ObjectChangeListener<>() {
+
+            @Override
+            public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {
+                callCounter.getAndIncrement();
+            }
+
+            @Override
+            public boolean isInvalid() {
+                return true;
+            }
+
+        });
+        property.set(TestValues.ObjectValue_2);
+        property.set(TestValues.ObjectValue_1);
+
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidatedInvalidationListenerRemoval() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        property.addListener(new InvalidationListener() {
+
+            @Override
+            public void onInvalidation(Observable observable) {
+                callCounter.getAndIncrement();
+            }
+
+            @Override
+            public boolean isInvalid() {
+                return true;
+            }
+
+        });
+        property.set(TestValues.ObjectValue_2);
+        property.set(TestValues.ObjectValue_1);
+
+        assertEquals(1, callCounter.get());
     }
 
 }

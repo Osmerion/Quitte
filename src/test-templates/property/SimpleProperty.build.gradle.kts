@@ -33,13 +33,12 @@ val packageName = "com.github.osmerion.quitte.property"
 Type.values().forEach {
     val type = it
     val typeParams = if (type === Type.OBJECT) "<Object>" else ""
-    val typeDiamonds = if (type === Type.OBJECT) "<>" else ""
+    val typeDiamond = if (type === Type.OBJECT) "<>" else ""
     val valAnno = if (type === Type.OBJECT) "@Nullable " else ""
 
     template("${packageName.replace('.', '/')}/Simple${type.abbrevName}PropertyGeneratedTest", isTest = true) {
         """package $packageName;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.github.osmerion.quitte.*;
@@ -58,118 +57,256 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class Simple${type.abbrevName}PropertyGeneratedTest {
 
     @Test
-    public void testChangeListener() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener((observable, oldValue, newValue) -> {
-            flag.set(true);
-            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
-        });
-        
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertTrue(flag.get());
+    public void testInitialGetConsistency() {
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
+        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
     }
 
     @Test
-    public void testChangeListenerInvalidation() {
-        AtomicInteger counter = new AtomicInteger(0);
-    
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener(new ${type.abbrevName}ChangeListener$typeDiamonds() {
-
-            @Override
-            public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} oldValue, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} newValue) {
-                counter.incrementAndGet();
-            }
-            
-            @Override
-            public boolean isInvalid() {
-                return true;
-            }
-
-        });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        property.set(TestValues.${type.abbrevName}Value_1);
-
-        assertEquals(1, counter.get());
-    }
-
-    @Test
-    @DisplayName("ChangeListener on set invocation with previous value")
-    public void testChangeListenerSkipped() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener((observable, oldValue, newValue) -> flag.set(true));
-        
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertFalse(flag.get());
-    }
-
-    @Test
-    public void testInvalidationListener() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener(observable -> flag.set(true));
-        
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertTrue(flag.get());
-    }
-
-    @Test
-    public void testInvalidationListenerInvalidation() {
-        AtomicInteger counter = new AtomicInteger(0);
-    
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener(new InvalidationListener() {
-
-            @Override
-            public void onInvalidation(Observable observable) {
-                counter.incrementAndGet();
-            }
-            
-            @Override
-            public boolean isInvalid() {
-                return true;
-            }
-
-        });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        property.set(TestValues.${type.abbrevName}Value_1);
-
-        assertEquals(1, counter.get());
-    }
-
-    @Test
-    @DisplayName("InvalidationListener on set invocation with previous value")
-    public void testInvalidationListenerSkipped() {
-        AtomicBoolean flag = new AtomicBoolean(false);
-    
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
-        property.addListener(observable -> flag.set(true));
-        
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertFalse(flag.get());
-    }
-
-    @Test
-    @DisplayName("set-get consistency")
     public void testSetGetConsistency() {
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
         assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
-        
+
         property.set(TestValues.${type.abbrevName}Value_2);
         assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
     }
 
     @Test
-    @DisplayName("Simple${type.abbrevName}Property#set() return value")
     public void testSetReturn() {
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamonds(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
         assertEquals(TestValues.${type.abbrevName}Value_1, property.set(TestValues.${type.abbrevName}Value_2));
+    }
+
+    @Test
+    public void testChangeListenerSetGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        property.addListener((observable, oldValue, newValue) -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        });
+
+        property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerSkippedOnSet() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        property.set(TestValues.${type.abbrevName}Value_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSetGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        property.addListener((observable -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        }));
+
+        property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSkippedOnSet() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        property.addListener(observable -> callCounter.getAndIncrement());
+
+        property.set(TestValues.${type.abbrevName}Value_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
+        wrapper.addListener((observable, oldValue, newValue) -> {
+            switch (callCounter.getAndIncrement()) {
+                case 0 -> {
+                    assertEquals(TestValues.${type.abbrevName}Value_2, oldValue);
+                    assertEquals(TestValues.${type.abbrevName}Value_1, newValue);
+                    assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
+                }
+                case 1 -> {
+                    assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
+                    assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
+                    assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+                }
+                default -> throw new IllegalStateException();
+            }
+        });
+
+        wrapper.bindTo(property);
+
+        property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(2, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerSkippedOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        wrapper.bindTo(property);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
+        wrapper.addListener(observable -> {
+            switch (callCounter.getAndIncrement()) {
+                case 0 -> assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
+                case 1 -> assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+                default -> throw new IllegalStateException();
+            }
+        });
+
+        wrapper.bindTo(property);
+
+        property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(2, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSkippedOnBindingCreated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        wrapper.addListener(observable -> callCounter.getAndIncrement());
+
+        wrapper.bindTo(property);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerBindingUpdatedGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        wrapper.bindTo(property);
+
+        wrapper.addListener((observable, oldValue, newValue) -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        });
+
+        property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerSkippedOnBindingUpdated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        property.set(TestValues.${type.abbrevName}Value_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerBindingUpdatedGetConsistency() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        wrapper.bindTo(property);
+
+        wrapper.addListener(observable -> {
+            callCounter.incrementAndGet();
+            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        });
+
+        property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerSkippedOnBindingUpdated() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        wrapper.addListener(observable -> callCounter.getAndIncrement());
+
+        property.set(TestValues.${type.abbrevName}Value_1);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidatedChangeListenerRemoval() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        property.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
+
+            @Override
+            public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} oldValue, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} newValue) {
+                callCounter.getAndIncrement();
+            }
+
+            @Override
+            public boolean isInvalid() {
+                return true;
+            }
+
+        });
+        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_1);
+
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidatedInvalidationListenerRemoval() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        property.addListener(new InvalidationListener() {
+
+            @Override
+            public void onInvalidation(Observable observable) {
+                callCounter.getAndIncrement();
+            }
+
+            @Override
+            public boolean isInvalid() {
+                return true;
+            }
+
+        });
+        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_1);
+
+        assertEquals(1, callCounter.get());
     }
 
 }"""
