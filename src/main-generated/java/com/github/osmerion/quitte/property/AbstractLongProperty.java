@@ -275,11 +275,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
         return this.invalidationListeners.remove(listener);
     }
 
-    /**
-     * <b>This method must provide raw setter access and should not be called directly.</b>
-     *
-     * @since   0.1.0
-     */
+    /** <b>This method must provide raw setter access and should not be called directly.</b> */
     abstract long getImpl();
 
     final long getBoundValue() {

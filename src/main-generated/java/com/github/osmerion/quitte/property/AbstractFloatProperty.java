@@ -275,11 +275,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         return this.invalidationListeners.remove(listener);
     }
 
-    /**
-     * <b>This method must provide raw setter access and should not be called directly.</b>
-     *
-     * @since   0.1.0
-     */
+    /** <b>This method must provide raw setter access and should not be called directly.</b> */
     abstract float getImpl();
 
     final float getBoundValue() {

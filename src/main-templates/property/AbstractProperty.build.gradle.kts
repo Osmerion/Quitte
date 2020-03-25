@@ -210,11 +210,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         return this.invalidationListeners.remove(listener);
     }
 
-    /**
-     * <b>This method must provide raw setter access and should not be called directly.</b>
-     *
-     * @since   0.1.0
-     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    /** <b>This method must provide raw setter access and should not be called directly.</b> */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     abstract ${type.raw} getImpl();
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     final ${type.raw} getBoundValue() {
