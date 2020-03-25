@@ -59,27 +59,22 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    protected final double getImpl() {
+    public final double get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final double getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(double value) {
+    final void setImpl(double value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(double value) {
+    final boolean setImplDeferrable(double value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

@@ -48,12 +48,12 @@ import com.github.osmerion.quitte.value.*;
 public class LazyDoubleProperty extends AbstractDoubleProperty implements LazyValue {
 
     private final SimpleObjectProperty<State> state = new SimpleObjectProperty<>(State.UNINITIALIZED) {
-    
+
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             if (value != State.VALID) LazyDoubleProperty.this.invalidate();
         }
-    
+
     };
 
     @Nullable
@@ -85,23 +85,6 @@ public class LazyDoubleProperty extends AbstractDoubleProperty implements LazyVa
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    @Override
-    public final double get() {
-        if (this.state.get() != State.VALID) {
-            var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) this.state.set(State.VALID);
-            
-            this.provider = null;
-        }
-
-        return this.value;
-    }
-
-    /**
      * TODO doc
      *
      * @since   0.1.0
@@ -116,62 +99,72 @@ public class LazyDoubleProperty extends AbstractDoubleProperty implements LazyVa
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final double get() {
+        if (this.state.get() != State.VALID) {
+            var provider = Objects.requireNonNull(this.provider); 
+            if (!this.updateValue(this.intercept(provider.get()))) this.state.set(State.VALID);
+
+            this.provider = null;
+        }
+
+        return this.value;
+    }
+
+    /**
      * TODO doc
      *
      * @since   0.1.0
      */
     public final void set(DoubleSupplier supplier) {
         if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        
+
         this.provider = supplier;
         this.state.set(State.INVALID);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final double getImpl() {
+    final double getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(double value) {
+    final void setImpl(double value) {
         this.value = value;
     }
-    
-    /**
-     * TODO doc
-     *
-     * @since   0.1.0
-     */
-    protected final boolean setImplDeferrable(double value) {
+
+    final boolean setImplDeferrable(double value) {
         this.provider = () -> value;
         this.state.set(State.INVALID);
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void onBindingInvalidated() {
+    final void onBindingInvalidated() {
         this.provider = this::getBoundValue;
         this.state.set(State.INVALID);
     }
-    
+
     @Override
-    protected final void onChanged(double oldValue, double newValue) {
+    final void onChangedInternal(double oldValue, double newValue) {
         this.state.set(State.VALID);
+    }
+
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */
+    protected double intercept(double value) {
+        return value;
     }
 
 }

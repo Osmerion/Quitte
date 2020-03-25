@@ -63,27 +63,23 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      */
     @Override
     @Nullable
-    protected final T getImpl() {
+    public final T get() {
+        return this.getImpl();
+    }
+
+    @Override
+    @Nullable
+    final T getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(@Nullable T value) {
+    final void setImpl(@Nullable T value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(@Nullable T value) {
+    final boolean setImplDeferrable(@Nullable T value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -91,7 +87,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

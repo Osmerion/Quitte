@@ -59,27 +59,22 @@ public class SimpleByteProperty extends AbstractByteProperty {
      * @since   0.1.0
      */
     @Override
-    protected final byte getImpl() {
+    public final byte get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final byte getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(byte value) {
+    final void setImpl(byte value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(byte value) {
+    final boolean setImplDeferrable(byte value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleByteProperty extends AbstractByteProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

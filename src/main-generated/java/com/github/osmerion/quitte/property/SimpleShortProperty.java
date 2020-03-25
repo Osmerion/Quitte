@@ -59,27 +59,22 @@ public class SimpleShortProperty extends AbstractShortProperty {
      * @since   0.1.0
      */
     @Override
-    protected final short getImpl() {
+    public final short get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final short getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(short value) {
+    final void setImpl(short value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(short value) {
+    final boolean setImplDeferrable(short value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleShortProperty extends AbstractShortProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

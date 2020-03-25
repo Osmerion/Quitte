@@ -54,9 +54,12 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
 
     private final transient CopyOnWriteArraySet<DoubleChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
-    
+
     @Nullable
     private transient DoubleBinding binding;
+
+    // package-private constructor for an effectively sealed class
+    AbstractDoubleProperty() {}
 
     /**
      * {@inheritDoc}
@@ -273,13 +276,14 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
     }
 
     /**
-     * {@inheritDoc}
+     * <b>This method must provide raw setter access and should not be called directly.</b>
      *
      * @since   0.1.0
      */
-    @Override
-    public double get() {
-        return this.getImpl();
+    abstract double getImpl();
+
+    final double getBoundValue() {
+        return Objects.requireNonNull(this.binding).get();
     }
 
     /**
@@ -303,47 +307,30 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
     /**
      * <b>This method must provide raw setter access and should not be called directly.</b>
      *
-     * @since   0.1.0
-     */
-    protected abstract double getImpl();
-
-    /**
-     * <b>This method must provide raw setter access and should not be called directly.</b>
-     *
      * @param value the value
-     *
-     * @since   0.1.0
      */
-    protected abstract void setImpl(double value);
+    abstract void setImpl(double value);
 
     /**
      * Attempts to set the value of this property and returns whether or not the current value was invalidated.
      *
      * @return  whether or not the value has been invalidated
-     *
-     * @since   0.1.0
      */
-    protected boolean setImplDeferrable(double value) {
+    boolean setImplDeferrable(double value) {
         var prev = this.getImpl();
         if (prev == value) return false;
-    
+
         this.updateValue(value);
         return true;
     }
 
     protected final void invalidate() {
+        this.onInvalidated();
+
         for (var listener : this.invalidationListeners) {
             listener.onInvalidation(this);
             if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
-    }
-
-    protected void onBindingInvalidated() {
-        this.setInternal(this.getBoundValue());
-    }
-
-    protected final double getBoundValue() {
-        return Objects.requireNonNull(this.binding).get();
     }
 
     protected final boolean updateValue(double value) {
@@ -351,16 +338,38 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
         if (prev == value) return false;
 
         this.setImpl(value);
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
-        
+
         return true;
     }
 
+    void onBindingInvalidated() {
+        this.setInternal(this.getBoundValue());
+    }
+
+    void onChangedInternal(double oldValue, double newValue) {}
+
+    /**
+     * Called when this property's value has changed.
+     *
+     * @param oldValue  the old value
+     * @param newValue  the new value
+     *
+     * @since   0.1.0
+     */
     protected void onChanged(double oldValue, double newValue) {}
+
+    /**
+     * Called when this property was invalidated.
+     *
+     * @since   0.1.0
+     */
+    protected void onInvalidated() {}
 
 }

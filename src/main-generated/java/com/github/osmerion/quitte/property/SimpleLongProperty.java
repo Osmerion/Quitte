@@ -59,27 +59,22 @@ public class SimpleLongProperty extends AbstractLongProperty {
      * @since   0.1.0
      */
     @Override
-    protected final long getImpl() {
+    public final long get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final long getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(long value) {
+    final void setImpl(long value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(long value) {
+    final boolean setImplDeferrable(long value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleLongProperty extends AbstractLongProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

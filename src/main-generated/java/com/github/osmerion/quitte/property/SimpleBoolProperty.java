@@ -59,27 +59,22 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
      * @since   0.1.0
      */
     @Override
-    protected final boolean getImpl() {
+    public final boolean get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final boolean getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(boolean value) {
+    final void setImpl(boolean value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(boolean value) {
+    final boolean setImplDeferrable(boolean value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

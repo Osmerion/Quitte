@@ -59,27 +59,22 @@ public class SimpleIntProperty extends AbstractIntProperty {
      * @since   0.1.0
      */
     @Override
-    protected final int getImpl() {
+    public final int get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final int getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(int value) {
+    final void setImpl(int value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(int value) {
+    final boolean setImplDeferrable(int value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleIntProperty extends AbstractIntProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

@@ -48,12 +48,12 @@ import com.github.osmerion.quitte.value.*;
 public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements LazyValue {
 
     private final SimpleObjectProperty<State> state = new SimpleObjectProperty<>(State.UNINITIALIZED) {
-    
+
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             if (value != State.VALID) LazyObjectProperty.this.invalidate();
         }
-    
+
     };
 
     @Nullable
@@ -86,24 +86,6 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    @Override
-    @Nullable
-    public final T get() {
-        if (this.state.get() != State.VALID) {
-            var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) this.state.set(State.VALID);
-            
-            this.provider = null;
-        }
-
-        return this.value;
-    }
-
-    /**
      * TODO doc
      *
      * @since   0.1.0
@@ -118,63 +100,75 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     /**
-     * TODO doc
-     *
-     * @since   0.1.0
-     */
-    public final void set(ObjectSupplier<T> supplier) {
-        if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        
-        this.provider = supplier;
-        this.state.set(State.INVALID);
-    }
-
-    /**
      * {@inheritDoc}
      *
      * @since   0.1.0
      */
     @Override
     @Nullable
-    protected final T getImpl() {
+    public final T get() {
+        if (this.state.get() != State.VALID) {
+            var provider = Objects.requireNonNull(this.provider); 
+            if (!this.updateValue(this.intercept(provider.get()))) this.state.set(State.VALID);
+
+            this.provider = null;
+        }
+
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    @Override
-    protected final void setImpl(@Nullable T value) {
-        this.value = value;
-    }
-    
     /**
      * TODO doc
      *
      * @since   0.1.0
      */
-    protected final boolean setImplDeferrable(@Nullable T value) {
+    public final void set(ObjectSupplier<T> supplier) {
+        if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
+
+        this.provider = supplier;
+        this.state.set(State.INVALID);
+    }
+
+    @Override
+    @Nullable
+    final T getImpl() {
+        return this.value;
+    }
+
+    @Override
+    final void setImpl(@Nullable T value) {
+        this.value = value;
+    }
+
+    final boolean setImplDeferrable(@Nullable T value) {
         this.provider = () -> value;
         this.state.set(State.INVALID);
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void onBindingInvalidated() {
+    final void onBindingInvalidated() {
         this.provider = this::getBoundValue;
         this.state.set(State.INVALID);
     }
-    
+
     @Override
-    protected final void onChanged(@Nullable T oldValue, @Nullable T newValue) {
+    final void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
         this.state.set(State.VALID);
+    }
+
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */
+    @Nullable
+    protected T intercept(@Nullable T value) {
+        return value;
     }
 
 }

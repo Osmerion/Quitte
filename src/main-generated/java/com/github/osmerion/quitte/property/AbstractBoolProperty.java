@@ -54,9 +54,12 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
 
     private final transient CopyOnWriteArraySet<BoolChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
-    
+
     @Nullable
     private transient BoolBinding binding;
+
+    // package-private constructor for an effectively sealed class
+    AbstractBoolProperty() {}
 
     /**
      * {@inheritDoc}
@@ -273,13 +276,14 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
     }
 
     /**
-     * {@inheritDoc}
+     * <b>This method must provide raw setter access and should not be called directly.</b>
      *
      * @since   0.1.0
      */
-    @Override
-    public boolean get() {
-        return this.getImpl();
+    abstract boolean getImpl();
+
+    final boolean getBoundValue() {
+        return Objects.requireNonNull(this.binding).get();
     }
 
     /**
@@ -303,47 +307,30 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
     /**
      * <b>This method must provide raw setter access and should not be called directly.</b>
      *
-     * @since   0.1.0
-     */
-    protected abstract boolean getImpl();
-
-    /**
-     * <b>This method must provide raw setter access and should not be called directly.</b>
-     *
      * @param value the value
-     *
-     * @since   0.1.0
      */
-    protected abstract void setImpl(boolean value);
+    abstract void setImpl(boolean value);
 
     /**
      * Attempts to set the value of this property and returns whether or not the current value was invalidated.
      *
      * @return  whether or not the value has been invalidated
-     *
-     * @since   0.1.0
      */
-    protected boolean setImplDeferrable(boolean value) {
+    boolean setImplDeferrable(boolean value) {
         var prev = this.getImpl();
         if (prev == value) return false;
-    
+
         this.updateValue(value);
         return true;
     }
 
     protected final void invalidate() {
+        this.onInvalidated();
+
         for (var listener : this.invalidationListeners) {
             listener.onInvalidation(this);
             if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
-    }
-
-    protected void onBindingInvalidated() {
-        this.setInternal(this.getBoundValue());
-    }
-
-    protected final boolean getBoundValue() {
-        return Objects.requireNonNull(this.binding).get();
     }
 
     protected final boolean updateValue(boolean value) {
@@ -351,16 +338,38 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
         if (prev == value) return false;
 
         this.setImpl(value);
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
-        
+
         return true;
     }
 
+    void onBindingInvalidated() {
+        this.setInternal(this.getBoundValue());
+    }
+
+    void onChangedInternal(boolean oldValue, boolean newValue) {}
+
+    /**
+     * Called when this property's value has changed.
+     *
+     * @param oldValue  the old value
+     * @param newValue  the new value
+     *
+     * @since   0.1.0
+     */
     protected void onChanged(boolean oldValue, boolean newValue) {}
+
+    /**
+     * Called when this property was invalidated.
+     *
+     * @since   0.1.0
+     */
+    protected void onInvalidated() {}
 
 }

@@ -59,27 +59,22 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
      * @since   0.1.0
      */
     @Override
-    protected final float getImpl() {
+    public final float get() {
+        return this.getImpl();
+    }
+
+    @Override
+    final float getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(float value) {
+    final void setImpl(float value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(float value) {
+    final boolean setImplDeferrable(float value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -87,7 +82,7 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *

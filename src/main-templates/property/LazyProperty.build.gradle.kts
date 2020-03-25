@@ -58,12 +58,12 @@ import com.github.osmerion.quitte.value.*;
 public class Lazy${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeParams implements LazyValue {
 
     private final SimpleObjectProperty<State> state = new SimpleObjectProperty<>(State.UNINITIALIZED) {
-    
+
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             if (value != State.VALID) Lazy${type.abbrevName}Property.this.invalidate();
         }
-    
+
     };
 
     @Nullable
@@ -95,23 +95,6 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    public final ${type.raw} get() {
-        if (this.state.get() != State.VALID) {
-            var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) this.state.set(State.VALID);
-            
-            this.provider = null;
-        }
-
-        return this.value;
-    }
-
-    /**
      * TODO doc
      *
      * @since   0.1.0
@@ -126,62 +109,72 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    public final ${type.raw} get() {
+        if (this.state.get() != State.VALID) {
+            var provider = Objects.requireNonNull(this.provider); 
+            if (!this.updateValue(this.intercept(provider.get()))) this.state.set(State.VALID);
+
+            this.provider = null;
+        }
+
+        return this.value;
+    }
+
+    /**
      * TODO doc
      *
      * @since   0.1.0
      */
     public final void set(${type.abbrevName}Supplier$typeParams supplier) {
         if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        
+
         this.provider = supplier;
         this.state.set(State.INVALID);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected final ${type.raw} getImpl() {
+    final ${type.raw} getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         this.value = value;
     }
-    
-    /**
-     * TODO doc
-     *
-     * @since   0.1.0
-     */
-    protected final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+
+    final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         this.provider = () -> value;
         this.state.set(State.INVALID);
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void onBindingInvalidated() {
+    final void onBindingInvalidated() {
         this.provider = this::getBoundValue;
         this.state.set(State.INVALID);
     }
-    
+
     @Override
-    protected final void onChanged(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    final void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
         this.state.set(State.VALID);
+    }
+
+    /**
+     * Intercepts values before updating this property.
+     *
+     * @param value the value
+     *
+     * @return  the result
+     *
+     * @since   0.1.0
+     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    protected ${type.raw} intercept(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        return value;
     }
 
 }"""

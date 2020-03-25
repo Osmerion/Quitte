@@ -64,9 +64,12 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
 
     private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeParams> changeListeners = new CopyOnWriteArraySet<>();
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
-    
+
     @Nullable
     private transient ${type.abbrevName}Binding$typeParams binding;
+
+    // package-private constructor for an effectively sealed class
+    Abstract${type.abbrevName}Property() {}
 
     /**
      * {@inheritDoc}
@@ -208,13 +211,14 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     }
 
     /**
-     * {@inheritDoc}
+     * <b>This method must provide raw setter access and should not be called directly.</b>
      *
      * @since   0.1.0
-     */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    public ${type.raw} get() {
-        return this.getImpl();
+     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    abstract ${type.raw} getImpl();
+${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    final ${type.raw} getBoundValue() {
+        return Objects.requireNonNull(this.binding).get();
     }
 
     /**
@@ -238,47 +242,30 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     /**
      * <b>This method must provide raw setter access and should not be called directly.</b>
      *
-     * @since   0.1.0
-     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected abstract ${type.raw} getImpl();
-
-    /**
-     * <b>This method must provide raw setter access and should not be called directly.</b>
-     *
      * @param value the value
-     *
-     * @since   0.1.0
      */
-    protected abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
+    abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
     /**
      * Attempts to set the value of this property and returns whether or not the current value was invalidated.
      *
      * @return  whether or not the value has been invalidated
-     *
-     * @since   0.1.0
      */
-    protected boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         var prev = this.getImpl();
         if (prev == value) return false;
-    
+
         this.updateValue(value);
         return true;
     }
 
     protected final void invalidate() {
+        this.onInvalidated();
+
         for (var listener : this.invalidationListeners) {
             listener.onInvalidation(this);
             if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
-    }
-
-    protected void onBindingInvalidated() {
-        this.setInternal(this.getBoundValue());
-    }
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected final ${type.raw} getBoundValue() {
-        return Objects.requireNonNull(this.binding).get();
     }
 
     protected final boolean updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
@@ -286,17 +273,39 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         if (prev == value) return false;
 
         this.setImpl(value);
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
-        
+
         return true;
     }
 
+    void onBindingInvalidated() {
+        this.setInternal(this.getBoundValue());
+    }
+
+    void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
+
+    /**
+     * Called when this property's value has changed.
+     *
+     * @param oldValue  the old value
+     * @param newValue  the new value
+     *
+     * @since   0.1.0
+     */
     protected void onChanged(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
+
+    /**
+     * Called when this property was invalidated.
+     *
+     * @since   0.1.0
+     */
+    protected void onInvalidated() {}
 
 }"""
     }

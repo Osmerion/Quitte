@@ -69,27 +69,22 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @since   0.1.0
      */
     @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected final ${type.raw} getImpl() {
+    public final ${type.raw} get() {
+        return this.getImpl();
+    }
+
+    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    final ${type.raw} getImpl() {
         return this.value;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override
-    protected final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         this.value = value;
     }
-    
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
+
     @Override
-    protected final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         var prev = this.getImpl();
         value = this.intercept(value);
         if (prev == value) return false;
@@ -97,7 +92,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         this.updateValue(value);
         return true;
     }
-    
+
     /**
      * Intercepts values before updating this property.
      *
