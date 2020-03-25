@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 /**
  * Represents an operation that consumes a single argument and returns no result.
  *
- * <p>{@code Consumer} expected to operate via side-effects.</p>
+ * <p>A {@code Consumer} is expected to operate via side-effects.</p>
  *
  * @param <T>   the type of the input to the operation
  *

@@ -44,7 +44,7 @@ ${if (sourceType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else "
 /**
  * Represents an operation that consumes a single argument and returns no result.
  *
- * <p>{@code Consumer} expected to operate via side-effects.</p>
+ * <p>A {@code Consumer} is expected to operate via side-effects.</p>
  *${when {
     sourceType === Type.OBJECT -> """
  * @param <T>   the type of the input to the operation

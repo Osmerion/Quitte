@@ -34,7 +34,7 @@ package com.github.osmerion.quitte.functional;
 /**
  * Represents an operation that consumes a single argument and returns no result.
  *
- * <p>{@code Consumer} expected to operate via side-effects.</p>
+ * <p>A {@code Consumer} is expected to operate via side-effects.</p>
  *
  * @see java.util.function.Consumer
  *
