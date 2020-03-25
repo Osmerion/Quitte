@@ -53,22 +53,6 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     /**
      * Returns a new lazy expression which applies a given transformation to a given observable.
      *
-     * @param <S>           the type of the source value
-     * @param <T>           the type of the target value
-     * @param observable    the observable
-     * @param transform     the transformation to apply
-     *
-     * @return  a new lazy expression which applies a given transformation to a given observable
-     *
-     * @since   0.1.0
-     */
-    public static <S, T> LazyObjectExpression<T> of(ObservableValue<S> observable, Function<S, T> transform) {
-        return new Transform<>(ex -> new ObjectBinding.Generic<>(ex::onDependencyInvalidated, observable, transform::apply));
-    }
-
-    /**
-     * Returns a new lazy expression which applies a given transformation to a given observable.
-     *
      * @param <T>           the type of the target value
      * @param observable    the observable
      * @param transform     the transformation to apply

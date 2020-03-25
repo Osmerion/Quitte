@@ -53,21 +53,6 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
     /**
      * Returns a new lazy expression which applies a given transformation to a given observable.
      *
-     * @param <S>           the type of the source value
-     * @param observable    the observable
-     * @param transform     the transformation to apply
-     *
-     * @return  a new lazy expression which applies a given transformation to a given observable
-     *
-     * @since   0.1.0
-     */
-    public static <S> LazyFloatExpression of(ObservableValue<S> observable, Function<S, Float> transform) {
-        return new Transform(ex -> new FloatBinding.Generic<>(ex::onDependencyInvalidated, observable, it -> Objects.requireNonNull(transform.apply(it))));
-    }
-
-    /**
-     * Returns a new lazy expression which applies a given transformation to a given observable.
-     *
      * @param observable    the observable
      * @param transform     the transformation to apply
      *

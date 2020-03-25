@@ -59,21 +59,6 @@ import com.github.osmerion.quitte.value.*;
  * @author  Leon Linhart
  */
 public abstract class Lazy${type.abbrevName}Expression$typeParams extends Abstract${type.abbrevName}Expression$typeParams implements LazyValue {
-
-    /**
-     * Returns a new lazy expression which applies a given transformation to a given observable.
-     *
-     * @param <S>           the type of the source value${if (type === Type.OBJECT) "\n     * @param <T>           the type of the target value" else ""}
-     * @param observable    the observable
-     * @param transform     the transformation to apply
-     *
-     * @return  a new lazy expression which applies a given transformation to a given observable
-     *
-     * @since   0.1.0
-     */
-    public static ${if (type === Type.OBJECT) "<S, T>" else "<S>"} Lazy${type.abbrevName}Expression$typeParams of(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
-        return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${type.abbrevName}Binding.Generic<>(ex::onDependencyInvalidated, observable, ${if (type === Type.OBJECT) "transform::apply" else "it -> Objects.requireNonNull(transform.apply(it))"}));
-    }
 ${Type.values().joinToString(separator = "") { sourceType ->
             val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
             val transformTypeParams = when {
