@@ -65,12 +65,12 @@ For further information on how to use Quitte, please refer to the JavaDoc.
 
 ### Setup
 
-A complete build of Quitte only requires an installation of JDK 13 or later.
+A complete build of Quitte only requires an installation of JDK 14 or later.
 This JDK should either be used to invoke Gradle (i.e. sit in `JAVA_HOME`), or be
 made visible to Gradle by setting up environment variables (or [Gradle properties](https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties))
 as follows:
 ```
-JDK_13="path to JDK 13"
+JDK_14="path to JDK 14"
 ```
 
 ### Building
