@@ -95,15 +95,22 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     /**
-     * TODO doc
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    public ReadableObjectProperty<State> stateProperty() {
+    @Override
+    public final ReadableObjectProperty<State> stateProperty() {
         return this.state.asReadOnlyProperty();
     }
 
-    public State getState() {
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
+    public final State getState() {
         //noinspection ConstantConditions
         return this.state.get();
     }

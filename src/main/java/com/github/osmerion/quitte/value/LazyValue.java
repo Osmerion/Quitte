@@ -42,9 +42,9 @@ import com.github.osmerion.quitte.property.ReadableObjectProperty;
 public interface LazyValue {
 
     /**
-     * TODO doc
+     * Returns a read-only view of the state of this lazy value.
      *
-     * @return
+     * @return  a read-only view of the state of this lazy value
      *
      * @since   0.1.0
      */
