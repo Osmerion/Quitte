@@ -150,7 +150,7 @@ publishing {
 
             pom {
                 name.set(project.name)
-                description.set("")
+                description.set("Specialized, observable properties and observable collections for the JVM.")
                 packaging = "jar"
                 url.set("https://github.com/Osmerion/Quitte")
 
