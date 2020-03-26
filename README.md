@@ -1,11 +1,11 @@
 # Quitte
 [![License](https://img.shields.io/badge/license-BSD-blue.svg?style=flat-square)](https://github.com/Osmerion/Quitte/blob/master/LICENSE)
 
-Specialized function types, observable properties and observable collections for the JVM.
+Specialized, observable properties and observable collections for the JVM.
 
-Quitte was originally designed as a replacement for JavaFX properties for [Osmerion](https://github.com/Osmerion/Osmerion).
+Quitte was originally designed as a replacement for JavaFX's properties for [Osmerion](https://github.com/Osmerion/Osmerion).
 This library does not provide any advanced functionality on its own. However, it can be useful when observable values,
-properties, or specialized types are needed.
+properties, or collections are required.
 
 
 ## Usage
