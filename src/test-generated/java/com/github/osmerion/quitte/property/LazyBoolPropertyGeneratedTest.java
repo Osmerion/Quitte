@@ -51,7 +51,17 @@ public final class LazyBoolPropertyGeneratedTest {
     @Test
     public void testInitialGetConsistency() {
         LazyBoolProperty property = new LazyBoolProperty(TestValues.BoolValue_2);
+        assertEquals(LazyValue.State.VALID, property.getState());
         assertEquals(TestValues.BoolValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+    }
+
+    @Test
+    public void testLazyInitializationGetConsistency() {
+        LazyBoolProperty property = new LazyBoolProperty(() -> TestValues.BoolValue_2);
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.BoolValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -60,7 +70,9 @@ public final class LazyBoolPropertyGeneratedTest {
         assertEquals(TestValues.BoolValue_1, property.get());
 
         property.set(TestValues.BoolValue_2);
+        assertEquals(LazyValue.State.INVALID, property.getState());
         assertEquals(TestValues.BoolValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -76,6 +88,7 @@ public final class LazyBoolPropertyGeneratedTest {
         LazyBoolProperty property = new LazyBoolProperty(TestValues.BoolValue_1);
         property.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
+            assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.BoolValue_1, oldValue);
             assertEquals(TestValues.BoolValue_2, newValue);
             assertEquals(TestValues.BoolValue_2, property.get());
@@ -83,7 +96,7 @@ public final class LazyBoolPropertyGeneratedTest {
 
         property.set(TestValues.BoolValue_2);
         assertEquals(0, callCounter.get());
-        
+
         assertEquals(TestValues.BoolValue_2, property.get());
         assertEquals(1, callCounter.get());
     }
@@ -100,12 +113,27 @@ public final class LazyBoolPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerSkippedOnLazyInitialization() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        LazyBoolProperty property = new LazyBoolProperty(() -> TestValues.BoolValue_2);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.BoolValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
     public void testInvalidationListenerSetGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         LazyBoolProperty property = new LazyBoolProperty(TestValues.BoolValue_1);
         property.addListener(observable -> {
             callCounter.getAndIncrement();
+            assertEquals(LazyValue.State.INVALID, property.getState());
             assertEquals(TestValues.BoolValue_2, property.get());
         });
 

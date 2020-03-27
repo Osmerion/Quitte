@@ -53,7 +53,17 @@ public final class LazyObjectPropertyGeneratedTest {
     @Test
     public void testInitialGetConsistency() {
         LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_2);
+        assertEquals(LazyValue.State.VALID, property.getState());
         assertEquals(TestValues.ObjectValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+    }
+
+    @Test
+    public void testLazyInitializationGetConsistency() {
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_2);
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.ObjectValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -62,7 +72,9 @@ public final class LazyObjectPropertyGeneratedTest {
         assertEquals(TestValues.ObjectValue_1, property.get());
 
         property.set(TestValues.ObjectValue_2);
+        assertEquals(LazyValue.State.INVALID, property.getState());
         assertEquals(TestValues.ObjectValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -78,6 +90,7 @@ public final class LazyObjectPropertyGeneratedTest {
         LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
         property.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
+            assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.ObjectValue_1, oldValue);
             assertEquals(TestValues.ObjectValue_2, newValue);
             assertEquals(TestValues.ObjectValue_2, property.get());
@@ -85,7 +98,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
         property.set(TestValues.ObjectValue_2);
         assertEquals(0, callCounter.get());
-        
+
         assertEquals(TestValues.ObjectValue_2, property.get());
         assertEquals(1, callCounter.get());
     }
@@ -102,12 +115,27 @@ public final class LazyObjectPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerSkippedOnLazyInitialization() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_2);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.ObjectValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
     public void testInvalidationListenerSetGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
         property.addListener(observable -> {
             callCounter.getAndIncrement();
+            assertEquals(LazyValue.State.INVALID, property.getState());
             assertEquals(TestValues.ObjectValue_2, property.get());
         });
 

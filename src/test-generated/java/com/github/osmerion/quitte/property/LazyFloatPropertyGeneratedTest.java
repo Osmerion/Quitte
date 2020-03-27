@@ -51,7 +51,17 @@ public final class LazyFloatPropertyGeneratedTest {
     @Test
     public void testInitialGetConsistency() {
         LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_2);
+        assertEquals(LazyValue.State.VALID, property.getState());
         assertEquals(TestValues.FloatValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+    }
+
+    @Test
+    public void testLazyInitializationGetConsistency() {
+        LazyFloatProperty property = new LazyFloatProperty(() -> TestValues.FloatValue_2);
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.FloatValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -60,7 +70,9 @@ public final class LazyFloatPropertyGeneratedTest {
         assertEquals(TestValues.FloatValue_1, property.get());
 
         property.set(TestValues.FloatValue_2);
+        assertEquals(LazyValue.State.INVALID, property.getState());
         assertEquals(TestValues.FloatValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -76,6 +88,7 @@ public final class LazyFloatPropertyGeneratedTest {
         LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_1);
         property.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
+            assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.FloatValue_1, oldValue);
             assertEquals(TestValues.FloatValue_2, newValue);
             assertEquals(TestValues.FloatValue_2, property.get());
@@ -83,7 +96,7 @@ public final class LazyFloatPropertyGeneratedTest {
 
         property.set(TestValues.FloatValue_2);
         assertEquals(0, callCounter.get());
-        
+
         assertEquals(TestValues.FloatValue_2, property.get());
         assertEquals(1, callCounter.get());
     }
@@ -100,12 +113,27 @@ public final class LazyFloatPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerSkippedOnLazyInitialization() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        LazyFloatProperty property = new LazyFloatProperty(() -> TestValues.FloatValue_2);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.FloatValue_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
     public void testInvalidationListenerSetGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_1);
         property.addListener(observable -> {
             callCounter.getAndIncrement();
+            assertEquals(LazyValue.State.INVALID, property.getState());
             assertEquals(TestValues.FloatValue_2, property.get());
         });
 

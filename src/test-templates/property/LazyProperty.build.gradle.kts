@@ -59,7 +59,17 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
     @Test
     public void testInitialGetConsistency() {
         Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
+        assertEquals(LazyValue.State.VALID, property.getState());
         assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+    }
+
+    @Test
+    public void testLazyInitializationGetConsistency() {
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_2);
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -68,7 +78,9 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
 
         property.set(TestValues.${type.abbrevName}Value_2);
+        assertEquals(LazyValue.State.INVALID, property.getState());
         assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
     }
 
     @Test
@@ -84,6 +96,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
         property.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
+            assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
             assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
             assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
@@ -91,7 +104,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
         property.set(TestValues.${type.abbrevName}Value_2);
         assertEquals(0, callCounter.get());
-        
+
         assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
         assertEquals(1, callCounter.get());
     }
@@ -108,12 +121,27 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerSkippedOnLazyInitialization() {
+        AtomicInteger callCounter = new AtomicInteger(0);
+
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_2);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
     public void testInvalidationListenerSetGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
         property.addListener(observable -> {
             callCounter.getAndIncrement();
+            assertEquals(LazyValue.State.INVALID, property.getState());
             assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
         });
 
