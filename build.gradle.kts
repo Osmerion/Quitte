@@ -40,7 +40,7 @@ plugins {
     id("org.javamodularity.moduleplugin") version "1.6.0"
 }
 
-group = "com.github.osmerion"
+group = "com.github.osmerion.quitte"
 val artifactName = "quitte"
 val nextVersion = "0.1.0"
 version = when (deployment.type) {
