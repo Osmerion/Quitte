@@ -232,7 +232,7 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
     @Override
     final void onDependencyInvalidated() {
         this.provider = this::recomputeValue;
-        this.state.set(State.INVALID);
+        if (this.state.get() == State.VALID) this.state.set(State.INVALID);
     }
 
     @Override
