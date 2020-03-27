@@ -159,8 +159,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -171,9 +170,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         return true;
     }
 
-    boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
-        return true;
-    }
+    void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
 
     /**
      * Called when this property's value has changed.

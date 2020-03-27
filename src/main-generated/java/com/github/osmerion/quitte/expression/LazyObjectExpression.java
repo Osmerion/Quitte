@@ -175,7 +175,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
 
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
-            if (value != State.VALID) LazyObjectExpression.this.invalidate();
+            //noinspection ConstantConditions
+            if (!value.isValid()) LazyObjectExpression.this.invalidate();
         }
 
     };
@@ -221,8 +222,14 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     public final T get() {
         if (this.state.get() != State.VALID) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) this.state.set(State.VALID);
-            
+            if (!this.updateValue(provider.get())) {
+                if (this.state.get() != State.UNINITIALIZED) {
+                    this.state.set(State.VALID);
+                } else {
+                    this.state.set(State.INITIALIZED);
+                }
+            }
+
             this.provider = null;
         }
 
@@ -243,12 +250,18 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     @Override
     final void onDependencyInvalidated() {
         this.provider = this::recomputeValue;
-        if (this.state.get() == State.VALID) this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
-    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
-        return this.state.set(State.VALID) != State.UNINITIALIZED;
+    final void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+        if (this.state.get() != State.UNINITIALIZED) {
+            this.state.set(State.VALID);
+        } else {
+            this.state.set(State.INITIALIZED);
+        }
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

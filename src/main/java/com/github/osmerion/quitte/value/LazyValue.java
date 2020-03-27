@@ -66,8 +66,14 @@ public interface LazyValue {
      */
     enum State {
         UNINITIALIZED,
+        INITIALIZED,
         VALID,
-        INVALID
+        INVALID;
+
+        public boolean isValid() {
+            return this == INITIALIZED || this == VALID;
+        }
+
     }
 
 }

@@ -52,7 +52,8 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
 
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
-            if (value != State.VALID) LazyFloatProperty.this.invalidate();
+            //noinspection ConstantConditions
+            if (!value.isValid()) LazyFloatProperty.this.invalidate();
         }
 
     };
@@ -72,13 +73,17 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
     @PrimaryConstructor
     public LazyFloatProperty(float initial) {
         this.value = initial;
-        this.state.set(State.VALID);
+        this.state.set(State.INITIALIZED);
     }
 
     /**
-     * Creates a new property with the given initial value.
+     * Creates a new, initially uninitialized, property.
      *
-     * @param initial   the initial value for the property
+     * <p>The given supplier is considered to be the initial source of this property's value. When the property is
+     * initialized, registered ChangeListeners will be called with an {@code oldValue} of {@code 0.0F} (the
+     * initial value of the property's underlying variable.)</p>
+     *
+     * @param initial   the initial value provider for the property
      *
      * @since   0.1.0
      */
@@ -114,9 +119,16 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
      */
     @Override
     public final float get() {
-        if (this.state.get() != State.VALID) {
+        //noinspection ConstantConditions
+        if (!this.state.get().isValid()) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(this.intercept(provider.get()))) this.state.set(State.VALID);
+            if (!this.updateValue(this.intercept(provider.get()))) {
+                if (this.state.get() != State.UNINITIALIZED) {
+                    this.state.set(State.VALID);
+                } else {
+                    this.state.set(State.INITIALIZED);
+                }
+            }
 
             this.provider = null;
         }
@@ -133,7 +145,9 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
         if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
 
         this.provider = supplier;
-        this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
@@ -148,19 +162,28 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
 
     final boolean setImplDeferrable(float value) {
         this.provider = () -> value;
-        this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
+
         return false;
     }
 
     @Override
     final void onBindingInvalidated() {
         this.provider = this::getBoundValue;
-        this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
-    final boolean onChangedInternal(float oldValue, float newValue) {
-        return this.state.set(State.VALID) != State.UNINITIALIZED;
+    final void onChangedInternal(float oldValue, float newValue) {
+        if (this.state.get() != State.UNINITIALIZED) {
+            this.state.set(State.VALID);
+        } else {
+            this.state.set(State.INITIALIZED);
+        }
     }
 
     /**

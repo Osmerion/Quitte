@@ -149,8 +149,7 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -161,9 +160,7 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
         return true;
     }
 
-    boolean onChangedInternal(boolean oldValue, boolean newValue) {
-        return true;
-    }
+    void onChangedInternal(boolean oldValue, boolean newValue) {}
 
     /**
      * Called when this property's value has changed.

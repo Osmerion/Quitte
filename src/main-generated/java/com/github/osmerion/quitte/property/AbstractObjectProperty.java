@@ -338,8 +338,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -354,9 +353,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         this.setInternal(this.getBoundValue());
     }
 
-    boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
-        return true;
-    }
+    void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {}
 
     /**
      * Called when this property's value has changed.

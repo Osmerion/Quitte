@@ -149,8 +149,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -161,9 +160,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
         return true;
     }
 
-    boolean onChangedInternal(long oldValue, long newValue) {
-        return true;
-    }
+    void onChangedInternal(long oldValue, long newValue) {}
 
     /**
      * Called when this property's value has changed.

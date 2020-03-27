@@ -87,7 +87,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
-            if (value != State.VALID) Lazy${type.abbrevName}Expression.this.invalidate();
+            //noinspection ConstantConditions
+            if (!value.isValid()) Lazy${type.abbrevName}Expression.this.invalidate();
         }
 
     };
@@ -131,8 +132,14 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     public final ${type.raw} get() {
         if (this.state.get() != State.VALID) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) this.state.set(State.VALID);
-            
+            if (!this.updateValue(provider.get())) {
+                if (this.state.get() != State.UNINITIALIZED) {
+                    this.state.set(State.VALID);
+                } else {
+                    this.state.set(State.INITIALIZED);
+                }
+            }
+
             this.provider = null;
         }
 
@@ -152,12 +159,18 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     @Override
     final void onDependencyInvalidated() {
         this.provider = this::recomputeValue;
-        if (this.state.get() == State.VALID) this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
-    final boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
-        return this.state.set(State.VALID) != State.UNINITIALIZED;
+    final void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+        if (this.state.get() != State.UNINITIALIZED) {
+            this.state.set(State.VALID);
+        } else {
+            this.state.set(State.INITIALIZED);
+        }
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

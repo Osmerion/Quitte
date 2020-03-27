@@ -154,8 +154,7 @@ public abstract class AbstractObjectExpression<T> implements Expression<T>, Obse
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -166,9 +165,7 @@ public abstract class AbstractObjectExpression<T> implements Expression<T>, Obse
         return true;
     }
 
-    boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
-        return true;
-    }
+    void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {}
 
     /**
      * Called when this property's value has changed.

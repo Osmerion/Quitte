@@ -334,8 +334,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -350,9 +349,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
         this.setInternal(this.getBoundValue());
     }
 
-    boolean onChangedInternal(byte oldValue, byte newValue) {
-        return true;
-    }
+    void onChangedInternal(byte oldValue, byte newValue) {}
 
     /**
      * Called when this property's value has changed.

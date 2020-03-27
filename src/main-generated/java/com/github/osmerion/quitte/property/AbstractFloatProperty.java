@@ -334,8 +334,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -350,9 +349,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         this.setInternal(this.getBoundValue());
     }
 
-    boolean onChangedInternal(float oldValue, float newValue) {
-        return true;
-    }
+    void onChangedInternal(float oldValue, float newValue) {}
 
     /**
      * Called when this property's value has changed.

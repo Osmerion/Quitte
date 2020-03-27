@@ -149,8 +149,7 @@ public abstract class AbstractFloatExpression implements Expression<Float>, Obse
         if (prev == value) return false;
 
         this.setImpl(value);
-        if (!this.onChangedInternal(prev, value)) return true;
-
+        this.onChangedInternal(prev, value);
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -161,9 +160,7 @@ public abstract class AbstractFloatExpression implements Expression<Float>, Obse
         return true;
     }
 
-    boolean onChangedInternal(float oldValue, float newValue) {
-        return true;
-    }
+    void onChangedInternal(float oldValue, float newValue) {}
 
     /**
      * Called when this property's value has changed.

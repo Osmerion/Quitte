@@ -52,7 +52,8 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
 
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
-            if (value != State.VALID) LazyObjectProperty.this.invalidate();
+            //noinspection ConstantConditions
+            if (!value.isValid()) LazyObjectProperty.this.invalidate();
         }
 
     };
@@ -73,13 +74,17 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     @PrimaryConstructor
     public LazyObjectProperty(@Nullable T initial) {
         this.value = initial;
-        this.state.set(State.VALID);
+        this.state.set(State.INITIALIZED);
     }
 
     /**
-     * Creates a new property with the given initial value.
+     * Creates a new, initially uninitialized, property.
      *
-     * @param initial   the initial value for the property
+     * <p>The given supplier is considered to be the initial source of this property's value. When the property is
+     * initialized, registered ChangeListeners will be called with an {@code oldValue} of {@code null} (the
+     * initial value of the property's underlying variable.)</p>
+     *
+     * @param initial   the initial value provider for the property
      *
      * @since   0.1.0
      */
@@ -116,9 +121,16 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     @Override
     @Nullable
     public final T get() {
-        if (this.state.get() != State.VALID) {
+        //noinspection ConstantConditions
+        if (!this.state.get().isValid()) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(this.intercept(provider.get()))) this.state.set(State.VALID);
+            if (!this.updateValue(this.intercept(provider.get()))) {
+                if (this.state.get() != State.UNINITIALIZED) {
+                    this.state.set(State.VALID);
+                } else {
+                    this.state.set(State.INITIALIZED);
+                }
+            }
 
             this.provider = null;
         }
@@ -135,7 +147,9 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
         if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
 
         this.provider = supplier;
-        this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
@@ -151,19 +165,28 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
 
     final boolean setImplDeferrable(@Nullable T value) {
         this.provider = () -> value;
-        this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
+
         return false;
     }
 
     @Override
     final void onBindingInvalidated() {
         this.provider = this::getBoundValue;
-        this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
-    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
-        return this.state.set(State.VALID) != State.UNINITIALIZED;
+    final void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+        if (this.state.get() != State.UNINITIALIZED) {
+            this.state.set(State.VALID);
+        } else {
+            this.state.set(State.INITIALIZED);
+        }
     }
 
     /**

@@ -167,7 +167,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
 
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
-            if (value != State.VALID) LazyBoolExpression.this.invalidate();
+            //noinspection ConstantConditions
+            if (!value.isValid()) LazyBoolExpression.this.invalidate();
         }
 
     };
@@ -211,8 +212,14 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     public final boolean get() {
         if (this.state.get() != State.VALID) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) this.state.set(State.VALID);
-            
+            if (!this.updateValue(provider.get())) {
+                if (this.state.get() != State.UNINITIALIZED) {
+                    this.state.set(State.VALID);
+                } else {
+                    this.state.set(State.INITIALIZED);
+                }
+            }
+
             this.provider = null;
         }
 
@@ -232,12 +239,18 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     @Override
     final void onDependencyInvalidated() {
         this.provider = this::recomputeValue;
-        if (this.state.get() == State.VALID) this.state.set(State.INVALID);
+
+        //noinspection ConstantConditions
+        if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
     @Override
-    final boolean onChangedInternal(boolean oldValue, boolean newValue) {
-        return this.state.set(State.VALID) != State.UNINITIALIZED;
+    final void onChangedInternal(boolean oldValue, boolean newValue) {
+        if (this.state.get() != State.UNINITIALIZED) {
+            this.state.set(State.VALID);
+        } else {
+            this.state.set(State.INITIALIZED);
+        }
     }
 
     /** A simple expression transforming a single value using the internal binding API. */
