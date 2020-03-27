@@ -55,7 +55,7 @@ public final class SimpleObjectExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_2);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.ObjectValue_2, expression.get());
     }
 

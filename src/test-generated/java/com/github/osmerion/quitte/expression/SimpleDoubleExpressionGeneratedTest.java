@@ -53,7 +53,7 @@ public final class SimpleDoubleExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleDoubleProperty property = new SimpleDoubleProperty(TestValues.DoubleValue_2);
         SimpleDoubleExpression expression = SimpleDoubleExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.DoubleValue_2, expression.get());
     }
 

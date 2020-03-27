@@ -61,7 +61,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        
+
         assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
     }
 

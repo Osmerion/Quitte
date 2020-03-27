@@ -53,7 +53,7 @@ public final class SimpleByteExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_2);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.ByteValue_2, expression.get());
     }
 

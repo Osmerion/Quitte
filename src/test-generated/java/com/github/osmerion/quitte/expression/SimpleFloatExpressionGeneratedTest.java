@@ -53,7 +53,7 @@ public final class SimpleFloatExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_2);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.FloatValue_2, expression.get());
     }
 

@@ -53,7 +53,7 @@ public final class SimpleShortExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_2);
         SimpleShortExpression expression = SimpleShortExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.ShortValue_2, expression.get());
     }
 

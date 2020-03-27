@@ -53,7 +53,7 @@ public final class SimpleBoolExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_2);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.BoolValue_2, expression.get());
     }
 

@@ -53,7 +53,7 @@ public final class SimpleLongExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_2);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.LongValue_2, expression.get());
     }
 

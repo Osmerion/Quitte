@@ -53,7 +53,7 @@ public final class SimpleIntExpressionGeneratedTest {
     public void testInitialGetConsistency() {
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_2);
         SimpleIntExpression expression = SimpleIntExpression.of(property, it -> it);
-        
+
         assertEquals(TestValues.IntValue_2, expression.get());
     }
 
