@@ -32,25 +32,25 @@ package com.github.osmerion.quitte;
 
 public final class TestValues {
 
-    public static final boolean BoolValue_1 = false;
-    public static final boolean BoolValue_2 = true;
+    public static final boolean BoolValue_1 = true;
+    public static final boolean BoolValue_2 = false;
 
-    public static final byte ByteValue_1 = 0;
+    public static final byte ByteValue_1 = 100;
     public static final byte ByteValue_2 = 1;
 
-    public static final short ShortValue_1 = 0;
+    public static final short ShortValue_1 = 100;
     public static final short ShortValue_2 = 1;
 
-    public static final int IntValue_1 = 0;
+    public static final int IntValue_1 = 100;
     public static final int IntValue_2 = 1;
 
-    public static final long LongValue_1 = 0;
+    public static final long LongValue_1 = 100;
     public static final long LongValue_2 = 1;
 
-    public static final float FloatValue_1 = 0;
+    public static final float FloatValue_1 = 100;
     public static final float FloatValue_2 = 1;
 
-    public static final double DoubleValue_1 = 0;
+    public static final double DoubleValue_1 = 100;
     public static final double DoubleValue_2 = 1;
 
     public static final Object ObjectValue_1 = "foo";
