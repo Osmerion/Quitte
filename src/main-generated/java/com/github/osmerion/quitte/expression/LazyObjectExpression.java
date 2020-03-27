@@ -247,8 +247,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     }
 
     @Override
-    final void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

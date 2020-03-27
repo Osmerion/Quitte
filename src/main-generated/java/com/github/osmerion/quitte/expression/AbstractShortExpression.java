@@ -149,7 +149,8 @@ public abstract class AbstractShortExpression implements Expression<Short>, Obse
         if (prev == value) return false;
 
         this.setImpl(value);
-        this.onChangedInternal(prev, value);
+        if (!this.onChangedInternal(prev, value)) return true;
+
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -160,7 +161,9 @@ public abstract class AbstractShortExpression implements Expression<Short>, Obse
         return true;
     }
 
-    void onChangedInternal(short oldValue, short newValue) {}
+    boolean onChangedInternal(short oldValue, short newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

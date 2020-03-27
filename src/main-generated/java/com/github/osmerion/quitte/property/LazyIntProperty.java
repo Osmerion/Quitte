@@ -159,8 +159,8 @@ public class LazyIntProperty extends AbstractIntProperty implements LazyValue {
     }
 
     @Override
-    final void onChangedInternal(int oldValue, int newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(int oldValue, int newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

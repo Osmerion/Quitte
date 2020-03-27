@@ -149,7 +149,8 @@ public abstract class AbstractIntExpression implements Expression<Integer>, Obse
         if (prev == value) return false;
 
         this.setImpl(value);
-        this.onChangedInternal(prev, value);
+        if (!this.onChangedInternal(prev, value)) return true;
+
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -160,7 +161,9 @@ public abstract class AbstractIntExpression implements Expression<Integer>, Obse
         return true;
     }
 
-    void onChangedInternal(int oldValue, int newValue) {}
+    boolean onChangedInternal(int oldValue, int newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

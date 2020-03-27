@@ -149,7 +149,8 @@ public abstract class AbstractDoubleExpression implements Expression<Double>, Ob
         if (prev == value) return false;
 
         this.setImpl(value);
-        this.onChangedInternal(prev, value);
+        if (!this.onChangedInternal(prev, value)) return true;
+
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -160,7 +161,9 @@ public abstract class AbstractDoubleExpression implements Expression<Double>, Ob
         return true;
     }
 
-    void onChangedInternal(double oldValue, double newValue) {}
+    boolean onChangedInternal(double oldValue, double newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

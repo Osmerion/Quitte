@@ -162,8 +162,8 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     @Override
-    final void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

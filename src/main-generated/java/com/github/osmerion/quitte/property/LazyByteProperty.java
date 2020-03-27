@@ -159,8 +159,8 @@ public class LazyByteProperty extends AbstractByteProperty implements LazyValue 
     }
 
     @Override
-    final void onChangedInternal(byte oldValue, byte newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(byte oldValue, byte newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

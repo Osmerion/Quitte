@@ -169,8 +169,8 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     @Override
-    final void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

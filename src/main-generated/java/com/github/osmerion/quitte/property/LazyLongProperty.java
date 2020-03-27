@@ -159,8 +159,8 @@ public class LazyLongProperty extends AbstractLongProperty implements LazyValue 
     }
 
     @Override
-    final void onChangedInternal(long oldValue, long newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(long oldValue, long newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

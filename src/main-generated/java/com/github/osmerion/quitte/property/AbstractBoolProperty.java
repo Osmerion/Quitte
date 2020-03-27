@@ -334,7 +334,8 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
         if (prev == value) return false;
 
         this.setImpl(value);
-        this.onChangedInternal(prev, value);
+        if (!this.onChangedInternal(prev, value)) return true;
+
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
@@ -349,7 +350,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
         this.setInternal(this.getBoundValue());
     }
 
-    void onChangedInternal(boolean oldValue, boolean newValue) {}
+    boolean onChangedInternal(boolean oldValue, boolean newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

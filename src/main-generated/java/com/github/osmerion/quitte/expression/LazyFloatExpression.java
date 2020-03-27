@@ -236,8 +236,8 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
     }
 
     @Override
-    final void onChangedInternal(float oldValue, float newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(float oldValue, float newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

@@ -236,8 +236,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
     }
 
     @Override
-    final void onChangedInternal(byte oldValue, byte newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(byte oldValue, byte newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

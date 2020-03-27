@@ -236,8 +236,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
     }
 
     @Override
-    final void onChangedInternal(long oldValue, long newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(long oldValue, long newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

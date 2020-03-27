@@ -236,8 +236,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
     }
 
     @Override
-    final void onChangedInternal(short oldValue, short newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(short oldValue, short newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

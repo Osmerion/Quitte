@@ -159,8 +159,8 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
     }
 
     @Override
-    final void onChangedInternal(float oldValue, float newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(float oldValue, float newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

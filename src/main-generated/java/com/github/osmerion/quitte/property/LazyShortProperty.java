@@ -159,8 +159,8 @@ public class LazyShortProperty extends AbstractShortProperty implements LazyValu
     }
 
     @Override
-    final void onChangedInternal(short oldValue, short newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(short oldValue, short newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

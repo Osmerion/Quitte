@@ -236,8 +236,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
     }
 
     @Override
-    final void onChangedInternal(double oldValue, double newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(double oldValue, double newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

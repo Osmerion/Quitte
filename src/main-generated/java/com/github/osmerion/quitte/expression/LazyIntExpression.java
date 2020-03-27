@@ -236,8 +236,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
     }
 
     @Override
-    final void onChangedInternal(int oldValue, int newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(int oldValue, int newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

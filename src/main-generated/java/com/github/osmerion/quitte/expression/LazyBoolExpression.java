@@ -236,8 +236,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     }
 
     @Override
-    final void onChangedInternal(boolean oldValue, boolean newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(boolean oldValue, boolean newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */

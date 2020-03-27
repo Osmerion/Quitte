@@ -159,8 +159,8 @@ public class LazyBoolProperty extends AbstractBoolProperty implements LazyValue 
     }
 
     @Override
-    final void onChangedInternal(boolean oldValue, boolean newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(boolean oldValue, boolean newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**

@@ -159,8 +159,8 @@ public class LazyDoubleProperty extends AbstractDoubleProperty implements LazyVa
     }
 
     @Override
-    final void onChangedInternal(double oldValue, double newValue) {
-        this.state.set(State.VALID);
+    final boolean onChangedInternal(double oldValue, double newValue) {
+        return this.state.set(State.VALID) != State.UNINITIALIZED;
     }
 
     /**
