@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A specialized writable {@code boolean} property.
  *
@@ -49,6 +51,7 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleBoolProperty(boolean initial) {
         this.value = initial;
     }

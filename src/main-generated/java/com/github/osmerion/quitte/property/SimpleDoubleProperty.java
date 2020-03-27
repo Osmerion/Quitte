@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A specialized writable {@code double} property.
  *
@@ -49,6 +51,7 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleDoubleProperty(double initial) {
         this.value = initial;
     }

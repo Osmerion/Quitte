@@ -42,6 +42,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import com.github.osmerion.quitte.functional.*;
+import com.github.osmerion.quitte.internal.addon.*;
 import com.github.osmerion.quitte.value.*;
 
 /**
@@ -78,6 +79,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public Lazy${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} initial) {
         this.value = initial;
         this.state.set(State.VALID);

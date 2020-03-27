@@ -36,6 +36,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import com.github.osmerion.quitte.functional.*;
+import com.github.osmerion.quitte.internal.addon.*;
 import com.github.osmerion.quitte.value.*;
 
 /**
@@ -68,6 +69,7 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public LazyFloatProperty(float initial) {
         this.value = initial;
         this.state.set(State.VALID);

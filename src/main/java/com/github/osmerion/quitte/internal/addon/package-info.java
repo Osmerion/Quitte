@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
- * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,74 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.osmerion.quitte.property;
+@NonNullApi
+package com.github.osmerion.quitte.internal.addon;
 
-import com.github.osmerion.quitte.internal.addon.*;
-
-/**
- * A specialized writable {@code long} property.
- *
- * @since   0.1.0
- *
- * @author  Leon Linhart
- */
-public class SimpleLongProperty extends AbstractLongProperty {
-
-    private long value;
-
-    /**
-     * Creates a new property with the given initial value.
-     *
-     * @param initial   the initial value for the property
-     *
-     * @since   0.1.0
-     */
-    @PrimaryConstructor
-    public SimpleLongProperty(long initial) {
-        this.value = initial;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    @Override
-    public final long get() {
-        return this.getImpl();
-    }
-
-    @Override
-    final long getImpl() {
-        return this.value;
-    }
-
-    @Override
-    final void setImpl(long value) {
-        this.value = value;
-    }
-
-    @Override
-    final boolean setImplDeferrable(long value) {
-        var prev = this.getImpl();
-        value = this.intercept(value);
-        if (prev == value) return false;
-    
-        this.updateValue(value);
-        return true;
-    }
-
-    /**
-     * Intercepts values before updating this property.
-     *
-     * @param value the value
-     *
-     * @return  the result
-     *
-     * @since   0.1.0
-     */
-    protected long intercept(long value) {
-        return value;
-    }
-
-}
+import com.github.osmerion.quitte.internal.NonNullApi;

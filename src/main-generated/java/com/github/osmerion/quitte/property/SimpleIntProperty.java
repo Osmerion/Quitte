@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A specialized writable {@code int} property.
  *
@@ -49,6 +51,7 @@ public class SimpleIntProperty extends AbstractIntProperty {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleIntProperty(int initial) {
         this.value = initial;
     }

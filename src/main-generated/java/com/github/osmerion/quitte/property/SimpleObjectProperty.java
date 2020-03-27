@@ -33,6 +33,8 @@ package com.github.osmerion.quitte.property;
 
 import javax.annotation.Nullable;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A generic writable property.
  *
@@ -52,6 +54,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleObjectProperty(@Nullable T initial) {
         this.value = initial;
     }

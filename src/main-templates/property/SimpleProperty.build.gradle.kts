@@ -37,6 +37,8 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Simple${type.abbrevName}Property") {
         """package $packageName;
 ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * ${if (type === Type.OBJECT)
             "A generic writable property."
@@ -59,6 +61,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public Simple${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} initial) {
         this.value = initial;
     }

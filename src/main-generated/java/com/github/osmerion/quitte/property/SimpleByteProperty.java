@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A specialized writable {@code byte} property.
  *
@@ -49,6 +51,7 @@ public class SimpleByteProperty extends AbstractByteProperty {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleByteProperty(byte initial) {
         this.value = initial;
     }

@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A specialized writable {@code float} property.
  *
@@ -49,6 +51,7 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleFloatProperty(float initial) {
         this.value = initial;
     }

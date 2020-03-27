@@ -31,6 +31,8 @@
  */
 package com.github.osmerion.quitte.property;
 
+import com.github.osmerion.quitte.internal.addon.*;
+
 /**
  * A specialized writable {@code short} property.
  *
@@ -49,6 +51,7 @@ public class SimpleShortProperty extends AbstractShortProperty {
      *
      * @since   0.1.0
      */
+    @PrimaryConstructor
     public SimpleShortProperty(short initial) {
         this.value = initial;
     }
