@@ -57,214 +57,252 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
     @Test
-    public void testInitialGetConsistency() {
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
-        assertEquals(LazyValue.State.VALID, property.getState());
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
+    public void testInitialGetConsistencyForPrimaryCtor() {
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
     }
 
     @Test
-    public void testLazyInitializationGetConsistency() {
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_2);
+    public void testInitialGetConsistencyForLazyInitialization() {
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
     }
 
     @Test
-    public void testSetGetConsistency() {
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
-
-        property.set(TestValues.${type.abbrevName}Value_2);
+    public void testSetReturnForPrimaryCtor() {
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.set(TestValues.${type.abbrevName}Value_L));
         assertEquals(LazyValue.State.INVALID, property.getState());
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+    }
+
+    @Test
+    public void testSetReturnForLazyInitialization() {
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_N, property.set(TestValues.${type.abbrevName}Value_L));
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+    }
+
+    @Test
+    public void testSetGetStateLifecycleForPrimaryCtor() {
+        var propertyInvalidatedCallCounter = new AtomicInteger(0);
+        var stateChangedCallCounter = new AtomicInteger(0);
+        var stateInvalidatedCallCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        property.addListener((observable -> propertyInvalidatedCallCounter.getAndIncrement()));
+
+        var state = property.stateProperty();
+        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
+        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(LazyValue.State.INVALID, property.getState());
+        assertEquals(1, propertyInvalidatedCallCounter.get());
+        assertEquals(1, stateChangedCallCounter.get());
+        assertEquals(1, stateInvalidatedCallCounter.get());
+
+        property.get();
         assertEquals(LazyValue.State.VALID, property.getState());
+        assertEquals(1, propertyInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.INVALID, property.getState());
+        assertEquals(2, propertyInvalidatedCallCounter.get());
+        assertEquals(3, stateChangedCallCounter.get());
+        assertEquals(3, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.INVALID, property.getState());
+        assertEquals(2, propertyInvalidatedCallCounter.get());
+        assertEquals(3, stateChangedCallCounter.get());
+        assertEquals(3, stateInvalidatedCallCounter.get());
+
+        property.get();
+        assertEquals(LazyValue.State.VALID, property.getState());
+        assertEquals(2, propertyInvalidatedCallCounter.get());
+        assertEquals(4, stateChangedCallCounter.get());
+        assertEquals(4, stateInvalidatedCallCounter.get());
     }
 
     @Test
-    public void testSetReturn() {
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        assertEquals(TestValues.${type.abbrevName}Value_1, property.set(TestValues.${type.abbrevName}Value_2));
+    public void testSetGetStateLifecycleForLazyInitialization() {
+        var propertyInvalidatedCallCounter = new AtomicInteger(0);
+        var stateChangedCallCounter = new AtomicInteger(0);
+        var stateInvalidatedCallCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
+        property.addListener((observable -> propertyInvalidatedCallCounter.getAndIncrement()));
+
+        var state = property.stateProperty();
+        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
+        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(0, propertyInvalidatedCallCounter.get());
+        assertEquals(0, stateChangedCallCounter.get());
+        assertEquals(0, stateInvalidatedCallCounter.get());
+
+        property.get();
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+        assertEquals(0, propertyInvalidatedCallCounter.get());
+        assertEquals(1, stateChangedCallCounter.get());
+        assertEquals(1, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.INVALID, property.getState());
+        assertEquals(1, propertyInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(LazyValue.State.INVALID, property.getState());
+        assertEquals(1, propertyInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        property.get();
+        assertEquals(LazyValue.State.VALID, property.getState());
+        assertEquals(1, propertyInvalidatedCallCounter.get());
+        assertEquals(3, stateChangedCallCounter.get());
+        assertEquals(3, stateInvalidatedCallCounter.get());
     }
 
     @Test
-    public void testChangeListenerSetGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+    public void testChangeListenerSetGetConsistencyForPrimaryCtor() {
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         property.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.VALID, property.getState());
-            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+            assertEquals(TestValues.${type.abbrevName}Value_H, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_L, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
         });
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
         assertEquals(1, callCounter.get());
     }
 
     @Test
-    public void testChangeListenerSkippedOnSet() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+    public void testChangeListenerSetGetConsistencyForLazyInitialization() {
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
+        property.addListener((observable, oldValue, newValue) -> {
+            callCounter.incrementAndGet();
+            assertEquals(LazyValue.State.INITIALIZED, property.getState());
+            assertEquals(TestValues.${type.abbrevName}Value_N, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_L, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        });
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(0, callCounter.get());
+
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerDeferredOnSetForPrimaryCtor() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(0, callCounter.get());
     }
 
     @Test
-    public void testChangeListenerSkippedOnLazyInitialization() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+    public void testChangeListenerDeferredOnSetForLazyInitialization() {
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_2);
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
         property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
-
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(0, callCounter.get());
     }
 
     @Test
-    public void testInvalidationListenerSetGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+    public void testChangeListenerSkippedOnSetGetForPrimaryCtor() {
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerInitForLazyInitialization() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
+        property.addListener((observable, oldValue, newValue) -> {
+            callCounter.getAndIncrement();
+            assertEquals(1, callCounter.get());
+            assertEquals(LazyValue.State.INITIALIZED, property.getState());
+            assertEquals(TestValues.${type.abbrevName}Value_N, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_H, newValue);
+        });
+
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerOnSetForPrimaryCtor() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         property.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, property.getState());
-            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
+            assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
         });
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(1, callCounter.get());
     }
 
     @Test
-    public void testChangeListenerSkippedOnBindingCreated() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+    public void testInvalidationListenerSkippedOnSetForLazyInitialization() {
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        Lazy${type.abbrevName}Property$typeParams wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
+        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        wrapper.bindTo(property);
-        assertEquals(0, callCounter.get());
-    }
-
-    @Test
-    public void testInvalidationListenerOnBindingCreated() {
-        AtomicInteger callCounter = new AtomicInteger(0);
-
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        Lazy${type.abbrevName}Property$typeParams wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
-        wrapper.addListener(observable -> {
-            switch (callCounter.getAndIncrement()) {
-                case 0 -> assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
-                case 1 -> assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-                default -> throw new IllegalStateException();
-            }
-        });
-
-        wrapper.bindTo(property);
-        assertEquals(1, callCounter.get());
-        assertEquals(TestValues.${type.abbrevName}Value_1, wrapper.get());
-
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(2, callCounter.get());
-    }
-
-    @Test
-    public void testChangeListenerBindingUpdatedGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
-
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        Lazy${type.abbrevName}Property$typeParams wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        wrapper.bindTo(property);
-
-        wrapper.addListener((observable, oldValue, newValue) -> {
-            callCounter.getAndIncrement();
-            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        });
-
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(TestValues.${type.abbrevName}Value_2, wrapper.get());
-        assertEquals(1, callCounter.get());
-    }
-
-    @Test
-    public void testChangeListenerSkippedOnBindingUpdated() {
-        AtomicInteger callCounter = new AtomicInteger(0);
-
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        Lazy${type.abbrevName}Property$typeParams wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
-
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertEquals(0, callCounter.get());
-    }
-
-    @Test
-    public void testInvalidationListenerBindingUpdatedGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
-
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_1);
-        Lazy${type.abbrevName}Property$typeParams wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        wrapper.bindTo(property);
-
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
-
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
-        assertEquals(LazyValue.State.INVALID, wrapper.getState());
-        
-        assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
-        assertEquals(LazyValue.State.INVALID, wrapper.getState());
-
-        assertEquals(TestValues.${type.abbrevName}Value_1, wrapper.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
-        assertEquals(LazyValue.State.VALID, wrapper.getState());
-
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(1, callCounter.get());
-
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
-        assertEquals(LazyValue.State.INVALID, wrapper.getState());
-
-        assertEquals(TestValues.${type.abbrevName}Value_2, wrapper.get());
-        assertEquals(LazyValue.State.VALID, property.getState());
-        assertEquals(LazyValue.State.VALID, wrapper.getState());
-    }
-
-    @Test
-    public void testInvalidationListenerSkippedOnBindingUpdated() {
-        AtomicInteger callCounter = new AtomicInteger(0);
-
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        Lazy${type.abbrevName}Property$typeParams wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
-
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedChangeListenerRemoval() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         property.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
 
             @Override
@@ -278,20 +316,17 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
             }
 
         });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
 
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         property.addListener(new InvalidationListener() {
 
             @Override
@@ -305,13 +340,134 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
             }
 
         });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(TestValues.${type.abbrevName}Value_2, property.get());
-        
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertEquals(TestValues.${type.abbrevName}Value_1, property.get());
 
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerDeferredOnBindingCreated() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        wrapper.bindTo(property);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerOnGetForBindingWithSameValue() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        wrapper.bindTo(property);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerOnBindingCreated() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        wrapper.addListener(observable -> {
+            switch (callCounter.getAndIncrement()) {
+                case 0 -> assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+                case 1 -> assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+                default -> throw new IllegalStateException();
+            }
+        });
+
+        wrapper.bindTo(property);
         assertEquals(1, callCounter.get());
+        assertEquals(TestValues.${type.abbrevName}Value_H, wrapper.get());
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(2, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerBindingUpdatedGetConsistency() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        wrapper.bindTo(property);
+
+        wrapper.addListener((observable, oldValue, newValue) -> {
+            callCounter.getAndIncrement();
+            assertEquals(TestValues.${type.abbrevName}Value_H, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_L, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        });
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(TestValues.${type.abbrevName}Value_L, wrapper.get());
+        assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void testChangeListenerDeferredOnBindingUpdated() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(0, callCounter.get());
+    }
+
+    @Test
+    public void testInvalidationListenerBindingUpdatedGetConsistency() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        wrapper.bindTo(property);
+
+        wrapper.addListener(observable -> callCounter.getAndIncrement());
+
+        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
+        assertEquals(LazyValue.State.INVALID, wrapper.getState());
+        
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+        assertEquals(LazyValue.State.INVALID, wrapper.getState());
+
+        assertEquals(TestValues.${type.abbrevName}Value_H, wrapper.get());
+        assertEquals(LazyValue.State.INITIALIZED, property.getState());
+        assertEquals(LazyValue.State.VALID, wrapper.getState());
+
+        property.set(TestValues.${type.abbrevName}Value_L);
+        assertEquals(1, callCounter.get());
+
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+        assertEquals(LazyValue.State.INVALID, wrapper.getState());
+
+        assertEquals(TestValues.${type.abbrevName}Value_L, wrapper.get());
+        assertEquals(LazyValue.State.VALID, property.getState());
+        assertEquals(LazyValue.State.VALID, wrapper.getState());
+    }
+
+    @Test
+    public void testInvalidationListenerDeferredOnBindingUpdated() {
+        var callCounter = new AtomicInteger(0);
+
+        var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        wrapper.addListener(observable -> callCounter.getAndIncrement());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(0, callCounter.get());
     }
 
 }"""

@@ -32,28 +32,36 @@ package com.github.osmerion.quitte;
 
 public final class TestValues {
 
-    public static final boolean BoolValue_1 = true;
-    public static final boolean BoolValue_2 = false;
+    public static final boolean BoolValue_N = false;
+    public static final boolean BoolValue_L = false;
+    public static final boolean BoolValue_H = true;
 
-    public static final byte ByteValue_1 = 100;
-    public static final byte ByteValue_2 = 1;
+    public static final byte ByteValue_N = 0;
+    public static final byte ByteValue_L = Byte.MIN_VALUE;
+    public static final byte ByteValue_H = Byte.MAX_VALUE;
 
-    public static final short ShortValue_1 = 100;
-    public static final short ShortValue_2 = 1;
+    public static final short ShortValue_N = 0;
+    public static final short ShortValue_L = Short.MIN_VALUE;
+    public static final short ShortValue_H = Short.MAX_VALUE;
 
-    public static final int IntValue_1 = 100;
-    public static final int IntValue_2 = 1;
+    public static final int IntValue_N = 0;
+    public static final int IntValue_L = Integer.MIN_VALUE;
+    public static final int IntValue_H = Integer.MAX_VALUE;
 
-    public static final long LongValue_1 = 100;
-    public static final long LongValue_2 = 1;
+    public static final long LongValue_N = 0L;
+    public static final long LongValue_L = Long.MIN_VALUE;
+    public static final long LongValue_H = Long.MAX_VALUE;
 
-    public static final float FloatValue_1 = 100;
-    public static final float FloatValue_2 = 1;
+    public static final float FloatValue_N = 0.0F;
+    public static final float FloatValue_L = Float.MIN_VALUE;
+    public static final float FloatValue_H = Float.MAX_VALUE;
 
-    public static final double DoubleValue_1 = 100;
-    public static final double DoubleValue_2 = 1;
+    public static final double DoubleValue_N = 0.0D;
+    public static final double DoubleValue_L = Double.MIN_VALUE;
+    public static final double DoubleValue_H = Double.MAX_VALUE;
 
-    public static final Object ObjectValue_1 = "foo";
-    public static final Object ObjectValue_2 = "bar";
+    public static final Object ObjectValue_N = null;
+    public static final Object ObjectValue_L = "LOW";
+    public static final Object ObjectValue_H = "HIGH";
 
 }
