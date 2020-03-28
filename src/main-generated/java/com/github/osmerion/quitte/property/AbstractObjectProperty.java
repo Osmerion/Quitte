@@ -328,6 +328,11 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         this.onInvalidated();
 
         for (var listener : this.invalidationListeners) {
+            if (listener.isInvalid()) {
+                this.invalidationListeners.remove(listener);
+                continue;
+            }
+
             listener.onInvalidation(this);
             if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
@@ -342,6 +347,11 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
+            if (listener.isInvalid()) {
+                this.changeListeners.remove(listener);
+                continue;
+            }
+
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }

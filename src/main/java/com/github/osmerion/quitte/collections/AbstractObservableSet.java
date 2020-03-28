@@ -196,11 +196,21 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                 var change = new SetChangeListener.Change<>(this.added, this.removed);
 
                 for (SetChangeListener<? super E> listener : AbstractObservableSet.this.changeListeners) {
+                    if (listener.isInvalid()) {
+                        AbstractObservableSet.this.changeListeners.remove(listener);
+                        continue;
+                    }
+
                     listener.onChanged(change);
                     if (listener.isInvalid()) AbstractObservableSet.this.changeListeners.remove(listener);
                 }
 
                 for (var listener : AbstractObservableSet.this.invalidationListeners) {
+                    if (listener.isInvalid()) {
+                        AbstractObservableSet.this.invalidationListeners.remove(listener);
+                        continue;
+                    }
+
                     listener.onInvalidation(AbstractObservableSet.this);
                     if (listener.isInvalid()) AbstractObservableSet.this.invalidationListeners.remove(listener);
                 }

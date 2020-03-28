@@ -259,6 +259,11 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         this.onInvalidated();
 
         for (var listener : this.invalidationListeners) {
+            if (listener.isInvalid()) {
+                this.invalidationListeners.remove(listener);
+                continue;
+            }
+
             listener.onInvalidation(this);
             if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
@@ -273,6 +278,11 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         this.onChanged(prev, value);
 
         for (var listener : this.changeListeners) {
+            if (listener.isInvalid()) {
+                this.changeListeners.remove(listener);
+                continue;
+            }
+
             listener.onChanged(this, prev, this.getImpl());
             if (listener.isInvalid()) this.changeListeners.remove(listener);
         }
