@@ -51,22 +51,22 @@ public final class LazyIntExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_2);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_H);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
-        assertEquals(TestValues.IntValue_2, expression.get());
-        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(TestValues.IntValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_1);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_L);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
-        assertEquals(TestValues.IntValue_1, expression.get());
+        assertEquals(TestValues.IntValue_L, expression.get());
 
-        property.set(TestValues.IntValue_2);
+        property.set(TestValues.IntValue_H);
         assertEquals(LazyValue.State.INVALID, expression.getState());
-        assertEquals(TestValues.IntValue_2, expression.get());
+        assertEquals(TestValues.IntValue_H, expression.get());
         assertEquals(LazyValue.State.VALID, expression.getState());
     }
 
@@ -74,20 +74,20 @@ public final class LazyIntExpressionGeneratedTest {
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_1);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_L);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(LazyValue.State.VALID, expression.getState());
-            assertEquals(TestValues.IntValue_1, oldValue);
-            assertEquals(TestValues.IntValue_2, newValue);
-            assertEquals(TestValues.IntValue_2, expression.get());
+            assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+            assertEquals(TestValues.IntValue_N, oldValue);
+            assertEquals(TestValues.IntValue_H, newValue);
+            assertEquals(TestValues.IntValue_H, expression.get());
         });
 
-        property.set(TestValues.IntValue_2);
+        property.set(TestValues.IntValue_H);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.IntValue_2, expression.get());
+        assertEquals(TestValues.IntValue_H, expression.get());
         assertEquals(1, callCounter.get());
     }
 
@@ -95,11 +95,11 @@ public final class LazyIntExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_1);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_L);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.IntValue_1);
+        property.set(TestValues.IntValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -107,15 +107,18 @@ public final class LazyIntExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_1);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_L);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
-            assertEquals(TestValues.IntValue_2, expression.get());
+            assertEquals(TestValues.IntValue_H, expression.get());
         });
 
-        property.set(TestValues.IntValue_2);
+        expression.get();
+        assertEquals(0, callCounter.get());
+
+        property.set(TestValues.IntValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -123,7 +126,7 @@ public final class LazyIntExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_1);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_L);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
         expression.addListener(new IntChangeListener() {
 
@@ -138,20 +141,16 @@ public final class LazyIntExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.IntValue_2);
-        assertEquals(TestValues.IntValue_2, expression.get());
-        
-        property.set(TestValues.IntValue_1);
-        assertEquals(TestValues.IntValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.IntValue_H);
+        assertEquals(TestValues.IntValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_1);
+        LazyIntProperty property = new LazyIntProperty(TestValues.IntValue_L);
         LazyIntExpression expression = LazyIntExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -166,13 +165,9 @@ public final class LazyIntExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.IntValue_2);
-        assertEquals(TestValues.IntValue_2, expression.get());
-        
-        property.set(TestValues.IntValue_1);
-        assertEquals(TestValues.IntValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.IntValue_H);
+        assertEquals(TestValues.IntValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

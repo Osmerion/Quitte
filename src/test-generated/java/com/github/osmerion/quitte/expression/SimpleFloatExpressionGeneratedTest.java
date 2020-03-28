@@ -51,36 +51,36 @@ public final class SimpleFloatExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_2);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_H);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
 
-        assertEquals(TestValues.FloatValue_2, expression.get());
+        assertEquals(TestValues.FloatValue_H, expression.get());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        assertEquals(TestValues.FloatValue_1, expression.get());
+        assertEquals(TestValues.FloatValue_L, expression.get());
 
-        property.set(TestValues.FloatValue_2);
-        assertEquals(TestValues.FloatValue_2, expression.get());
+        property.set(TestValues.FloatValue_H);
+        assertEquals(TestValues.FloatValue_H, expression.get());
     }
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.FloatValue_1, oldValue);
-            assertEquals(TestValues.FloatValue_2, newValue);
-            assertEquals(TestValues.FloatValue_2, expression.get());
+            assertEquals(TestValues.FloatValue_L, oldValue);
+            assertEquals(TestValues.FloatValue_H, newValue);
+            assertEquals(TestValues.FloatValue_H, expression.get());
         });
 
-        property.set(TestValues.FloatValue_2);
+        property.set(TestValues.FloatValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -88,11 +88,11 @@ public final class SimpleFloatExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.FloatValue_1);
+        property.set(TestValues.FloatValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -100,14 +100,14 @@ public final class SimpleFloatExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
         expression.addListener((observable -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.FloatValue_2, expression.get());
+            assertEquals(TestValues.FloatValue_H, expression.get());
         }));
 
-        property.set(TestValues.FloatValue_2);
+        property.set(TestValues.FloatValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -115,11 +115,11 @@ public final class SimpleFloatExpressionGeneratedTest {
     public void testInvalidationListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
         expression.addListener(observable -> callCounter.getAndIncrement());
 
-        property.set(TestValues.FloatValue_1);
+        property.set(TestValues.FloatValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -127,7 +127,7 @@ public final class SimpleFloatExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
         expression.addListener(new FloatChangeListener() {
 
@@ -142,17 +142,16 @@ public final class SimpleFloatExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.FloatValue_2);
-        property.set(TestValues.FloatValue_1);
+        property.set(TestValues.FloatValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_1);
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -167,10 +166,9 @@ public final class SimpleFloatExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.FloatValue_2);
-        property.set(TestValues.FloatValue_1);
+        property.set(TestValues.FloatValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

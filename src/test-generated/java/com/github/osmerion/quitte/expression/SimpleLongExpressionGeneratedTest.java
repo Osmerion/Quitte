@@ -51,36 +51,36 @@ public final class SimpleLongExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_2);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_H);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
 
-        assertEquals(TestValues.LongValue_2, expression.get());
+        assertEquals(TestValues.LongValue_H, expression.get());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        assertEquals(TestValues.LongValue_1, expression.get());
+        assertEquals(TestValues.LongValue_L, expression.get());
 
-        property.set(TestValues.LongValue_2);
-        assertEquals(TestValues.LongValue_2, expression.get());
+        property.set(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, expression.get());
     }
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.LongValue_1, oldValue);
-            assertEquals(TestValues.LongValue_2, newValue);
-            assertEquals(TestValues.LongValue_2, expression.get());
+            assertEquals(TestValues.LongValue_L, oldValue);
+            assertEquals(TestValues.LongValue_H, newValue);
+            assertEquals(TestValues.LongValue_H, expression.get());
         });
 
-        property.set(TestValues.LongValue_2);
+        property.set(TestValues.LongValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -88,11 +88,11 @@ public final class SimpleLongExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.LongValue_1);
+        property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -100,14 +100,14 @@ public final class SimpleLongExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
         expression.addListener((observable -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.LongValue_2, expression.get());
+            assertEquals(TestValues.LongValue_H, expression.get());
         }));
 
-        property.set(TestValues.LongValue_2);
+        property.set(TestValues.LongValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -115,11 +115,11 @@ public final class SimpleLongExpressionGeneratedTest {
     public void testInvalidationListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
         expression.addListener(observable -> callCounter.getAndIncrement());
 
-        property.set(TestValues.LongValue_1);
+        property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -127,7 +127,7 @@ public final class SimpleLongExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
         expression.addListener(new LongChangeListener() {
 
@@ -142,17 +142,16 @@ public final class SimpleLongExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.LongValue_2);
-        property.set(TestValues.LongValue_1);
+        property.set(TestValues.LongValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_1);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -167,10 +166,9 @@ public final class SimpleLongExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.LongValue_2);
-        property.set(TestValues.LongValue_1);
+        property.set(TestValues.LongValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

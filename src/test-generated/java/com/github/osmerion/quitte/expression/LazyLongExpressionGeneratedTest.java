@@ -51,22 +51,22 @@ public final class LazyLongExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_2);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_H);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
-        assertEquals(TestValues.LongValue_2, expression.get());
-        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(TestValues.LongValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_1);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
-        assertEquals(TestValues.LongValue_1, expression.get());
+        assertEquals(TestValues.LongValue_L, expression.get());
 
-        property.set(TestValues.LongValue_2);
+        property.set(TestValues.LongValue_H);
         assertEquals(LazyValue.State.INVALID, expression.getState());
-        assertEquals(TestValues.LongValue_2, expression.get());
+        assertEquals(TestValues.LongValue_H, expression.get());
         assertEquals(LazyValue.State.VALID, expression.getState());
     }
 
@@ -74,20 +74,20 @@ public final class LazyLongExpressionGeneratedTest {
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_1);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(LazyValue.State.VALID, expression.getState());
-            assertEquals(TestValues.LongValue_1, oldValue);
-            assertEquals(TestValues.LongValue_2, newValue);
-            assertEquals(TestValues.LongValue_2, expression.get());
+            assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+            assertEquals(TestValues.LongValue_N, oldValue);
+            assertEquals(TestValues.LongValue_H, newValue);
+            assertEquals(TestValues.LongValue_H, expression.get());
         });
 
-        property.set(TestValues.LongValue_2);
+        property.set(TestValues.LongValue_H);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.LongValue_2, expression.get());
+        assertEquals(TestValues.LongValue_H, expression.get());
         assertEquals(1, callCounter.get());
     }
 
@@ -95,11 +95,11 @@ public final class LazyLongExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_1);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.LongValue_1);
+        property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -107,15 +107,18 @@ public final class LazyLongExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_1);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
-            assertEquals(TestValues.LongValue_2, expression.get());
+            assertEquals(TestValues.LongValue_H, expression.get());
         });
 
-        property.set(TestValues.LongValue_2);
+        expression.get();
+        assertEquals(0, callCounter.get());
+
+        property.set(TestValues.LongValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -123,7 +126,7 @@ public final class LazyLongExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_1);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
         expression.addListener(new LongChangeListener() {
 
@@ -138,20 +141,16 @@ public final class LazyLongExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.LongValue_2);
-        assertEquals(TestValues.LongValue_2, expression.get());
-        
-        property.set(TestValues.LongValue_1);
-        assertEquals(TestValues.LongValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_1);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
         LazyLongExpression expression = LazyLongExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -166,13 +165,9 @@ public final class LazyLongExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.LongValue_2);
-        assertEquals(TestValues.LongValue_2, expression.get());
-        
-        property.set(TestValues.LongValue_1);
-        assertEquals(TestValues.LongValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

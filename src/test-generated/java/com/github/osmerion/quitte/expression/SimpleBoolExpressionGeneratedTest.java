@@ -51,36 +51,36 @@ public final class SimpleBoolExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_2);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_H);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
 
-        assertEquals(TestValues.BoolValue_2, expression.get());
+        assertEquals(TestValues.BoolValue_H, expression.get());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
-        assertEquals(TestValues.BoolValue_1, expression.get());
+        assertEquals(TestValues.BoolValue_L, expression.get());
 
-        property.set(TestValues.BoolValue_2);
-        assertEquals(TestValues.BoolValue_2, expression.get());
+        property.set(TestValues.BoolValue_H);
+        assertEquals(TestValues.BoolValue_H, expression.get());
     }
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.BoolValue_1, oldValue);
-            assertEquals(TestValues.BoolValue_2, newValue);
-            assertEquals(TestValues.BoolValue_2, expression.get());
+            assertEquals(TestValues.BoolValue_L, oldValue);
+            assertEquals(TestValues.BoolValue_H, newValue);
+            assertEquals(TestValues.BoolValue_H, expression.get());
         });
 
-        property.set(TestValues.BoolValue_2);
+        property.set(TestValues.BoolValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -88,11 +88,11 @@ public final class SimpleBoolExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.BoolValue_1);
+        property.set(TestValues.BoolValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -100,14 +100,14 @@ public final class SimpleBoolExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
         expression.addListener((observable -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.BoolValue_2, expression.get());
+            assertEquals(TestValues.BoolValue_H, expression.get());
         }));
 
-        property.set(TestValues.BoolValue_2);
+        property.set(TestValues.BoolValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -115,11 +115,11 @@ public final class SimpleBoolExpressionGeneratedTest {
     public void testInvalidationListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
         expression.addListener(observable -> callCounter.getAndIncrement());
 
-        property.set(TestValues.BoolValue_1);
+        property.set(TestValues.BoolValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -127,7 +127,7 @@ public final class SimpleBoolExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
         expression.addListener(new BoolChangeListener() {
 
@@ -142,17 +142,16 @@ public final class SimpleBoolExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.BoolValue_2);
-        property.set(TestValues.BoolValue_1);
+        property.set(TestValues.BoolValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_1);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolExpression expression = SimpleBoolExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -167,10 +166,9 @@ public final class SimpleBoolExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.BoolValue_2);
-        property.set(TestValues.BoolValue_1);
+        property.set(TestValues.BoolValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

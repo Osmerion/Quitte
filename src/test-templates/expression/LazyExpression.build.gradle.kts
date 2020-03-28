@@ -30,6 +30,7 @@
  */
 val packageName = "com.github.osmerion.quitte.expression"
 
+
 Type.values().forEach {
     val type = it
     val typeParams = if (type === Type.OBJECT) "<Object>" else ""
@@ -59,22 +60,22 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
-        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
-        assertEquals(TestValues.${type.abbrevName}Value_1, expression.get());
+        assertEquals(TestValues.${type.abbrevName}Value_L, expression.get());
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(LazyValue.State.INVALID, expression.getState());
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         assertEquals(LazyValue.State.VALID, expression.getState());
     }
 
@@ -82,20 +83,20 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(LazyValue.State.VALID, expression.getState());
-            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+            assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+            assertEquals(TestValues.${type.abbrevName}Value_N, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_H, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         });
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         assertEquals(1, callCounter.get());
     }
 
@@ -103,11 +104,11 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -115,15 +116,18 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
-            assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+            assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         });
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        expression.get();
+        assertEquals(0, callCounter.get());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -131,7 +135,7 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
 
@@ -146,20 +150,16 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
-        
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertEquals(TestValues.${type.abbrevName}Value_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Lazy${type.abbrevName}Expression$typeParams expression = Lazy${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -174,13 +174,9 @@ public final class Lazy${type.abbrevName}ExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
-        
-        property.set(TestValues.${type.abbrevName}Value_1);
-        assertEquals(TestValues.${type.abbrevName}Value_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
 }"""

@@ -51,22 +51,22 @@ public final class LazyDoubleExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_2);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_H);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
-        assertEquals(TestValues.DoubleValue_2, expression.get());
-        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(TestValues.DoubleValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_1);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
-        assertEquals(TestValues.DoubleValue_1, expression.get());
+        assertEquals(TestValues.DoubleValue_L, expression.get());
 
-        property.set(TestValues.DoubleValue_2);
+        property.set(TestValues.DoubleValue_H);
         assertEquals(LazyValue.State.INVALID, expression.getState());
-        assertEquals(TestValues.DoubleValue_2, expression.get());
+        assertEquals(TestValues.DoubleValue_H, expression.get());
         assertEquals(LazyValue.State.VALID, expression.getState());
     }
 
@@ -74,20 +74,20 @@ public final class LazyDoubleExpressionGeneratedTest {
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_1);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(LazyValue.State.VALID, expression.getState());
-            assertEquals(TestValues.DoubleValue_1, oldValue);
-            assertEquals(TestValues.DoubleValue_2, newValue);
-            assertEquals(TestValues.DoubleValue_2, expression.get());
+            assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+            assertEquals(TestValues.DoubleValue_N, oldValue);
+            assertEquals(TestValues.DoubleValue_H, newValue);
+            assertEquals(TestValues.DoubleValue_H, expression.get());
         });
 
-        property.set(TestValues.DoubleValue_2);
+        property.set(TestValues.DoubleValue_H);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.DoubleValue_2, expression.get());
+        assertEquals(TestValues.DoubleValue_H, expression.get());
         assertEquals(1, callCounter.get());
     }
 
@@ -95,11 +95,11 @@ public final class LazyDoubleExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_1);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.DoubleValue_1);
+        property.set(TestValues.DoubleValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -107,15 +107,18 @@ public final class LazyDoubleExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_1);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
-            assertEquals(TestValues.DoubleValue_2, expression.get());
+            assertEquals(TestValues.DoubleValue_H, expression.get());
         });
 
-        property.set(TestValues.DoubleValue_2);
+        expression.get();
+        assertEquals(0, callCounter.get());
+
+        property.set(TestValues.DoubleValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -123,7 +126,7 @@ public final class LazyDoubleExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_1);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
         expression.addListener(new DoubleChangeListener() {
 
@@ -138,20 +141,16 @@ public final class LazyDoubleExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.DoubleValue_2);
-        assertEquals(TestValues.DoubleValue_2, expression.get());
-        
-        property.set(TestValues.DoubleValue_1);
-        assertEquals(TestValues.DoubleValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_1);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
         LazyDoubleExpression expression = LazyDoubleExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -166,13 +165,9 @@ public final class LazyDoubleExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.DoubleValue_2);
-        assertEquals(TestValues.DoubleValue_2, expression.get());
-        
-        property.set(TestValues.DoubleValue_1);
-        assertEquals(TestValues.DoubleValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

@@ -59,36 +59,36 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_2);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
 
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        assertEquals(TestValues.${type.abbrevName}Value_1, expression.get());
+        assertEquals(TestValues.${type.abbrevName}Value_L, expression.get());
 
-        property.set(TestValues.${type.abbrevName}Value_2);
-        assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
     }
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.${type.abbrevName}Value_1, oldValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, newValue);
-            assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+            assertEquals(TestValues.${type.abbrevName}Value_L, oldValue);
+            assertEquals(TestValues.${type.abbrevName}Value_H, newValue);
+            assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         });
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -96,11 +96,11 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -108,14 +108,14 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener((observable -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.${type.abbrevName}Value_2, expression.get());
+            assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         }));
 
-        property.set(TestValues.${type.abbrevName}Value_2);
+        property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -123,11 +123,11 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
     public void testInvalidationListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener(observable -> callCounter.getAndIncrement());
 
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -135,7 +135,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
 
@@ -150,17 +150,16 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_1);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -175,10 +174,9 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.${type.abbrevName}Value_2);
-        property.set(TestValues.${type.abbrevName}Value_1);
+        property.set(TestValues.${type.abbrevName}Value_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
 }"""

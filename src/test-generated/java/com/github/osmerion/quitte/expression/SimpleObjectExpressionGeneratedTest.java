@@ -53,36 +53,36 @@ public final class SimpleObjectExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_2);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
 
-        assertEquals(TestValues.ObjectValue_2, expression.get());
+        assertEquals(TestValues.ObjectValue_H, expression.get());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        assertEquals(TestValues.ObjectValue_1, expression.get());
+        assertEquals(TestValues.ObjectValue_L, expression.get());
 
-        property.set(TestValues.ObjectValue_2);
-        assertEquals(TestValues.ObjectValue_2, expression.get());
+        property.set(TestValues.ObjectValue_H);
+        assertEquals(TestValues.ObjectValue_H, expression.get());
     }
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.ObjectValue_1, oldValue);
-            assertEquals(TestValues.ObjectValue_2, newValue);
-            assertEquals(TestValues.ObjectValue_2, expression.get());
+            assertEquals(TestValues.ObjectValue_L, oldValue);
+            assertEquals(TestValues.ObjectValue_H, newValue);
+            assertEquals(TestValues.ObjectValue_H, expression.get());
         });
 
-        property.set(TestValues.ObjectValue_2);
+        property.set(TestValues.ObjectValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -90,11 +90,11 @@ public final class SimpleObjectExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.ObjectValue_1);
+        property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -102,14 +102,14 @@ public final class SimpleObjectExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
         expression.addListener((observable -> {
             callCounter.incrementAndGet();
-            assertEquals(TestValues.ObjectValue_2, expression.get());
+            assertEquals(TestValues.ObjectValue_H, expression.get());
         }));
 
-        property.set(TestValues.ObjectValue_2);
+        property.set(TestValues.ObjectValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -117,11 +117,11 @@ public final class SimpleObjectExpressionGeneratedTest {
     public void testInvalidationListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
         expression.addListener(observable -> callCounter.getAndIncrement());
 
-        property.set(TestValues.ObjectValue_1);
+        property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -129,7 +129,7 @@ public final class SimpleObjectExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
         expression.addListener(new ObjectChangeListener<>() {
 
@@ -144,17 +144,16 @@ public final class SimpleObjectExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.ObjectValue_2);
-        property.set(TestValues.ObjectValue_1);
+        property.set(TestValues.ObjectValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_1);
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -169,10 +168,9 @@ public final class SimpleObjectExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.ObjectValue_2);
-        property.set(TestValues.ObjectValue_1);
+        property.set(TestValues.ObjectValue_H);
 
-        assertEquals(1, callCounter.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

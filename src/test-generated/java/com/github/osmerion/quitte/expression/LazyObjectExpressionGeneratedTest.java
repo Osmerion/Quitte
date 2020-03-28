@@ -53,22 +53,22 @@ public final class LazyObjectExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_2);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
-        assertEquals(TestValues.ObjectValue_2, expression.get());
-        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(TestValues.ObjectValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
-        assertEquals(TestValues.ObjectValue_1, expression.get());
+        assertEquals(TestValues.ObjectValue_L, expression.get());
 
-        property.set(TestValues.ObjectValue_2);
+        property.set(TestValues.ObjectValue_H);
         assertEquals(LazyValue.State.INVALID, expression.getState());
-        assertEquals(TestValues.ObjectValue_2, expression.get());
+        assertEquals(TestValues.ObjectValue_H, expression.get());
         assertEquals(LazyValue.State.VALID, expression.getState());
     }
 
@@ -76,20 +76,20 @@ public final class LazyObjectExpressionGeneratedTest {
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(LazyValue.State.VALID, expression.getState());
-            assertEquals(TestValues.ObjectValue_1, oldValue);
-            assertEquals(TestValues.ObjectValue_2, newValue);
-            assertEquals(TestValues.ObjectValue_2, expression.get());
+            assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+            assertEquals(TestValues.ObjectValue_N, oldValue);
+            assertEquals(TestValues.ObjectValue_H, newValue);
+            assertEquals(TestValues.ObjectValue_H, expression.get());
         });
 
-        property.set(TestValues.ObjectValue_2);
+        property.set(TestValues.ObjectValue_H);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.ObjectValue_2, expression.get());
+        assertEquals(TestValues.ObjectValue_H, expression.get());
         assertEquals(1, callCounter.get());
     }
 
@@ -97,11 +97,11 @@ public final class LazyObjectExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.ObjectValue_1);
+        property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -109,15 +109,18 @@ public final class LazyObjectExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
-            assertEquals(TestValues.ObjectValue_2, expression.get());
+            assertEquals(TestValues.ObjectValue_H, expression.get());
         });
 
-        property.set(TestValues.ObjectValue_2);
+        expression.get();
+        assertEquals(0, callCounter.get());
+
+        property.set(TestValues.ObjectValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -125,7 +128,7 @@ public final class LazyObjectExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
         expression.addListener(new ObjectChangeListener<>() {
 
@@ -140,20 +143,16 @@ public final class LazyObjectExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.ObjectValue_2);
-        assertEquals(TestValues.ObjectValue_2, expression.get());
-        
-        property.set(TestValues.ObjectValue_1);
-        assertEquals(TestValues.ObjectValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.ObjectValue_H);
+        assertEquals(TestValues.ObjectValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_1);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         LazyObjectExpression<Object> expression = LazyObjectExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -168,13 +167,9 @@ public final class LazyObjectExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.ObjectValue_2);
-        assertEquals(TestValues.ObjectValue_2, expression.get());
-        
-        property.set(TestValues.ObjectValue_1);
-        assertEquals(TestValues.ObjectValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.ObjectValue_H);
+        assertEquals(TestValues.ObjectValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
 }

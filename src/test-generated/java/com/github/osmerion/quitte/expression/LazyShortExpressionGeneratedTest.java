@@ -51,22 +51,22 @@ public final class LazyShortExpressionGeneratedTest {
 
     @Test
     public void testInitialGetConsistency() {
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_2);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_H);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
-        assertEquals(TestValues.ShortValue_2, expression.get());
-        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(TestValues.ShortValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
     public void testUpdateGetConsistency() {
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_1);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_L);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
-        assertEquals(TestValues.ShortValue_1, expression.get());
+        assertEquals(TestValues.ShortValue_L, expression.get());
 
-        property.set(TestValues.ShortValue_2);
+        property.set(TestValues.ShortValue_H);
         assertEquals(LazyValue.State.INVALID, expression.getState());
-        assertEquals(TestValues.ShortValue_2, expression.get());
+        assertEquals(TestValues.ShortValue_H, expression.get());
         assertEquals(LazyValue.State.VALID, expression.getState());
     }
 
@@ -74,20 +74,20 @@ public final class LazyShortExpressionGeneratedTest {
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_1);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_L);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
-            assertEquals(LazyValue.State.VALID, expression.getState());
-            assertEquals(TestValues.ShortValue_1, oldValue);
-            assertEquals(TestValues.ShortValue_2, newValue);
-            assertEquals(TestValues.ShortValue_2, expression.get());
+            assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+            assertEquals(TestValues.ShortValue_N, oldValue);
+            assertEquals(TestValues.ShortValue_H, newValue);
+            assertEquals(TestValues.ShortValue_H, expression.get());
         });
 
-        property.set(TestValues.ShortValue_2);
+        property.set(TestValues.ShortValue_H);
         assertEquals(0, callCounter.get());
 
-        assertEquals(TestValues.ShortValue_2, expression.get());
+        assertEquals(TestValues.ShortValue_H, expression.get());
         assertEquals(1, callCounter.get());
     }
 
@@ -95,11 +95,11 @@ public final class LazyShortExpressionGeneratedTest {
     public void testChangeListenerSkippedOnUpdate() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_1);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_L);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
-        property.set(TestValues.ShortValue_1);
+        property.set(TestValues.ShortValue_L);
         assertEquals(0, callCounter.get());
     }
 
@@ -107,15 +107,18 @@ public final class LazyShortExpressionGeneratedTest {
     public void testInvalidationListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_1);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_L);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
-            assertEquals(TestValues.ShortValue_2, expression.get());
+            assertEquals(TestValues.ShortValue_H, expression.get());
         });
 
-        property.set(TestValues.ShortValue_2);
+        expression.get();
+        assertEquals(0, callCounter.get());
+
+        property.set(TestValues.ShortValue_H);
         assertEquals(1, callCounter.get());
     }
 
@@ -123,7 +126,7 @@ public final class LazyShortExpressionGeneratedTest {
     public void testInvalidatedChangeListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_1);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_L);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
         expression.addListener(new ShortChangeListener() {
 
@@ -138,20 +141,16 @@ public final class LazyShortExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.ShortValue_2);
-        assertEquals(TestValues.ShortValue_2, expression.get());
-        
-        property.set(TestValues.ShortValue_1);
-        assertEquals(TestValues.ShortValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.ShortValue_H);
+        assertEquals(TestValues.ShortValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
-        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_1);
+        LazyShortProperty property = new LazyShortProperty(TestValues.ShortValue_L);
         LazyShortExpression expression = LazyShortExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
@@ -166,13 +165,9 @@ public final class LazyShortExpressionGeneratedTest {
             }
 
         });
-        property.set(TestValues.ShortValue_2);
-        assertEquals(TestValues.ShortValue_2, expression.get());
-        
-        property.set(TestValues.ShortValue_1);
-        assertEquals(TestValues.ShortValue_1, expression.get());
-
-        assertEquals(1, callCounter.get());
+        property.set(TestValues.ShortValue_H);
+        assertEquals(TestValues.ShortValue_H, expression.get());
+        assertEquals(0, callCounter.get());
     }
 
 }
