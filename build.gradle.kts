@@ -34,7 +34,7 @@ import com.github.osmerion.quitte.build.tasks.*
 import java.io.*
 
 plugins {
-    java
+    `java-library`
     signing
     `maven-publish`
     id("org.javamodularity.moduleplugin") version "1.6.0"
