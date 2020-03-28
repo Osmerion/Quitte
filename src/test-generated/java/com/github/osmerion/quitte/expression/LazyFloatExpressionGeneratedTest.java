@@ -50,18 +50,74 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class LazyFloatExpressionGeneratedTest {
 
     @Test
-    public void testInitialGetConsistency() {
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_H);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+    public void testInitialGetConsistencyForInitializedSource() {
+        var property = new LazyFloatProperty(TestValues.FloatValue_H);
+        var expression = LazyFloatExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
         assertEquals(TestValues.FloatValue_H, expression.get());
         assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
+    public void testInitialGetConsistencyForUninitializedSource() {
+        var property = new LazyFloatProperty(() ->TestValues.FloatValue_H);
+        var expression = LazyFloatExpression.of(property, it -> it);
+        assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
+        assertEquals(TestValues.FloatValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+    }
+
+    @Test
+    public void testUpdateGetStateLifecycle() {
+        var expressionInvalidatedCallCounter = new AtomicInteger(0);
+        var stateChangedCallCounter = new AtomicInteger(0);
+        var stateInvalidatedCallCounter = new AtomicInteger(0);
+
+        var property = new LazyFloatProperty(TestValues.FloatValue_H);
+        var expression = LazyFloatExpression.of(property, it -> it);
+        expression.addListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
+
+        var state = expression.stateProperty();
+        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
+        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+
+        assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
+
+        property.set(TestValues.FloatValue_L);
+        assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
+        assertEquals(0, expressionInvalidatedCallCounter.get());
+        assertEquals(0, stateChangedCallCounter.get());
+        assertEquals(0, stateInvalidatedCallCounter.get());
+
+        expression.get();
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+        assertEquals(0, expressionInvalidatedCallCounter.get());
+        assertEquals(1, stateChangedCallCounter.get());
+        assertEquals(1, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.FloatValue_H);
+        assertEquals(LazyValue.State.INVALID, expression.getState());
+        assertEquals(1, expressionInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.FloatValue_H);
+        assertEquals(LazyValue.State.INVALID, expression.getState());
+        assertEquals(1, expressionInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        expression.get();
+        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(1, expressionInvalidatedCallCounter.get());
+        assertEquals(3, stateChangedCallCounter.get());
+        assertEquals(3, stateInvalidatedCallCounter.get());
+    }
+
+    @Test
     public void testUpdateGetConsistency() {
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+        var property = new LazyFloatProperty(TestValues.FloatValue_L);
+        var expression = LazyFloatExpression.of(property, it -> it);
         assertEquals(TestValues.FloatValue_L, expression.get());
 
         property.set(TestValues.FloatValue_H);
@@ -72,10 +128,10 @@ public final class LazyFloatExpressionGeneratedTest {
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+        var property = new LazyFloatProperty(TestValues.FloatValue_L);
+        var expression = LazyFloatExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, expression.getState());
@@ -93,10 +149,10 @@ public final class LazyFloatExpressionGeneratedTest {
 
     @Test
     public void testChangeListenerSkippedOnUpdate() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+        var property = new LazyFloatProperty(TestValues.FloatValue_L);
+        var expression = LazyFloatExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.FloatValue_L);
@@ -105,10 +161,10 @@ public final class LazyFloatExpressionGeneratedTest {
 
     @Test
     public void testInvalidationListenerUpdateGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+        var property = new LazyFloatProperty(TestValues.FloatValue_L);
+        var expression = LazyFloatExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
@@ -124,10 +180,10 @@ public final class LazyFloatExpressionGeneratedTest {
 
     @Test
     public void testInvalidatedChangeListenerRemoval() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+        var property = new LazyFloatProperty(TestValues.FloatValue_L);
+        var expression = LazyFloatExpression.of(property, it -> it);
         expression.addListener(new FloatChangeListener() {
 
             @Override
@@ -148,10 +204,10 @@ public final class LazyFloatExpressionGeneratedTest {
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
-        LazyFloatExpression expression = LazyFloatExpression.of(property, it -> it);
+        var property = new LazyFloatProperty(TestValues.FloatValue_L);
+        var expression = LazyFloatExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
             @Override

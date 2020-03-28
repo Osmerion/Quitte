@@ -50,18 +50,74 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class LazyByteExpressionGeneratedTest {
 
     @Test
-    public void testInitialGetConsistency() {
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_H);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+    public void testInitialGetConsistencyForInitializedSource() {
+        var property = new LazyByteProperty(TestValues.ByteValue_H);
+        var expression = LazyByteExpression.of(property, it -> it);
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
         assertEquals(TestValues.ByteValue_H, expression.get());
         assertEquals(LazyValue.State.INITIALIZED, expression.getState());
     }
 
     @Test
+    public void testInitialGetConsistencyForUninitializedSource() {
+        var property = new LazyByteProperty(() ->TestValues.ByteValue_H);
+        var expression = LazyByteExpression.of(property, it -> it);
+        assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
+        assertEquals(TestValues.ByteValue_H, expression.get());
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+    }
+
+    @Test
+    public void testUpdateGetStateLifecycle() {
+        var expressionInvalidatedCallCounter = new AtomicInteger(0);
+        var stateChangedCallCounter = new AtomicInteger(0);
+        var stateInvalidatedCallCounter = new AtomicInteger(0);
+
+        var property = new LazyByteProperty(TestValues.ByteValue_H);
+        var expression = LazyByteExpression.of(property, it -> it);
+        expression.addListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
+
+        var state = expression.stateProperty();
+        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
+        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+
+        assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
+
+        property.set(TestValues.ByteValue_L);
+        assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
+        assertEquals(0, expressionInvalidatedCallCounter.get());
+        assertEquals(0, stateChangedCallCounter.get());
+        assertEquals(0, stateInvalidatedCallCounter.get());
+
+        expression.get();
+        assertEquals(LazyValue.State.INITIALIZED, expression.getState());
+        assertEquals(0, expressionInvalidatedCallCounter.get());
+        assertEquals(1, stateChangedCallCounter.get());
+        assertEquals(1, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.ByteValue_H);
+        assertEquals(LazyValue.State.INVALID, expression.getState());
+        assertEquals(1, expressionInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        property.set(TestValues.ByteValue_H);
+        assertEquals(LazyValue.State.INVALID, expression.getState());
+        assertEquals(1, expressionInvalidatedCallCounter.get());
+        assertEquals(2, stateChangedCallCounter.get());
+        assertEquals(2, stateInvalidatedCallCounter.get());
+
+        expression.get();
+        assertEquals(LazyValue.State.VALID, expression.getState());
+        assertEquals(1, expressionInvalidatedCallCounter.get());
+        assertEquals(3, stateChangedCallCounter.get());
+        assertEquals(3, stateInvalidatedCallCounter.get());
+    }
+
+    @Test
     public void testUpdateGetConsistency() {
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+        var property = new LazyByteProperty(TestValues.ByteValue_L);
+        var expression = LazyByteExpression.of(property, it -> it);
         assertEquals(TestValues.ByteValue_L, expression.get());
 
         property.set(TestValues.ByteValue_H);
@@ -72,10 +128,10 @@ public final class LazyByteExpressionGeneratedTest {
 
     @Test
     public void testChangeListenerUpdateGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+        var property = new LazyByteProperty(TestValues.ByteValue_L);
+        var expression = LazyByteExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, expression.getState());
@@ -93,10 +149,10 @@ public final class LazyByteExpressionGeneratedTest {
 
     @Test
     public void testChangeListenerSkippedOnUpdate() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+        var property = new LazyByteProperty(TestValues.ByteValue_L);
+        var expression = LazyByteExpression.of(property, it -> it);
         expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_L);
@@ -105,10 +161,10 @@ public final class LazyByteExpressionGeneratedTest {
 
     @Test
     public void testInvalidationListenerUpdateGetConsistency() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+        var property = new LazyByteProperty(TestValues.ByteValue_L);
+        var expression = LazyByteExpression.of(property, it -> it);
         expression.addListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
@@ -124,10 +180,10 @@ public final class LazyByteExpressionGeneratedTest {
 
     @Test
     public void testInvalidatedChangeListenerRemoval() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+        var property = new LazyByteProperty(TestValues.ByteValue_L);
+        var expression = LazyByteExpression.of(property, it -> it);
         expression.addListener(new ByteChangeListener() {
 
             @Override
@@ -148,10 +204,10 @@ public final class LazyByteExpressionGeneratedTest {
 
     @Test
     public void testInvalidatedInvalidationListenerRemoval() {
-        AtomicInteger callCounter = new AtomicInteger(0);
+        var callCounter = new AtomicInteger(0);
 
-        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
-        LazyByteExpression expression = LazyByteExpression.of(property, it -> it);
+        var property = new LazyByteProperty(TestValues.ByteValue_L);
+        var expression = LazyByteExpression.of(property, it -> it);
         expression.addListener(new InvalidationListener() {
 
             @Override
