@@ -132,13 +132,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(this.intercept(provider.get()))) {
-                if (this.state.get() != State.UNINITIALIZED) {
-                    this.state.set(State.VALID);
-                } else {
-                    this.state.set(State.INITIALIZED);
-                }
-            }
+            this.updateValue(this.intercept(provider.get()), !this.state.get().isValid());
 
             this.provider = null;
         }
@@ -188,11 +182,13 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     @Override
-    final void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    final boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
+            return true;
         } else {
             this.state.set(State.INITIALIZED);
+            return false;
         }
     }
 

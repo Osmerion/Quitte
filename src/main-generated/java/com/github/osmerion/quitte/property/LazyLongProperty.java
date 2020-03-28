@@ -122,13 +122,7 @@ public class LazyLongProperty extends AbstractLongProperty implements LazyValue 
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(this.intercept(provider.get()))) {
-                if (this.state.get() != State.UNINITIALIZED) {
-                    this.state.set(State.VALID);
-                } else {
-                    this.state.set(State.INITIALIZED);
-                }
-            }
+            this.updateValue(this.intercept(provider.get()), !this.state.get().isValid());
 
             this.provider = null;
         }
@@ -178,11 +172,13 @@ public class LazyLongProperty extends AbstractLongProperty implements LazyValue 
     }
 
     @Override
-    final void onChangedInternal(long oldValue, long newValue) {
+    final boolean onChangedInternal(long oldValue, long newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
+            return true;
         } else {
             this.state.set(State.INITIALIZED);
+            return false;
         }
     }
 

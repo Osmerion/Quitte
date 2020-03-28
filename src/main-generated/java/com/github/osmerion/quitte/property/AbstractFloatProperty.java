@@ -316,7 +316,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         var prev = this.getImpl();
         if (prev == value) return false;
 
-        this.updateValue(value);
+        this.updateValue(value, false);
         return true;
     }
 
@@ -334,32 +334,38 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
         }
     }
 
-    protected final boolean updateValue(float value) {
+    protected final void updateValue(float value, boolean notifyListeners) {
         var prev = this.getImpl();
-        if (prev == value) return false;
+        var changed = prev != value;
 
-        this.setImpl(value);
-        this.onChangedInternal(prev, value);
-        this.onChanged(prev, value);
-
-        for (var listener : this.changeListeners) {
-            if (listener.isInvalid()) {
-                this.changeListeners.remove(listener);
-                continue;
-            }
-
-            listener.onChanged(this, prev, this.getImpl());
-            if (listener.isInvalid()) this.changeListeners.remove(listener);
+        if (changed) {
+            this.setImpl(value);
+            notifyListeners = true;
         }
 
-        return true;
+        if (notifyListeners) {
+            if (this.onChangedInternal(prev, value) && !changed) return;
+            this.onChanged(prev, value);
+
+            for (var listener : this.changeListeners) {
+                if (listener.isInvalid()) {
+                    this.changeListeners.remove(listener);
+                    continue;
+                }
+
+                listener.onChanged(this, prev, this.getImpl());
+                if (listener.isInvalid()) this.changeListeners.remove(listener);
+            }
+        }
     }
 
     void onBindingInvalidated() {
         this.setInternal(this.getBoundValue());
     }
 
-    void onChangedInternal(float oldValue, float newValue) {}
+    boolean onChangedInternal(float oldValue, float newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

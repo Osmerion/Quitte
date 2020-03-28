@@ -124,13 +124,7 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) {
             var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(this.intercept(provider.get()))) {
-                if (this.state.get() != State.UNINITIALIZED) {
-                    this.state.set(State.VALID);
-                } else {
-                    this.state.set(State.INITIALIZED);
-                }
-            }
+            this.updateValue(this.intercept(provider.get()), !this.state.get().isValid());
 
             this.provider = null;
         }
@@ -181,11 +175,13 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     @Override
-    final void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
+            return true;
         } else {
             this.state.set(State.INITIALIZED);
+            return false;
         }
     }
 
