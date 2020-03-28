@@ -78,12 +78,7 @@ public class SimpleDoubleProperty extends AbstractDoubleProperty {
 
     @Override
     final boolean setImplDeferrable(double value) {
-        var prev = this.getImpl();
-        value = this.intercept(value);
-        if (prev == value) return false;
-    
-        this.updateValue(value);
-        return true;
+        return super.setImplDeferrable(this.intercept(value));
     }
 
     /**

@@ -83,12 +83,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
 
     @Override
     final boolean setImplDeferrable(@Nullable T value) {
-        var prev = this.getImpl();
-        value = this.intercept(value);
-        if (prev == value) return false;
-    
-        this.updateValue(value);
-        return true;
+        return super.setImplDeferrable(this.intercept(value));
     }
 
     /**

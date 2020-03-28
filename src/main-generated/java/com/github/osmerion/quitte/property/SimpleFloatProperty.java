@@ -78,12 +78,7 @@ public class SimpleFloatProperty extends AbstractFloatProperty {
 
     @Override
     final boolean setImplDeferrable(float value) {
-        var prev = this.getImpl();
-        value = this.intercept(value);
-        if (prev == value) return false;
-    
-        this.updateValue(value);
-        return true;
+        return super.setImplDeferrable(this.intercept(value));
     }
 
     /**

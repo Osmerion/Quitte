@@ -78,12 +78,7 @@ public class SimpleBoolProperty extends AbstractBoolProperty {
 
     @Override
     final boolean setImplDeferrable(boolean value) {
-        var prev = this.getImpl();
-        value = this.intercept(value);
-        if (prev == value) return false;
-    
-        this.updateValue(value);
-        return true;
+        return super.setImplDeferrable(this.intercept(value));
     }
 
     /**
