@@ -148,34 +148,42 @@ public abstract class AbstractObjectExpression<T> implements Expression<T>, Obse
     }
 
     void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue())) this.invalidate();
+        if (this.updateValue(this.recomputeValue(), false)) this.invalidate();
     }
 
     @Nullable
     protected abstract T recomputeValue();
 
-    final boolean updateValue(@Nullable T value) {
+    final boolean updateValue(@Nullable T value, boolean notifyListeners) {
         var prev = this.getImpl();
-        if (prev == value) return false;
+        var changed = prev != value;
 
-        this.setImpl(value);
-        this.onChangedInternal(prev, value);
-        this.onChanged(prev, value);
-
-        for (var listener : this.changeListeners) {
-            if (listener.isInvalid()) {
-                this.changeListeners.remove(listener);
-                continue;
-            }
-
-            listener.onChanged(this, prev, this.getImpl());
-            if (listener.isInvalid()) this.changeListeners.remove(listener);
+        if (changed) {
+            this.setImpl(value);
+            notifyListeners = true;
         }
 
-        return true;
+        if (notifyListeners) {
+            if (this.onChangedInternal(prev, value) && !changed) return changed;
+            this.onChanged(prev, value);
+
+            for (var listener : this.changeListeners) {
+                if (listener.isInvalid()) {
+                    this.changeListeners.remove(listener);
+                    continue;
+                }
+
+                listener.onChanged(this, prev, this.getImpl());
+                if (listener.isInvalid()) this.changeListeners.remove(listener);
+            }
+        }
+
+        return changed;
     }
 
-    void onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {}
+    boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

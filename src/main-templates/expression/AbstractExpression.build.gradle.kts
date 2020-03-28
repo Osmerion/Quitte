@@ -154,33 +154,41 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams implements
     }
 
     void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue())) this.invalidate();
+        if (this.updateValue(this.recomputeValue(), false)) this.invalidate();
     }
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected abstract ${type.raw} recomputeValue();
 
-    final boolean updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final boolean updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value, boolean notifyListeners) {
         var prev = this.getImpl();
-        if (prev == value) return false;
+        var changed = prev != value;
 
-        this.setImpl(value);
-        this.onChangedInternal(prev, value);
-        this.onChanged(prev, value);
-
-        for (var listener : this.changeListeners) {
-            if (listener.isInvalid()) {
-                this.changeListeners.remove(listener);
-                continue;
-            }
-
-            listener.onChanged(this, prev, this.getImpl());
-            if (listener.isInvalid()) this.changeListeners.remove(listener);
+        if (changed) {
+            this.setImpl(value);
+            notifyListeners = true;
         }
 
-        return true;
+        if (notifyListeners) {
+            if (this.onChangedInternal(prev, value) && !changed) return changed;
+            this.onChanged(prev, value);
+
+            for (var listener : this.changeListeners) {
+                if (listener.isInvalid()) {
+                    this.changeListeners.remove(listener);
+                    continue;
+                }
+
+                listener.onChanged(this, prev, this.getImpl());
+                if (listener.isInvalid()) this.changeListeners.remove(listener);
+            }
+        }
+
+        return changed;
     }
 
-    void onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
+    boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+        return true;
+    }
 
     /**
      * Called when this property's value has changed.

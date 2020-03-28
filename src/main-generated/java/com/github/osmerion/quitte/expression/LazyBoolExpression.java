@@ -210,15 +210,10 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      */
     @Override
     public final boolean get() {
-        if (this.state.get() != State.VALID) {
-            var provider = Objects.requireNonNull(this.provider); 
-            if (!this.updateValue(provider.get())) {
-                if (this.state.get() != State.UNINITIALIZED) {
-                    this.state.set(State.VALID);
-                } else {
-                    this.state.set(State.INITIALIZED);
-                }
-            }
+        //noinspection ConstantConditions
+        if (!this.state.get().isValid()) { 
+            var provider = Objects.requireNonNull(this.provider);
+            this.updateValue(provider.get(), !this.state.get().isValid());
 
             this.provider = null;
         }
@@ -245,11 +240,13 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     }
 
     @Override
-    final void onChangedInternal(boolean oldValue, boolean newValue) {
+    final boolean onChangedInternal(boolean oldValue, boolean newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
+            return true;
         } else {
             this.state.set(State.INITIALIZED);
+            return false;
         }
     }
 
