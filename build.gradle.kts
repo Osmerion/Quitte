@@ -37,7 +37,7 @@ plugins {
     `java-library`
     signing
     `maven-publish`
-    id("org.javamodularity.moduleplugin") version "1.6.0"
+    id("de.jjohannes.extra-java-module-info") version "0.1"
 }
 
 group = "com.github.osmerion.quitte"
@@ -49,6 +49,8 @@ version = when (deployment.type) {
 }
 
 java {
+    modularity.inferModulePath.set(true)
+
     sourceCompatibility = JavaVersion.VERSION_14
     targetCompatibility = JavaVersion.VERSION_14
 
@@ -188,6 +190,10 @@ signing {
 
 repositories {
     mavenCentral()
+}
+
+extraJavaModuleInfo {
+    automaticModule("jsr305-3.0.2.jar", "jsr305")
 }
 
 dependencies {
