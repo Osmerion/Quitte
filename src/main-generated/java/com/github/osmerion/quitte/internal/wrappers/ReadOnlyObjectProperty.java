@@ -74,7 +74,7 @@ public final class ReadOnlyObjectProperty<T> implements ReadableObjectProperty<T
     }
 
     @Override
-    public boolean addListener(ObjectChangeListener listener) {
+    public boolean addListener(ObjectChangeListener<T> listener) {
         return this.property.addListener(listener);
     }
 
@@ -84,7 +84,7 @@ public final class ReadOnlyObjectProperty<T> implements ReadableObjectProperty<T
     }
 
     @Override
-    public boolean removeListener(ObjectChangeListener listener) {
+    public boolean removeListener(ObjectChangeListener<T> listener) {
         return this.property.removeListener(listener);
     }
 

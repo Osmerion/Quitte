@@ -84,7 +84,7 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
     }
 
     @Override
-    public boolean addListener(${type.abbrevName}ChangeListener listener) {
+    public boolean addListener(${type.abbrevName}ChangeListener$typeParams listener) {
         return this.property.addListener(listener);
     }
 
@@ -94,7 +94,7 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
     }
 
     @Override
-    public boolean removeListener(${type.abbrevName}ChangeListener listener) {
+    public boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener) {
         return this.property.removeListener(listener);
     }
 
