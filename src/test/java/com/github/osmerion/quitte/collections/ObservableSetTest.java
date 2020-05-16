@@ -64,6 +64,7 @@ public final class ObservableSetTest {
             this.observableSet.addAll(List.of("foo", "bar"));
             changeCtx.assertAddition("foo");
             changeCtx.assertAddition("bar");
+            changeCtx.assertEmpty();
 
             this.observableSet.add("foo");
             changeCtx.assertEmpty();
@@ -71,6 +72,7 @@ public final class ObservableSetTest {
             this.observableSet.clear();
             changeCtx.assertRemoval("foo");
             changeCtx.assertRemoval("bar");
+            changeCtx.assertEmpty();
         }
     }
 
@@ -104,11 +106,13 @@ public final class ObservableSetTest {
             assertEquals(1, this.underlyingSet.size());
             assertEquals(1, this.observableSet.size());
             changeCtx.assertAddition(null);
+            changeCtx.assertEmpty();
 
             this.observableSet.remove(null);
             assertEquals(0, this.underlyingSet.size());
             assertEquals(0, this.observableSet.size());
             changeCtx.assertRemoval(null);
+            changeCtx.assertEmpty();
         }
     }
 
