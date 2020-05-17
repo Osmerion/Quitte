@@ -30,6 +30,7 @@
  */
 package com.github.osmerion.quitte.internal.collections;
 
+import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
 import com.github.osmerion.quitte.collections.AbstractObservableMap;
@@ -38,8 +39,8 @@ import com.github.osmerion.quitte.collections.ObservableMap;
 /**
  * A wrapper for an observable map that blocks mutation.
  *
- * @param <K>   the type of the set's keys
- * @param <V>   the type of the set's values
+ * @param <K>   the type of the map's keys
+ * @param <V>   the type of the map's values
  *
  * @see com.github.osmerion.quitte.collections.ObservableMap#unmodifiableViewOf(ObservableMap)
  *
@@ -58,7 +59,7 @@ public final class UnmodifiableObservableMap<K, V> extends AbstractObservableMap
     private transient Set<Entry<K, V>> entrySet;
 
     public UnmodifiableObservableMap(ObservableMap<K, V> impl) {
-        this.impl = impl;
+        this.impl = Objects.requireNonNull(impl);
     }
 
     @Override
