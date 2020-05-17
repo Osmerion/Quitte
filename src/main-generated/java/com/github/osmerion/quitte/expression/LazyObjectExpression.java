@@ -36,10 +36,12 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.property.*;
 import com.github.osmerion.quitte.value.*;
+import com.github.osmerion.quitte.value.change.*;
 
 /**
  * A generic lazy expression.
@@ -169,6 +171,52 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      */
     public static <S, T> LazyObjectExpression<T> of(ObservableObjectValue<S> observable, Object2ObjectFunction<S, T> transform) {
         return new Transform<>(ex -> new Object2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+    }
+
+    /**
+     * Returns a new lazy expression which aliases a child property of an observable.
+     *
+     * <p>The parent observable must never evaluate to {@code null}.</p>
+     *
+     * @param observable    the parent observable
+     * @param selector      the function that selects the child property
+     * @param <S>           the parent type
+     * @param <T>           the child type
+    *
+     * @return  a new lazy expression which aliases a child property of an observable
+     *
+     * @since   0.1.0
+     */
+    public static <S, T> LazyObjectExpression<T> ofNested(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
+        return new LazyObjectExpression<>() {
+
+            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+
+            {
+                observable.addListener(ignored -> this.onDependencyInvalidated());
+
+                ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
+                    if (oldValue != null) {
+                        var nestedProperty = selector.apply(oldValue);
+                        nestedProperty.removeListener(this.nestedPropertyListener);
+                    }
+
+                    var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
+                    nestedProperty.addListener(this.nestedPropertyListener);
+                };
+                observable.addListener(parentChangeListener);
+                parentChangeListener.onChanged(observable, null, observable.get());
+            }
+
+
+            @Nullable
+            @Override
+            protected T recomputeValue() {
+                var parent = observable.get();
+                return selector.apply(Objects.requireNonNull(parent)).get();
+            }
+
+        };
     }
 
     private final SimpleObjectProperty<State> state = new SimpleObjectProperty<>(State.UNINITIALIZED) {

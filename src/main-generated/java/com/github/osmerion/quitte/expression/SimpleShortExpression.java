@@ -34,9 +34,11 @@ package com.github.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
+import com.github.osmerion.quitte.value.change.*;
 
 /**
  * A basic implementation for a specialized {@code short} expression.
@@ -158,6 +160,50 @@ public abstract class SimpleShortExpression extends AbstractShortExpression {
      */
     public static <S> SimpleShortExpression of(ObservableObjectValue<S> observable, Object2ShortFunction<S> transform) {
         return new Transform(ex -> new Object2ShortBinding<>(ex::onDependencyInvalidated, observable, transform));
+    }
+
+    /**
+     * Returns a new simple expression which aliases a child property of an observable.
+     *
+     * <p>The parent observable must never evaluate to {@code null}.</p>
+     *
+     * @param observable    the parent observable
+     * @param selector      the function that selects the child property
+     * @param <S>           the parent type
+     * 
+     * @return  a new simple expression which aliases a child property of an observable
+     *
+     * @since   0.1.0
+     */
+    public static <S> SimpleShortExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableShortValue> selector) {
+        return new SimpleShortExpression() {
+
+            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+
+            {
+                observable.addListener(ignored -> this.onDependencyInvalidated());
+
+                ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
+                    if (oldValue != null) {
+                        var nestedProperty = selector.apply(oldValue);
+                        nestedProperty.removeListener(this.nestedPropertyListener);
+                    }
+
+                    var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
+                    nestedProperty.addListener(this.nestedPropertyListener);
+                };
+                observable.addListener(parentChangeListener);
+                parentChangeListener.onChanged(observable, null, observable.get());
+            }
+
+
+            @Override
+            protected short recomputeValue() {
+                var parent = observable.get();
+                return selector.apply(Objects.requireNonNull(parent)).get();
+            }
+
+        };
     }
 
     protected short value;

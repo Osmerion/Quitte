@@ -34,9 +34,11 @@ package com.github.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
+import com.github.osmerion.quitte.value.change.*;
 
 /**
  * A basic implementation for a specialized {@code boolean} expression.
@@ -158,6 +160,50 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      */
     public static <S> SimpleBoolExpression of(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform) {
         return new Transform(ex -> new Object2BoolBinding<>(ex::onDependencyInvalidated, observable, transform));
+    }
+
+    /**
+     * Returns a new simple expression which aliases a child property of an observable.
+     *
+     * <p>The parent observable must never evaluate to {@code null}.</p>
+     *
+     * @param observable    the parent observable
+     * @param selector      the function that selects the child property
+     * @param <S>           the parent type
+     * 
+     * @return  a new simple expression which aliases a child property of an observable
+     *
+     * @since   0.1.0
+     */
+    public static <S> SimpleBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
+        return new SimpleBoolExpression() {
+
+            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+
+            {
+                observable.addListener(ignored -> this.onDependencyInvalidated());
+
+                ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
+                    if (oldValue != null) {
+                        var nestedProperty = selector.apply(oldValue);
+                        nestedProperty.removeListener(this.nestedPropertyListener);
+                    }
+
+                    var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
+                    nestedProperty.addListener(this.nestedPropertyListener);
+                };
+                observable.addListener(parentChangeListener);
+                parentChangeListener.onChanged(observable, null, observable.get());
+            }
+
+
+            @Override
+            protected boolean recomputeValue() {
+                var parent = observable.get();
+                return selector.apply(Objects.requireNonNull(parent)).get();
+            }
+
+        };
     }
 
     protected boolean value;

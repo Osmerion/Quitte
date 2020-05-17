@@ -36,12 +36,15 @@ Type.values().forEach {
 
     template("${packageName.replace('.', '/')}/Simple${type.abbrevName}Expression") {
         """package $packageName;
-${if (type !== Type.OBJECT) "\nimport java.util.Objects;" else ""}
+
+import java.util.Objects;
 import java.util.function.Function;
 ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
 import com.github.osmerion.quitte.value.*;
+import com.github.osmerion.quitte.value.change.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -78,7 +81,51 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Simple${type.abbrevName}Expression$typeParams of(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
         return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::onDependencyInvalidated, observable, transform));
     }
-"""}}${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+"""}}
+    /**
+     * Returns a new simple expression which aliases a child property of an observable.
+     *
+     * <p>The parent observable must never evaluate to {@code null}.</p>
+     *
+     * @param observable    the parent observable
+     * @param selector      the function that selects the child property
+     * @param <S>           the parent type
+     * ${if (type === Type.OBJECT) "@param <T>           the child type\n    *" else ""}
+     * @return  a new simple expression which aliases a child property of an observable
+     *
+     * @since   0.1.0
+     */
+    public static <${if (type === Type.OBJECT) "S, T" else "S"}> Simple${type.abbrevName}Expression$typeParams ofNested(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
+        return new Simple${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
+
+            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+
+            {
+                observable.addListener(ignored -> this.onDependencyInvalidated());
+
+                ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
+                    if (oldValue != null) {
+                        var nestedProperty = selector.apply(oldValue);
+                        nestedProperty.removeListener(this.nestedPropertyListener);
+                    }
+
+                    var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
+                    nestedProperty.addListener(this.nestedPropertyListener);
+                };
+                observable.addListener(parentChangeListener);
+                parentChangeListener.onChanged(observable, null, observable.get());
+            }
+
+${if (type === Type.OBJECT) "\n            @Nullable" else ""}
+            @Override
+            protected ${type.raw} recomputeValue() {
+                var parent = observable.get();
+                return selector.apply(Objects.requireNonNull(parent)).get();
+            }
+
+        };
+    }
+${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected ${type.raw} value;
 
     /**
