@@ -36,7 +36,7 @@ import com.github.osmerion.quitte.internal.collections.UnmodifiableObservableMap
 import com.github.osmerion.quitte.internal.collections.WrappingObservableMap;
 
 /**
- *  A observable map with support for tracking changes to the map's content.
+ * A observable map with support for tracking changes to the map's content.
  *
  * @param <K>   the type of the map's keys
  * @param <V>   the type of the map's values
