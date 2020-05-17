@@ -126,7 +126,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             /* Only notify the listeners if the value has actually changed. */
             if ((prevValue == null && value != null) || (prevValue != null && !prevValue.equals(value))) {
                 try (ChangeBuilder changeBuilder = this.beginChange()) {
-                    changeBuilder.logAdd(key, value);
+                    changeBuilder.logUpdate(key, prevValue, value);
                 }
             }
         } else {
@@ -153,6 +153,9 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
         @Nullable
         private HashMap<K, V> added, removed;
 
+        @Nullable
+        private HashMap<K, MapChangeListener.Change.Update<V>> updated;
+
         private int depth = 0;
 
         private ChangeBuilder() {}
@@ -173,9 +176,9 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
 
             if (this.depth == 0) {
                 AbstractObservableMap.this.changeBuilder = null;
-                if (this.added == null && this.removed == null) return;
+                if (this.added == null && this.removed == null && this.updated == null) return;
 
-                var change = new MapChangeListener.Change<>(this.added, this.removed);
+                var change = new MapChangeListener.Change<>(this.added, this.removed, this.updated);
 
                 for (MapChangeListener<? super K, ? super V> listener : AbstractObservableMap.this.changeListeners) {
                     if (listener.isInvalid()) {
@@ -200,7 +203,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
         }
 
         /**
-         * Logs the addition of the given element.
+         * Logs the addition of the given entry.
          *
          * @param key   the key that was added
          * @param value the value that was added
@@ -208,18 +211,19 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
          * @since   0.1.0
          */
         public void logAdd(@Nullable K key, @Nullable V value) {
-            if (this.added == null) this.added = new HashMap<>();
-
-            /*
-             * Guard against spurious operations that add and remove the same element for whatever reason.
-             *
-             * TODO: This is rarely useful. Reconsider if this check should be performed.
-             */
-            if (this.removed == null || !this.removed.remove(key, value)) this.added.put(key, value);
+            if (this.added != null && this.added.containsKey(key)) throw new IllegalArgumentException();
+            if (this.updated != null && this.updated.containsKey(key)) throw new IllegalArgumentException();
+            
+            if (this.removed == null || !this.removed.containsKey(key)) {
+                if (this.added == null) this.added = new HashMap<>();
+                this.added.put(key, value);
+            } else {
+                this.removed.remove(key);
+            }
         }
 
         /**
-         * Logs the removal of the given element.
+         * Logs the removal of the given entry.
          *
          * @param key   the key that was removed
          * @param value the value that was removed
@@ -227,14 +231,31 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
          * @since   0.1.0
          */
         public void logRemove(@Nullable K key, @Nullable V value) {
+            if (this.updated != null) this.updated.remove(key);
+            
             if (this.removed == null) this.removed = new HashMap<>();
-
-            /*
-             * Guard against spurious operations that add and remove the same element for whatever reason.
-             *
-             * TODO: This is rarely useful. Reconsider if this check should be performed.
-             */
             if (this.added == null || !this.added.remove(key, value)) this.removed.put(key, value);
+        }
+
+        /**
+         * Logs the update of the given entry.
+         *
+         * @param key       the key of the entry that was updated
+         * @param oldValue  the old value
+         * @param newValue  the new value
+         *
+         * @since   0.1.0
+         */
+        public void logUpdate(@Nullable K key, @Nullable V oldValue, @Nullable V newValue) {
+            if (this.removed != null && this.removed.containsKey(key)) throw new IllegalArgumentException();
+
+            if (this.added != null && this.added.containsKey(key)) {
+                this.added.put(key, newValue);
+                return;
+            }
+
+            if (this.updated == null) this.updated = new HashMap<>();
+            this.updated.put(key, new MapChangeListener.Change.Update<>(oldValue, newValue));
         }
 
     }
@@ -410,8 +431,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             V prevValue = this.impl.setValue(value);
 
             try (ChangeBuilder changeBuilder = AbstractObservableMap.this.beginChange()) {
-                changeBuilder.logRemove(this.getKey(), prevValue);
-                changeBuilder.logAdd(this.getKey(), value);
+                changeBuilder.logUpdate(this.getKey(), prevValue, value);
             }
 
             return prevValue;

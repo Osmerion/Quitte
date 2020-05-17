@@ -47,6 +47,7 @@ final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
 
         change.getAddedElements().forEach((k, v) -> this.context.operations.add(new Addition(k, v)));
         change.getRemovedElements().forEach((k, v) -> this.context.operations.add(new Removal(k, v)));
+        change.getUpdatedElements().forEach((k, update) -> this.context.operations.add(new Update(k, update.getOldValue(), update.getNewValue())));
     }
 
     public Context push() {
@@ -73,6 +74,10 @@ final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
             assertTrue(this.operations.removeFirstOccurrence(new Removal(key, value)), "No unconsumed removal of element recorded");
         }
 
+        public void assertUpdate(K key, V oldValue, V newValue) {
+            assertTrue(this.operations.removeFirstOccurrence(new Update(key, oldValue, newValue)), "No unconsumed update of element recorded");
+        }
+
         /** Asserts that there are no unconsumed operations left in the current context. */
         public void assertEmpty() {
             assertTrue(this.operations.isEmpty());
@@ -82,8 +87,8 @@ final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
 
     private abstract class Operation {
 
-        private final K key;
-        private final V value;
+        final K key;
+        final V value;
 
         Operation(K key, V value) {
             this.key = key;
@@ -111,6 +116,32 @@ final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
 
     private class Removal extends Operation {
         Removal(K key, V value) { super(key, value); }
+    }
+
+    private class Update extends Operation {
+        
+        private final V oldValue;
+        
+        Update(K key, V oldValue, V newValue) {
+            super(key, newValue);
+            this.oldValue = oldValue;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+
+            if (this.getClass() == obj.getClass()) {
+                Update other = (Update) obj;
+                return Objects.equals(this.key, other.key)
+                    && Objects.equals(this.oldValue, other.oldValue)
+                    && Objects.equals(this.value, other.value);
+            }
+
+            return false;
+        }
+        
     }
 
 }

@@ -78,10 +78,12 @@ public interface MapChangeListener<K, V> {
     final class Change<K, V> {
 
         private final Map<K, V> added, removed;
+        private final Map<K, Update<V>> updated;
 
-        Change(@Nullable Map<K, V> added, @Nullable Map<K, V> removed) {
-            this.added = added != null ? Collections.unmodifiableMap(added) : Collections.emptyMap();
-            this.removed = removed != null ? Collections.unmodifiableMap(removed) : Collections.emptyMap();
+        Change(@Nullable Map<K, V> added, @Nullable Map<K, V> removed, @Nullable Map<K, Update<V>> updated) {
+            this.added = (added != null) ? Collections.unmodifiableMap(added) : Collections.emptyMap();
+            this.removed = (removed != null) ? Collections.unmodifiableMap(removed) : Collections.emptyMap();
+            this.updated = (updated != null) ? Collections.unmodifiableMap(updated) : Collections.emptyMap();
         }
 
         /**
@@ -106,6 +108,58 @@ public interface MapChangeListener<K, V> {
             return this.removed;
         }
 
+        /**
+         * Returns the entries that were updated in the observed map as part of this change.
+         *
+         * @return  the entries that were updated in the observed map as part of this change
+         *
+         * @since   0.1.0
+         */
+        public Map<K, Update<V>> getUpdatedElements() {
+            return this.updated;
+        }
+
+        /**
+         * Describes an update to a map entry's value.
+         * 
+         * @since   0.1.0
+         */
+        public static final class Update<V> {
+
+            @Nullable
+            private final V oldValue, newValue;
+            
+            Update(@Nullable V oldValue, @Nullable V newValue) {
+                this.oldValue = oldValue;
+                this.newValue = newValue;
+            }
+
+            /**
+             * Returns the old value.
+             *
+             * @return  the old value
+             *
+             * @since   0.1.0
+             */
+            @Nullable
+            public V getOldValue() {
+                return this.oldValue;
+            }
+
+            /**
+             * Returns the new value.
+             *
+             * @return  the new value
+             *
+             * @since   0.1.0
+             */
+            @Nullable
+            public V getNewValue() {
+                return this.newValue;
+            }
+
+        }
+        
     }
 
 }

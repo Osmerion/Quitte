@@ -66,8 +66,7 @@ public final class ObservableMapTest {
             changeCtx.assertEmpty();
 
             this.observableMap.put("foo", "blub");
-//            changeCtx.assertRemoval("foo", "bar");
-            changeCtx.assertAddition("foo", "blub");
+            changeCtx.assertUpdate("foo", "bar", "blub");
             changeCtx.assertEmpty();
 
             this.observableMap.clear();
