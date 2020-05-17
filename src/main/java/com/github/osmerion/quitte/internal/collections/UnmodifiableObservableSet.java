@@ -41,9 +41,16 @@ import com.github.osmerion.quitte.collections.ObservableSet;
  *
  * @param <E>   the type of the set's elements
  *
+ * @see com.github.osmerion.quitte.collections.ObservableSet#unmodifiableViewOf(ObservableSet)
+ *
+ * @serial include
+ *
  * @author  Leon Linhart
  */
 public final class UnmodifiableObservableSet<E> extends AbstractObservableSet<E> {
+
+    @SuppressWarnings("unused")
+    private static final long serialVersionUID = 2291646691105830160L;
 
     private final ObservableSet<E> impl;
 
@@ -59,11 +66,6 @@ public final class UnmodifiableObservableSet<E> extends AbstractObservableSet<E>
     @Override
     protected boolean removeImpl(@Nullable Object element) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.impl.isEmpty();
     }
 
     @Override

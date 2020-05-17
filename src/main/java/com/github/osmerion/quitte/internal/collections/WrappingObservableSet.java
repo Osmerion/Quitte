@@ -49,6 +49,7 @@ import com.github.osmerion.quitte.collections.AbstractObservableSet;
  */
 public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
 
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 2971132266946625119L;
 
     private final Set<E> impl;
@@ -66,11 +67,6 @@ public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
     @SuppressWarnings("SuspiciousMethodCalls")
     protected boolean removeImpl(@Nullable Object element) {
         return this.impl.remove(element);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.impl.isEmpty();
     }
 
     @Override
