@@ -125,7 +125,54 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
 
         };
     }
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+${if (type === Type.OBJECT) """
+    /**
+     * Returns a new simple expression which aliases a child property of an observable.
+     *
+     * <p>Returns {@code null} if the parent observable evaluates to {@code null}.</p>
+     *
+     * @param observable    the parent observable
+     * @param selector      the function that selects the child property
+     * @param <S>           the parent type
+     * ${if (type === Type.OBJECT) "@param <T>           the child type\n    *" else ""}
+     * @return  a new simple expression which aliases a child property of an observable
+     *
+     * @since   0.1.0
+     */
+    public static <${if (type === Type.OBJECT) "S, T" else "S"}> Simple${type.abbrevName}Expression$typeParams ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
+        return new Simple${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
+
+            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+
+            {
+                observable.addListener(ignored -> this.onDependencyInvalidated());
+
+                ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
+                    if (oldValue != null) {
+                        var nestedProperty = selector.apply(oldValue);
+                        nestedProperty.removeListener(this.nestedPropertyListener);
+                    }
+
+                    if (newValue != null) {
+                        var nestedProperty = selector.apply(newValue);
+                        nestedProperty.addListener(this.nestedPropertyListener);
+                    }
+                };
+                observable.addListener(parentChangeListener);
+                parentChangeListener.onChanged(observable, null, observable.get());
+            }
+
+${if (type === Type.OBJECT) "\n            @Nullable" else ""}
+            @Override
+            protected ${type.raw} recomputeValue() {
+                var parent = observable.get();
+                return (parent != null) ? selector.apply(parent).get() : null;
+            }
+
+        };
+    }
+
+    @Nullable""" else ""}
     protected ${type.raw} value;
 
     /**
