@@ -68,8 +68,6 @@ public final class WeakMapChangeListener<K, V> implements MapChangeListener<K, V
     /**
      * {@inheritDoc}
      *
-     * @implNote    At the time of writing, this is the only place where the "alive-check" happens.
-     *
      * @since   0.1.0
      */
     @Override
