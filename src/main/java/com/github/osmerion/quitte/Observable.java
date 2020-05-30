@@ -40,18 +40,39 @@ package com.github.osmerion.quitte;
 public interface Observable {
 
     /**
-     * TODO doc
+     * Attaches the specified listener to this observable.
      *
-     * @param listener
+     * <p>If the given listener is already attached to this observable, this method returns {@code false}.</p>
+     *
+     * <p>As long as the listener is attached it will be notified whenever this observable is invalidated.</p>
+     *
+     * @param listener  the listener to be attached to this observable
+     *
+     * @return  {@code true} if the listener was not previously attached to this observable value has been successfully
+     *          attached, or {@code false} otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #removeListener(InvalidationListener)
      *
      * @since   0.1.0
      */
     boolean addListener(InvalidationListener listener);
 
     /**
-     * TODO doc
+     * Detaches the given listener from this observable.
      *
-     * @param listener
+     * <p>If the given listener is not attached to this observable, this method does nothing and returns {@code false}.
+     * </p>
+     *
+     * @param listener  the listener to be detached from this observable
+     *
+     * @return  {@code true} if the listener was attached and has been detached from this observable, or {@code false}
+     *          otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #addListener(InvalidationListener)
      *
      * @since   0.1.0
      */
