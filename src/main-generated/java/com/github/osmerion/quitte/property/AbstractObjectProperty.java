@@ -234,6 +234,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<T> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingObjectChangeListener && ((WrappingObjectChangeListener<T>) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ObjectChangeListener.wrap(listener));
     }
 

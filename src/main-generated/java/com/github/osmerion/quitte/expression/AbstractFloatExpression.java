@@ -70,6 +70,7 @@ public abstract class AbstractFloatExpression implements Expression<Float>, Obse
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Float> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingFloatChangeListener && ((WrappingFloatChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(FloatChangeListener.wrap(listener));
     }
 

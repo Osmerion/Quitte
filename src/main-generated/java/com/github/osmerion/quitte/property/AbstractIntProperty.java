@@ -234,6 +234,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Integer> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingIntChangeListener && ((WrappingIntChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(IntChangeListener.wrap(listener));
     }
 

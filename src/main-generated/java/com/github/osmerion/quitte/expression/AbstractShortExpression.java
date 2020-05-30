@@ -70,6 +70,7 @@ public abstract class AbstractShortExpression implements Expression<Short>, Obse
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Short> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingShortChangeListener && ((WrappingShortChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ShortChangeListener.wrap(listener));
     }
 

@@ -234,6 +234,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Double> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingDoubleChangeListener && ((WrappingDoubleChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(DoubleChangeListener.wrap(listener));
     }
 

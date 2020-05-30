@@ -234,6 +234,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Boolean> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingBoolChangeListener && ((WrappingBoolChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(BoolChangeListener.wrap(listener));
     }
 

@@ -70,6 +70,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Long> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingLongChangeListener && ((WrappingLongChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(LongChangeListener.wrap(listener));
     }
 

@@ -70,6 +70,7 @@ public abstract class AbstractByteExpression implements Expression<Byte>, Observ
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<Byte> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingByteChangeListener && ((WrappingByteChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ByteChangeListener.wrap(listener));
     }
 

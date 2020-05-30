@@ -72,6 +72,7 @@ public abstract class AbstractObjectExpression<T> implements Expression<T>, Obse
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<T> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingObjectChangeListener && ((WrappingObjectChangeListener<T>) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ObjectChangeListener.wrap(listener));
     }
 

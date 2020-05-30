@@ -169,6 +169,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      */
     @Override
     public final boolean addBoxedListener(ChangeListener<${type.box}> listener) {
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener))) return false;
         return this.changeListeners.add(${type.abbrevName}ChangeListener.wrap(listener));
     }
 
