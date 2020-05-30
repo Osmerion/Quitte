@@ -40,15 +40,22 @@ package com.github.osmerion.quitte;
 public interface Observable {
 
     /**
-     * Attaches the specified listener to this observable.
+     * Attaches the given {@link InvalidationListener} to this observable.
      *
-     * <p>If the given listener is already attached to this observable, this method returns {@code false}.</p>
+     * <p>If the given listener is already attached to this observable, this method does nothing and returns
+     * {@code false}.</p>
      *
-     * <p>As long as the listener is attached it will be notified whenever this observable is invalidated.</p>
+     * <p>While an {@code InvalidationListener} is attached to an observable, it will be {@link InvalidationListener#onInvalidation(Observable)
+     * notified} whenever the observable is invalidated.</p>
+     *
+     * <p>This observable stores a strong reference to the given listener until the listener is either removed
+     * explicitly by calling {@link #removeListener(InvalidationListener)} or implicitly when this observable discovers
+     * that the listener has become {@link InvalidationListener#isInvalid() invalid}. Generally, it is recommended to
+     * use an instance of {@link WeakInvalidationListener} when possible to avoid leaking instances.</p>
      *
      * @param listener  the listener to be attached to this observable
      *
-     * @return  {@code true} if the listener was not previously attached to this observable value has been successfully
+     * @return  {@code true} if the listener was not previously attached to this or value has been successfully
      *          attached, or {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
@@ -60,15 +67,15 @@ public interface Observable {
     boolean addListener(InvalidationListener listener);
 
     /**
-     * Detaches the given listener from this observable.
+     * Detaches the given {@link InvalidationListener} from this observable.
      *
      * <p>If the given listener is not attached to this observable, this method does nothing and returns {@code false}.
      * </p>
      *
      * @param listener  the listener to be detached from this observable
      *
-     * @return  {@code true} if the listener was attached and has been detached from this observable, or {@code false}
-     *          otherwise
+     * @return  {@code true} if the listener was attached to and has been detached from this observable, or
+     *          {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *

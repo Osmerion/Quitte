@@ -66,17 +66,21 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
     }
 
     /**
-     * Attaches the specified listener to this observable value.
+     * Attaches the given {@link DoubleChangeListener} to this observable.
      *
-     * <p>If the given listener is already attached to this observable value, this method returns {@code false}.</p>
+     * <p>While an {@code DoubleChangeListener} is attached to an observable, it will be {@link DoubleChangeListener#onChanged()
+     * notified} whenever the value of the observable is changed.</p>
      *
-     * <p>As long as the listener is attached it will be notified whenever the value of this {@code ObservableValue}
-     * changes via {@link ChangeListener#onChanged(ObservableValue, Object, Object)}.</p>
+     * <p>This observable stores a strong reference to the given listener until the listener is either removed
+     * explicitly by calling {@link #removeListener(DoubleChangeListener)} or implicitly when this
+     * observable discovers that the listener has become {@link DoubleChangeListener#isInvalid() invalid}.
+     * Generally, it is recommended to use an instance of {@link com.github.osmerion.quitte.value.change.WeakDoubleChangeListener WeakChangeListener}
+     * when possible to avoid leaking instances.</p>
      *
      * @param listener  the listener to be attached to this observable value
      *
-     * @return  {@code true} if the listener was not previously attached to this observable value has been successfully
-     *          attached, {@code false} otherwise
+     * @return  {@code true} if the listener was not previously attached to this observable and has been successfully
+     *          attached, or {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
@@ -97,12 +101,15 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
     }
 
     /**
-     * Detaches all listeners that are {@link Object#equals(Object) equal} to the given listener from this observable
-     * value.
+     * Detaches the given {@link DoubleChangeListener} from this observable.
+     *
+     * <p>If the given listener is not attached to this observable, this method does nothing and returns {@code false}.
+     * </p>
      *
      * @param listener  the listener to be detached from this observable value
      *
-     * @return  {@code true} if at least one listener has been removed, {@code false} otherwise
+     * @return  {@code true} if the listener was attached to and has been detached from this observable, or
+     *          {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
