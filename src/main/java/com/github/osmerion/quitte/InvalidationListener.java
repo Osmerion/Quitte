@@ -33,6 +33,8 @@ package com.github.osmerion.quitte;
 /**
  * A listener that may be used to subscribe to changes of one or more {@link Observable observables}.
  *
+ * @see Observable
+ *
  * @since   0.1.0
  *
  * @author  Leon Linhart
@@ -41,8 +43,7 @@ package com.github.osmerion.quitte;
 public interface InvalidationListener {
 
     /**
-     * Called whenever an {@link Observable} this listener is {@link Observable#addListener(InvalidationListener) attached to}
-     * is invalidated.
+     * Processes invalidation of an {@link Observable} this listener is attached to.
      *
      * @param observable    the observable that was invalidated
      *

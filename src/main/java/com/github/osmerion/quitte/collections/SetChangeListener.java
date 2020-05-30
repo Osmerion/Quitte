@@ -35,9 +35,11 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
- * A listener that may be used to subscribe to changes to one or more {@link ObservableSet ObservableSets}.
+ * A listener that may be used to subscribe to changes to one or more {@link ObservableSet observable sets}.
  *
  * @param <E>   the type of an observed set's elements
+ *
+ * @see ObservableSet
  *
  * @since   0.1.0
  *
@@ -47,9 +49,9 @@ import javax.annotation.Nullable;
 public interface SetChangeListener<E> {
 
     /**
-     * Called after a change has been made to an observed set.
+     * Processes changes to an {@link ObservableSet} this listener is attached to.
      *
-     * @param change    the change that was made
+     * @param change    the change to process
      *
      * @since   0.1.0
      */
@@ -57,6 +59,12 @@ public interface SetChangeListener<E> {
 
     /**
      * Returns whether or not this listener is invalid.
+     *
+     * <p>Once an {@link ObservableSet} discovers that a listener is invalid, it will stop notifying the listener of
+     * updates and release all strong references to the listener.</p>
+     *
+     * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
+     * Breaking this contract may result in unexpected behavior.</p>
      *
      * @return  whether or not this listener is invalid
      *

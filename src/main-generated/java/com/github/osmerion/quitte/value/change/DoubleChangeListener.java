@@ -31,11 +31,12 @@
  */
 package com.github.osmerion.quitte.value.change;
 
+import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.internal.wrappers.*;
 import com.github.osmerion.quitte.value.*;
 
 /**
- * A specialized {@code double} change-listener.
+ * A listener that may be used to subscribe to changes of one or more specialized {@code double}-{@link Observable observables}..
  *
  * @see ObservableValue
  * @see ObservableDoubleValue
@@ -60,6 +61,12 @@ public interface DoubleChangeListener {
 
     /**
      * Returns whether or not this listener is invalid.
+     *
+     * <p>Once an {@link Observable observable} discovers that a listener is invalid, it will stop notifying the
+     * listener of updates and release all strong references to the listener.</p>
+     *
+     * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
+     * Breaking this contract may result in unexpected behavior.</p>
      *
      * @return  whether or not this listener is invalid
      *
