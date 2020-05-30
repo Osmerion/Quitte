@@ -70,12 +70,23 @@ public final class SimpleIntPropertyGeneratedTest {
     }
 
     @Test
-    public void testChangeListenerAddRemovedWithBox() {
+    public void testChangeListenerBoxAttachDetach() {
         var property = new SimpleIntProperty(TestValues.IntValue_H);
         ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
-        
+
         property.addBoxedListener(changeListener);
         assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new SimpleIntProperty(TestValues.IntValue_H);
+        ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(property.addBoxedListener(changeListener));
+        assertFalse(property.addBoxedListener(changeListener));
+        assertTrue(property.removeBoxedListener(changeListener));
+        assertTrue(property.addBoxedListener(changeListener));
     }
 
     @Test

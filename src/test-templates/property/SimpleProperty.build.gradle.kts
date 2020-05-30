@@ -78,12 +78,23 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
     }
 
     @Test
-    public void testChangeListenerAddRemovedWithBox() {
+    public void testChangeListenerBoxAttachDetach() {
         var property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
-        
+
         property.addBoxedListener(changeListener);
         assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(property.addBoxedListener(changeListener));
+        assertFalse(property.addBoxedListener(changeListener));
+        assertTrue(property.removeBoxedListener(changeListener));
+        assertTrue(property.addBoxedListener(changeListener));
     }
 
     @Test

@@ -72,12 +72,23 @@ public final class SimpleObjectPropertyGeneratedTest {
     }
 
     @Test
-    public void testChangeListenerAddRemovedWithBox() {
+    public void testChangeListenerBoxAttachDetach() {
         var property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
-        
+
         property.addBoxedListener(changeListener);
         assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
+        ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(property.addBoxedListener(changeListener));
+        assertFalse(property.addBoxedListener(changeListener));
+        assertTrue(property.removeBoxedListener(changeListener));
+        assertTrue(property.addBoxedListener(changeListener));
     }
 
     @Test

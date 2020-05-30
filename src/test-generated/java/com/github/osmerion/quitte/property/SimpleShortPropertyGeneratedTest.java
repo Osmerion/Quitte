@@ -70,12 +70,23 @@ public final class SimpleShortPropertyGeneratedTest {
     }
 
     @Test
-    public void testChangeListenerAddRemovedWithBox() {
+    public void testChangeListenerBoxAttachDetach() {
         var property = new SimpleShortProperty(TestValues.ShortValue_H);
         ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
-        
+
         property.addBoxedListener(changeListener);
         assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new SimpleShortProperty(TestValues.ShortValue_H);
+        ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(property.addBoxedListener(changeListener));
+        assertFalse(property.addBoxedListener(changeListener));
+        assertTrue(property.removeBoxedListener(changeListener));
+        assertTrue(property.addBoxedListener(changeListener));
     }
 
     @Test

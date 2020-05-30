@@ -182,6 +182,26 @@ public final class LazyShortPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerBoxAttachDetach() {
+        var property = new LazyShortProperty(TestValues.ShortValue_H);
+        ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new LazyShortProperty(TestValues.ShortValue_H);
+        ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(property.addBoxedListener(changeListener));
+        assertFalse(property.addBoxedListener(changeListener));
+        assertTrue(property.removeBoxedListener(changeListener));
+        assertTrue(property.addBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerSetGetConsistencyForPrimaryCtor() {
         var callCounter = new AtomicInteger(0);
 

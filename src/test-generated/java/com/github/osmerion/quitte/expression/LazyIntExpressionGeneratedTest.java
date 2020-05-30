@@ -127,13 +127,25 @@ public final class LazyIntExpressionGeneratedTest {
     }
 
     @Test
-    public void testChangeListenerAddRemovedWithBox() {
+    public void testChangeListenerBoxAttachDetach() {
         var property = new LazyIntProperty(TestValues.IntValue_H);
         var expression = LazyIntExpression.of(property, it -> it);
         ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        expression.addBoxedListener(changeListener);
+        assertTrue(expression.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new LazyIntProperty(TestValues.IntValue_H);
+        var expression = LazyIntExpression.of(property, it -> it);
+        ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(expression.addBoxedListener(changeListener));
+        assertFalse(expression.addBoxedListener(changeListener));
+        assertTrue(expression.removeBoxedListener(changeListener));
+        assertTrue(expression.addBoxedListener(changeListener));
     }
 
     @Test

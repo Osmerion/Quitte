@@ -127,13 +127,25 @@ public final class LazyByteExpressionGeneratedTest {
     }
 
     @Test
-    public void testChangeListenerAddRemovedWithBox() {
+    public void testChangeListenerBoxAttachDetach() {
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         var expression = LazyByteExpression.of(property, it -> it);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        expression.addBoxedListener(changeListener);
+        assertTrue(expression.removeBoxedListener(changeListener));
+    }
+
+    @Test
+    public void testChangeListenerDuplicateBoxAttachDetach() {
+        var property = new LazyByteProperty(TestValues.ByteValue_H);
+        var expression = LazyByteExpression.of(property, it -> it);
+        ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        assertTrue(expression.addBoxedListener(changeListener));
+        assertFalse(expression.addBoxedListener(changeListener));
+        assertTrue(expression.removeBoxedListener(changeListener));
+        assertTrue(expression.addBoxedListener(changeListener));
     }
 
     @Test
