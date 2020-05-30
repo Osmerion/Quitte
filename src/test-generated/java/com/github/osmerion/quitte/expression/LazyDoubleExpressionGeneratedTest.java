@@ -127,6 +127,16 @@ public final class LazyDoubleExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyDoubleProperty(TestValues.DoubleValue_H);
+        var expression = LazyDoubleExpression.of(property, it -> it);
+        ChangeListener<Double> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         var callCounter = new AtomicInteger(0);
 

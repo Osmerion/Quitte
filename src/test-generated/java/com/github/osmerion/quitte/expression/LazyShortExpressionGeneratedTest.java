@@ -127,6 +127,16 @@ public final class LazyShortExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyShortProperty(TestValues.ShortValue_H);
+        var expression = LazyShortExpression.of(property, it -> it);
+        ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         var callCounter = new AtomicInteger(0);
 

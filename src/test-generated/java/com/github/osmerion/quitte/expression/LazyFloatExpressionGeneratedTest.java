@@ -127,6 +127,16 @@ public final class LazyFloatExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyFloatProperty(TestValues.FloatValue_H);
+        var expression = LazyFloatExpression.of(property, it -> it);
+        ChangeListener<Float> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         var callCounter = new AtomicInteger(0);
 

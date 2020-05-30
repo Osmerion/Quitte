@@ -127,6 +127,16 @@ public final class LazyLongExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyLongProperty(TestValues.LongValue_H);
+        var expression = LazyLongExpression.of(property, it -> it);
+        ChangeListener<Long> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         var callCounter = new AtomicInteger(0);
 

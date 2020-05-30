@@ -68,6 +68,16 @@ public final class SimpleBoolExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleBoolProperty(TestValues.BoolValue_H);
+        var expression = SimpleBoolExpression.of(property, it -> it);
+        ChangeListener<Boolean> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

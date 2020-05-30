@@ -68,6 +68,16 @@ public final class SimpleShortExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleShortProperty(TestValues.ShortValue_H);
+        var expression = SimpleShortExpression.of(property, it -> it);
+        ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

@@ -68,6 +68,16 @@ public final class SimpleDoubleExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleDoubleProperty(TestValues.DoubleValue_H);
+        var expression = SimpleDoubleExpression.of(property, it -> it);
+        ChangeListener<Double> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

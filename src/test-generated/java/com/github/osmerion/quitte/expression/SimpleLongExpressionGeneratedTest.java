@@ -68,6 +68,16 @@ public final class SimpleLongExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleLongProperty(TestValues.LongValue_H);
+        var expression = SimpleLongExpression.of(property, it -> it);
+        ChangeListener<Long> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

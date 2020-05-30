@@ -127,6 +127,16 @@ public final class LazyByteExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyByteProperty(TestValues.ByteValue_H);
+        var expression = LazyByteExpression.of(property, it -> it);
+        ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         var callCounter = new AtomicInteger(0);
 

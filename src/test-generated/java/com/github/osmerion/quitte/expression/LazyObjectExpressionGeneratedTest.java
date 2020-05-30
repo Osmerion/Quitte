@@ -129,6 +129,16 @@ public final class LazyObjectExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
+        var expression = LazyObjectExpression.of(property, it -> it);
+        ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         var callCounter = new AtomicInteger(0);
 

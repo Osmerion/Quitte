@@ -173,6 +173,15 @@ public final class LazyIntPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyIntProperty(TestValues.IntValue_H);
+        ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+        
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerSetGetConsistencyForPrimaryCtor() {
         var callCounter = new AtomicInteger(0);
 

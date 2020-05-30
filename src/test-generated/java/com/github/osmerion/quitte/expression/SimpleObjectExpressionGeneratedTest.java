@@ -70,6 +70,16 @@ public final class SimpleObjectExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
+        var expression = SimpleObjectExpression.of(property, it -> it);
+        ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

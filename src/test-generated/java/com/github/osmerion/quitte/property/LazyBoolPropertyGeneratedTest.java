@@ -173,6 +173,15 @@ public final class LazyBoolPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new LazyBoolProperty(TestValues.BoolValue_H);
+        ChangeListener<Boolean> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+        
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerSetGetConsistencyForPrimaryCtor() {
         var callCounter = new AtomicInteger(0);
 

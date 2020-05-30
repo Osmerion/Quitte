@@ -68,6 +68,16 @@ public final class SimpleByteExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleByteProperty(TestValues.ByteValue_H);
+        var expression = SimpleByteExpression.of(property, it -> it);
+        ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

@@ -68,6 +68,16 @@ public final class SimpleFloatExpressionGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleFloatProperty(TestValues.FloatValue_H);
+        var expression = SimpleFloatExpression.of(property, it -> it);
+        ChangeListener<Float> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerUpdateGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 

@@ -72,6 +72,15 @@ public final class SimpleObjectPropertyGeneratedTest {
     }
 
     @Test
+    public void testChangeListenerAddRemovedWithBox() {
+        var property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
+        ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
+        
+        property.addBoxedListener(changeListener);
+        assertTrue(property.removeBoxedListener(changeListener));
+    }
+
+    @Test
     public void testChangeListenerSetGetConsistency() {
         AtomicInteger callCounter = new AtomicInteger(0);
 
