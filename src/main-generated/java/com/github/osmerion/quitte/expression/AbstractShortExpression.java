@@ -34,6 +34,7 @@ package com.github.osmerion.quitte.expression;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.github.osmerion.quitte.*;
+import com.github.osmerion.quitte.internal.wrappers.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -89,8 +90,7 @@ public abstract class AbstractShortExpression implements Expression<Short>, Obse
      */
     @Override
     public final boolean removeBoxedListener(ChangeListener<Short> listener) {
-        //noinspection SuspiciousMethodCalls
-        return this.changeListeners.remove(listener);
+        return this.changeListeners.removeIf(it -> it instanceof WrappingShortChangeListener && ((WrappingShortChangeListener) it).isWrapping(listener));
     }
 
     /**

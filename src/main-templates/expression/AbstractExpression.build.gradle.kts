@@ -40,6 +40,7 @@ Type.values().forEach {
 import java.util.concurrent.CopyOnWriteArraySet;
 ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.github.osmerion.quitte.*;
+import com.github.osmerion.quitte.internal.wrappers.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -99,8 +100,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams implements
      */
     @Override
     public final boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
-        //noinspection SuspiciousMethodCalls
-        return this.changeListeners.remove(listener);
+        return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener));
     }
 
     /**

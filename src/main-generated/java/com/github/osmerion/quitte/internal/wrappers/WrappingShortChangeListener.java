@@ -65,14 +65,13 @@ public final class WrappingShortChangeListener implements ShortChangeListener {
         return this.listener.isInvalid();
     }
 
-    @Override
-    public boolean equals(@Nullable Object other) {
-        return other == this.listener || other == this;
-    }
-
-    @Override
-    public int hashCode() {
-        return this.listener.hashCode();
+    /**
+     * Returns whether or not this wrapper is wrapping the given listener.
+     *
+     * @return  whether or not this wrapper is wrappping the given listener
+     */
+    public boolean isWrapping(ChangeListener<Short> listener) {
+        return this.listener == listener;
     }
 
 }

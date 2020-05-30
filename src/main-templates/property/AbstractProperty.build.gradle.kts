@@ -46,6 +46,7 @@ import javax.annotation.Nullable;
 import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.functional.*;
 import com.github.osmerion.quitte.internal.binding.*;
+import com.github.osmerion.quitte.internal.wrappers.*;
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 
@@ -188,8 +189,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      */
     @Override
     public final boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
-        //noinspection SuspiciousMethodCalls
-        return this.changeListeners.remove(listener);
+        return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener));
     }
 
     /**
