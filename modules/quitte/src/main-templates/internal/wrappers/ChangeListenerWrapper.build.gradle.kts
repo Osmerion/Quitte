@@ -37,9 +37,7 @@ Type.values().forEach {
 
     template("${packageName.replace('.', '/')}/Wrapping${type.abbrevName}ChangeListener") {
         """package $packageName;
-
-import javax.annotation.Nullable;
-
+${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.github.osmerion.quitte.value.*;
 import com.github.osmerion.quitte.value.change.*;
 

@@ -39,7 +39,6 @@ Type.values().forEach {
 
 import com.github.osmerion.quitte.internal.wrappers.*;
 import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
 
 /**
  * ${if (type === Type.OBJECT)
