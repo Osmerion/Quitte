@@ -71,7 +71,7 @@ open class Generate : DefaultTask() {
         val licenseHeader = header.readText(Charsets.UTF_8).format()
 
         templates!!.forEach {
-            File(project.rootDir, "src/$templateCat-generated/java/${it.path}.java").apply {
+            File(project.projectDir, "src/$templateCat-generated/java/${it.path}.java").apply {
                 parentFile.mkdirs()
                 writeText("$licenseHeader\n${it.content}", Charsets.UTF_8)
             }

@@ -120,7 +120,7 @@ listOf("main", "test").forEach { templateCategory ->
             templates = project.extra["${templateCategory}Templates"] as List<Template>
 
             input = templateSource
-            header = file(".dev/resources/LICENSE_HEADER_GEN")
+            header = rootProject.file(".dev/resources/LICENSE_HEADER_GEN")
         }
     }
 }
