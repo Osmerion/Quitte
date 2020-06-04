@@ -36,7 +36,7 @@ import com.github.osmerion.quitte.internal.collections.UnmodifiableObservableSet
 import com.github.osmerion.quitte.internal.collections.WrappingObservableSet;
 
 /**
- * A observable set with support for tracking changes to the set's content.
+ * An observable set with support for tracking changes to the set's content.
  *
  * @param <E>   the type of elements in this set
  *
