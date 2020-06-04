@@ -1,9 +1,9 @@
-/.gradle/
+/.gradle
 !/.idea
 /.idea/*
 !/.idea/copyright
-!/.idea/scopes/
-/build/
+!/.idea/scopes
+/build
 /out
 
 /buildSrc/.gradle
