@@ -31,7 +31,10 @@
  */
 package com.github.osmerion.quitte.expression;
 
+import java.util.IdentityHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+
+import javax.annotation.Nullable;
 
 import com.github.osmerion.quitte.*;
 import com.github.osmerion.quitte.internal.wrappers.*;
@@ -49,6 +52,9 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
 
     private final transient CopyOnWriteArraySet<BoolChangeListener> changeListeners = new CopyOnWriteArraySet<>();
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
+
+    @Nullable
+    private transient IdentityHashMap<Observable, WeakInvalidationListener> dependencies;
 
     // package-private constructor for an effectively sealed class
     AbstractBoolExpression() {}
@@ -132,7 +138,7 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
      */
     abstract void setImpl(boolean value);
 
-    protected final void invalidate() {
+    final void invalidate() {
         for (var listener : this.invalidationListeners) {
             if (listener.isInvalid()) {
                 this.invalidationListeners.remove(listener);
@@ -142,6 +148,46 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
             listener.onInvalidation(this);
             if (listener.isInvalid()) this.invalidationListeners.remove(listener);
         }
+    }
+
+    /**
+     * Adds a dependency for this expression. This expression will be invalidated when the given {@link Observable} is
+     * invalidated.
+     *
+     * @param observable    the observable on which this expression should depend
+     *
+     * @throws IllegalArgumentException if this expression already depends on the given {@code Observable}
+     *
+     * @since   0.1.0
+     */
+    protected final void addDependency(Observable observable) {
+        if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
+
+        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.onDependencyInvalidated());
+        this.dependencies.compute(observable, (key, oldValue) -> {
+            if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
+
+            observable.addListener(listener);
+            return listener;
+        });
+    }
+
+    /**
+     * Removes a dependency for this expression.
+     *
+     * @param observable    the observable on which this expression should not longer depend
+     *
+     * @throws IllegalArgumentException if this expression does not depend on the given {@code Observable}
+     *
+     * @since   0.1.0
+     */
+    protected final void removeDependency(Observable observable) {
+        if (this.dependencies == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
+
+        WeakInvalidationListener listener = this.dependencies.remove(observable);
+        if (listener == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
+
+        observable.removeListener(listener);
     }
 
     void onDependencyInvalidated() {
