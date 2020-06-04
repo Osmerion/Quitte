@@ -29,3 +29,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 rootProject.name = "Quitte"
+
+file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
+    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
+
+    if (hasBuildscript(dir)) {
+        val projectName = dir.name
+
+        include(projectName)
+        project(":$projectName").projectDir = dir
+    }
+}

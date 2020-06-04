@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,17 +29,47 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.github.osmerion.quitte.build.*
+package com.github.osmerion.quitte.internal.wrappers;
 
-allprojects {
-    group = "com.github.osmerion.quitte"
-    val nextVersion = "0.1.0"
-    version = when (deployment.type) {
-        com.github.osmerion.quitte.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
-        else -> nextVersion
+import com.github.osmerion.quitte.value.*;
+import com.github.osmerion.quitte.value.change.*;
+
+/**
+ * A wrapping change-listener.
+ *
+ * <p>The wrapper object is {@link Object#equals(Object) equal} to the underlying listener and shares the same
+ * hashcode.</p>
+ *
+ * @see ChangeListener
+ * @see FloatChangeListener
+ *
+ * @author  Leon Linhart
+ */
+public final class WrappingFloatChangeListener implements FloatChangeListener {
+
+    private final ChangeListener<Float> listener;
+
+    public WrappingFloatChangeListener(ChangeListener<Float> listener) {
+        this.listener = listener;
     }
 
-    repositories {
-        mavenCentral()
+    @Override
+    public void onChanged(ObservableFloatValue observable, float oldValue, float newValue) {
+        this.listener.onChanged(observable, oldValue, newValue);
     }
+
+    @Override
+    public boolean isInvalid() {
+        return this.listener.isInvalid();
+    }
+
+    /**
+     * Returns whether or not this wrapper is wrapping the given listener.
+     *
+     * @return  whether or not this wrapper is wrappping the given listener
+     */
+    public boolean isWrapping(ChangeListener<Float> listener) {
+        return this.listener == listener;
+    }
+
 }

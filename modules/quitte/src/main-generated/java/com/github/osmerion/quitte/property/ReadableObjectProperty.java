@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,17 +29,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.github.osmerion.quitte.build.*
+package com.github.osmerion.quitte.property;
 
-allprojects {
-    group = "com.github.osmerion.quitte"
-    val nextVersion = "0.1.0"
-    version = when (deployment.type) {
-        com.github.osmerion.quitte.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
-        else -> nextVersion
+import com.github.osmerion.quitte.internal.wrappers.*;
+import com.github.osmerion.quitte.value.*;
+
+/**
+ * A generic readable property.
+ *
+ * @see ObservableObjectValue
+ *
+ * @since   0.1.0
+ *
+ * @author  Leon Linhart
+ */
+public interface ReadableObjectProperty<T> extends ReadableProperty<T>, ObservableObjectValue<T> {
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    default ReadableObjectProperty<T> asReadOnlyProperty() {
+        return (this.isWritable() ? new ReadOnlyObjectProperty<>(this) : this);
     }
 
-    repositories {
-        mavenCentral()
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    default boolean isWritable() {
+        return !(this instanceof ReadOnlyObjectProperty);
     }
+
 }
