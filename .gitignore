@@ -9,3 +9,6 @@
 /buildSrc/.gradle
 /buildSrc/build
 /buildSrc/out
+
+/modules/*/build
+/modules/*/out
