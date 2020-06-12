@@ -34,4 +34,9 @@ plugins {
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation(group = "de.jjohannes.gradle", name = "extra-java-module-info", version = "0.1")
 }
