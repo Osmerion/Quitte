@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Leon Linhart,
+ * Copyright (c) 2018-2019 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,18 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-module com.github.osmerion.quitte {
+@NonNullApi
+package com.github.osmerion.quitte.i18n;
 
-    requires static jsr305;
-
-    exports com.github.osmerion.quitte;
-    exports com.github.osmerion.quitte.expression;
-    exports com.github.osmerion.quitte.collections;
-    exports com.github.osmerion.quitte.functional;
-    exports com.github.osmerion.quitte.property;
-    exports com.github.osmerion.quitte.value;
-    exports com.github.osmerion.quitte.value.change;
-
-    exports com.github.osmerion.quitte.internal to com.github.osmerion.quitte.i18n;
-
-}
+import com.github.osmerion.quitte.internal.NonNullApi;
