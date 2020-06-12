@@ -52,7 +52,7 @@ open class Generate : DefaultTask() {
     @Internal
     var templates: List<Template>? = null
         set(value) {
-            outputs = value!!.map { File(project.rootDir, "src/$templateCat-generated/java/${it.path}.java") }
+            outputs = value!!.map { File(project.projectDir, "src/$templateCat-generated/java/${it.path}.java") }
             field = value
         }
 
