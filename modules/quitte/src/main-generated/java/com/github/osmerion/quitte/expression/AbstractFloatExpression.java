@@ -173,6 +173,36 @@ public abstract class AbstractFloatExpression implements Expression<Float>, Obse
     }
 
     /**
+     * Adds a dependency for this expression. This expression will be invalidated when the given {@link Observable} is
+     * invalidated.
+     *
+     * <p>The given {@link Runnable} is executed when the given {@link Observable} is invalidated and may be used to
+     * implemented side effects.</p>
+     *
+     * @param observable    the observable on which this expression should depend
+     * @param action        the action that should be performed when the dependency is invalidated but before the value
+     *                      of this action is recomputed
+     *
+     * @throws IllegalArgumentException if this expression already depends on the given {@code Observable}
+     *
+     * @since   0.1.0
+     */
+    protected final void addDependency(Observable observable, Runnable action) {
+        if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
+
+        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
+            action.run();
+            this.onDependencyInvalidated();
+        });
+        this.dependencies.compute(observable, (key, oldValue) -> {
+            if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
+
+            observable.addListener(listener);
+            return listener;
+        });
+    }
+
+    /**
      * Removes a dependency for this expression.
      *
      * @param observable    the observable on which this expression should not longer depend
