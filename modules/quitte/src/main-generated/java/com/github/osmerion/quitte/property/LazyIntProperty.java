@@ -133,6 +133,8 @@ public class LazyIntProperty extends AbstractIntProperty implements LazyValue {
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(IntSupplier supplier) {

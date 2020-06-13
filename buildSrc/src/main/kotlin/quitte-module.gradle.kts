@@ -70,7 +70,15 @@ tasks {
         from(sourceSets["main"].allSource)
     }
 
-    val javadoc = "javadoc"(Javadoc::class)
+    val javadoc = "javadoc"(Javadoc::class) {
+        with (options as StandardJavadocDocletOptions) {
+            tags = listOf(
+                "apiNote:a:API Note:",
+                "implSpec:a:Implementation Requirements:",
+                "implNote:a:Implementation Note:"
+            )
+        }
+    }
 
     create<Jar>("javadocJar") {
         dependsOn(javadoc)

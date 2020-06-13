@@ -68,7 +68,7 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
     /**
      * Attaches the given {@link IntChangeListener} to this observable.
      *
-     * <p>While an {@code IntChangeListener} is attached to an observable, it will be {@link IntChangeListener#onChanged()
+     * <p>While an {@code IntChangeListener} is attached to an observable, it will be {@link IntChangeListener#onChanged(ObservableIntValue, int, int)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

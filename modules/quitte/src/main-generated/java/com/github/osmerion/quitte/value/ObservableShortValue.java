@@ -68,7 +68,7 @@ public interface ObservableShortValue extends ObservableValue<Short> {
     /**
      * Attaches the given {@link ShortChangeListener} to this observable.
      *
-     * <p>While an {@code ShortChangeListener} is attached to an observable, it will be {@link ShortChangeListener#onChanged()
+     * <p>While an {@code ShortChangeListener} is attached to an observable, it will be {@link ShortChangeListener#onChanged(ObservableShortValue, short, short)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

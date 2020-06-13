@@ -78,7 +78,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
     /**
      * Attaches the given {@link ${type.abbrevName}ChangeListener} to this observable.
      *
-     * <p>While an {@code ${type.abbrevName}ChangeListener} is attached to an observable, it will be {@link ${type.abbrevName}ChangeListener#onChanged()
+     * <p>While an {@code ${type.abbrevName}ChangeListener} is attached to an observable, it will be {@link ${type.abbrevName}ChangeListener#onChanged(Observable${type.abbrevName}Value, ${if (type === Type.OBJECT) "Object" else type.raw}, ${if (type === Type.OBJECT) "Object" else type.raw})
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

@@ -133,6 +133,8 @@ public class LazyLongProperty extends AbstractLongProperty implements LazyValue 
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(LongSupplier supplier) {

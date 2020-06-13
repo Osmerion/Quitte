@@ -133,6 +133,8 @@ public class LazyDoubleProperty extends AbstractDoubleProperty implements LazyVa
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(DoubleSupplier supplier) {

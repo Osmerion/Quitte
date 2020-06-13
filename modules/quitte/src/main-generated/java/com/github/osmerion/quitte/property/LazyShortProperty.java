@@ -133,6 +133,8 @@ public class LazyShortProperty extends AbstractShortProperty implements LazyValu
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(ShortSupplier supplier) {

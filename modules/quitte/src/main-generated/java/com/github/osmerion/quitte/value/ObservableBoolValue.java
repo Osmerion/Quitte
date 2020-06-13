@@ -68,7 +68,7 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
     /**
      * Attaches the given {@link BoolChangeListener} to this observable.
      *
-     * <p>While an {@code BoolChangeListener} is attached to an observable, it will be {@link BoolChangeListener#onChanged()
+     * <p>While an {@code BoolChangeListener} is attached to an observable, it will be {@link BoolChangeListener#onChanged(ObservableBoolValue, boolean, boolean)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

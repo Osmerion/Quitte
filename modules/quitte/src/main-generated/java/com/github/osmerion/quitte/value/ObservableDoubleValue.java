@@ -68,7 +68,7 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
     /**
      * Attaches the given {@link DoubleChangeListener} to this observable.
      *
-     * <p>While an {@code DoubleChangeListener} is attached to an observable, it will be {@link DoubleChangeListener#onChanged()
+     * <p>While an {@code DoubleChangeListener} is attached to an observable, it will be {@link DoubleChangeListener#onChanged(ObservableDoubleValue, double, double)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

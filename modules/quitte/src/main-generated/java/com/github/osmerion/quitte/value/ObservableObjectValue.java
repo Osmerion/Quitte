@@ -71,7 +71,7 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
     /**
      * Attaches the given {@link ObjectChangeListener} to this observable.
      *
-     * <p>While an {@code ObjectChangeListener} is attached to an observable, it will be {@link ObjectChangeListener#onChanged()
+     * <p>While an {@code ObjectChangeListener} is attached to an observable, it will be {@link ObjectChangeListener#onChanged(ObservableObjectValue, Object, Object)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

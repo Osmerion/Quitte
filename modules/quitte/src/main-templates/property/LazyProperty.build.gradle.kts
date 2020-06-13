@@ -143,6 +143,8 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(${type.abbrevName}Supplier$typeParams supplier) {

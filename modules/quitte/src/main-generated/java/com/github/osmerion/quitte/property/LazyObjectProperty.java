@@ -135,6 +135,8 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(ObjectSupplier<T> supplier) {

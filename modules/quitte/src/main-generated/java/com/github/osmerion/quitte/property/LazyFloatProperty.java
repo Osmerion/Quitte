@@ -133,6 +133,8 @@ public class LazyFloatProperty extends AbstractFloatProperty implements LazyValu
     /**
      * TODO doc
      *
+     * @param supplier
+     *
      * @since   0.1.0
      */
     public final void set(FloatSupplier supplier) {

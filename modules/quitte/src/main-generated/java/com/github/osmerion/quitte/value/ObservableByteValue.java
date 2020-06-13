@@ -68,7 +68,7 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
     /**
      * Attaches the given {@link ByteChangeListener} to this observable.
      *
-     * <p>While an {@code ByteChangeListener} is attached to an observable, it will be {@link ByteChangeListener#onChanged()
+     * <p>While an {@code ByteChangeListener} is attached to an observable, it will be {@link ByteChangeListener#onChanged(ObservableByteValue, byte, byte)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

@@ -68,7 +68,7 @@ public interface ObservableLongValue extends ObservableValue<Long> {
     /**
      * Attaches the given {@link LongChangeListener} to this observable.
      *
-     * <p>While an {@code LongChangeListener} is attached to an observable, it will be {@link LongChangeListener#onChanged()
+     * <p>While an {@code LongChangeListener} is attached to an observable, it will be {@link LongChangeListener#onChanged(ObservableLongValue, long, long)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

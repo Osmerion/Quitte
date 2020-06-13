@@ -68,7 +68,7 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
     /**
      * Attaches the given {@link FloatChangeListener} to this observable.
      *
-     * <p>While an {@code FloatChangeListener} is attached to an observable, it will be {@link FloatChangeListener#onChanged()
+     * <p>While an {@code FloatChangeListener} is attached to an observable, it will be {@link FloatChangeListener#onChanged(ObservableFloatValue, float, float)
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed

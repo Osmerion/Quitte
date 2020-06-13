@@ -66,6 +66,8 @@ public final class WrappingByteChangeListener implements ByteChangeListener {
     /**
      * Returns whether or not this wrapper is wrapping the given listener.
      *
+     * @param listener  the listener to test for
+     *
      * @return  whether or not this wrapper is wrappping the given listener
      */
     public boolean isWrapping(ChangeListener<Byte> listener) {
