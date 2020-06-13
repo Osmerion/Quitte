@@ -133,9 +133,9 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     /**
-     * TODO doc
+     * Sets the function to recompute the value of this property and invalidates this property.
      *
-     * @param supplier
+     * @param supplier  the function to recompute this property's value
      *
      * @since   0.1.0
      */

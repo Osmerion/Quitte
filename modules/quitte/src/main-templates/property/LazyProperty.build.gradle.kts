@@ -141,9 +141,9 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     /**
-     * TODO doc
+     * Sets the function to recompute the value of this property and invalidates this property.
      *
-     * @param supplier
+     * @param supplier  the function to recompute this property's value
      *
      * @since   0.1.0
      */
