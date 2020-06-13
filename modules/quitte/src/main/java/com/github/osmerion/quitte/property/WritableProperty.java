@@ -37,8 +37,6 @@ import com.github.osmerion.quitte.value.WritableValue;
 /**
  * TODO doc
  *
- * @param <T>
- *
  * @since   0.1.0
  *
  * @author  Leon Linhart
