@@ -107,6 +107,7 @@ public final class I18n {
      * @since   0.1.0
      */
     public static SimpleObjectExpression<String> format(I18nContext context, String key, Object... arguments) {
+        //noinspection NotNullFieldNotInitialized
         return new SimpleObjectExpression<>() {
 
             private final I18nParameter[] i18nParameters;
@@ -161,6 +162,7 @@ public final class I18n {
      * @since   0.1.0
      */
     public LazyObjectExpression<String> formatLazily(I18nContext context, String key, Object... arguments) {
+        //noinspection NotNullFieldNotInitialized
         return new LazyObjectExpression<>() {
 
             private final I18nParameter[] i18nParameters;
