@@ -42,9 +42,9 @@ import com.github.osmerion.quitte.value.ObservableValue;
 public interface ReadableProperty<T> extends ObservableValue<T> {
 
     /**
-     * TODO doc
+     * Returns a read-only view of this property.
      *
-     * @return
+     * @return  a read-only view of this property
      *
      * @since   0.1.0
      */
