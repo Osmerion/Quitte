@@ -32,8 +32,6 @@ package com.github.osmerion.quitte.i18n;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.function.Function;
-import com.github.osmerion.quitte.Observable;
 import com.github.osmerion.quitte.expression.LazyObjectExpression;
 import com.github.osmerion.quitte.expression.SimpleObjectExpression;
 import com.github.osmerion.quitte.value.ObservableValue;
@@ -48,52 +46,12 @@ import com.github.osmerion.quitte.value.ObservableValue;
 public final class I18n {
 
     /**
-     * Wraps a given {@link ObservableValue} in an instance of {@link I18nParameter} for special treatment in formatting
-     * methods.
-     *
-     * @param observable    the observable to wrap
-     *
-     * @return  a {@code I18nParameter} wrapping the given observable value
-     *
-     * @see #format(I18nContext, String, Object...)
-     * @see #formatLazily(I18nContext, String, Object...)
-     *
-     * @since   0.1.0
-     */
-    public static I18nParameter i18n(ObservableValue<?> observable) {
-        /*
-         * Calling the boxing getter of ObservableValue is fine here, since the returned objects are eventually passed
-         * to MessageFormat#format as Object[] anyway. Thus, there is no need to provide specialized overloads here.
-         */
-        return i18n(observable, ObservableValue::getValue);
-    }
-
-    /**
-     * Wraps a given {@link Observable} in an instance of {@link I18nParameter} for special treatment in formatting
-     * methods.
-     *
-     * @param <O>           the type of the observable
-     * @param observable    the observable to wrap
-     * @param mapper        the function used to map the observable to a value
-     *
-     * @return  a {@code I18nParameter} wrapping the given observable
-     *
-     * @see #format(I18nContext, String, Object...)
-     * @see #formatLazily(I18nContext, String, Object...)
-     *
-     * @since   0.1.0
-     */
-    public static <O extends Observable> I18nParameter i18n(O observable, Function<O, ?> mapper) {
-        return new I18nParameter.Dynamic(observable, () -> mapper.apply(observable));
-    }
-
-    /**
      * Returns a {@link SimpleObjectExpression} that yields a formatted and localized message using
      * {@link MessageFormat#format(Object)}.
      *
      *  <p>The given {@code arguments} are passed to the formatting method as is with the exception of arguments of type
-     * {@link I18nParameter} obtained via {@link #i18n(ObservableValue)} (or any other overload). These arguments are
-     * treated as variable <em>parameters</em>.</p>
+     * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
+     * arguments are treated as variable <em>parameters</em>.</p>
      *
      * <p>The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
      *
@@ -147,8 +105,8 @@ public final class I18n {
      * {@link MessageFormat#format(Object)}.
      *
      *  <p>The given {@code arguments} are passed to the formatting method as is with the exception of arguments of type
-     * {@link I18nParameter} obtained via {@link #i18n(ObservableValue)} (or any other overload). These arguments are
-     * treated as variable <em>parameters</em>.</p>
+     * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
+     * arguments are treated as variable <em>parameters</em>.</p>
      *
      * <p>The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
      *

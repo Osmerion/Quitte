@@ -30,8 +30,10 @@
  */
 package com.github.osmerion.quitte.i18n;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 import com.github.osmerion.quitte.Observable;
+import com.github.osmerion.quitte.value.ObservableValue;
 
 /**
  * A parameter with special treatment in {@link I18n#format(I18nContext, String, Object...)} and related methods.
@@ -48,14 +50,54 @@ import com.github.osmerion.quitte.Observable;
  */
 public abstract class I18nParameter {
 
+    /**
+     * Wraps a given {@link ObservableValue} in an instance of {@link I18nParameter} for special treatment in formatting
+     * methods.
+     *
+     * @param observable    the observable to wrap
+     *
+     * @return  a {@code I18nParameter} wrapping the given observable value
+     *
+     * @see I18n#format(I18nContext, String, Object...)
+     * @see I18n#formatLazily(I18nContext, String, Object...)
+     *
+     * @since   0.1.0
+     */
+    public static I18nParameter i18n(ObservableValue<?> observable) {
+        /*
+         * Calling the boxing getter of ObservableValue is fine here, since the returned objects are eventually passed
+         * to MessageFormat#format as Object[] anyway. Thus, there is no need to provide specialized overloads here.
+         */
+        return i18n(observable, ObservableValue::getValue);
+    }
+
+    /**
+     * Wraps a given {@link Observable} in an instance of {@link I18nParameter} for special treatment in formatting
+     * methods.
+     *
+     * @param <O>           the type of the observable
+     * @param observable    the observable to wrap
+     * @param mapper        the function used to map the observable to a value
+     *
+     * @return  a {@code I18nParameter} wrapping the given observable
+     *
+     * @see I18n#format(I18nContext, String, Object...)
+     * @see I18n#formatLazily(I18nContext, String, Object...)
+     *
+     * @since   0.1.0
+     */
+    public static <O extends Observable> I18nParameter i18n(O observable, Function<O, ?> mapper) {
+        return new I18nParameter.Dynamic(observable, () -> mapper.apply(observable));
+    }
+
     /*
      * The JavaDoc of I18nParameter is not technically correct since instances of I18nParameter.Static do not receive
      * any special treatment. However, there is no way to obtain those from the (public) API and they are entirely
      * transparent with no special behavior. Hence, we can get away with incorrect JavaDoc here.
      */
 
-    // package-private constructor for an effectively sealed class
-    I18nParameter() {}
+    // private constructor for an effectively sealed class
+    private I18nParameter() {}
 
     abstract Object get();
 
