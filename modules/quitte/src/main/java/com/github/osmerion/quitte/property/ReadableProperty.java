@@ -35,6 +35,9 @@ import com.github.osmerion.quitte.value.ObservableValue;
 /**
  * A basic readable property.
  *
+ * <p>A property may be {@link #isBound() bound} to an {@link ObservableValue}. While a property is bound, its value
+ * will depend on the value on the value of the observable it is bound to.</p>
+ *
  * @since   0.1.0
  *
  * @author  Leon Linhart

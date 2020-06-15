@@ -31,7 +31,8 @@
 package com.github.osmerion.quitte;
 
 /**
- * TODO doc
+ * An observable object wraps a state and allows {@link #addListener(InvalidationListener) listening} for invalidation
+ * of the wrapped state.
  *
  * @since   0.1.0
  *

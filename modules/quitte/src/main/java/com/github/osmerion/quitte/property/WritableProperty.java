@@ -35,7 +35,7 @@ import com.github.osmerion.quitte.value.ObservableValue;
 import com.github.osmerion.quitte.value.WritableValue;
 
 /**
- * TODO doc
+ * A basic writable property.
  *
  * @since   0.1.0
  *
