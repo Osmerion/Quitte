@@ -33,7 +33,7 @@ package com.github.osmerion.quitte.value;
 import com.github.osmerion.quitte.property.ReadableObjectProperty;
 
 /**
- * TODO doc
+ * An object representing a lazily evaluated value.
  *
  * @since   0.1.0
  *
@@ -65,11 +65,38 @@ public interface LazyValue {
      * @since   0.1.0
      */
     enum State {
+        /**
+         * Describes an invalid value that was never valid.
+         *
+         * @since   0.1.0
+         */
         UNINITIALIZED,
+        /**
+         * Describes the first time the value is valid.
+         *
+         * @since   0.1.0
+         */
         INITIALIZED,
+        /**
+         * Describes a valid value.
+         *
+         * @since   0.1.0
+         */
         VALID,
+        /**
+         * Describes an invalid value.
+         *
+         * @since   0.1.0
+         */
         INVALID;
 
+        /**
+         * Returns whether or not this state describes a valid value.
+         *
+         * @return  whether or not this state describes a valid value
+         *
+         * @since   0.1.0
+         */
         public boolean isValid() {
             return this == INITIALIZED || this == VALID;
         }
