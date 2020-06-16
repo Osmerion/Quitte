@@ -36,7 +36,8 @@ import com.github.osmerion.quitte.Observable;
 import com.github.osmerion.quitte.value.change.ChangeListener;
 
 /**
- * A basic observable value.
+ * An {@code ObservableValue} object wraps a single value state and allows {@link #addBoxedListener(ChangeListener)
+ * listening} for changes of the wrapped value.
  *
  * <p><b>Specialized versions of this interface should be used whenever possible.</b></p>
  *

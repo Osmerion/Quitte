@@ -31,7 +31,9 @@
 package com.github.osmerion.quitte;
 
 /**
- * A listener that may be used to subscribe to changes of one or more {@link Observable observables}.
+ * An {@code InvalidationListener} may be {@link Observable#addListener(InvalidationListener) attached} to an
+ * {@link Observable} to get notified when the observable is invalidated. A listener may be attached to multiple
+ * observables.
  *
  * @see Observable
  *

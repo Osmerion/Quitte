@@ -31,8 +31,12 @@
 package com.github.osmerion.quitte;
 
 /**
- * An observable object wraps a state and allows {@link #addListener(InvalidationListener) listening} for invalidation
- * of the wrapped state.
+ * An {@code Observable} object wraps a state and allows {@link #addListener(InvalidationListener) listening} for
+ * invalidation of the wrapped state.
+ *
+ * <p>Since it is not always reasonable to remove listeners manually, Quitte provides a basic API to mark listeners as
+ * invalid (e.g. {@link InvalidationListener#isInvalid()}). An implementation of this class must check if a listener has
+ * become invalid and automatically remove it accordingly.</p>
  *
  * @since   0.1.0
  *
