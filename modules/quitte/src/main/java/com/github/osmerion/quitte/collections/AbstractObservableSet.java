@@ -227,11 +227,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
         public void logAdd(@Nullable E element) {
             if (this.added == null) this.added = new HashSet<>();
 
-            /*
-             * Guard against spurious operations that add and remove the same element for whatever reason.
-             *
-             * TODO: This is rarely useful. Reconsider if this check should be performed.
-             */
+            /* Guard against spurious operations that add and remove the same element for whatever reason. */
             if (this.removed == null || !this.removed.remove(element)) this.added.add(element);
         }
 
@@ -245,11 +241,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
         public void logRemove(@Nullable E old) {
             if (this.removed == null) this.removed = new HashSet<>();
 
-            /*
-             * Guard against spurious operations that add and remove the same element for whatever reason.
-             *
-             * TODO: This is rarely useful. Reconsider if this check should be performed.
-             */
+            /* Guard against spurious operations that add and remove the same element for whatever reason. */
             if (this.added == null || !this.added.remove(old)) this.removed.add(old);
         }
 
