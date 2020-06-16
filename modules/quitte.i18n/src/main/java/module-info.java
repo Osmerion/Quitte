@@ -28,6 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+/** Internationalization capabilities for Quitte observables. */
 module com.github.osmerion.quitte.i18n {
 
     requires transitive com.github.osmerion.quitte;

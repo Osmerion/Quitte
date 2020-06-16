@@ -28,6 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+/** Provides observable collections and additional utilities. */
 @NonNullApi
 package com.github.osmerion.quitte.collections;
 
