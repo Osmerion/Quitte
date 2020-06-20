@@ -28,6 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+/** Provides classes for modeling functions and relations for observable properties. */
 @NonNullApi
 package com.github.osmerion.quitte.expression;
 
