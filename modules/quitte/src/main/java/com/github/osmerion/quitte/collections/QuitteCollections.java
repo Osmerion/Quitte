@@ -33,7 +33,6 @@ package com.github.osmerion.quitte.collections;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.Queue;
 
 /**
  * This class provides additional general functionality that is not yet available in {@link java.util.Collections}.
