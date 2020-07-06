@@ -53,7 +53,8 @@ public final class I18n {
      * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
      * arguments are treated as variable <em>parameters</em>.</p>
      *
-     * <p>The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
+     * <p>The {@link MessageFormat} is identified by the given localization key and provided by the {@link I18nContext}.
+     * The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
      *
      * @param context   the localization context from which to retrieve the format for the message
      * @param key       the localization key that will be used to retrieve the appropriate {@link MessageFormat} from
@@ -108,7 +109,8 @@ public final class I18n {
      * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
      * arguments are treated as variable <em>parameters</em>.</p>
      *
-     * <p>The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
+     * <p>The {@link MessageFormat} is identified by the given localization key and provided by the {@link I18nContext}.
+     * The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
      *
      * @param context   the localization context from which to retrieve the format for the message
      * @param key       the localization key that will be used to retrieve the appropriate {@link MessageFormat} from

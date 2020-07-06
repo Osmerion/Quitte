@@ -36,8 +36,14 @@ import com.github.osmerion.quitte.InvalidationListener;
 import com.github.osmerion.quitte.Observable;
 
 /**
- * TODO doc
+ * An internationalization (<em>I18n</em>) context provides mappings from a localization key to a localized
+ * {@link MessageFormat}.
  *
+ * <p>A context may update its mappings dynamically. When doing so, {@link InvalidationListener InvalidationListeners}
+ * should be invoked by calling {@link #notifyListeners()}.</p>
+ * 
+ * @see I18n
+ * 
  * @since   0.1.0
  *
  * @author  Leon Linhart
