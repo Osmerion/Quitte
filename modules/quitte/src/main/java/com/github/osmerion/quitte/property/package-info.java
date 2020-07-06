@@ -28,7 +28,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
- @NonNullApi
+/** Provides classes and interfaces for properties. */
+@NonNullApi
 package com.github.osmerion.quitte.property;
 
 import com.github.osmerion.quitte.internal.NonNullApi;

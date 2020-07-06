@@ -28,6 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+/** Defines APIs for observable properties and expressions, and observable collections. */
 module com.github.osmerion.quitte {
 
     requires static jsr305;
@@ -40,6 +41,10 @@ module com.github.osmerion.quitte {
     exports com.github.osmerion.quitte.value;
     exports com.github.osmerion.quitte.value.change;
 
-    exports com.github.osmerion.quitte.internal to com.github.osmerion.quitte.i18n;
+    exports com.github.osmerion.quitte.internal to
+        com.github.osmerion.quitte.holo,
+        com.github.osmerion.quitte.i18n;
+
+    exports com.github.osmerion.quitte.internal.addon to com.github.osmerion.quitte.holo;
 
 }
