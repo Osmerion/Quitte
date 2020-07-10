@@ -51,16 +51,7 @@ public interface ReadableByteProperty extends ReadableProperty<Byte>, Observable
      * @since   0.1.0
      */
     default ReadableByteProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyByteProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyByteProperty);
+        return (!(this instanceof ReadOnlyByteProperty) ? new ReadOnlyByteProperty(this) : this);
     }
 
 }

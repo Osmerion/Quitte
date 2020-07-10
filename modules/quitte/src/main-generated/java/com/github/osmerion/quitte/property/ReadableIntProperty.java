@@ -51,16 +51,7 @@ public interface ReadableIntProperty extends ReadableProperty<Integer>, Observab
      * @since   0.1.0
      */
     default ReadableIntProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyIntProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyIntProperty);
+        return (!(this instanceof ReadOnlyIntProperty) ? new ReadOnlyIntProperty(this) : this);
     }
 
 }

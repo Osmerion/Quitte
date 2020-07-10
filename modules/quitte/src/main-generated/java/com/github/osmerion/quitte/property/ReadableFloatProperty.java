@@ -51,16 +51,7 @@ public interface ReadableFloatProperty extends ReadableProperty<Float>, Observab
      * @since   0.1.0
      */
     default ReadableFloatProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyFloatProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyFloatProperty);
+        return (!(this instanceof ReadOnlyFloatProperty) ? new ReadOnlyFloatProperty(this) : this);
     }
 
 }

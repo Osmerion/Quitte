@@ -51,16 +51,7 @@ public interface ReadableBoolProperty extends ReadableProperty<Boolean>, Observa
      * @since   0.1.0
      */
     default ReadableBoolProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyBoolProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyBoolProperty);
+        return (!(this instanceof ReadOnlyBoolProperty) ? new ReadOnlyBoolProperty(this) : this);
     }
 
 }

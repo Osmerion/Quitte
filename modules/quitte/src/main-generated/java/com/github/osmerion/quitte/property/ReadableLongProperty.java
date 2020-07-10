@@ -51,16 +51,7 @@ public interface ReadableLongProperty extends ReadableProperty<Long>, Observable
      * @since   0.1.0
      */
     default ReadableLongProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyLongProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyLongProperty);
+        return (!(this instanceof ReadOnlyLongProperty) ? new ReadOnlyLongProperty(this) : this);
     }
 
 }

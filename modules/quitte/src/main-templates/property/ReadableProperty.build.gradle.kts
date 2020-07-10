@@ -61,16 +61,7 @@ public interface Readable${type.abbrevName}Property$typeParams extends ReadableP
      * @since   0.1.0
      */
     default Readable${type.abbrevName}Property$typeParams asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnly${type.abbrevName}Property${if (type === Type.OBJECT) "<>" else ""}(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnly${type.abbrevName}Property);
+        return (!(this instanceof ReadOnly${type.abbrevName}Property) ? new ReadOnly${type.abbrevName}Property${if (type === Type.OBJECT) "<>" else ""}(this) : this);
     }
 
 }"""

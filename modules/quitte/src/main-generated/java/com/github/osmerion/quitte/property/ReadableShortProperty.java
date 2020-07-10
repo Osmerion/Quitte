@@ -51,16 +51,7 @@ public interface ReadableShortProperty extends ReadableProperty<Short>, Observab
      * @since   0.1.0
      */
     default ReadableShortProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyShortProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyShortProperty);
+        return (!(this instanceof ReadOnlyShortProperty) ? new ReadOnlyShortProperty(this) : this);
     }
 
 }

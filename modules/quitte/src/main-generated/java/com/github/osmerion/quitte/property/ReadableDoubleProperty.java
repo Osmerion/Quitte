@@ -51,16 +51,7 @@ public interface ReadableDoubleProperty extends ReadableProperty<Double>, Observ
      * @since   0.1.0
      */
     default ReadableDoubleProperty asReadOnlyProperty() {
-        return (this.isWritable() ? new ReadOnlyDoubleProperty(this) : this);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    default boolean isWritable() {
-        return !(this instanceof ReadOnlyDoubleProperty);
+        return (!(this instanceof ReadOnlyDoubleProperty) ? new ReadOnlyDoubleProperty(this) : this);
     }
 
 }
