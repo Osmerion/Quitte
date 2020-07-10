@@ -118,7 +118,6 @@ publishing {
 
             pom {
                 name.set(project.name)
-                description.set("Internationalization capabilities for seamless interoperability with Quitte observables.")
                 packaging = "jar"
                 url.set("https://github.com/Osmerion/Quitte")
 
