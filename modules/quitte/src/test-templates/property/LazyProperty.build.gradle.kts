@@ -56,6 +56,118 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#asReadOnlyProperty                                                                           *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO implement
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isBound                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty${'$'}isBound_Initial() {
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty${'$'}isBound_BoundProperty() {
+        Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        assertFalse(property.isBound());
+
+        property.bindTo(other);
+        assertTrue(property.isBound());
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty${'$'}isBound_ReadOnlyProperty() {
+        Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isWritable                                                                                   *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty${'$'}isWritable_Initial() {
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty${'$'}isWritable_BoundProperty() {
+        Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        assertTrue(property.isWritable());
+
+        property.bindTo(other);
+        assertFalse(property.isWritable());
+
+        property.unbind();
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty${'$'}isWritable_ReadOnlyProperty() {
+        Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#addBoxedListener                                                                              *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO come up with proper tests
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#get                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue${'$'}get_Initial() {
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+    }
+
+    @Test
+    public void test_ObservableValue${'$'}get_SetGet() {
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#getValue                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue${'$'}getValue_Initial() {
+        Lazy${type.abbrevName}Property property = new Lazy${type.abbrevName}Property(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.getValue());
+    }
+
+    @Test
+    public void test_ObservableValue${'$'}getValue_SetGet() {
+        Lazy${type.abbrevName}Property property = new Lazy${type.abbrevName}Property(TestValues.${type.abbrevName}Value_L);
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.getValue());
+
+        property.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.getValue());
+    }
+
+    // TODO reconsider all tests below
+
     @Test
     public void testInitialGetConsistencyForPrimaryCtor() {
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);

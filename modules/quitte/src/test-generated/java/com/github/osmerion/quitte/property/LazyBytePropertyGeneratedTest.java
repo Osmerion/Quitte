@@ -48,6 +48,118 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public final class LazyBytePropertyGeneratedTest {
 
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#asReadOnlyProperty                                                                           *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO implement
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isBound                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty$isBound_Initial() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty$isBound_BoundProperty() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertFalse(property.isBound());
+
+        property.bindTo(other);
+        assertTrue(property.isBound());
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty$isBound_ReadOnlyProperty() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isWritable                                                                                   *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty$isWritable_Initial() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty$isWritable_BoundProperty() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertTrue(property.isWritable());
+
+        property.bindTo(other);
+        assertFalse(property.isWritable());
+
+        property.unbind();
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty$isWritable_ReadOnlyProperty() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#addBoxedListener                                                                              *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO come up with proper tests
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#get                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue$get_Initial() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.get());
+    }
+
+    @Test
+    public void test_ObservableValue$get_SetGet() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertEquals(TestValues.ByteValue_L, property.get());
+
+        property.set(TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.get());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#getValue                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue$getValue_Initial() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.getValue());
+    }
+
+    @Test
+    public void test_ObservableValue$getValue_SetGet() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertEquals(TestValues.ByteValue_L, property.getValue());
+
+        property.set(TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.getValue());
+    }
+
+    // TODO reconsider all tests below
+
     @Test
     public void testInitialGetConsistencyForPrimaryCtor() {
         var property = new LazyByteProperty(TestValues.ByteValue_H);

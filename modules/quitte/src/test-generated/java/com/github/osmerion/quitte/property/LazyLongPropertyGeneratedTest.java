@@ -48,6 +48,118 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public final class LazyLongPropertyGeneratedTest {
 
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#asReadOnlyProperty                                                                           *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO implement
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isBound                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty$isBound_Initial() {
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty$isBound_BoundProperty() {
+        LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
+        assertFalse(property.isBound());
+
+        property.bindTo(other);
+        assertTrue(property.isBound());
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty$isBound_ReadOnlyProperty() {
+        LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
+        ReadableLongProperty property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isWritable                                                                                   *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty$isWritable_Initial() {
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty$isWritable_BoundProperty() {
+        LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
+        assertTrue(property.isWritable());
+
+        property.bindTo(other);
+        assertFalse(property.isWritable());
+
+        property.unbind();
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty$isWritable_ReadOnlyProperty() {
+        LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
+        ReadableLongProperty property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#addBoxedListener                                                                              *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO come up with proper tests
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#get                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue$get_Initial() {
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, property.get());
+    }
+
+    @Test
+    public void test_ObservableValue$get_SetGet() {
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
+        assertEquals(TestValues.LongValue_L, property.get());
+
+        property.set(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, property.get());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#getValue                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue$getValue_Initial() {
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, property.getValue());
+    }
+
+    @Test
+    public void test_ObservableValue$getValue_SetGet() {
+        LazyLongProperty property = new LazyLongProperty(TestValues.LongValue_L);
+        assertEquals(TestValues.LongValue_L, property.getValue());
+
+        property.set(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, property.getValue());
+    }
+
+    // TODO reconsider all tests below
+
     @Test
     public void testInitialGetConsistencyForPrimaryCtor() {
         var property = new LazyLongProperty(TestValues.LongValue_H);

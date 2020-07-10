@@ -48,20 +48,117 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public final class SimpleBoolPropertyGeneratedTest {
 
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#asReadOnlyProperty                                                                           *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO implement
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isBound                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
     @Test
-    public void testInitialGetConsistency() {
+    public void test_ReadableProperty$isBound_Initial() {
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty$isBound_BoundProperty() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
+        assertFalse(property.isBound());
+
+        property.bindTo(other);
+        assertTrue(property.isBound());
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test_ReadableProperty$isBound_ReadOnlyProperty() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ReadableProperty#isWritable                                                                                   *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ReadableProperty$isWritable_Initial() {
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty$isWritable_BoundProperty() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
+        assertTrue(property.isWritable());
+
+        property.bindTo(other);
+        assertFalse(property.isWritable());
+
+        property.unbind();
+        assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void test_ReadableProperty$isWritable_ReadOnlyProperty() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other.asReadOnlyProperty();
+        assertFalse(property.isWritable());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#addBoxedListener                                                                              *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    // TODO come up with proper tests
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#get                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue$get_Initial() {
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_H);
         assertEquals(TestValues.BoolValue_H, property.get());
     }
 
     @Test
-    public void testSetGetConsistency() {
+    public void test_ObservableValue$get_SetGet() {
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         assertEquals(TestValues.BoolValue_L, property.get());
 
         property.set(TestValues.BoolValue_H);
         assertEquals(TestValues.BoolValue_H, property.get());
     }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * ObservableValue#getValue                                                                                      *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_ObservableValue$getValue_Initial() {
+        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_H);
+        assertEquals(TestValues.IntValue_H, property.getValue());
+    }
+
+    @Test
+    public void test_ObservableValue$getValue_SetGet() {
+        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
+        assertEquals(TestValues.IntValue_L, property.getValue());
+
+        property.set(TestValues.IntValue_H);
+        assertEquals(TestValues.IntValue_H, property.getValue());
+    }
+
+    // TODO reconsider all tests below
 
     @Test
     public void testSetReturn() {
