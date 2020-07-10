@@ -190,6 +190,16 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
             this.depth--;
 
             if (this.depth == 0) {
+                for (var listener : AbstractObservableSet.this.invalidationListeners) {
+                    if (listener.isInvalid()) {
+                        AbstractObservableSet.this.invalidationListeners.remove(listener);
+                        continue;
+                    }
+
+                    listener.onInvalidation(AbstractObservableSet.this);
+                    if (listener.isInvalid()) AbstractObservableSet.this.invalidationListeners.remove(listener);
+                }
+
                 AbstractObservableSet.this.changeBuilder = null;
                 if (this.added == null && this.removed == null) return;
 
@@ -203,16 +213,6 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
 
                     listener.onChanged(change);
                     if (listener.isInvalid()) AbstractObservableSet.this.changeListeners.remove(listener);
-                }
-
-                for (var listener : AbstractObservableSet.this.invalidationListeners) {
-                    if (listener.isInvalid()) {
-                        AbstractObservableSet.this.invalidationListeners.remove(listener);
-                        continue;
-                    }
-
-                    listener.onInvalidation(AbstractObservableSet.this);
-                    if (listener.isInvalid()) AbstractObservableSet.this.invalidationListeners.remove(listener);
                 }
             }
         }
