@@ -210,6 +210,16 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
+    public final boolean isWritable() {
+        return !this.isBound();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    @Override
     public final synchronized void unbind() {
         if (this.binding == null) throw new IllegalStateException();
 
