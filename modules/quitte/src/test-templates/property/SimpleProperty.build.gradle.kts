@@ -166,13 +166,31 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
         assertEquals(TestValues.IntValue_H, property.getValue());
     }
 
-    // TODO reconsider all tests below
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#set                                                                                             *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
-    public void testSetReturn() {
+    public void test_WritableValue${'$'}set_ThrowForBound() {
+        Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        assertEquals(TestValues.${type.abbrevName}Value_L, property.set(TestValues.${type.abbrevName}Value_H));
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.${type.abbrevName}Value_H));
     }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#setValue                                                                                        *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue${'$'}setValue_ThrowForBound() {
+        Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.${type.abbrevName}Value_H));
+    }
+
+    // TODO reconsider all tests below
 
     @Test
     public void testChangeListenerBoxAttachDetach() {

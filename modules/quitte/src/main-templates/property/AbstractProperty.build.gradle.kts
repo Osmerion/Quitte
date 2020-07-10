@@ -233,17 +233,14 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    public final ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    @Override
+    public final void set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        return this.setInternal(value);
-    }
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    private ${type.raw} setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
-        var prev = this.getImpl();
-        if (this.setImplDeferrable(value)) this.invalidate();
 
-        return prev;
+        this.setInternal(value);
+    }
+    private void setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+        if (this.setImplDeferrable(value)) this.invalidate();
     }
 
     /**

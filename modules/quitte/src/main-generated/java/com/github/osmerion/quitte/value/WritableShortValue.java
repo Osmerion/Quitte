@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableShortValue extends WritableValue<Short>, ObservableShortValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    short set(short value);
+    void set(short value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableShortValue extends WritableValue<Short>, ObservableShor
      * @since   0.1.0
      */
     @Override
-    default Short setValue(@Nullable Short value) {
-        return this.set(value != null ? value : 0);
+    default void setValue(@Nullable Short value) {
+        this.set(value != null ? value : 0);
     }
 
 }

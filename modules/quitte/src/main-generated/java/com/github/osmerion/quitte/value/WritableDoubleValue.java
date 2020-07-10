@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableDoubleValue extends WritableValue<Double>, ObservableDoubleValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    double set(double value);
+    void set(double value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableDoubleValue extends WritableValue<Double>, ObservableDo
      * @since   0.1.0
      */
     @Override
-    default Double setValue(@Nullable Double value) {
-        return this.set(value != null ? value : 0.0D);
+    default void setValue(@Nullable Double value) {
+        this.set(value != null ? value : 0.0D);
     }
 
 }

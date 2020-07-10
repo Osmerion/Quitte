@@ -158,13 +158,31 @@ public final class SimpleBoolPropertyGeneratedTest {
         assertEquals(TestValues.IntValue_H, property.getValue());
     }
 
-    // TODO reconsider all tests below
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#set                                                                                             *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
-    public void testSetReturn() {
+    public void test_WritableValue$set_ThrowForBound() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
-        assertEquals(TestValues.BoolValue_L, property.set(TestValues.BoolValue_H));
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.BoolValue_H));
     }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#setValue                                                                                        *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$setValue_ThrowForBound() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.BoolValue_H));
+    }
+
+    // TODO reconsider all tests below
 
     @Test
     public void testChangeListenerBoxAttachDetach() {

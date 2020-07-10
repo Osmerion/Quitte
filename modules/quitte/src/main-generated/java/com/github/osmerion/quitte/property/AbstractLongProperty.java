@@ -299,16 +299,13 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final long set(long value) {
+    public final void set(long value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        return this.setInternal(value);
+
+        this.setInternal(value);
     }
-
-    private long setInternal(long value) {
-        var prev = this.getImpl();
+    private void setInternal(long value) {
         if (this.setImplDeferrable(value)) this.invalidate();
-
-        return prev;
     }
 
     /**

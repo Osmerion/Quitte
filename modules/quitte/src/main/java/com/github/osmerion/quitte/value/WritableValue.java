@@ -46,18 +46,15 @@ import javax.annotation.Nullable;
 public interface WritableValue<T> extends ObservableValue<T> {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * <p><b>Specialized versions of this method should be used whenever possible.</b> (e.g.:
      * {@link WritableIntValue#set})</p>
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    @Nullable
-    T setValue(@Nullable T value);
+    void setValue(@Nullable T value);
 
 }

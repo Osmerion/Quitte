@@ -301,18 +301,13 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    @Nullable
-    public final T set(@Nullable T value) {
+    public final void set(@Nullable T value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        return this.setInternal(value);
+
+        this.setInternal(value);
     }
-
-    @Nullable
-    private T setInternal(@Nullable T value) {
-        var prev = this.getImpl();
+    private void setInternal(@Nullable T value) {
         if (this.setImplDeferrable(value)) this.invalidate();
-
-        return prev;
     }
 
     /**

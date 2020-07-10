@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableBoolValue extends WritableValue<Boolean>, ObservableBoolValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    boolean set(boolean value);
+    void set(boolean value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableBoolValue extends WritableValue<Boolean>, ObservableBoo
      * @since   0.1.0
      */
     @Override
-    default Boolean setValue(@Nullable Boolean value) {
-        return this.set(value != null ? value : false);
+    default void setValue(@Nullable Boolean value) {
+        this.set(value != null ? value : false);
     }
 
 }

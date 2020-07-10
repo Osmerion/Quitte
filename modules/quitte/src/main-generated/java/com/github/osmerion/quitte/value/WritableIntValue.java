@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableIntValue extends WritableValue<Integer>, ObservableIntValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    int set(int value);
+    void set(int value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableIntValue extends WritableValue<Integer>, ObservableIntV
      * @since   0.1.0
      */
     @Override
-    default Integer setValue(@Nullable Integer value) {
-        return this.set(value != null ? value : 0);
+    default void setValue(@Nullable Integer value) {
+        this.set(value != null ? value : 0);
     }
 
 }

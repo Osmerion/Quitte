@@ -139,6 +139,15 @@ public final class LazyDoublePropertyGeneratedTest {
         assertEquals(TestValues.DoubleValue_H, property.get());
     }
 
+    @Test
+    public void test_ObservableValue$get_SetDeferredGet() {
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        assertEquals(TestValues.DoubleValue_L, property.getValue());
+
+        property.set(() -> TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, property.getValue());
+    }
+
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ObservableValue#getValue                                                                                      *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
@@ -158,6 +167,47 @@ public final class LazyDoublePropertyGeneratedTest {
         assertEquals(TestValues.DoubleValue_H, property.getValue());
     }
 
+    @Test
+    public void test_ObservableValue$getValue_SetDeferredGet() {
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        assertEquals(TestValues.DoubleValue_L, property.getValue());
+
+        property.set(() -> TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, property.getValue());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#set                                                                                             *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$set_ThrowForBound() {
+        LazyDoubleProperty other = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.DoubleValue_H));
+    }
+
+    @Test
+    public void test_WritableValue$setDeferred_ThrowForBound() {
+        LazyDoubleProperty other = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(() -> TestValues.DoubleValue_H));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#setValue                                                                                        *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$setValue_ThrowForBound() {
+        LazyDoubleProperty other = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        LazyDoubleProperty property = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.DoubleValue_H));
+    }
+
     // TODO reconsider all tests below
 
     @Test
@@ -174,22 +224,6 @@ public final class LazyDoublePropertyGeneratedTest {
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
         assertEquals(TestValues.DoubleValue_H, property.get());
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
-    }
-
-    @Test
-    public void testSetReturnForPrimaryCtor() {
-        var property = new LazyDoubleProperty(TestValues.DoubleValue_H);
-        assertEquals(LazyValue.State.INITIALIZED, property.getState());
-        assertEquals(TestValues.DoubleValue_H, property.set(TestValues.DoubleValue_L));
-        assertEquals(LazyValue.State.INVALID, property.getState());
-    }
-
-    @Test
-    public void testSetReturnForLazyInitialization() {
-        var property = new LazyDoubleProperty(() -> TestValues.DoubleValue_H);
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
-        assertEquals(TestValues.DoubleValue_N, property.set(TestValues.DoubleValue_L));
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
     }
 
     @Test

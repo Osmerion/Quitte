@@ -56,15 +56,13 @@ import javax.annotation.Nullable;
 public interface Writable${type.abbrevName}Value$typeParams extends WritableValue<${type.box}>, Observable${type.abbrevName}Value$typeParams {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    ${type.raw} set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
+    void set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
     /**
      * {@inheritDoc}
@@ -72,8 +70,8 @@ public interface Writable${type.abbrevName}Value$typeParams extends WritableValu
      * @since   0.1.0
      */
     @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    default ${type.box} setValue(@Nullable ${type.box} value) {
-        return this.set(${if (type === Type.OBJECT) "value" else "value != null ? value : ${type.default}"});
+    default void setValue(@Nullable ${type.box} value) {
+        this.set(${if (type === Type.OBJECT) "value" else "value != null ? value : ${type.default}"});
     }
 
 }"""

@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableFloatValue extends WritableValue<Float>, ObservableFloatValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    float set(float value);
+    void set(float value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableFloatValue extends WritableValue<Float>, ObservableFloa
      * @since   0.1.0
      */
     @Override
-    default Float setValue(@Nullable Float value) {
-        return this.set(value != null ? value : 0.0F);
+    default void setValue(@Nullable Float value) {
+        this.set(value != null ? value : 0.0F);
     }
 
 }

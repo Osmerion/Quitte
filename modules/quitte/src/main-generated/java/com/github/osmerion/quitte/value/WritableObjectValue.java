@@ -46,16 +46,14 @@ import javax.annotation.Nullable;
 public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObjectValue<T> {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
-     *
-     * @return  the previous value
      *
      * @since   0.1.0
      */
     @Nullable
-    T set(@Nullable T value);
+    void set(@Nullable T value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObje
      */
     @Override
     @Nullable
-    default T setValue(@Nullable T value) {
-        return this.set(value);
+    default void setValue(@Nullable T value) {
+        this.set(value);
     }
 
 }

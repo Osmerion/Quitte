@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableLongValue extends WritableValue<Long>, ObservableLongValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    long set(long value);
+    void set(long value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableLongValue extends WritableValue<Long>, ObservableLongVa
      * @since   0.1.0
      */
     @Override
-    default Long setValue(@Nullable Long value) {
-        return this.set(value != null ? value : 0L);
+    default void setValue(@Nullable Long value) {
+        this.set(value != null ? value : 0L);
     }
 
 }

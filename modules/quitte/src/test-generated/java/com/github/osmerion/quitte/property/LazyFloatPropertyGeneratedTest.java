@@ -139,6 +139,15 @@ public final class LazyFloatPropertyGeneratedTest {
         assertEquals(TestValues.FloatValue_H, property.get());
     }
 
+    @Test
+    public void test_ObservableValue$get_SetDeferredGet() {
+        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
+        assertEquals(TestValues.FloatValue_L, property.getValue());
+
+        property.set(() -> TestValues.FloatValue_H);
+        assertEquals(TestValues.FloatValue_H, property.getValue());
+    }
+
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ObservableValue#getValue                                                                                      *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
@@ -158,6 +167,47 @@ public final class LazyFloatPropertyGeneratedTest {
         assertEquals(TestValues.FloatValue_H, property.getValue());
     }
 
+    @Test
+    public void test_ObservableValue$getValue_SetDeferredGet() {
+        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
+        assertEquals(TestValues.FloatValue_L, property.getValue());
+
+        property.set(() -> TestValues.FloatValue_H);
+        assertEquals(TestValues.FloatValue_H, property.getValue());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#set                                                                                             *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$set_ThrowForBound() {
+        LazyFloatProperty other = new LazyFloatProperty(TestValues.FloatValue_L);
+        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.FloatValue_H));
+    }
+
+    @Test
+    public void test_WritableValue$setDeferred_ThrowForBound() {
+        LazyFloatProperty other = new LazyFloatProperty(TestValues.FloatValue_L);
+        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(() -> TestValues.FloatValue_H));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#setValue                                                                                        *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$setValue_ThrowForBound() {
+        LazyFloatProperty other = new LazyFloatProperty(TestValues.FloatValue_L);
+        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.FloatValue_H));
+    }
+
     // TODO reconsider all tests below
 
     @Test
@@ -174,22 +224,6 @@ public final class LazyFloatPropertyGeneratedTest {
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
         assertEquals(TestValues.FloatValue_H, property.get());
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
-    }
-
-    @Test
-    public void testSetReturnForPrimaryCtor() {
-        var property = new LazyFloatProperty(TestValues.FloatValue_H);
-        assertEquals(LazyValue.State.INITIALIZED, property.getState());
-        assertEquals(TestValues.FloatValue_H, property.set(TestValues.FloatValue_L));
-        assertEquals(LazyValue.State.INVALID, property.getState());
-    }
-
-    @Test
-    public void testSetReturnForLazyInitialization() {
-        var property = new LazyFloatProperty(() -> TestValues.FloatValue_H);
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
-        assertEquals(TestValues.FloatValue_N, property.set(TestValues.FloatValue_L));
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
     }
 
     @Test

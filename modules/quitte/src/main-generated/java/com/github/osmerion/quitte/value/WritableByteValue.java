@@ -46,15 +46,13 @@ import javax.annotation.Nullable;
 public interface WritableByteValue extends WritableValue<Byte>, ObservableByteValue {
 
     /**
-     * Updates the value represented by this object and returns the previous value.
+     * Updates the value represented by this object.
      *
      * @param value the new value
      *
-     * @return  the previous value
-     *
      * @since   0.1.0
      */
-    byte set(byte value);
+    void set(byte value);
 
     /**
      * {@inheritDoc}
@@ -64,8 +62,8 @@ public interface WritableByteValue extends WritableValue<Byte>, ObservableByteVa
      * @since   0.1.0
      */
     @Override
-    default Byte setValue(@Nullable Byte value) {
-        return this.set(value != null ? value : 0);
+    default void setValue(@Nullable Byte value) {
+        this.set(value != null ? value : 0);
     }
 
 }

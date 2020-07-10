@@ -299,16 +299,13 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final double set(double value) {
+    public final void set(double value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        return this.setInternal(value);
+
+        this.setInternal(value);
     }
-
-    private double setInternal(double value) {
-        var prev = this.getImpl();
+    private void setInternal(double value) {
         if (this.setImplDeferrable(value)) this.invalidate();
-
-        return prev;
     }
 
     /**

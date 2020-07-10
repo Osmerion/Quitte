@@ -139,6 +139,15 @@ public final class LazyBytePropertyGeneratedTest {
         assertEquals(TestValues.ByteValue_H, property.get());
     }
 
+    @Test
+    public void test_ObservableValue$get_SetDeferredGet() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertEquals(TestValues.ByteValue_L, property.getValue());
+
+        property.set(() -> TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.getValue());
+    }
+
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ObservableValue#getValue                                                                                      *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
@@ -158,6 +167,47 @@ public final class LazyBytePropertyGeneratedTest {
         assertEquals(TestValues.ByteValue_H, property.getValue());
     }
 
+    @Test
+    public void test_ObservableValue$getValue_SetDeferredGet() {
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        assertEquals(TestValues.ByteValue_L, property.getValue());
+
+        property.set(() -> TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.getValue());
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#set                                                                                             *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$set_ThrowForBound() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.ByteValue_H));
+    }
+
+    @Test
+    public void test_WritableValue$setDeferred_ThrowForBound() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(() -> TestValues.ByteValue_H));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableValue#setValue                                                                                        *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableValue$setValue_ThrowForBound() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        property.bindTo(other);
+        assertThrows(IllegalStateException.class, () -> property.set(TestValues.ByteValue_H));
+    }
+
     // TODO reconsider all tests below
 
     @Test
@@ -174,22 +224,6 @@ public final class LazyBytePropertyGeneratedTest {
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
         assertEquals(TestValues.ByteValue_H, property.get());
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
-    }
-
-    @Test
-    public void testSetReturnForPrimaryCtor() {
-        var property = new LazyByteProperty(TestValues.ByteValue_H);
-        assertEquals(LazyValue.State.INITIALIZED, property.getState());
-        assertEquals(TestValues.ByteValue_H, property.set(TestValues.ByteValue_L));
-        assertEquals(LazyValue.State.INVALID, property.getState());
-    }
-
-    @Test
-    public void testSetReturnForLazyInitialization() {
-        var property = new LazyByteProperty(() -> TestValues.ByteValue_H);
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
-        assertEquals(TestValues.ByteValue_N, property.set(TestValues.ByteValue_L));
-        assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
     }
 
     @Test

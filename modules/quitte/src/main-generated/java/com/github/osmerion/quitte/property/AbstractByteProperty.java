@@ -299,16 +299,13 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final byte set(byte value) {
+    public final void set(byte value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
-        return this.setInternal(value);
+
+        this.setInternal(value);
     }
-
-    private byte setInternal(byte value) {
-        var prev = this.getImpl();
+    private void setInternal(byte value) {
         if (this.setImplDeferrable(value)) this.invalidate();
-
-        return prev;
     }
 
     /**
