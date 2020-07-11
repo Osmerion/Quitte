@@ -36,8 +36,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used internally to mark the primary constructor of
- * property classes.
+ * This annotation is used internally to mark the primary constructor of property classes.
  *
  * @author  Leon Linhart
  */
