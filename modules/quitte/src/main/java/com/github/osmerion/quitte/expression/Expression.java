@@ -34,8 +34,7 @@ import com.github.osmerion.quitte.value.ObservableValue;
 
 /**
  * An expression wraps an observable value which is derived from some state. Additionally, an expression's value may not
- * be set. Expressions typically represent the result of a function applied to one or more other observable values.
- * Thus, it is commonly said that an expression <em>yields</em> a value.
+ * be set. Expressions typically yield the result of a function applied to one or more other observable values.
  *
  * @param <T>   the type of the value yielded by the expression
  *
