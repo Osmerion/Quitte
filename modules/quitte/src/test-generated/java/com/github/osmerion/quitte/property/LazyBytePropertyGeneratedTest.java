@@ -185,6 +185,20 @@ public final class LazyBytePropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableProperty#bindTo                                                                                       *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableProperty$bindTo_ThrowForBound() {
+        LazyByteProperty other1 = new LazyByteProperty(TestValues.ByteValue_L);
+        LazyByteProperty property = new LazyByteProperty(TestValues.ByteValue_L);
+        property.bindTo(other1);
+
+        LazyByteProperty other2 = new LazyByteProperty(TestValues.ByteValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * WritableValue#set                                                                                             *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 

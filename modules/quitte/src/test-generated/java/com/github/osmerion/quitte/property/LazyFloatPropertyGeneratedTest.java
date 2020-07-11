@@ -185,6 +185,20 @@ public final class LazyFloatPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableProperty#bindTo                                                                                       *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableProperty$bindTo_ThrowForBound() {
+        LazyFloatProperty other1 = new LazyFloatProperty(TestValues.FloatValue_L);
+        LazyFloatProperty property = new LazyFloatProperty(TestValues.FloatValue_L);
+        property.bindTo(other1);
+
+        LazyFloatProperty other2 = new LazyFloatProperty(TestValues.FloatValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * WritableValue#set                                                                                             *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 

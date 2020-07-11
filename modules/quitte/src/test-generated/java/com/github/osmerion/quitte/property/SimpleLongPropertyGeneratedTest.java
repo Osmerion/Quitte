@@ -167,6 +167,20 @@ public final class SimpleLongPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableProperty#bindTo                                                                                       *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableProperty$bindTo_ThrowForBound() {
+        SimpleLongProperty other1 = new SimpleLongProperty(TestValues.LongValue_L);
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
+        property.bindTo(other1);
+
+        SimpleLongProperty other2 = new SimpleLongProperty(TestValues.LongValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * WritableValue#set                                                                                             *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 

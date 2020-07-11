@@ -193,6 +193,20 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * WritableProperty#bindTo                                                                                       *
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test_WritableProperty${'$'}bindTo_ThrowForBound() {
+        Lazy${type.abbrevName}Property$typeParams other1 = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        property.bindTo(other1);
+
+        Lazy${type.abbrevName}Property$typeParams other2 = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2));
+    }
+
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * WritableValue#set                                                                                             *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
