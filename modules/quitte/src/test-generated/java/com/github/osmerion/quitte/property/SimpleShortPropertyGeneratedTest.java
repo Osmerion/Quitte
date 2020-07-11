@@ -52,7 +52,15 @@ public final class SimpleShortPropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_Get() {
+        SimpleShortProperty other = new SimpleShortProperty(TestValues.ShortValue_L);
+        ReadableShortProperty property = other.asReadOnlyProperty();
+        assertEquals(TestValues.ShortValue_L, property.get());
+
+        other.set(TestValues.ShortValue_H);
+        assertEquals(TestValues.ShortValue_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

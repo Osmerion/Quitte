@@ -60,7 +60,15 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty${'$'}asReadOnlyProperty_Get() {
+        Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+
+        other.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

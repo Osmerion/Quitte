@@ -52,7 +52,15 @@ public final class LazyLongPropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_Get() {
+        LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
+        ReadableLongProperty property = other.asReadOnlyProperty();
+        assertEquals(TestValues.LongValue_L, property.get());
+
+        other.set(TestValues.LongValue_H);
+        assertEquals(TestValues.LongValue_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

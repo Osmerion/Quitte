@@ -52,7 +52,15 @@ public final class SimpleBytePropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_Get() {
+        SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other.asReadOnlyProperty();
+        assertEquals(TestValues.ByteValue_L, property.get());
+
+        other.set(TestValues.ByteValue_H);
+        assertEquals(TestValues.ByteValue_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

@@ -52,7 +52,15 @@ public final class LazyBoolPropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_Get() {
+        LazyBoolProperty other = new LazyBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other.asReadOnlyProperty();
+        assertEquals(TestValues.BoolValue_L, property.get());
+
+        other.set(TestValues.BoolValue_H);
+        assertEquals(TestValues.BoolValue_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

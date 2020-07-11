@@ -52,7 +52,15 @@ public final class LazyDoublePropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_Get() {
+        LazyDoubleProperty other = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        ReadableDoubleProperty property = other.asReadOnlyProperty();
+        assertEquals(TestValues.DoubleValue_L, property.get());
+
+        other.set(TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

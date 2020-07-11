@@ -54,7 +54,15 @@ public final class SimpleObjectPropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_Get() {
+        SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        ReadableObjectProperty<Object> property = other.asReadOnlyProperty();
+        assertEquals(TestValues.ObjectValue_L, property.get());
+
+        other.set(TestValues.ObjectValue_H);
+        assertEquals(TestValues.ObjectValue_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *

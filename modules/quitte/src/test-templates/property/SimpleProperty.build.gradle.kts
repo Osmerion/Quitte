@@ -60,7 +60,15 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
      * ReadableProperty#asReadOnlyProperty                                                                           *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
-    // TODO implement
+    @Test
+    public void testReadableProperty${'$'}asReadOnlyProperty_Get() {
+        Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+
+        other.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+    }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
      * ReadableProperty#isBound                                                                                      *
