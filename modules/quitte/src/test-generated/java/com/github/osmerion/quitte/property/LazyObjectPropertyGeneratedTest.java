@@ -55,6 +55,13 @@ public final class LazyObjectPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyObjectProperty<Object> other = new LazyObjectProperty<>(TestValues.ObjectValue_L);
+        ReadableObjectProperty<Object> property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyObjectProperty<Object> other = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         ReadableObjectProperty<Object> property = other.asReadOnlyProperty();

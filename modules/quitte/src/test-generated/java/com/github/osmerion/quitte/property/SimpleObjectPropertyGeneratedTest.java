@@ -55,6 +55,13 @@ public final class SimpleObjectPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        ReadableObjectProperty<Object> property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         ReadableObjectProperty<Object> property = other.asReadOnlyProperty();

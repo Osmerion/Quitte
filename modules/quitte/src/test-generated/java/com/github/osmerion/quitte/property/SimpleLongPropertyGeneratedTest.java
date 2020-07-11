@@ -53,6 +53,13 @@ public final class SimpleLongPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleLongProperty other = new SimpleLongProperty(TestValues.LongValue_L);
+        ReadableLongProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleLongProperty other = new SimpleLongProperty(TestValues.LongValue_L);
         ReadableLongProperty property = other.asReadOnlyProperty();

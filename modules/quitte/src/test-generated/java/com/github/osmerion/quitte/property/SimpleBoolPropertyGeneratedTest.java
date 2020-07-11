@@ -53,6 +53,13 @@ public final class SimpleBoolPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
         ReadableBoolProperty property = other.asReadOnlyProperty();

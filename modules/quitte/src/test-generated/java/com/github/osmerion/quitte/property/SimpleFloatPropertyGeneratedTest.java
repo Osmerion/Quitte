@@ -53,6 +53,13 @@ public final class SimpleFloatPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleFloatProperty other = new SimpleFloatProperty(TestValues.FloatValue_L);
+        ReadableFloatProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleFloatProperty other = new SimpleFloatProperty(TestValues.FloatValue_L);
         ReadableFloatProperty property = other.asReadOnlyProperty();

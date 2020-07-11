@@ -53,6 +53,13 @@ public final class LazyDoublePropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyDoubleProperty other = new LazyDoubleProperty(TestValues.DoubleValue_L);
+        ReadableDoubleProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyDoubleProperty other = new LazyDoubleProperty(TestValues.DoubleValue_L);
         ReadableDoubleProperty property = other.asReadOnlyProperty();

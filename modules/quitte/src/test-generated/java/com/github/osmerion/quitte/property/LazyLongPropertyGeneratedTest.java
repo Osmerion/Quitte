@@ -53,6 +53,13 @@ public final class LazyLongPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
+        ReadableLongProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyLongProperty other = new LazyLongProperty(TestValues.LongValue_L);
         ReadableLongProperty property = other.asReadOnlyProperty();

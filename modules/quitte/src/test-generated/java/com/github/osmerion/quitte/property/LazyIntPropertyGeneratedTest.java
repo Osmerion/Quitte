@@ -53,6 +53,13 @@ public final class LazyIntPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyIntProperty other = new LazyIntProperty(TestValues.IntValue_L);
+        ReadableIntProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyIntProperty other = new LazyIntProperty(TestValues.IntValue_L);
         ReadableIntProperty property = other.asReadOnlyProperty();

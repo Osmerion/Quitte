@@ -53,6 +53,13 @@ public final class SimpleShortPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleShortProperty other = new SimpleShortProperty(TestValues.ShortValue_L);
+        ReadableShortProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleShortProperty other = new SimpleShortProperty(TestValues.ShortValue_L);
         ReadableShortProperty property = other.asReadOnlyProperty();

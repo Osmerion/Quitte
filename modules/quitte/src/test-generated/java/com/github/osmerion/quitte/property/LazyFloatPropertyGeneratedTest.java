@@ -53,6 +53,13 @@ public final class LazyFloatPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyFloatProperty other = new LazyFloatProperty(TestValues.FloatValue_L);
+        ReadableFloatProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyFloatProperty other = new LazyFloatProperty(TestValues.FloatValue_L);
         ReadableFloatProperty property = other.asReadOnlyProperty();

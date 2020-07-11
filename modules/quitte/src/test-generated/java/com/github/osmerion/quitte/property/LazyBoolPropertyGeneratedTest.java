@@ -53,6 +53,13 @@ public final class LazyBoolPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyBoolProperty other = new LazyBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyBoolProperty other = new LazyBoolProperty(TestValues.BoolValue_L);
         ReadableBoolProperty property = other.asReadOnlyProperty();

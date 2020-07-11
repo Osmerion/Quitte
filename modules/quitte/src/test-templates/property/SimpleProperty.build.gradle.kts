@@ -61,6 +61,13 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty${'$'}asReadOnlyProperty_NewInstanceAvoidance() {
+        Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty${'$'}asReadOnlyProperty_Get() {
         Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();

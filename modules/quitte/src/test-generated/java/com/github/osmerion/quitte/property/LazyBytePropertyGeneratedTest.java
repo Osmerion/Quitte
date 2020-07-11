@@ -53,6 +53,13 @@ public final class LazyBytePropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         LazyByteProperty other = new LazyByteProperty(TestValues.ByteValue_L);
         ReadableByteProperty property = other.asReadOnlyProperty();

@@ -53,6 +53,13 @@ public final class SimpleDoublePropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleDoubleProperty other = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        ReadableDoubleProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleDoubleProperty other = new SimpleDoubleProperty(TestValues.DoubleValue_L);
         ReadableDoubleProperty property = other.asReadOnlyProperty();

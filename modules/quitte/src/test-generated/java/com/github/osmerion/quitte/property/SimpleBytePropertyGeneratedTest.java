@@ -53,6 +53,13 @@ public final class SimpleBytePropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
         ReadableByteProperty property = other.asReadOnlyProperty();

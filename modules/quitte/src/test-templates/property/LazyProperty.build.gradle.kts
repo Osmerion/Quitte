@@ -61,6 +61,13 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty${'$'}asReadOnlyProperty_NewInstanceAvoidance() {
+        Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty${'$'}asReadOnlyProperty_Get() {
         Lazy${type.abbrevName}Property$typeParams other = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();

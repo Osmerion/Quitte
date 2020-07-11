@@ -53,6 +53,13 @@ public final class SimpleIntPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void testReadableProperty$asReadOnlyProperty_NewInstanceAvoidance() {
+        SimpleIntProperty other = new SimpleIntProperty(TestValues.IntValue_L);
+        ReadableIntProperty property = other.asReadOnlyProperty();
+        assertSame(property, property.asReadOnlyProperty());
+    }
+
+    @Test
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleIntProperty other = new SimpleIntProperty(TestValues.IntValue_L);
         ReadableIntProperty property = other.asReadOnlyProperty();
