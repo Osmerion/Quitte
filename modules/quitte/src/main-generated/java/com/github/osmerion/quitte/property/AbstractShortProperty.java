@@ -68,7 +68,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableValue<Short> observable) {
+    public final synchronized void bindToBoxing(ObservableValue<Short> observable) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new ShortBinding.Generic<>(this::onBindingInvalidated, observable, Objects::requireNonNull);
         this.onBindingInvalidated();
@@ -80,7 +80,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, Short> transform) {
+    public final synchronized <S> void bindToBoxing(ObservableValue<S> observable, Function<S, Short> transform) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new ShortBinding.Generic<>(this::onBindingInvalidated, observable, it -> Objects.requireNonNull(transform.apply(it)));
         this.onBindingInvalidated();

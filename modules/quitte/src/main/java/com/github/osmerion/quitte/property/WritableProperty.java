@@ -62,7 +62,7 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableValue<T> observable);
+    void bindToBoxing(ObservableValue<T> observable);
 
     /**
      * Binds this property to the given observable value.
@@ -83,7 +83,7 @@ public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableValue<S> observable, Function<S, T> transform);
+    <S> void bindToBoxing(ObservableValue<S> observable, Function<S, T> transform);
 
     /**
      * Unbinds this property.

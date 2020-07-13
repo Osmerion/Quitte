@@ -68,7 +68,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableValue<T> observable) {
+    public final synchronized void bindToBoxing(ObservableValue<T> observable) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new ObjectBinding.Generic<>(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
@@ -80,7 +80,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, T> transform) {
+    public final synchronized <S> void bindToBoxing(ObservableValue<S> observable, Function<S, T> transform) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new ObjectBinding.Generic<>(this::onBindingInvalidated, observable, transform::apply);
         this.onBindingInvalidated();

@@ -68,7 +68,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableValue<Double> observable) {
+    public final synchronized void bindToBoxing(ObservableValue<Double> observable) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new DoubleBinding.Generic<>(this::onBindingInvalidated, observable, Objects::requireNonNull);
         this.onBindingInvalidated();
@@ -80,7 +80,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, Double> transform) {
+    public final synchronized <S> void bindToBoxing(ObservableValue<S> observable, Function<S, Double> transform) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new DoubleBinding.Generic<>(this::onBindingInvalidated, observable, it -> Objects.requireNonNull(transform.apply(it)));
         this.onBindingInvalidated();

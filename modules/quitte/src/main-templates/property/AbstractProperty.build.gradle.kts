@@ -78,7 +78,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableValue<${type.box}> observable) {
+    public final synchronized void bindToBoxing(ObservableValue<${type.box}> observable) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new ${type.abbrevName}Binding.Generic<>(this::onBindingInvalidated, observable, ${if (type === Type.OBJECT) "it -> it" else "Objects::requireNonNull"});
         this.onBindingInvalidated();
@@ -90,7 +90,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
+    public final synchronized <S> void bindToBoxing(ObservableValue<S> observable, Function<S, ${type.box}> transform) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new ${type.abbrevName}Binding.Generic<>(this::onBindingInvalidated, observable, ${if (type === Type.OBJECT) "transform::apply" else "it -> Objects.requireNonNull(transform.apply(it))"});
         this.onBindingInvalidated();

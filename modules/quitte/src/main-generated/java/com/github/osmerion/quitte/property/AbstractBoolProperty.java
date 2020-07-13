@@ -68,7 +68,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableValue<Boolean> observable) {
+    public final synchronized void bindToBoxing(ObservableValue<Boolean> observable) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new BoolBinding.Generic<>(this::onBindingInvalidated, observable, Objects::requireNonNull);
         this.onBindingInvalidated();
@@ -80,7 +80,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableValue<S> observable, Function<S, Boolean> transform) {
+    public final synchronized <S> void bindToBoxing(ObservableValue<S> observable, Function<S, Boolean> transform) {
         if (this.binding != null) throw new IllegalStateException();
         this.binding = new BoolBinding.Generic<>(this::onBindingInvalidated, observable, it -> Objects.requireNonNull(transform.apply(it)));
         this.onBindingInvalidated();
