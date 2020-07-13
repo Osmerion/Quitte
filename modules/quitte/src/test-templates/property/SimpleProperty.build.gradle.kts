@@ -243,6 +243,27 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
         assertThrows(IllegalStateException.class, () -> property.set(TestValues.${type.abbrevName}Value_H));
     }
 
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * Other (Overloads, etc.)
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+${Type.values().joinToString(separator = "") { sourceType ->
+            val sourceTypeParams = if (sourceType === Type.OBJECT) "<Object>" else ""
+            val sourceTypeDiamond = if (sourceType === Type.OBJECT) "<>" else ""
+
+            """
+    @Test
+    public void test__Overloads$${sourceType.abbrevName}_bindTo() {
+        Simple${sourceType.abbrevName}Property$sourceTypeParams other1 = new Simple${sourceType.abbrevName}Property$sourceTypeDiamond(TestValues.${sourceType.abbrevName}Value_L);
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        property.bindTo(other1, ignore -> TestValues.${type.abbrevName}Value_H);
+
+        Simple${sourceType.abbrevName}Property$sourceTypeParams other2 = new Simple${sourceType.abbrevName}Property$sourceTypeDiamond(TestValues.${sourceType.abbrevName}Value_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.${type.abbrevName}Value_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+"""}}
     // TODO reconsider all tests below
 
     @Test

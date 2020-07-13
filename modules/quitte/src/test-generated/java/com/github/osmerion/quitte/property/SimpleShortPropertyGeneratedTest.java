@@ -235,6 +235,114 @@ public final class SimpleShortPropertyGeneratedTest {
         assertThrows(IllegalStateException.class, () -> property.set(TestValues.ShortValue_H));
     }
 
+    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
+     * Other (Overloads, etc.)
+    \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+    @Test
+    public void test__Overloads$Bool_bindTo() {
+        SimpleBoolProperty other1 = new SimpleBoolProperty(TestValues.BoolValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleBoolProperty other2 = new SimpleBoolProperty(TestValues.BoolValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Byte_bindTo() {
+        SimpleByteProperty other1 = new SimpleByteProperty(TestValues.ByteValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleByteProperty other2 = new SimpleByteProperty(TestValues.ByteValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Short_bindTo() {
+        SimpleShortProperty other1 = new SimpleShortProperty(TestValues.ShortValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleShortProperty other2 = new SimpleShortProperty(TestValues.ShortValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Int_bindTo() {
+        SimpleIntProperty other1 = new SimpleIntProperty(TestValues.IntValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleIntProperty other2 = new SimpleIntProperty(TestValues.IntValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Long_bindTo() {
+        SimpleLongProperty other1 = new SimpleLongProperty(TestValues.LongValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleLongProperty other2 = new SimpleLongProperty(TestValues.LongValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Float_bindTo() {
+        SimpleFloatProperty other1 = new SimpleFloatProperty(TestValues.FloatValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleFloatProperty other2 = new SimpleFloatProperty(TestValues.FloatValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Double_bindTo() {
+        SimpleDoubleProperty other1 = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleDoubleProperty other2 = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
+    @Test
+    public void test__Overloads$Object_bindTo() {
+        SimpleObjectProperty<Object> other1 = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        property.bindTo(other1, ignore -> TestValues.ShortValue_H);
+
+        SimpleObjectProperty<Object> other2 = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        assertThrows(IllegalStateException.class, () -> property.bindTo(other2, ignore -> TestValues.ShortValue_H));
+
+        property.unbind();
+        assertFalse(property.isBound());
+    }
+
     // TODO reconsider all tests below
 
     @Test
