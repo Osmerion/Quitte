@@ -63,10 +63,34 @@ public final class SimpleBytePropertyGeneratedTest {
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
         ReadableByteProperty property = other.asReadOnlyProperty();
-        assertEquals(TestValues.ByteValue_L, property.get());
+        assertEquals(other.get(), property.get());
 
         other.set(TestValues.ByteValue_H);
-        assertEquals(TestValues.ByteValue_H, property.get());
+        assertEquals(other.get(), property.get());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_GetValue() {
+        SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other.asReadOnlyProperty();
+        assertEquals(other.getValue(), property.getValue());
+
+        other.set(TestValues.ByteValue_H);
+        assertEquals(other.getValue(), property.getValue());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_IsBound() {
+        SimpleByteProperty other1 = new SimpleByteProperty(TestValues.ByteValue_L);
+        ReadableByteProperty property = other1.asReadOnlyProperty();
+        assertEquals(other1.isBound(), property.isBound());
+
+        SimpleByteProperty other2 = new SimpleByteProperty(TestValues.ByteValue_L);
+        other1.bindTo(other2);
+        assertEquals(other1.isBound(), property.isBound());
+
+        other1.unbind();
+        assertEquals(other1.isBound(), property.isBound());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

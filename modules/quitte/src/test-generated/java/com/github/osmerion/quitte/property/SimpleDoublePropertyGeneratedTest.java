@@ -63,10 +63,34 @@ public final class SimpleDoublePropertyGeneratedTest {
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleDoubleProperty other = new SimpleDoubleProperty(TestValues.DoubleValue_L);
         ReadableDoubleProperty property = other.asReadOnlyProperty();
-        assertEquals(TestValues.DoubleValue_L, property.get());
+        assertEquals(other.get(), property.get());
 
         other.set(TestValues.DoubleValue_H);
-        assertEquals(TestValues.DoubleValue_H, property.get());
+        assertEquals(other.get(), property.get());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_GetValue() {
+        SimpleDoubleProperty other = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        ReadableDoubleProperty property = other.asReadOnlyProperty();
+        assertEquals(other.getValue(), property.getValue());
+
+        other.set(TestValues.DoubleValue_H);
+        assertEquals(other.getValue(), property.getValue());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_IsBound() {
+        SimpleDoubleProperty other1 = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        ReadableDoubleProperty property = other1.asReadOnlyProperty();
+        assertEquals(other1.isBound(), property.isBound());
+
+        SimpleDoubleProperty other2 = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        other1.bindTo(other2);
+        assertEquals(other1.isBound(), property.isBound());
+
+        other1.unbind();
+        assertEquals(other1.isBound(), property.isBound());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

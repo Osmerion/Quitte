@@ -63,10 +63,34 @@ public final class SimpleBoolPropertyGeneratedTest {
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
         ReadableBoolProperty property = other.asReadOnlyProperty();
-        assertEquals(TestValues.BoolValue_L, property.get());
+        assertEquals(other.get(), property.get());
 
         other.set(TestValues.BoolValue_H);
-        assertEquals(TestValues.BoolValue_H, property.get());
+        assertEquals(other.get(), property.get());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_GetValue() {
+        SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other.asReadOnlyProperty();
+        assertEquals(other.getValue(), property.getValue());
+
+        other.set(TestValues.BoolValue_H);
+        assertEquals(other.getValue(), property.getValue());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_IsBound() {
+        SimpleBoolProperty other1 = new SimpleBoolProperty(TestValues.BoolValue_L);
+        ReadableBoolProperty property = other1.asReadOnlyProperty();
+        assertEquals(other1.isBound(), property.isBound());
+
+        SimpleBoolProperty other2 = new SimpleBoolProperty(TestValues.BoolValue_L);
+        other1.bindTo(other2);
+        assertEquals(other1.isBound(), property.isBound());
+
+        other1.unbind();
+        assertEquals(other1.isBound(), property.isBound());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

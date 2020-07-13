@@ -71,10 +71,34 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
     public void testReadableProperty${'$'}asReadOnlyProperty_Get() {
         Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
-        assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
+        assertEquals(other.get(), property.get());
 
         other.set(TestValues.${type.abbrevName}Value_H);
-        assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
+        assertEquals(other.get(), property.get());
+    }
+
+    @Test
+    public void testReadableProperty${'$'}asReadOnlyProperty_GetValue() {
+        Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other.asReadOnlyProperty();
+        assertEquals(other.getValue(), property.getValue());
+
+        other.set(TestValues.${type.abbrevName}Value_H);
+        assertEquals(other.getValue(), property.getValue());
+    }
+
+    @Test
+    public void testReadableProperty${'$'}asReadOnlyProperty_IsBound() {
+        Simple${type.abbrevName}Property$typeParams other1 = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        Readable${type.abbrevName}Property$typeParams property = other1.asReadOnlyProperty();
+        assertEquals(other1.isBound(), property.isBound());
+
+        Simple${type.abbrevName}Property$typeParams other2 = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
+        other1.bindTo(other2);
+        assertEquals(other1.isBound(), property.isBound());
+
+        other1.unbind();
+        assertEquals(other1.isBound(), property.isBound());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

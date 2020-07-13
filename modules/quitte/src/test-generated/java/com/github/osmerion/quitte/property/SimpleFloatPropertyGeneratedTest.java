@@ -63,10 +63,34 @@ public final class SimpleFloatPropertyGeneratedTest {
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleFloatProperty other = new SimpleFloatProperty(TestValues.FloatValue_L);
         ReadableFloatProperty property = other.asReadOnlyProperty();
-        assertEquals(TestValues.FloatValue_L, property.get());
+        assertEquals(other.get(), property.get());
 
         other.set(TestValues.FloatValue_H);
-        assertEquals(TestValues.FloatValue_H, property.get());
+        assertEquals(other.get(), property.get());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_GetValue() {
+        SimpleFloatProperty other = new SimpleFloatProperty(TestValues.FloatValue_L);
+        ReadableFloatProperty property = other.asReadOnlyProperty();
+        assertEquals(other.getValue(), property.getValue());
+
+        other.set(TestValues.FloatValue_H);
+        assertEquals(other.getValue(), property.getValue());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_IsBound() {
+        SimpleFloatProperty other1 = new SimpleFloatProperty(TestValues.FloatValue_L);
+        ReadableFloatProperty property = other1.asReadOnlyProperty();
+        assertEquals(other1.isBound(), property.isBound());
+
+        SimpleFloatProperty other2 = new SimpleFloatProperty(TestValues.FloatValue_L);
+        other1.bindTo(other2);
+        assertEquals(other1.isBound(), property.isBound());
+
+        other1.unbind();
+        assertEquals(other1.isBound(), property.isBound());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

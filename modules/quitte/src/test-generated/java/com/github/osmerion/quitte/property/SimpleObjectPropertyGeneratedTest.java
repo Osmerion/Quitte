@@ -65,10 +65,34 @@ public final class SimpleObjectPropertyGeneratedTest {
     public void testReadableProperty$asReadOnlyProperty_Get() {
         SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         ReadableObjectProperty<Object> property = other.asReadOnlyProperty();
-        assertEquals(TestValues.ObjectValue_L, property.get());
+        assertEquals(other.get(), property.get());
 
         other.set(TestValues.ObjectValue_H);
-        assertEquals(TestValues.ObjectValue_H, property.get());
+        assertEquals(other.get(), property.get());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_GetValue() {
+        SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        ReadableObjectProperty<Object> property = other.asReadOnlyProperty();
+        assertEquals(other.getValue(), property.getValue());
+
+        other.set(TestValues.ObjectValue_H);
+        assertEquals(other.getValue(), property.getValue());
+    }
+
+    @Test
+    public void testReadableProperty$asReadOnlyProperty_IsBound() {
+        SimpleObjectProperty<Object> other1 = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        ReadableObjectProperty<Object> property = other1.asReadOnlyProperty();
+        assertEquals(other1.isBound(), property.isBound());
+
+        SimpleObjectProperty<Object> other2 = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
+        other1.bindTo(other2);
+        assertEquals(other1.isBound(), property.isBound());
+
+        other1.unbind();
+        assertEquals(other1.isBound(), property.isBound());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
