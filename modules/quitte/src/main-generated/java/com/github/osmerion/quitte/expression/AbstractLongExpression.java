@@ -138,7 +138,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
      */
     abstract void setImpl(long value);
 
-    final void invalidate() {
+    final void notifyInvalidationListeners() {
         for (var listener : this.invalidationListeners) {
             if (listener.isInvalid()) {
                 this.invalidationListeners.remove(listener);
@@ -221,7 +221,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
     }
 
     void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue(), false)) this.invalidate();
+        if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
 
     protected abstract long recomputeValue();

@@ -214,7 +214,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyByteExpression.this.invalidate();
+            if (!value.isValid()) LazyByteExpression.this.notifyInvalidationListeners();
         }
 
     };

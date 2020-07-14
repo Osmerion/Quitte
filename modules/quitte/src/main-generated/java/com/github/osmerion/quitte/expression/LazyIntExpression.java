@@ -214,7 +214,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyIntExpression.this.invalidate();
+            if (!value.isValid()) LazyIntExpression.this.notifyInvalidationListeners();
         }
 
     };

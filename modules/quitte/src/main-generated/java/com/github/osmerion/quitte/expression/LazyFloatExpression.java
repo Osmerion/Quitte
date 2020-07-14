@@ -214,7 +214,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyFloatExpression.this.invalidate();
+            if (!value.isValid()) LazyFloatExpression.this.notifyInvalidationListeners();
         }
 
     };

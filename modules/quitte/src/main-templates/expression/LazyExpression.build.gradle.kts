@@ -134,7 +134,7 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) Lazy${type.abbrevName}Expression.this.invalidate();
+            if (!value.isValid()) Lazy${type.abbrevName}Expression.this.notifyInvalidationListeners();
         }
 
     };

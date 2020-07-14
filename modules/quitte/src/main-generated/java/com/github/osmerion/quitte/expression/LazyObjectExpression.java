@@ -224,7 +224,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyObjectExpression.this.invalidate();
+            if (!value.isValid()) LazyObjectExpression.this.notifyInvalidationListeners();
         }
 
     };

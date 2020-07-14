@@ -214,7 +214,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyDoubleExpression.this.invalidate();
+            if (!value.isValid()) LazyDoubleExpression.this.notifyInvalidationListeners();
         }
 
     };

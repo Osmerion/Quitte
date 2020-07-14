@@ -214,7 +214,7 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyShortExpression.this.invalidate();
+            if (!value.isValid()) LazyShortExpression.this.notifyInvalidationListeners();
         }
 
     };

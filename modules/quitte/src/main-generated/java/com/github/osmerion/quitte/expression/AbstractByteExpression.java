@@ -138,7 +138,7 @@ public abstract class AbstractByteExpression implements Expression<Byte>, Observ
      */
     abstract void setImpl(byte value);
 
-    final void invalidate() {
+    final void notifyInvalidationListeners() {
         for (var listener : this.invalidationListeners) {
             if (listener.isInvalid()) {
                 this.invalidationListeners.remove(listener);
@@ -221,7 +221,7 @@ public abstract class AbstractByteExpression implements Expression<Byte>, Observ
     }
 
     void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue(), false)) this.invalidate();
+        if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
 
     protected abstract byte recomputeValue();

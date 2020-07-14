@@ -138,7 +138,7 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
      */
     abstract void setImpl(boolean value);
 
-    final void invalidate() {
+    final void notifyInvalidationListeners() {
         for (var listener : this.invalidationListeners) {
             if (listener.isInvalid()) {
                 this.invalidationListeners.remove(listener);
@@ -221,7 +221,7 @@ public abstract class AbstractBoolExpression implements Expression<Boolean>, Obs
     }
 
     void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue(), false)) this.invalidate();
+        if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
 
     protected abstract boolean recomputeValue();

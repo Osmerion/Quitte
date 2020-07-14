@@ -214,7 +214,7 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyLongExpression.this.invalidate();
+            if (!value.isValid()) LazyLongExpression.this.notifyInvalidationListeners();
         }
 
     };

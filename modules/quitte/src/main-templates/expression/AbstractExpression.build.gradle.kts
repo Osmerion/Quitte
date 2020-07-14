@@ -148,7 +148,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams implements
      */
     abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
-    final void invalidate() {
+    final void notifyInvalidationListeners() {
         for (var listener : this.invalidationListeners) {
             if (listener.isInvalid()) {
                 this.invalidationListeners.remove(listener);
@@ -231,7 +231,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams implements
     }
 
     void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue(), false)) this.invalidate();
+        if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected abstract ${type.raw} recomputeValue();

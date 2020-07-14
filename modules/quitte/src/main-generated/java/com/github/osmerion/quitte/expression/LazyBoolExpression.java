@@ -214,7 +214,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
         @Override
         public void onChanged(@Nullable State prevValue, @Nullable State value) {
             //noinspection ConstantConditions
-            if (!value.isValid()) LazyBoolExpression.this.invalidate();
+            if (!value.isValid()) LazyBoolExpression.this.notifyInvalidationListeners();
         }
 
     };
