@@ -87,6 +87,8 @@ public final class I18n {
                         return new I18nParameter.Static(it);
                     }
                 }).toArray(I18nParameter[]::new);
+
+                this.invalidate();
             }
 
             @Override
@@ -143,6 +145,8 @@ public final class I18n {
                         return new I18nParameter.Static(it);
                     }
                 }).toArray(I18nParameter[]::new);
+
+                this.invalidate();
             }
 
             @Override
