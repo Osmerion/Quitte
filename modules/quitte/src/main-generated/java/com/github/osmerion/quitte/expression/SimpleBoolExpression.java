@@ -60,7 +60,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableBoolValue observable, Bool2BoolFunction transform) {
-        return new Transform(ex -> new Bool2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableByteValue observable, Byte2BoolFunction transform) {
-        return new Transform(ex -> new Byte2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableShortValue observable, Short2BoolFunction transform) {
-        return new Transform(ex -> new Short2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -102,7 +102,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableIntValue observable, Int2BoolFunction transform) {
-        return new Transform(ex -> new Int2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableLongValue observable, Long2BoolFunction transform) {
-        return new Transform(ex -> new Long2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -130,7 +130,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableFloatValue observable, Float2BoolFunction transform) {
-        return new Transform(ex -> new Float2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -144,7 +144,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static SimpleBoolExpression of(ObservableDoubleValue observable, Double2BoolFunction transform) {
-        return new Transform(ex -> new Double2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -159,7 +159,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      * @since   0.1.0
      */
     public static <S> SimpleBoolExpression of(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform) {
-        return new Transform(ex -> new Object2BoolBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2BoolBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -178,10 +178,10 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
     public static <S> SimpleBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
         return new SimpleBoolExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {

@@ -63,7 +63,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableBoolValue observable, Bool2BoolFunction transform) {
-        return new Transform(ex -> new Bool2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableByteValue observable, Byte2BoolFunction transform) {
-        return new Transform(ex -> new Byte2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableShortValue observable, Short2BoolFunction transform) {
-        return new Transform(ex -> new Short2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableIntValue observable, Int2BoolFunction transform) {
-        return new Transform(ex -> new Int2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableLongValue observable, Long2BoolFunction transform) {
-        return new Transform(ex -> new Long2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableFloatValue observable, Float2BoolFunction transform) {
-        return new Transform(ex -> new Float2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static LazyBoolExpression of(ObservableDoubleValue observable, Double2BoolFunction transform) {
-        return new Transform(ex -> new Double2BoolBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2BoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -162,7 +162,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      * @since   0.1.0
      */
     public static <S> LazyBoolExpression of(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform) {
-        return new Transform(ex -> new Object2BoolBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2BoolBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -181,10 +181,10 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     public static <S> LazyBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
         return new LazyBoolExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -278,7 +278,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     }
 
     @Override
-    final void onDependencyInvalidated() {
+    final void doInvalidate() {
         this.provider = this::recomputeValue;
 
         //noinspection ConstantConditions

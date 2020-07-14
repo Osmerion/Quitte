@@ -63,7 +63,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableBoolValue observable, Bool2DoubleFunction transform) {
-        return new Transform(ex -> new Bool2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableByteValue observable, Byte2DoubleFunction transform) {
-        return new Transform(ex -> new Byte2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableShortValue observable, Short2DoubleFunction transform) {
-        return new Transform(ex -> new Short2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableIntValue observable, Int2DoubleFunction transform) {
-        return new Transform(ex -> new Int2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableLongValue observable, Long2DoubleFunction transform) {
-        return new Transform(ex -> new Long2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableFloatValue observable, Float2DoubleFunction transform) {
-        return new Transform(ex -> new Float2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static LazyDoubleExpression of(ObservableDoubleValue observable, Double2DoubleFunction transform) {
-        return new Transform(ex -> new Double2DoubleBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2DoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -162,7 +162,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      * @since   0.1.0
      */
     public static <S> LazyDoubleExpression of(ObservableObjectValue<S> observable, Object2DoubleFunction<S> transform) {
-        return new Transform(ex -> new Object2DoubleBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2DoubleBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -181,10 +181,10 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
     public static <S> LazyDoubleExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableDoubleValue> selector) {
         return new LazyDoubleExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -278,7 +278,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
     }
 
     @Override
-    final void onDependencyInvalidated() {
+    final void doInvalidate() {
         this.provider = this::recomputeValue;
 
         //noinspection ConstantConditions

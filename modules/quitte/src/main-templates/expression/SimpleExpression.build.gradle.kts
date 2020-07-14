@@ -79,7 +79,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Simple${type.abbrevName}Expression$typeParams of(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
-        return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::onDependencyInvalidated, observable, transform));
+        return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::doInvalidate, observable, transform));
     }
 """}}
     /**
@@ -98,10 +98,10 @@ ${Type.values().joinToString(separator = "") { sourceType ->
     public static <${if (type === Type.OBJECT) "S, T" else "S"}> Simple${type.abbrevName}Expression$typeParams ofNested(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
         return new Simple${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -142,10 +142,10 @@ ${if (type === Type.OBJECT) """
     public static <${if (type === Type.OBJECT) "S, T" else "S"}> Simple${type.abbrevName}Expression$typeParams ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
         return new Simple${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {

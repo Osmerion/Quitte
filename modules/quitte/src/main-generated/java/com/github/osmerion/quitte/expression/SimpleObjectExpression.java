@@ -63,7 +63,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableBoolValue observable, Bool2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Bool2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Bool2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableByteValue observable, Byte2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Byte2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Byte2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableShortValue observable, Short2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Short2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Short2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableIntValue observable, Int2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Int2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Int2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -123,7 +123,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableLongValue observable, Long2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Long2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Long2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -138,7 +138,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableFloatValue observable, Float2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Float2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Float2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <T> SimpleObjectExpression<T> of(ObservableDoubleValue observable, Double2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Double2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Double2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -169,7 +169,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     public static <S, T> SimpleObjectExpression<T> of(ObservableObjectValue<S> observable, Object2ObjectFunction<S, T> transform) {
-        return new Transform<>(ex -> new Object2ObjectBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform<>(ex -> new Object2ObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -189,10 +189,10 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
     public static <S, T> SimpleObjectExpression<T> ofNested(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
         return new SimpleObjectExpression<>() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -235,10 +235,10 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
     public static <S, T> SimpleObjectExpression<T> ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
         return new SimpleObjectExpression<>() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {

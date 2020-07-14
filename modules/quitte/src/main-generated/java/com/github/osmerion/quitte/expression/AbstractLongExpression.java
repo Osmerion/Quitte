@@ -138,6 +138,19 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
      */
     abstract void setImpl(long value);
 
+    /**
+     * Invalidates the result of this expression.
+     *
+     * @since   0.1.0
+     */
+    protected final void invalidate() {
+        this.doInvalidate();
+    }
+
+    void doInvalidate() {
+        if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
+    }
+
     final void notifyInvalidationListeners() {
         for (var listener : this.invalidationListeners) {
             if (listener.isInvalid()) {
@@ -163,7 +176,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
     protected final void addDependency(Observable observable) {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
-        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.onDependencyInvalidated());
+        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.doInvalidate());
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
@@ -192,7 +205,7 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
 
         WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
             action.run();
-            this.onDependencyInvalidated();
+            this.doInvalidate();
         });
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
@@ -218,10 +231,6 @@ public abstract class AbstractLongExpression implements Expression<Long>, Observ
         if (listener == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
 
         observable.removeListener(listener);
-    }
-
-    void onDependencyInvalidated() {
-        if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
 
     protected abstract long recomputeValue();

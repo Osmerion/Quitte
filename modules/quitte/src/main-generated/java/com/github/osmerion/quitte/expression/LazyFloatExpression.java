@@ -63,7 +63,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableBoolValue observable, Bool2FloatFunction transform) {
-        return new Transform(ex -> new Bool2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableByteValue observable, Byte2FloatFunction transform) {
-        return new Transform(ex -> new Byte2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableShortValue observable, Short2FloatFunction transform) {
-        return new Transform(ex -> new Short2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableIntValue observable, Int2FloatFunction transform) {
-        return new Transform(ex -> new Int2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableLongValue observable, Long2FloatFunction transform) {
-        return new Transform(ex -> new Long2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableFloatValue observable, Float2FloatFunction transform) {
-        return new Transform(ex -> new Float2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static LazyFloatExpression of(ObservableDoubleValue observable, Double2FloatFunction transform) {
-        return new Transform(ex -> new Double2FloatBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2FloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -162,7 +162,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      * @since   0.1.0
      */
     public static <S> LazyFloatExpression of(ObservableObjectValue<S> observable, Object2FloatFunction<S> transform) {
-        return new Transform(ex -> new Object2FloatBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2FloatBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -181,10 +181,10 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
     public static <S> LazyFloatExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableFloatValue> selector) {
         return new LazyFloatExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -278,7 +278,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
     }
 
     @Override
-    final void onDependencyInvalidated() {
+    final void doInvalidate() {
         this.provider = this::recomputeValue;
 
         //noinspection ConstantConditions

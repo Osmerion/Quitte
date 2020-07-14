@@ -63,7 +63,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableBoolValue observable, Bool2ByteFunction transform) {
-        return new Transform(ex -> new Bool2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableByteValue observable, Byte2ByteFunction transform) {
-        return new Transform(ex -> new Byte2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableShortValue observable, Short2ByteFunction transform) {
-        return new Transform(ex -> new Short2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableIntValue observable, Int2ByteFunction transform) {
-        return new Transform(ex -> new Int2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableLongValue observable, Long2ByteFunction transform) {
-        return new Transform(ex -> new Long2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableFloatValue observable, Float2ByteFunction transform) {
-        return new Transform(ex -> new Float2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static LazyByteExpression of(ObservableDoubleValue observable, Double2ByteFunction transform) {
-        return new Transform(ex -> new Double2ByteBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2ByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -162,7 +162,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      * @since   0.1.0
      */
     public static <S> LazyByteExpression of(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform) {
-        return new Transform(ex -> new Object2ByteBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2ByteBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -181,10 +181,10 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
     public static <S> LazyByteExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableByteValue> selector) {
         return new LazyByteExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -278,7 +278,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
     }
 
     @Override
-    final void onDependencyInvalidated() {
+    final void doInvalidate() {
         this.provider = this::recomputeValue;
 
         //noinspection ConstantConditions

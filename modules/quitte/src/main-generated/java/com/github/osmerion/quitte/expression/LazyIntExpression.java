@@ -63,7 +63,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableBoolValue observable, Bool2IntFunction transform) {
-        return new Transform(ex -> new Bool2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableByteValue observable, Byte2IntFunction transform) {
-        return new Transform(ex -> new Byte2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableShortValue observable, Short2IntFunction transform) {
-        return new Transform(ex -> new Short2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableIntValue observable, Int2IntFunction transform) {
-        return new Transform(ex -> new Int2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableLongValue observable, Long2IntFunction transform) {
-        return new Transform(ex -> new Long2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableFloatValue observable, Float2IntFunction transform) {
-        return new Transform(ex -> new Float2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static LazyIntExpression of(ObservableDoubleValue observable, Double2IntFunction transform) {
-        return new Transform(ex -> new Double2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -162,7 +162,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      * @since   0.1.0
      */
     public static <S> LazyIntExpression of(ObservableObjectValue<S> observable, Object2IntFunction<S> transform) {
-        return new Transform(ex -> new Object2IntBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2IntBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -181,10 +181,10 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
     public static <S> LazyIntExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableIntValue> selector) {
         return new LazyIntExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
@@ -278,7 +278,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
     }
 
     @Override
-    final void onDependencyInvalidated() {
+    final void doInvalidate() {
         this.provider = this::recomputeValue;
 
         //noinspection ConstantConditions

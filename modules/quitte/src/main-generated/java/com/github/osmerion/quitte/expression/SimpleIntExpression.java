@@ -60,7 +60,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableBoolValue observable, Bool2IntFunction transform) {
-        return new Transform(ex -> new Bool2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Bool2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableByteValue observable, Byte2IntFunction transform) {
-        return new Transform(ex -> new Byte2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Byte2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableShortValue observable, Short2IntFunction transform) {
-        return new Transform(ex -> new Short2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Short2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -102,7 +102,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableIntValue observable, Int2IntFunction transform) {
-        return new Transform(ex -> new Int2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Int2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableLongValue observable, Long2IntFunction transform) {
-        return new Transform(ex -> new Long2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Long2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -130,7 +130,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableFloatValue observable, Float2IntFunction transform) {
-        return new Transform(ex -> new Float2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Float2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -144,7 +144,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static SimpleIntExpression of(ObservableDoubleValue observable, Double2IntFunction transform) {
-        return new Transform(ex -> new Double2IntBinding(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Double2IntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -159,7 +159,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      * @since   0.1.0
      */
     public static <S> SimpleIntExpression of(ObservableObjectValue<S> observable, Object2IntFunction<S> transform) {
-        return new Transform(ex -> new Object2IntBinding<>(ex::onDependencyInvalidated, observable, transform));
+        return new Transform(ex -> new Object2IntBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -178,10 +178,10 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
     public static <S> SimpleIntExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableIntValue> selector) {
         return new SimpleIntExpression() {
 
-            final InvalidationListener nestedPropertyListener = ignored -> this.onDependencyInvalidated();
+            final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.onDependencyInvalidated());
+                observable.addListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
