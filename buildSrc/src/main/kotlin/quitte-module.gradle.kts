@@ -153,8 +153,6 @@ signing {
     sign(publishing.publications)
 }
 
-
-
 extraJavaModuleInfo {
     automaticModule("jsr305-3.0.2.jar", "jsr305")
 }
