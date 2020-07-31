@@ -29,7 +29,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Defines APIs for observable properties and expressions, and observable collections. */
+@SuppressWarnings("module")
 module com.github.osmerion.quitte {
+
+    /*
+     * With Gradle, modules are compiled separately. Thus, quitte.i18n (etc.) are unknown during compilation of this
+     * module and warnings are logged accordingly. Since this is expected, we just suppress all "module" related
+     * warnings for the descriptor.
+     */
 
     requires static jsr305;
 
