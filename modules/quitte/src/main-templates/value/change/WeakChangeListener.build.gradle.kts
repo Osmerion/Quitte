@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.value.change"
+val packageName = "com.osmerion.quitte.value.change"
 
 Type.values().forEach {
     val type = it
@@ -41,7 +41,7 @@ Type.values().forEach {
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
-import com.github.osmerion.quitte.value.*;
+import com.osmerion.quitte.value.*;
 
 /**
  * A {@code Weak${type.abbrevName}ChangeListener} may be used to wrap a listener that should only be referenced weakly

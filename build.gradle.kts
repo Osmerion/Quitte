@@ -28,13 +28,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.github.osmerion.quitte.build.*
+import com.osmerion.quitte.build.*
 
 allprojects {
-    group = "com.github.osmerion.quitte"
+    group = "com.osmerion.quitte"
     val nextVersion = "0.1.0"
     version = when (deployment.type) {
-        com.github.osmerion.quitte.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
+        com.osmerion.quitte.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
         else -> nextVersion
     }
 

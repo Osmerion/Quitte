@@ -28,10 +28,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.github.osmerion.quitte.build.*
-import com.github.osmerion.quitte.build.codegen.*
-import com.github.osmerion.quitte.build.tasks.*
-import java.io.*
+import com.osmerion.quitte.build.*
+import com.osmerion.quitte.build.BuildType
 
 plugins {
     `java-library`
@@ -149,7 +147,7 @@ publishing {
 }
 
 signing {
-    isRequired = (deployment.type === com.github.osmerion.quitte.build.BuildType.RELEASE)
+    isRequired = (deployment.type === BuildType.RELEASE)
     sign(publishing.publications)
 }
 

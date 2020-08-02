@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.internal.binding"
+val packageName = "com.osmerion.quitte.internal.binding"
 
 Type.values().forEach {
     val type = it
@@ -38,9 +38,9 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/${type.abbrevName}Binding") {
         """package $packageName;${if (type === Type.OBJECT) "\n\nimport javax.annotation.Nullable;" else ""}
 
-import com.github.osmerion.quitte.*;
-import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.value.*;
+import com.osmerion.quitte.*;
+import com.osmerion.quitte.functional.*;
+import com.osmerion.quitte.value.*;
 
 /**
  * ${if (type === Type.OBJECT)

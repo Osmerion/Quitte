@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.expression"
+val packageName = "com.osmerion.quitte.expression"
 
 Type.values().forEach {
     val type = it
@@ -42,10 +42,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.annotation.Nullable;
 
-import com.github.osmerion.quitte.*;
-import com.github.osmerion.quitte.internal.wrappers.*;
-import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
+import com.osmerion.quitte.*;
+import com.osmerion.quitte.internal.wrappers.*;
+import com.osmerion.quitte.value.*;
+import com.osmerion.quitte.value.change.*;
 
 /**
  * ${if (type === Type.OBJECT)

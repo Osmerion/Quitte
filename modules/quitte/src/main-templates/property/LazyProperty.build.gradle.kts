@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.property"
+val packageName = "com.osmerion.quitte.property"
 
 Type.values().forEach {
     val type = it
@@ -41,9 +41,9 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import com.github.osmerion.quitte.functional.*;
-import com.github.osmerion.quitte.internal.addon.*;
-import com.github.osmerion.quitte.value.*;
+import com.osmerion.quitte.functional.*;
+import com.osmerion.quitte.internal.addon.*;
+import com.osmerion.quitte.value.*;
 
 /**
  * ${if (type === Type.OBJECT)

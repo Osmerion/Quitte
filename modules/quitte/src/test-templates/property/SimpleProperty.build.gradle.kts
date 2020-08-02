@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.property"
+val packageName = "com.osmerion.quitte.property"
 
 Type.values().forEach {
     val type = it
@@ -41,9 +41,9 @@ Type.values().forEach {
 
 import java.util.concurrent.atomic.AtomicInteger;
 ${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
-import com.github.osmerion.quitte.*;
-import com.github.osmerion.quitte.value.*;
-import com.github.osmerion.quitte.value.change.*;
+import com.osmerion.quitte.*;
+import com.osmerion.quitte.value.*;
+import com.osmerion.quitte.value.change.*;
 
 import org.junit.jupiter.api.*;
 

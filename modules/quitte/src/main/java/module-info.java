@@ -30,7 +30,7 @@
  */
 /** Defines APIs for observable properties and expressions, and observable collections. */
 @SuppressWarnings("module")
-module com.github.osmerion.quitte {
+module com.osmerion.quitte {
 
     /*
      * With Gradle, modules are compiled separately. Thus, quitte.i18n (etc.) are unknown during compilation of this
@@ -40,18 +40,18 @@ module com.github.osmerion.quitte {
 
     requires static jsr305;
 
-    exports com.github.osmerion.quitte;
-    exports com.github.osmerion.quitte.expression;
-    exports com.github.osmerion.quitte.collections;
-    exports com.github.osmerion.quitte.functional;
-    exports com.github.osmerion.quitte.property;
-    exports com.github.osmerion.quitte.value;
-    exports com.github.osmerion.quitte.value.change;
+    exports com.osmerion.quitte;
+    exports com.osmerion.quitte.expression;
+    exports com.osmerion.quitte.collections;
+    exports com.osmerion.quitte.functional;
+    exports com.osmerion.quitte.property;
+    exports com.osmerion.quitte.value;
+    exports com.osmerion.quitte.value.change;
 
-    exports com.github.osmerion.quitte.internal to
-        com.github.osmerion.quitte.holo,
-        com.github.osmerion.quitte.i18n;
+    exports com.osmerion.quitte.internal to
+        com.osmerion.quitte.holo,
+        com.osmerion.quitte.i18n;
 
-    exports com.github.osmerion.quitte.internal.addon to com.github.osmerion.quitte.holo;
+    exports com.osmerion.quitte.internal.addon to com.osmerion.quitte.holo;
 
 }

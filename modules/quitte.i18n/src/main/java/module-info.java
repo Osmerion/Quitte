@@ -29,12 +29,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Internationalization capabilities for Quitte observables. */
-module com.github.osmerion.quitte.i18n {
+module com.osmerion.quitte.i18n {
 
-    requires transitive com.github.osmerion.quitte;
+    requires transitive com.osmerion.quitte;
 
     requires static jsr305;
 
-    exports com.github.osmerion.quitte.i18n;
+    exports com.osmerion.quitte.i18n;
 
 }

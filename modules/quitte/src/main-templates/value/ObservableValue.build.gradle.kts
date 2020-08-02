@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.value"
+val packageName = "com.osmerion.quitte.value"
 
 Type.values().forEach {
     val type = it
@@ -37,7 +37,7 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Observable${type.abbrevName}Value") {
 """package $packageName;${if (type === Type.OBJECT) "\n\nimport javax.annotation.Nullable;" else ""}
 
-import com.github.osmerion.quitte.value.change.*;
+import com.osmerion.quitte.value.change.*;
 
 import static java.util.Objects.*;
 
@@ -84,7 +84,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      * <p>This observable stores a strong reference to the given listener until the listener is either removed
      * explicitly by calling {@link #removeListener(${type.abbrevName}ChangeListener)} or implicitly when this
      * observable discovers that the listener has become {@link ${type.abbrevName}ChangeListener#isInvalid() invalid}.
-     * Generally, it is recommended to use an instance of {@link com.github.osmerion.quitte.value.change.Weak${type.abbrevName}ChangeListener WeakChangeListener}
+     * Generally, it is recommended to use an instance of {@link com.osmerion.quitte.value.change.Weak${type.abbrevName}ChangeListener WeakChangeListener}
      * when possible to avoid leaking instances.</p>
      *
      * @param listener  the listener to be attached to this observable value

@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.functional"
+val packageName = "com.osmerion.quitte.functional"
 
 Type.values().forEach { targetType ->
     val className = "${targetType.abbrevName}Supplier"

@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.github.osmerion.quitte.property"
+val packageName = "com.osmerion.quitte.property"
 
 Type.values().forEach {
     val type = it
@@ -37,8 +37,8 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Readable${type.abbrevName}Property") {
         """package $packageName;
 
-import com.github.osmerion.quitte.internal.wrappers.*;
-import com.github.osmerion.quitte.value.*;
+import com.osmerion.quitte.internal.wrappers.*;
+import com.osmerion.quitte.value.*;
 
 /**
  * ${if (type === Type.OBJECT)
