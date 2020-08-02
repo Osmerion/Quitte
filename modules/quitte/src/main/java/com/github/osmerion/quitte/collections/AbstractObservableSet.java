@@ -201,7 +201,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                 }
 
                 AbstractObservableSet.this.changeBuilder = null;
-                if (this.added == null && this.removed == null) return;
+                if ((this.added == null || this.added.isEmpty()) && (this.removed == null || this.removed.isEmpty())) return;
 
                 var change = new SetChangeListener.Change<>(this.added, this.removed);
 
