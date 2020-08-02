@@ -6,7 +6,7 @@
 Specialized, observable properties and observable collections for the JVM.
 
 Quitte was originally designed as a replacement for JavaFX's properties for [Osmerion](https://github.com/Osmerion/Osmerion).
-This library does not provide any advanced functionality on its own. However, it can be useful when observable values,
+This library does not provide any advanced functionality on its own. However, it can be useful anywhere when observable values,
 properties, or collections are required.
 
 
