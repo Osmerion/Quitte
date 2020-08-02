@@ -71,7 +71,6 @@ public class I18nTest {
 
         };
 
-
         SimpleDoubleProperty value = new SimpleDoubleProperty(10.5D);
         SimpleObjectExpression<String> message = I18n.format(ctx, "", "Willi", i18n(value));
         //noinspection ConstantConditions
