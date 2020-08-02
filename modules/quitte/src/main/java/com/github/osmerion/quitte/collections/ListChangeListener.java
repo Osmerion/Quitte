@@ -73,7 +73,7 @@ public interface ListChangeListener<E> {
 
     /**
      * A change to a list may either be a {@link Permutation permutation}, or one or more local updates to parts of the
-     * list (represented as {@link Update}).
+     * list (represented as {@link LocalChange}).
      *
      * <p>Using {@code instanceof} checks (or similar future pattern matching mechanisms) is recommended when working
      * with {@code Change} objects.</p>
