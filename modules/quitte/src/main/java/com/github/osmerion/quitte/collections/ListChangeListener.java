@@ -38,6 +38,8 @@ import java.util.List;
  *
  * @param <E>   the type of an observed list's elements
  *
+ * @see ObservableList
+ *
  * @since   0.1.0
  *
  * @author  Leon Linhart
@@ -87,9 +89,7 @@ public interface ListChangeListener<E> {
         private Change() {} // TODO This is an ideal candidate for a sealed record hierarchy.
 
         /**
-         * A change to a list
-         *
-         * @param <E>
+         * A change to a list in which its elements are rearranged.
          *
          * @since   0.1.0
          */
@@ -116,8 +116,6 @@ public interface ListChangeListener<E> {
 
         /**
          * A change to a list that consists of one or more local changes to the list.
-         *
-         * @param <E>   the type of the list's elements
          *
          * @since   0.1.0
          */
@@ -148,6 +146,11 @@ public interface ListChangeListener<E> {
 
     /**
      * A change to a list. This might either be an {@link Insertion}, a {@link Removal}, or an {@link Update}.
+     *
+     * <p>Using {@code instanceof} checks (or similar future pattern matching mechanisms) is recommended when working
+     * with {@code LocalChange} objects.</p>
+     *
+     * @param <E>   the type of the list's elements
      *
      * @since   0.1.0
      */
