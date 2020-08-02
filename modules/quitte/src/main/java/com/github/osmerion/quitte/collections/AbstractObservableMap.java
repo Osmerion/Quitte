@@ -186,7 +186,9 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
                 }
 
                 AbstractObservableMap.this.changeBuilder = null;
-                if (this.added == null && this.removed == null && this.updated == null) return;
+                if ((this.added == null || this.added.isEmpty()) &&
+                    (this.removed == null || this.removed.isEmpty()) &&
+                    (this.updated == null || this.updated.isEmpty())) return;
 
                 var change = new MapChangeListener.Change<>(this.added, this.removed, this.updated);
 
