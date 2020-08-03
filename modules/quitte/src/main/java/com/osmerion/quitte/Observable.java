@@ -60,7 +60,7 @@ public interface Observable {
      *
      * @param listener  the listener to be attached to this observable
      *
-     * @return  {@code true} if the listener was not previously attached to this or value has been successfully
+     * @return  {@code true} if the listener was not previously attached to this observable and has been successfully
      *          attached, or {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
