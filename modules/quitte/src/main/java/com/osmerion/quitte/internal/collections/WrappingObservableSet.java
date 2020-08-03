@@ -71,7 +71,7 @@ public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
 
             private final Iterator<E> impl = WrappingObservableSet.this.impl.iterator();
             @Nullable private E cursor;
