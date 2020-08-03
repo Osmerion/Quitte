@@ -34,7 +34,7 @@ import java.util.ArrayDeque;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
 
@@ -87,10 +87,10 @@ final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
 
     private abstract class Operation {
 
-        final K key;
-        final V value;
+        @Nullable final K key;
+        @Nullable final V value;
 
-        Operation(K key, V value) {
+        Operation(@Nullable K key, @Nullable V value) {
             this.key = key;
             this.value = value;
         }
@@ -111,18 +111,19 @@ final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
     }
 
     private class Addition extends Operation {
-        Addition(K key, V value) { super(key, value); }
+        Addition(@Nullable K key, @Nullable V value) { super(key, value); }
     }
 
     private class Removal extends Operation {
-        Removal(K key, V value) { super(key, value); }
+        Removal(@Nullable K key, @Nullable V value) { super(key, value); }
     }
 
     private class Update extends Operation {
-        
+
+        @Nullable
         private final V oldValue;
         
-        Update(K key, V oldValue, V newValue) {
+        Update(@Nullable K key, @Nullable V oldValue, @Nullable V newValue) {
             super(key, newValue);
             this.oldValue = oldValue;
         }
