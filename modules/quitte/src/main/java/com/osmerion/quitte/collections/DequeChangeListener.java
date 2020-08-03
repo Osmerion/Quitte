@@ -98,7 +98,7 @@ public interface DequeChangeListener<E> {
     }
 
     /**
-     * A change to a deque. This might either be a {@link SiteLocalChange}, or an {@link OpaqueLocalChange}.
+     * A change to a deque. This might either be an {@link Insertion}, or a {@link Removal}.
      *
      * <p>Using {@code instanceof} checks (or similar future pattern matching mechanisms) is recommended when working
      * with {@code LocalChange} objects.</p>
@@ -109,39 +109,13 @@ public interface DequeChangeListener<E> {
      */
     abstract class LocalChange<E> {
 
+        private final Site site;
         private final List<E> elements;
 
         // TODO This is an ideal candidate for a sealed record hierarchy.
-        private LocalChange(List<E> elements) {
+        private LocalChange(Site site, List<E> elements) {
+            this.site = site;
             this.elements = elements;
-        }
-
-        /**
-         * A change to a deque that is made to one of it's primary {@link Site sites}. This might either be an
-         * {@link Insertion}, or a {@link Removal}.
-         *
-         * @since   0.1.0
-         */
-        public static abstract class SiteLocalChange<E> extends LocalChange<E> {
-
-            private final Site site;
-
-            private SiteLocalChange(Site site, List<E> elements) {
-                super(elements);
-                this.site = site;
-            }
-
-            /**
-             * The {@link Site site} of the deque to which the change applies.
-             *
-             * @return  site of the deque to which the change applies
-             *
-             * @since   0.1.0
-             */
-            public final Site getSite() {
-                return this.site;
-            }
-
         }
 
         /**
@@ -157,12 +131,23 @@ public interface DequeChangeListener<E> {
         }
 
         /**
+         * The {@link Site site} of the deque to which the change applies.
+         *
+         * @return  site of the deque to which the change applies
+         *
+         * @since   0.1.0
+         */
+        public final Site getSite() {
+            return this.site;
+        }
+
+        /**
          * Represents insertion of one or more subsequent {@link #getElements() elements} starting from a given
          * {@link #getSite() site}.
          *
          * @since   0.1.0
          */
-        public static final class Insertion<E> extends SiteLocalChange<E> {
+        public static final class Insertion<E> extends LocalChange<E> {
 
             Insertion(Site site, List<E> elements) {
                 super(site, elements);
@@ -176,34 +161,10 @@ public interface DequeChangeListener<E> {
          *
          * @since   0.1.0
          */
-        public static final class Removal<E> extends SiteLocalChange<E> {
+        public static final class Removal<E> extends LocalChange<E> {
 
             Removal(Site site, List<E> elements) {
                 super(site, elements);
-            }
-
-        }
-
-        /**
-         * A change to a deque for which no other information is available than affected elements themselves.
-         *
-         * <p><b>It is strongly recommended to avoid using methods that generate opaque changes if possible.</b></p>
-         *
-         * @since   0.1.0
-         */
-        public static abstract class OpaqueLocalChange<E> extends LocalChange<E> {
-            private OpaqueLocalChange(List<E> elements) { super(elements); }
-        }
-
-        /**
-         * Represents removal of one or more {@link #getElements() elements} from somewhere in the deque.
-         *
-         * @since   0.1.0
-         */
-        public static final class OpaqueRemoval<E> extends OpaqueLocalChange<E> {
-
-            OpaqueRemoval(List<E> elements) {
-                super(elements);
             }
 
         }
@@ -227,7 +188,15 @@ public interface DequeChangeListener<E> {
          *
          * @since   0.1.0
          */
-        TAIL
+        TAIL,
+        /**
+         * An opaque position in the deque.
+         *
+         * <p>Using operations which produce "opaque change" is discouraged.</p>
+         *
+         * @since   0.1.0
+         */
+        OPAQUE
     }
 
 }

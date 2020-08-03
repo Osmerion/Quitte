@@ -113,7 +113,7 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
      * {@inheritDoc}
      *
      * <p><b>Modifications to an observable deque using the returned iterator should be made with caution as they
-     * produce {@link com.osmerion.quitte.collections.DequeChangeListener.LocalChange.OpaqueLocalChange opaque changes}.
+     * produce {@link com.osmerion.quitte.collections.DequeChangeListener.Site#OPAQUE opaque changes}.
      * </b></p>
      */
     @Override
@@ -123,7 +123,7 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
      * {@inheritDoc}
      *
      * <p><b>Modifications to an observable deque using the returned iterator should be made with caution as they
-     * produce {@link com.osmerion.quitte.collections.DequeChangeListener.LocalChange.OpaqueLocalChange opaque changes}.
+     * produce {@link com.osmerion.quitte.collections.DequeChangeListener.Site#OPAQUE opaque changes}.
      * </b></p>
      */
     @Override
@@ -133,7 +133,7 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
      * {@inheritDoc}
      *
      * <p><b>This method should be used with caution as it produces
-     * {@link com.osmerion.quitte.collections.DequeChangeListener.LocalChange.OpaqueLocalChange opaque changes}.</b></p>
+     * {@link com.osmerion.quitte.collections.DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     boolean remove(@Nullable Object o);
@@ -142,7 +142,7 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
      * {@inheritDoc}
      *
      * <p><b>This method should be used with caution as it produces
-     * {@link com.osmerion.quitte.collections.DequeChangeListener.LocalChange.OpaqueLocalChange opaque changes}.</b></p>
+     * {@link com.osmerion.quitte.collections.DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     boolean removeFirstOccurrence(Object o);
@@ -151,7 +151,7 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
      * {@inheritDoc}
      *
      * <p><b>This method should be used with caution as it produces
-     * {@link com.osmerion.quitte.collections.DequeChangeListener.LocalChange.OpaqueLocalChange opaque changes}.</b></p>
+     * {@link com.osmerion.quitte.collections.DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     boolean removeLastOccurrence(Object o);
