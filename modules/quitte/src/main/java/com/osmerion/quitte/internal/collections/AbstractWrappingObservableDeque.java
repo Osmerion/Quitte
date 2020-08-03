@@ -42,7 +42,7 @@ import com.osmerion.quitte.collections.AbstractObservableDeque;
  */
 abstract class AbstractWrappingObservableDeque<E> extends AbstractObservableDeque<E> {
 
-    Deque<E> impl;
+    final Deque<E> impl;
 
     AbstractWrappingObservableDeque(Deque<E> impl) {
         this.impl = impl;
