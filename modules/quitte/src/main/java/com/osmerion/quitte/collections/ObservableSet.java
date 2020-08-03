@@ -85,26 +85,47 @@ public interface ObservableSet<E> extends Set<E>, Observable {
     }
 
     /**
-     * Adds the given listener to this set.
+     * Attaches the given {@link MapChangeListener change listener} to this set.
      *
-     * @param listener  the listener for listening to changes to this set
+     * <p>If the given listener is already attached to this set, this method does nothing and returns {@code false}.</p>
+     *
+     * <p>While an {@code SetChangeListener} is attached to a set, it will be {@link SetChangeListener#onChanged(SetChangeListener.Change)}
+     * notified} whenever the set is updated.</p>
+     *
+     * <p>This set stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeListener(SetChangeListener)} or implicitly when this set discovers that the listener has
+     * become {@link SetChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
+     * {@link WeakSetChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this set
+     *
+     * @return  {@code true} if the listener was not previously attached to this set and has been successfully attached,
+     *          or {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
+     * @see #removeListener(SetChangeListener)
+     *
      * @since   0.1.0
      */
-    void addListener(SetChangeListener<? super E> listener);
+    boolean addListener(SetChangeListener<? super E> listener);
 
     /**
-     * Removes the given listener from this set. If the given listener has not been added to this set before, nothing
-     * happens.
+     * Detaches the given {@link SetChangeListener change listener} from this set.
      *
-     * @param listener  the listener to remove
+     * <p>If the given listener is not attached to this set, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this set
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this set, or {@code false}
+     *          otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
+     * @see #addListener(SetChangeListener)
+     *
      * @since   0.1.0
      */
-    void removeListener(SetChangeListener<? super E> listener);
+    boolean removeListener(SetChangeListener<? super E> listener);
 
 }

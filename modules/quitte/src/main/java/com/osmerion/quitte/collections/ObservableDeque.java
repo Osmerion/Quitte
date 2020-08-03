@@ -87,27 +87,49 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
     }
 
     /**
-     * Adds the given listener to this deque.
+     * Attaches the given {@link DequeChangeListener change listener} to this deque.
      *
-     * @param listener  the listener for listening to changes to this deque
+     * <p>If the given listener is already attached to this deque, this method does nothing and returns {@code false}.
+     * </p>
+     *
+     * <p>While an {@code DequeChangeListener} is attached to a deque, it will be {@link DequeChangeListener#onChanged(DequeChangeListener.Change)}
+     * notified} whenever the deque is updated.</p>
+     *
+     * <p>This deque stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeListener(DequeChangeListener)} or implicitly when this map discovers that the listener has
+     * become {@link DequeChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
+     * {@link WeakDequeueChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this deque
+     *
+     * @return  {@code true} if the listener was not previously attached to this deque and has been successfully
+     *          attached, or {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
+     * @see #removeListener(DequeChangeListener)
+     *
      * @since   0.1.0
      */
-    void addListener(DequeChangeListener<? super E> listener);
+    boolean addListener(DequeChangeListener<? super E> listener);
 
     /**
-     * Removes the given listener from this deque. If the given listener has not been added to this deque before,
-     * nothing happens.
+     * Detaches the given {@link DequeChangeListener change listener} from this deque.
      *
-     * @param listener  the listener to remove
+     * <p>If the given listener is not attached to this deque, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this deque
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this deque, or {@code false}
+     *          otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
+     * @see #addListener(DequeChangeListener)
+     *
      * @since   0.1.0
      */
-    void removeListener(DequeChangeListener<? super E> listener);
+    boolean removeListener(DequeChangeListener<? super E> listener);
 
     /**
      * {@inheritDoc}

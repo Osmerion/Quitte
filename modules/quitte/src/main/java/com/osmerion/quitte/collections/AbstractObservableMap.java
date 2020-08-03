@@ -65,8 +65,8 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public void addListener(MapChangeListener<? super K, ? super V> listener) {
-        this.changeListeners.add(Objects.requireNonNull(listener));
+    public final boolean addListener(MapChangeListener<? super K, ? super V> listener) {
+        return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
     /**
@@ -75,8 +75,8 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public void removeListener(MapChangeListener<? super K, ? super V> listener) {
-        this.changeListeners.remove(Objects.requireNonNull(listener));
+    public final boolean removeListener(MapChangeListener<? super K, ? super V> listener) {
+        return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public boolean addListener(InvalidationListener listener) {
+    public final boolean addListener(InvalidationListener listener) {
         return this.invalidationListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(InvalidationListener listener) {
+    public final boolean removeListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(Objects.requireNonNull(listener));
     }
 

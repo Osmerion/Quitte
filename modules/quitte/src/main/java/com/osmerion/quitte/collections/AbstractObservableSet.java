@@ -61,8 +61,8 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public final void addListener(SetChangeListener<? super E> listener) {
-        this.changeListeners.add(Objects.requireNonNull(listener));
+    public final boolean addListener(SetChangeListener<? super E> listener) {
+        return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
     /**
@@ -71,8 +71,8 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public final void removeListener(SetChangeListener<? super E> listener) {
-        this.changeListeners.remove(Objects.requireNonNull(listener));
+    public final boolean removeListener(SetChangeListener<? super E> listener) {
+        return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public boolean removeListener(InvalidationListener listener) {
+    public final boolean removeListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(Objects.requireNonNull(listener));
     }
 

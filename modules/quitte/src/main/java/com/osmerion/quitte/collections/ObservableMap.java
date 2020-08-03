@@ -88,26 +88,47 @@ public interface ObservableMap<K, V> extends Map<K, V>, Observable {
     }
 
     /**
-     * Adds the given listener to this map.
+     * Attaches the given {@link MapChangeListener change listener} to this map.
      *
-     * @param listener  the listener for listening to changes to this map
+     * <p>If the given listener is already attached to this map, this method does nothing and returns {@code false}.</p>
+     *
+     * <p>While an {@code MapChangeListener} is attached to a map, it will be {@link MapChangeListener#onChanged(MapChangeListener.Change)}
+     * notified} whenever the map is updated.</p>
+     *
+     * <p>This map stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeListener(MapChangeListener)} or implicitly when this map discovers that the listener has
+     * become {@link MapChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
+     * {@link WeakMapChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this map
+     *
+     * @return  {@code true} if the listener was not previously attached to this map and has been successfully attached,
+     *          or {@code false} otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
+     * @see #removeListener(MapChangeListener)
+     *
      * @since   0.1.0
      */
-    void addListener(MapChangeListener<? super K, ? super V> listener);
+    boolean addListener(MapChangeListener<? super K, ? super V> listener);
 
     /**
-     * Removes the given listener from this map. If the given listener has not been added to this map before, nothing
-     * happens.
+     * Detaches the given {@link MapChangeListener change listener} from this map.
      *
-     * @param listener  the listener to remove
+     * <p>If the given listener is not attached to this map, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this map
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this map, or {@code false}
+     *          otherwise
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
+     * @see #addListener(MapChangeListener)
+     *
      * @since   0.1.0
      */
-    void removeListener(MapChangeListener<? super K, ? super V> listener);
+    boolean removeListener(MapChangeListener<? super K, ? super V> listener);
 
 }
