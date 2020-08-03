@@ -39,7 +39,7 @@ import com.osmerion.quitte.collections.ObservableDeque;
  *
  * @param <E>   the type of the deque's elements
  *
- * @see com.osmerion.quitte.collections.ObservableDeque#unmodifiableViewOf(ObservableDeque)
+ * @see ObservableDeque#unmodifiableViewOf(ObservableDeque)
  *
  * @serial include
  *     
