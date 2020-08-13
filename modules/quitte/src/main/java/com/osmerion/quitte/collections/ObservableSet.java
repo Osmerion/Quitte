@@ -85,7 +85,7 @@ public interface ObservableSet<E> extends Set<E>, Observable {
     }
 
     /**
-     * Attaches the given {@link MapChangeListener change listener} to this set.
+     * Attaches the given {@link SetChangeListener change listener} to this set.
      *
      * <p>If the given listener is already attached to this set, this method does nothing and returns {@code false}.</p>
      *
