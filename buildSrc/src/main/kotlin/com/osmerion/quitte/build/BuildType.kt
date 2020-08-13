@@ -30,9 +30,8 @@
  */
 package com.osmerion.quitte.build
 
-data class Deployment internal constructor(
-    val type: BuildType,
-    val repo: String,
-    val user: String? = null,
-    val password: String? = null
-)
+enum class BuildType {
+    LOCAL,
+    SNAPSHOT,
+    RELEASE
+}

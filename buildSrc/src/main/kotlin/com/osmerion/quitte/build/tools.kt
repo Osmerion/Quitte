@@ -30,9 +30,34 @@
  */
 package com.osmerion.quitte.build
 
-data class Deployment internal constructor(
-    val type: BuildType,
-    val repo: String,
-    val user: String? = null,
-    val password: String? = null
-)
+import org.gradle.api.*
+import org.gradle.kotlin.dsl.*
+
+private const val DEPLOYMENT_KEY = "com.osmerion.quitte.build.Deployment"
+
+val Project.deployment: Deployment
+    get() =
+        if (extra.has(DEPLOYMENT_KEY)) {
+            extra[DEPLOYMENT_KEY] as Deployment
+        } else
+            (when {
+                hasProperty("release") -> Deployment(
+                    BuildType.RELEASE,
+                    "https://oss.sonatype.org/service/local/staging/deploy/maven2/",
+                    getProperty("sonatypeUsername"),
+                    getProperty("sonatypePassword")
+                )
+                hasProperty("snapshot") -> Deployment(
+                    BuildType.SNAPSHOT,
+                    "https://oss.sonatype.org/content/repositories/snapshots/",
+                    getProperty("sonatypeUsername"),
+                    getProperty("sonatypePassword")
+                )
+                else -> Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
+            }).also { extra[DEPLOYMENT_KEY] = it }
+
+fun Project.getProperty(k: String): String =
+    if (extra.has(k))
+        extra[k] as String
+    else
+        System.getenv(k) ?: ""
