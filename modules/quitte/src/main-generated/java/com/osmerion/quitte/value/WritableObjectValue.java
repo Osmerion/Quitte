@@ -52,7 +52,6 @@ public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObje
      *
      * @since   0.1.0
      */
-    @Nullable
     void set(@Nullable T value);
 
     /**
@@ -61,7 +60,6 @@ public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObje
      * @since   0.1.0
      */
     @Override
-    @Nullable
     default void setValue(@Nullable T value) {
         this.set(value);
     }

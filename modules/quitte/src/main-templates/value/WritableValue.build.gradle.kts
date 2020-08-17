@@ -61,7 +61,7 @@ public interface Writable${type.abbrevName}Value$typeParams extends WritableValu
      * @param value the new value
      *
      * @since   0.1.0
-     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+     */
     void set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
     /**
@@ -69,7 +69,7 @@ public interface Writable${type.abbrevName}Value$typeParams extends WritableValu
      * ${if (type === Type.OBJECT) "" else "\n     * <p>Defaults to {@code ${type.default}} if the given value is {@code null}.</p>\n     *"}
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     default void setValue(@Nullable ${type.box} value) {
         this.set(${if (type === Type.OBJECT) "value" else "value != null ? value : ${type.default}"});
     }
