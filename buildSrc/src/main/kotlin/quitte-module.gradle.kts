@@ -113,35 +113,7 @@ publishing {
             artifact(tasks["javadocJar"])
 
             artifactId = artifactName
-
-            pom {
-                name.set(project.name)
-                packaging = "jar"
-                url.set("https://github.com/Osmerion/Quitte")
-
-                licenses {
-                    license {
-                        name.set("BSD3")
-                        url.set("https://github.com/Osmerion/Quitte/blob/master/LICENSE")
-                        distribution.set("repo")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("TheMrMilchmann")
-                        name.set("Leon Linhart")
-                        email.set("themrmilchmann@gmail.com")
-                        url.set("https://github.com/TheMrMilchmann")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:git://github.com/Osmerion/Quitte.git")
-                    developerConnection.set("scm:git:git://github.com/Osmerion/Quitte.git")
-                    url.set("https://github.com/Osmerion/Quitte.git")
-                }
-            }
+            decorateMavenPom(project.name)
         }
     }
 }

@@ -31,6 +31,7 @@
 package com.osmerion.quitte.build
 
 import org.gradle.api.*
+import org.gradle.api.publish.maven.*
 import org.gradle.kotlin.dsl.*
 
 private const val DEPLOYMENT_KEY = "com.osmerion.quitte.build.Deployment"
@@ -61,3 +62,34 @@ fun Project.getProperty(k: String): String =
         extra[k] as String
     else
         System.getenv(k) ?: ""
+
+fun MavenPublication.decorateMavenPom(projectName: String, packaging: String = "jar") {
+    pom {
+        name.set(projectName)
+        this@pom.packaging = packaging
+        url.set("https://github.com/Osmerion/Quitte")
+
+        licenses {
+            license {
+                name.set("BSD3")
+                url.set("https://github.com/Osmerion/Quitte/blob/master/LICENSE")
+                distribution.set("repo")
+            }
+        }
+
+        developers {
+            developer {
+                id.set("TheMrMilchmann")
+                name.set("Leon Linhart")
+                email.set("themrmilchmann@gmail.com")
+                url.set("https://github.com/TheMrMilchmann")
+            }
+        }
+
+        scm {
+            connection.set("scm:git:git://github.com/Osmerion/Quitte.git")
+            developerConnection.set("scm:git:git://github.com/Osmerion/Quitte.git")
+            url.set("https://github.com/Osmerion/Quitte.git")
+        }
+    }
+}
