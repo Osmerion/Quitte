@@ -136,6 +136,8 @@ public interface ObservableList<E> extends List<E>, Observable {
     /**
      * See {@link #addAll(Collection)}.
      *
+     * @param elements  the elements to be added to this list
+     *
      * @return  {@code true} if this list changed as a result of the call, or {@code false} otherwise
      *
      * @throws ClassCastException               if the type of the specified element is incompatible with this list
@@ -198,6 +200,8 @@ public interface ObservableList<E> extends List<E>, Observable {
     /**
      * See {@link #setAll(Collection)}.
      *
+     * @param elements  the elements to replace the content of this list
+     *
      * @return  {@code true} if this list changed as a result of the call, or {@code false} otherwise
      *
      * @throws ClassCastException               if the type of the specified element is incompatible with this list
@@ -216,7 +220,7 @@ public interface ObservableList<E> extends List<E>, Observable {
     /**
      * Clears the list and adds all elements from the given collection.
      *
-     * @param elements  the elements to be added
+     * @param elements  the elements to replace the content of this list
      *
      * @return  {@code true} if this list changed as a result of the call, or {@code false} otherwise
      *

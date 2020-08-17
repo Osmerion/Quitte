@@ -356,6 +356,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         /**
          * Logs the addition of the given element.
          *
+         * @param site      the site of the deque to which the change was made
          * @param element   the element that was added
          *
          * @since   0.1.0
@@ -384,6 +385,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         /**
          * Logs the removal of the given element.
          *
+         * @param site      the site of the deque to which the change was made
          * @param element   the element that was removed
          *
          * @since   0.1.0
