@@ -192,7 +192,7 @@ public interface ListChangeListener<E> {
          * Represents insertion of one or more subsequent {@link #getElements() elements} starting from a given
          * {@link #getIndex() index}.
          *
-         * <p><b>Example:</b>
+         * <p><b>Example:</b></p>
          * <pre>
          * Initial
          * Indices:   0 1 2 3 4 5
@@ -206,7 +206,7 @@ public interface ListChangeListener<E> {
          * Indices:   0 1 2 3 4 5 6 7 8
          * Elements:  A X Y Z B C D E F
          *
-         * </pre></p>
+         * </pre>
          *
          * @since   0.1.0
          */
@@ -222,7 +222,7 @@ public interface ListChangeListener<E> {
          * Represents removal of one or more subsequent {@link #getElements() elements} starting from a given
          * {@link #getIndex() index}.
          *
-         * <p><b>Example:</b>
+         * <p><b>Example:</b></p>
          * <pre>
          * Initial
          * Indices:   0 1 2 3 4 5
@@ -236,7 +236,7 @@ public interface ListChangeListener<E> {
          * Indices:   0 1 2
          * Elements:  A E F
          *
-         * </pre></p>
+         * </pre>
          *
          * @since   0.1.0
          */
@@ -252,7 +252,7 @@ public interface ListChangeListener<E> {
          * Represents an update of one or more subsequent {@link #getElements() elements} starting from a given
          * {@link #getIndex() index}.
          *
-         * <p><b>Example:</b>
+         * <p><b>Example:</b></p>
          * <pre>
          * Initial
          * Indices:   0 1 2 3 4 5
@@ -266,7 +266,7 @@ public interface ListChangeListener<E> {
          * Indices:   0 1 2 3 4 5
          * Elements:  A X Y Z E F
          *
-         * </pre></p>
+         * </pre>
          *
          * @since   0.1.0
          */
