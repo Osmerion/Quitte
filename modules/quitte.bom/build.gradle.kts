@@ -45,7 +45,7 @@ publishing {
 
             pom {
                 name.set(project.name)
-                packaging = "jar"
+                packaging = "pom"
                 url.set("https://github.com/Osmerion/Quitte")
 
                 licenses {
