@@ -49,6 +49,20 @@ import com.osmerion.quitte.value.*;
 public interface IntChangeListener {
 
     /**
+     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
+     * shares a hashcode with it.
+     *
+     * @param listener  the listener to be wrapped
+     *
+     * @return  the wrapper
+     *
+     * @since   0.1.0
+     */
+    static  IntChangeListener wrap(ChangeListener<Integer> listener) {
+        return new WrappingIntChangeListener(listener);
+    }
+
+    /**
      * Processes a value change of an {@link ObservableIntValue} this listener is attached to.
      *
      * @param observable    the observable value that has changed
@@ -75,19 +89,5 @@ public interface IntChangeListener {
     default boolean isInvalid() {
         return false;
     }
-
-    /**
-     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
-     * shares a hashcode with it.
-     *
-     * @param listener  the listener to be wrapped
-     *
-     * @return  the wrapper
-     *
-     * @since   0.1.0
-     */
-    static  IntChangeListener wrap(ChangeListener<Integer> listener) {
-        return new WrappingIntChangeListener(listener);
-    }
-
+    
 }

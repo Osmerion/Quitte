@@ -44,7 +44,11 @@ import com.osmerion.quitte.value.*;
 
 /**
  * ${if (type === Type.OBJECT)
-            "A listener that may be used to subscribe to changes of one or more generic {@link Observable observables}."
+            """
+            |A listener that may be used to subscribe to changes of one or more generic {@link Observable observables}.
+            | * 
+            | * @param <T>   the type of the the type of the observable's value
+            """.trimMargin()
         else
             "A listener that may be used to subscribe to changes of one or more specialized {@code ${type.raw}}-{@link Observable observables}.."
         }
@@ -58,6 +62,20 @@ import com.osmerion.quitte.value.*;
  */
 @FunctionalInterface
 public interface ${type.abbrevName}ChangeListener$typeParams {
+
+    /**
+     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
+     * shares a hashcode with it.
+     *${if (type === Type.OBJECT) "\n     * @param <T>       the type of the the type of the observable's value" else ""}
+     * @param listener  the listener to be wrapped
+     *
+     * @return  the wrapper
+     *
+     * @since   0.1.0
+     */
+    static $typeParams ${type.abbrevName}ChangeListener$typeParams wrap(ChangeListener<${type.box}> listener) {
+        return new Wrapping${type.abbrevName}ChangeListener${if (type === Type.OBJECT) "<>" else ""}(listener);
+    }
 
     /**
      * Processes a value change of an {@link Observable${type.abbrevName}Value} this listener is attached to.
@@ -86,21 +104,7 @@ public interface ${type.abbrevName}ChangeListener$typeParams {
     default boolean isInvalid() {
         return false;
     }
-
-    /**
-     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
-     * shares a hashcode with it.
-     *
-     * @param listener  the listener to be wrapped
-     *
-     * @return  the wrapper
-     *
-     * @since   0.1.0
-     */
-    static $typeParams ${type.abbrevName}ChangeListener$typeParams wrap(ChangeListener<${type.box}> listener) {
-        return new Wrapping${type.abbrevName}ChangeListener$typeParams(listener);
-    }
-
+    
 }"""
     }
 }

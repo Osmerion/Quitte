@@ -39,6 +39,8 @@ import com.osmerion.quitte.value.*;
 
 /**
  * A listener that may be used to subscribe to changes of one or more generic {@link Observable observables}.
+ * 
+ * @param <T>   the type of the the type of the observable's value
  *
  * @see ObservableValue
  * @see ObservableObjectValue
@@ -49,6 +51,21 @@ import com.osmerion.quitte.value.*;
  */
 @FunctionalInterface
 public interface ObjectChangeListener<T> {
+
+    /**
+     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
+     * shares a hashcode with it.
+     *
+     * @param <T>       the type of the the type of the observable's value
+     * @param listener  the listener to be wrapped
+     *
+     * @return  the wrapper
+     *
+     * @since   0.1.0
+     */
+    static <T> ObjectChangeListener<T> wrap(ChangeListener<T> listener) {
+        return new WrappingObjectChangeListener<>(listener);
+    }
 
     /**
      * Processes a value change of an {@link ObservableObjectValue} this listener is attached to.
@@ -77,19 +94,5 @@ public interface ObjectChangeListener<T> {
     default boolean isInvalid() {
         return false;
     }
-
-    /**
-     * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
-     * shares a hashcode with it.
-     *
-     * @param listener  the listener to be wrapped
-     *
-     * @return  the wrapper
-     *
-     * @since   0.1.0
-     */
-    static <T> ObjectChangeListener<T> wrap(ChangeListener<T> listener) {
-        return new WrappingObjectChangeListener<T>(listener);
-    }
-
+    
 }
