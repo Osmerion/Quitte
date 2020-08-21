@@ -177,14 +177,13 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
     @Override
     public final boolean setAll(Collection<E> elements) {
-        boolean changed = !this.isEmpty();
-
         try (ChangeBuilder ignored = this.beginChange()) {
+            List<E> prev = List.copyOf(this);
             this.clear();
-            changed |= this.addAll(elements);
-        }
+            this.addAll(elements);
 
-        return changed;
+            return !this.equals(prev);
+        }
     }
 
     @Override
