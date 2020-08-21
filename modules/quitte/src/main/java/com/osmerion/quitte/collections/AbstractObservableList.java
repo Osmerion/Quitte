@@ -144,7 +144,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
         E old = this.removeImpl(index);
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logSet(index, old);
+            changeBuilder.logRemove(index, old);
             this.modCount++;
         }
 
