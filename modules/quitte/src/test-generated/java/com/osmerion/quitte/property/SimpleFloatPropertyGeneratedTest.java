@@ -184,17 +184,17 @@ public final class SimpleFloatPropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue$getValue_Initial() {
-        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_H);
-        assertEquals(TestValues.IntValue_H, property.getValue());
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_H);
+        assertEquals(TestValues.FloatValue_H, property.getValue());
     }
 
     @Test
     public void test_ObservableValue$getValue_SetGet() {
-        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        assertEquals(TestValues.IntValue_L, property.getValue());
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
+        assertEquals(TestValues.FloatValue_L, property.getValue());
 
-        property.set(TestValues.IntValue_H);
-        assertEquals(TestValues.IntValue_H, property.getValue());
+        property.set(TestValues.FloatValue_H);
+        assertEquals(TestValues.FloatValue_H, property.getValue());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

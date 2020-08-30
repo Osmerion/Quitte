@@ -184,17 +184,17 @@ public final class SimpleShortPropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue$getValue_Initial() {
-        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_H);
-        assertEquals(TestValues.IntValue_H, property.getValue());
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_H);
+        assertEquals(TestValues.ShortValue_H, property.getValue());
     }
 
     @Test
     public void test_ObservableValue$getValue_SetGet() {
-        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        assertEquals(TestValues.IntValue_L, property.getValue());
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
+        assertEquals(TestValues.ShortValue_L, property.getValue());
 
-        property.set(TestValues.IntValue_H);
-        assertEquals(TestValues.IntValue_H, property.getValue());
+        property.set(TestValues.ShortValue_H);
+        assertEquals(TestValues.ShortValue_H, property.getValue());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

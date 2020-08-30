@@ -184,17 +184,17 @@ public final class SimpleDoublePropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue$getValue_Initial() {
-        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_H);
-        assertEquals(TestValues.IntValue_H, property.getValue());
+        SimpleDoubleProperty property = new SimpleDoubleProperty(TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, property.getValue());
     }
 
     @Test
     public void test_ObservableValue$getValue_SetGet() {
-        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        assertEquals(TestValues.IntValue_L, property.getValue());
+        SimpleDoubleProperty property = new SimpleDoubleProperty(TestValues.DoubleValue_L);
+        assertEquals(TestValues.DoubleValue_L, property.getValue());
 
-        property.set(TestValues.IntValue_H);
-        assertEquals(TestValues.IntValue_H, property.getValue());
+        property.set(TestValues.DoubleValue_H);
+        assertEquals(TestValues.DoubleValue_H, property.getValue());
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
