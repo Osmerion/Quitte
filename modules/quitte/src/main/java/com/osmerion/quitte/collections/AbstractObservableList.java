@@ -187,7 +187,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
     }
 
     @Override
-    public void sort(Comparator<? super E> comparator) {
+    public final void sort(Comparator<? super E> comparator) {
         try (ChangeBuilder ignored = this.beginChange()) {
             this.sortImpl(comparator);
         }
