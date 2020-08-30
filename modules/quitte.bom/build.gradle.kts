@@ -43,6 +43,10 @@ publishing {
             from(components["javaPlatform"])
             artifactId = "quitte-bom"
             decorateMavenPom(project.name, packaging = "pom")
+
+            pom {
+                description.set("Bill of Materials for Quitte artifacts.")
+            }
         }
     }
 }
