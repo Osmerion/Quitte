@@ -59,6 +59,8 @@ final class MockSetChangeListener<E> implements SetChangeListener<E> {
 
         private final ArrayDeque<Operation> operations = new ArrayDeque<>();
 
+        private Context() {}
+
         /** Closes this context and asserts that all operations have been consumed. */
         @Override
         public void close() {
