@@ -158,7 +158,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue$get_SetDeferredGet() {
-        LazyObjectProperty property = new LazyObjectProperty(TestValues.ObjectValue_L);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         assertEquals(TestValues.ObjectValue_L, property.getValue());
 
         property.set(() -> TestValues.ObjectValue_H);
@@ -171,13 +171,13 @@ public final class LazyObjectPropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue$getValue_Initial() {
-        LazyObjectProperty property = new LazyObjectProperty(TestValues.ObjectValue_H);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         assertEquals(TestValues.ObjectValue_H, property.getValue());
     }
 
     @Test
     public void test_ObservableValue$getValue_SetGet() {
-        LazyObjectProperty property = new LazyObjectProperty(TestValues.ObjectValue_L);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         assertEquals(TestValues.ObjectValue_L, property.getValue());
 
         property.set(TestValues.ObjectValue_H);
@@ -186,7 +186,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue$getValue_SetDeferredGet() {
-        LazyObjectProperty property = new LazyObjectProperty(TestValues.ObjectValue_L);
+        LazyObjectProperty<Object> property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         assertEquals(TestValues.ObjectValue_L, property.getValue());
 
         property.set(() -> TestValues.ObjectValue_H);

@@ -164,7 +164,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue${'$'}get_SetDeferredGet() {
-        Lazy${type.abbrevName}Property property = new Lazy${type.abbrevName}Property(TestValues.${type.abbrevName}Value_L);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         assertEquals(TestValues.${type.abbrevName}Value_L, property.getValue());
 
         property.set(() -> TestValues.${type.abbrevName}Value_H);
@@ -177,13 +177,13 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue${'$'}getValue_Initial() {
-        Lazy${type.abbrevName}Property property = new Lazy${type.abbrevName}Property(TestValues.${type.abbrevName}Value_H);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         assertEquals(TestValues.${type.abbrevName}Value_H, property.getValue());
     }
 
     @Test
     public void test_ObservableValue${'$'}getValue_SetGet() {
-        Lazy${type.abbrevName}Property property = new Lazy${type.abbrevName}Property(TestValues.${type.abbrevName}Value_L);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         assertEquals(TestValues.${type.abbrevName}Value_L, property.getValue());
 
         property.set(TestValues.${type.abbrevName}Value_H);
@@ -192,7 +192,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
     @Test
     public void test_ObservableValue${'$'}getValue_SetDeferredGet() {
-        Lazy${type.abbrevName}Property property = new Lazy${type.abbrevName}Property(TestValues.${type.abbrevName}Value_L);
+        Lazy${type.abbrevName}Property$typeParams property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         assertEquals(TestValues.${type.abbrevName}Value_L, property.getValue());
 
         property.set(() -> TestValues.${type.abbrevName}Value_H);
