@@ -177,13 +177,28 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
     @Override
     public final boolean setAll(Collection<E> elements) {
-        try (ChangeBuilder ignored = this.beginChange()) {
-            List<E> prev = List.copyOf(this);
-            this.clear();
-            this.addAll(elements);
+        List<E> copyOfElements = this.equalContentsOrNull(elements);
+        if (copyOfElements == null) return false;
 
-            return !this.equals(prev);
+        try (ChangeBuilder ignored = this.beginChange()) {
+            this.clear();
+            this.addAll(copyOfElements);
+            return true;
         }
+    }
+
+    @Nullable
+    private List<E> equalContentsOrNull(Collection<E> elements) {
+        List<E> copyOfElements = new ArrayList<>(elements.size());
+        Iterator<?> aItr = this.iterator();
+        Iterator<?> bItr = elements.iterator();
+        boolean aHasNext, bHasNext;
+
+        while ((aHasNext = aItr.hasNext()) & (bHasNext = bItr.hasNext())) {
+            if (!Objects.equals(aItr.next(), bItr.next())) return null;
+        }
+
+        return (aHasNext == bHasNext) ? copyOfElements : null;
     }
 
     @Override
