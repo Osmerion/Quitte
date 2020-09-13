@@ -34,63 +34,83 @@ Type.values().forEach {
     val type = it
     val typeParams = if (type === Type.OBJECT) "<T>" else ""
 
-    template("${packageName.replace('.', '/')}/ReadOnly${type.abbrevName}Wrapper") {
+    template("${packageName.replace('.', '/')}/ReadOnly${type.abbrevName}Property") {
         """package $packageName;
 
 import com.osmerion.quitte.*;
-import com.osmerion.quitte.value.*;
+import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.change.*;
 
 /**
  * ${if (type === Type.OBJECT)
-            "A generic read-only value wrapper."
+            "A generic read-only property."
         else
-            "A specialized read-only {@code ${type.raw}} value wrapper."
+            "A specialized read-only {@code ${type.raw}} property."
         }
  *
  * @author  Leon Linhart
  */
-public final class ReadOnly${type.abbrevName}Wrapper$typeParams implements Observable${type.abbrevName}Value$typeParams {
+public final class ReadOnly${type.abbrevName}Property$typeParams implements Readable${type.abbrevName}Property$typeParams {
 
-    protected final ${type.raw} value;
+    protected final Readable${type.abbrevName}Property$typeParams property;
 
-    public ReadOnly${type.abbrevName}Wrapper(${type.raw} value) {
-        this.value = value;
+    public ReadOnly${type.abbrevName}Property(Readable${type.abbrevName}Property$typeParams property) {
+        this.property = property;
+    }
+
+    @Override
+    public Readable${type.abbrevName}Property$typeParams asReadOnlyProperty() {
+        return this;
     }
 
     @Override
     public ${type.raw} get() {
-        return this.value;
+        return this.property.get();
+    }
+
+	@Override
+    public ${type.box} getValue() {
+        return this.property.getValue();
+    }
+
+	@Override
+    public boolean isBound() {
+        return this.property.isBound();
+    }
+
+    @Override
+    public boolean isWritable() {
+        return false;
     }
 
     @Override
     public boolean addListener(${type.abbrevName}ChangeListener$typeParams listener) {
-        return false;
+        return this.property.addListener(listener);
     }
 
 	@Override
     public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
-        return false;
+        return this.property.addBoxedListener(listener);
     }
 
     @Override
     public boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener) {
-        return false;
+        return this.property.removeListener(listener);
     }
 
     @Override
     public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
-        return false;
+        return this.property.removeBoxedListener(listener);
     }
 
     @Override
     public final boolean addListener(InvalidationListener listener) {
-        return false;
+        return this.property.addListener(listener);
     }
 
     @Override
     public final boolean removeListener(InvalidationListener listener) {
-        return false;
+        return this.property.removeListener(listener);
     }
 
 }"""

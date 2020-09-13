@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018-2020 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,58 +29,47 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.osmerion.quitte.internal.wrappers"
-
-Type.values().forEach {
-    val type = it
-    val typeParams = if (type === Type.OBJECT) "<T>" else ""
-
-    template("${packageName.replace('.', '/')}/ReadOnly${type.abbrevName}Wrapper") {
-        """package $packageName;
+package com.osmerion.quitte.internal.wrappers;
 
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
 
 /**
- * ${if (type === Type.OBJECT)
-            "A generic read-only value wrapper."
-        else
-            "A specialized read-only {@code ${type.raw}} value wrapper."
-        }
+ * A specialized read-only {@code float} value wrapper.
  *
  * @author  Leon Linhart
  */
-public final class ReadOnly${type.abbrevName}Wrapper$typeParams implements Observable${type.abbrevName}Value$typeParams {
+public final class ReadOnlyFloatWrapper implements ObservableFloatValue {
 
-    protected final ${type.raw} value;
+    protected final float value;
 
-    public ReadOnly${type.abbrevName}Wrapper(${type.raw} value) {
+    public ReadOnlyFloatWrapper(float value) {
         this.value = value;
     }
 
     @Override
-    public ${type.raw} get() {
+    public float get() {
         return this.value;
     }
 
     @Override
-    public boolean addListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public boolean addListener(FloatChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
+    public boolean addBoxedListener(ChangeListener<Float> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public boolean removeListener(FloatChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
+    public boolean removeBoxedListener(ChangeListener<Float> listener) {
         return false;
     }
 
@@ -93,6 +83,4 @@ public final class ReadOnly${type.abbrevName}Wrapper$typeParams implements Obser
         return false;
     }
 
-}"""
-    }
 }

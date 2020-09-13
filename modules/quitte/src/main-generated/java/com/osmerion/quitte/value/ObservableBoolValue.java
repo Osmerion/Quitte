@@ -31,6 +31,7 @@
  */
 package com.osmerion.quitte.value;
 
+import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.change.*;
 
 import static java.util.Objects.*;
@@ -45,6 +46,19 @@ import static java.util.Objects.*;
  * @author  Leon Linhart
  */
 public interface ObservableBoolValue extends ObservableValue<Boolean> {
+
+    /**
+     * Returns an observable read-only view of the given {@code value}.
+     *
+     * @param value the value to wrap
+     *
+     * @return  an observable view of the given {@code value}
+     *
+     * @since   0.1.0
+     */
+    static ObservableBoolValue wrap(boolean value) {
+        return new ReadOnlyBoolWrapper(value);
+    }
 
     /**
      * Returns the value represented by this object.

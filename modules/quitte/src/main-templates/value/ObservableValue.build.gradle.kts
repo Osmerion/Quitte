@@ -37,6 +37,7 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Observable${type.abbrevName}Value") {
 """package $packageName;${if (type === Type.OBJECT) "\n\nimport javax.annotation.Nullable;" else ""}
 
+import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.change.*;
 
 import static java.util.Objects.*;
@@ -55,6 +56,19 @@ else
  * @author  Leon Linhart
  */
 public interface Observable${type.abbrevName}Value$typeParams extends ObservableValue<${type.box}> {
+
+    /**
+     * Returns an observable read-only view of the given {@code value}.
+     *
+     * @param value the value to wrap
+     *
+     * @return  an observable view of the given {@code value}
+     *
+     * @since   0.1.0
+     */
+    static ${if(type === Type.OBJECT) "<T> " else ""}Observable${type.abbrevName}Value$typeParams wrap(${type.raw} value) {
+        return new ReadOnly${type.abbrevName}Wrapper${if(type === Type.OBJECT) "<>" else ""}(value);
+    }
 
     /**
      * Returns the value represented by this object.

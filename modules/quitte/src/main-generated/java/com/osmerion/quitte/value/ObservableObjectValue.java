@@ -33,6 +33,7 @@ package com.osmerion.quitte.value;
 
 import javax.annotation.Nullable;
 
+import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.change.*;
 
 import static java.util.Objects.*;
@@ -47,6 +48,19 @@ import static java.util.Objects.*;
  * @author  Leon Linhart
  */
 public interface ObservableObjectValue<T> extends ObservableValue<T> {
+
+    /**
+     * Returns an observable read-only view of the given {@code value}.
+     *
+     * @param value the value to wrap
+     *
+     * @return  an observable view of the given {@code value}
+     *
+     * @since   0.1.0
+     */
+    static <T> ObservableObjectValue<T> wrap(T value) {
+        return new ReadOnlyObjectWrapper<>(value);
+    }
 
     /**
      * Returns the value represented by this object.
