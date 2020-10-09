@@ -32,6 +32,7 @@ package com.osmerion.quitte.collections;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -271,6 +272,20 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     }
 
     @Override
+    public final boolean addAll(Collection<? extends E> c) {
+        try (ChangeBuilder ignored = this.beginChange()) {
+            return super.addAll(c);
+        }
+    }
+
+    @Override
+    public final void clear() {
+        try (ChangeBuilder ignored = this.beginChange()) {
+            super.clear();
+        }
+    }
+
+    @Override
     public final boolean offer(@Nullable E element) {
         return this.offerLast(element);
     }
@@ -279,6 +294,13 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     @Nullable
     public final E remove() {
         return this.removeFirst();
+    }
+
+    @Override
+    public final boolean removeAll(Collection<?> c) {
+        try (ChangeBuilder ignored = this.beginChange()) {
+            return super.removeAll(c);
+        }
     }
 
     @Override
