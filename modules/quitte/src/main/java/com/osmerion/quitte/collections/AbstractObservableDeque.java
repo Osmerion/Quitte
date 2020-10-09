@@ -265,6 +265,12 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     }
 
     @Override
+    public final boolean add(E e) {
+        this.addLast(e);
+        return true;
+    }
+
+    @Override
     public final boolean offer(@Nullable E element) {
         return this.offerLast(element);
     }
