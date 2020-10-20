@@ -58,37 +58,12 @@ public class WrappingObservableList<E> extends AbstractObservableList<E> {
         this.impl = Objects.requireNonNull(impl);
     }
 
-    @Override
-    public void addImpl(int index, @Nullable E element) {
-        this.impl.add(index, element);
-    }
+    @Override public void addImpl(int index, @Nullable E element) { this.impl.add(index, element); }
+    @Override public E removeImpl(int index) { return this.impl.remove(index); }
+    @Override public E setImpl(int index, @Nullable E element) { return this.impl.set(index, element); }
+    @Override protected void sortImpl(Comparator<? super E> comparator) { this.impl.sort(comparator); }
 
-    @Override
-    @Nullable
-    public E removeImpl(int index) {
-        return this.impl.remove(index);
-    }
-
-    @Override
-    @Nullable
-    public E setImpl(int index, @Nullable E element) {
-        return this.impl.set(index, element);
-    }
-
-    @Override
-    protected void sortImpl(Comparator<? super E> comparator) {
-        this.impl.sort(comparator);
-    }
-
-    @Override
-    @Nullable
-    public E get(int index) {
-        return this.impl.get(index);
-    }
-
-    @Override
-    public int size() {
-        return this.impl.size();
-    }
+    @Override public E get(int index) { return this.impl.get(index); }
+    @Override public int size() { return this.impl.size(); }
 
 }

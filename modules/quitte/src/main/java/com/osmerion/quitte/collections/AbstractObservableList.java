@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 import com.osmerion.quitte.InvalidationListener;
 
 /**
- * A basic implementation for {@link ObservableList}.
+ * A basic implementation for a modifiable {@link ObservableList}.
  *
  * @param <E>   the type of the list's elements
  *

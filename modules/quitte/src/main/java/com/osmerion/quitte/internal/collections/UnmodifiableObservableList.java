@@ -30,12 +30,14 @@
  */
 package com.osmerion.quitte.internal.collections;
 
-import java.util.Comparator;
-import javax.annotation.Nullable;
+import java.util.AbstractList;
+import java.util.Collection;
+import com.osmerion.quitte.InvalidationListener;
+import com.osmerion.quitte.collections.ListChangeListener;
 import com.osmerion.quitte.collections.ObservableList;
 
 /**
- * A wrapper for an observable list that blocks mutation.
+ * A wrapper for an {@link ObservableList} that blocks mutation.
  *
  * @param <E>   the type of the list's elements
  *
@@ -45,18 +47,47 @@ import com.osmerion.quitte.collections.ObservableList;
  *
  * @author  Leon Linhart
  */
-public class UnmodifiableObservableList<E> extends AbstractWrappingObservableList<E> {
+public class UnmodifiableObservableList<E> extends AbstractList<E> implements ObservableList<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -261034095703032056L;
 
+    private final ObservableList<E> impl;
+
     public UnmodifiableObservableList(ObservableList<E> impl) {
-        super(impl);
+        this.impl = impl;
     }
 
-    @Override protected void addImpl(int index, @Nullable E element) { throw new UnsupportedOperationException(); }
-    @Override protected E removeImpl(int index) { throw new UnsupportedOperationException(); }
-    @Override protected E setImpl(int index, @Nullable E element) { throw new UnsupportedOperationException(); }
-    @Override protected void sortImpl(Comparator<? super E> c) { throw new UnsupportedOperationException(); }
+    @Override public boolean addListener(InvalidationListener listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(InvalidationListener listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addListener(ListChangeListener<? super E> listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(ListChangeListener<? super E> listener) { return this.impl.removeListener(listener); }
+
+    @Override public boolean contains(Object o) { return this.impl.contains(o); }
+    @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }
+    @Override public E get(int index) { return this.impl.get(index); }
+    @Override public int indexOf(Object o) { return this.impl.indexOf(o); }
+    @Override public boolean isEmpty() { return this.impl.isEmpty(); }
+    @Override public int lastIndexOf(Object o) { return this.impl.lastIndexOf(o); }
+    @Override public int size() { return this.impl.size(); }
+    @Override public Object[] toArray() { return this.impl.toArray(); }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        //noinspection SuspiciousToArrayCall
+        return this.impl.toArray(a);
+    }
+
+    @Override public boolean add(E e) { throw new UnsupportedOperationException(); }
+    @Override public void add(int index, E element) { throw new UnsupportedOperationException(); }
+    @Override public boolean addAll(Collection<? extends E> c) { throw new UnsupportedOperationException(); }
+    @Override public boolean addAll(int index, Collection<? extends E> c) { throw new UnsupportedOperationException(); }
+    @Override public void clear() { throw new UnsupportedOperationException(); }
+    @Override public E remove(int index) { throw new UnsupportedOperationException(); }
+    @Override public boolean remove(Object o) { throw new UnsupportedOperationException(); }
+    @Override public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+    @Override public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+    @Override public E set(int index, E element) { throw new UnsupportedOperationException(); }
+    @Override public boolean setAll(Collection<E> elements) { throw new UnsupportedOperationException(); }
 
 }

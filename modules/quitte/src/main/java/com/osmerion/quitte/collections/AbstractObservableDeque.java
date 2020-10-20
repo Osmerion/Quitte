@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import com.osmerion.quitte.InvalidationListener;
 
 /**
- * A basic implementation for {@link ObservableDeque}.
+ * A basic implementation for a modifiable {@link ObservableDeque}.
  *
  * @param <E>   the type of the deque's elements
  *

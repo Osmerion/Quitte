@@ -62,16 +62,12 @@ public final class WrappingObservableMap<K, V> extends AbstractObservableMap<K, 
         this.impl = Objects.requireNonNull(impl);
     }
 
+    @Override public V putImpl(@Nullable K key, @Nullable V value) { return this.impl.put(key, value); }
+
     @Override
     public Set<Entry<K, V>> entrySet() {
         if (this.entrySet == null) this.entrySet = new WrappingObservableEntrySet(this.impl.entrySet());
         return this.entrySet;
-    }
-
-    @Nullable
-    @Override
-    public V putImpl(@Nullable K key, @Nullable V value) {
-        return this.impl.put(key, value);
     }
 
 }

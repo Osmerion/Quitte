@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
 import com.osmerion.quitte.InvalidationListener;
 
 /**
- * A basic implementation for {@link ObservableSet}.
+ * A basic implementation for a modifiable {@link ObservableSet}.
  *
  * @param <E>   the type of the set's elements
  *

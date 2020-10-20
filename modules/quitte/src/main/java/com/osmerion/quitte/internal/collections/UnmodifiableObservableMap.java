@@ -30,14 +30,18 @@
  */
 package com.osmerion.quitte.internal.collections;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
-import com.osmerion.quitte.collections.AbstractObservableMap;
+import com.osmerion.quitte.InvalidationListener;
+import com.osmerion.quitte.collections.MapChangeListener;
 import com.osmerion.quitte.collections.ObservableMap;
 
 /**
- * A wrapper for an observable map that blocks mutation.
+ * A wrapper for an {@link ObservableMap} that blocks mutation.
  *
  * @param <K>   the type of the map's keys
  * @param <V>   the type of the map's values
@@ -48,30 +52,52 @@ import com.osmerion.quitte.collections.ObservableMap;
  *
  * @author  Leon Linhart
  */
-public final class UnmodifiableObservableMap<K, V> extends AbstractObservableMap<K, V> {
+public final class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -6114641986818029081L;
 
     private final ObservableMap<K, V> impl;
 
-    @Nullable
-    private transient Set<Entry<K, V>> entrySet;
-
     public UnmodifiableObservableMap(ObservableMap<K, V> impl) {
         this.impl = Objects.requireNonNull(impl);
     }
 
+    @Override public boolean addListener(InvalidationListener listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(InvalidationListener listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addListener(MapChangeListener<? super K, ? super V> listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(MapChangeListener<? super K, ? super V> listener) { return this.impl.removeListener(listener); }
+
+    @Override public boolean containsKey(Object key) { return this.impl.containsKey(key); }
+    @Override public boolean containsValue(Object value) { return this.impl.containsValue(value); }
+
+    @Nullable
+    private transient Set<Entry<K, V>> entrySet;
+
     @Override
     public Set<Entry<K, V>> entrySet() {
-        if (this.entrySet == null) this.entrySet = new UnmodifiableObservableEntrySet(this.impl.entrySet());
+        if (this.entrySet == null) this.entrySet = Collections.unmodifiableSet(this.impl.entrySet());
         return this.entrySet;
     }
 
-    @Nullable
+    @Override public boolean isEmpty() { return this.impl.isEmpty(); }
+
     @Override
-    protected V putImpl(@Nullable K key, @Nullable V value) {
-        throw new UnsupportedOperationException();
+    public Set<K> keySet() {
+        return Collections.unmodifiableSet(this.impl.keySet());
     }
+
+    @Override public int size() { return this.impl.size(); }
+
+    @Override
+    public Collection<V> values() {
+        return Collections.unmodifiableCollection(this.impl.values());
+    }
+
+    @Override public void clear() { throw new UnsupportedOperationException(); }
+    @Override public V get(Object key) { throw new UnsupportedOperationException(); }
+    @Override public V put(K key, V value) { throw new UnsupportedOperationException(); }
+    @Override public void putAll(Map<? extends K, ? extends V> m) { throw new UnsupportedOperationException(); }
+    @Override public V remove(Object key) { throw new UnsupportedOperationException(); }
 
 }

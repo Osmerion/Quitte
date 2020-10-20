@@ -30,12 +30,16 @@
  */
 package com.osmerion.quitte.internal.collections;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 import javax.annotation.Nullable;
+import com.osmerion.quitte.InvalidationListener;
+import com.osmerion.quitte.collections.DequeChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
 
 /**
- * A wrapper for an observable deque that blocks mutation.
+ * A wrapper for an {@link ObservableDeque} that blocks mutation.
  *
  * @param <E>   the type of the deque's elements
  *
@@ -45,23 +49,48 @@ import com.osmerion.quitte.collections.ObservableDeque;
  *     
  * @author  Leon Linhart
  */
-public final class UnmodifiableObservableDeque<E> extends AbstractWrappingObservableDeque<E> {
+public final class UnmodifiableObservableDeque<E> implements ObservableDeque<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -1042323408562421394L;
 
+    private final ObservableDeque<E> impl;
+
     public UnmodifiableObservableDeque(ObservableDeque<E> impl) {
-        super(impl);
+        this.impl = Objects.requireNonNull(impl);
     }
 
-    @Override public void addFirstImpl(@Nullable E element) { throw new UnsupportedOperationException(); }
-    @Override public void addLastImpl(@Nullable E element) { throw new UnsupportedOperationException(); }
-    @Override public boolean offerFirstImpl(@Nullable E element) { throw new UnsupportedOperationException(); }
-    @Override public boolean offerLastImpl(@Nullable E element) { throw new UnsupportedOperationException(); }
-    @Override public E removeFirstImpl() { throw new UnsupportedOperationException(); }
-    @Override public E removeLastImpl() { throw new UnsupportedOperationException(); }
-    @Override public E pollFirstImpl() { throw new UnsupportedOperationException(); }
-    @Override public E pollLastImpl() { throw new UnsupportedOperationException(); }
+    @Override public boolean addListener(InvalidationListener listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(InvalidationListener listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addListener(DequeChangeListener<? super E> listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(DequeChangeListener<? super E> listener) { return this.impl.removeListener(listener); }
+
+    @Override public boolean contains(Object o) { return this.impl.contains(o); }
+    @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }
+
+    @Override
+    public Iterator<E> descendingIterator() {
+        return new Iterator<>() {
+
+            private final Iterator<E> impl = UnmodifiableObservableDeque.this.impl.descendingIterator();
+
+            @Override
+            public boolean hasNext() {
+                return this.impl.hasNext();
+            }
+
+            @Override
+            public E next() {
+                return this.impl.next();
+            }
+
+        };
+    }
+
+    @Override public E element() { return this.impl.element(); }
+    @Override public E getFirst() { return this.impl.getFirst(); }
+    @Override public E getLast() { return this.impl.getLast(); }
+    @Override public boolean isEmpty() { return this.impl.isEmpty(); }
 
     @Override
     public Iterator<E> iterator() {
@@ -82,23 +111,38 @@ public final class UnmodifiableObservableDeque<E> extends AbstractWrappingObserv
         };
     }
 
+    @Override public E peek() { return this.impl.peek(); }
+    @Override public E peekFirst() { return this.impl.peekFirst(); }
+    @Override public E peekLast() { return this.impl.peekLast(); }
+    @Override public int size() { return this.impl.size(); }
+    @Override public Object[] toArray() { return this.impl.toArray(); }
+
     @Override
-    public Iterator<E> descendingIterator() {
-        return new Iterator<>() {
-
-            private final Iterator<E> impl = UnmodifiableObservableDeque.this.impl.descendingIterator();
-
-            @Override
-            public boolean hasNext() {
-                return this.impl.hasNext();
-            }
-
-            @Override
-            public E next() {
-                return this.impl.next();
-            }
-
-        };
+    public <T> T[] toArray(T[] a) {
+        //noinspection SuspiciousToArrayCall
+        return this.impl.toArray(a);
     }
+
+    @Override public boolean add(E e) { throw new UnsupportedOperationException(); }
+    @Override public boolean addAll(Collection<? extends E> c) { throw new UnsupportedOperationException(); }
+    @Override public void clear() { throw new UnsupportedOperationException(); }
+    @Override public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+    @Override public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+    @Override public void addFirst(@Nullable E element) { throw new UnsupportedOperationException(); }
+    @Override public void addLast(@Nullable E element) { throw new UnsupportedOperationException(); }
+    @Override public boolean offerFirst(@Nullable E element) { throw new UnsupportedOperationException(); }
+    @Override public boolean offerLast(@Nullable E element) { throw new UnsupportedOperationException(); }
+    @Override public E remove() { throw new UnsupportedOperationException(); }
+    @Override public boolean remove(@Nullable Object o) { throw new UnsupportedOperationException(); }
+    @Override public E removeFirst() { throw new UnsupportedOperationException(); }
+    @Override public boolean removeFirstOccurrence(Object o) { throw new UnsupportedOperationException(); }
+    @Override public E removeLast() { throw new UnsupportedOperationException(); }
+    @Override public boolean removeLastOccurrence(Object o) { throw new UnsupportedOperationException(); }
+    @Override public boolean offer(E e) { throw new UnsupportedOperationException(); }
+    @Override public E poll() { throw new UnsupportedOperationException(); }
+    @Override public E pollFirst() { throw new UnsupportedOperationException(); }
+    @Override public E pollLast() { throw new UnsupportedOperationException(); }
+    @Override public E pop() { throw new UnsupportedOperationException(); }
+    @Override public void push(E e) { throw new UnsupportedOperationException(); }
 
 }

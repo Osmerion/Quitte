@@ -30,14 +30,15 @@
  */
 package com.osmerion.quitte.internal.collections;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
-import javax.annotation.Nullable;
-import com.osmerion.quitte.collections.AbstractObservableSet;
+import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.collections.ObservableSet;
+import com.osmerion.quitte.collections.SetChangeListener;
 
 /**
- * A wrapper for an observable set that blocks mutation.
+ * A wrapper for an {@link ObservableSet} that blocks mutation.
  *
  * @param <E>   the type of the set's elements
  *
@@ -47,7 +48,7 @@ import com.osmerion.quitte.collections.ObservableSet;
  *
  * @author  Leon Linhart
  */
-public final class UnmodifiableObservableSet<E> extends AbstractObservableSet<E> {
+public final class UnmodifiableObservableSet<E> implements ObservableSet<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = 2291646691105830160L;
@@ -58,19 +59,18 @@ public final class UnmodifiableObservableSet<E> extends AbstractObservableSet<E>
         this.impl = Objects.requireNonNull(impl);
     }
 
-    @Override
-    protected boolean addImpl(@Nullable E element) {
-        throw new UnsupportedOperationException();
-    }
+    @Override public boolean addListener(InvalidationListener listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(InvalidationListener listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addListener(SetChangeListener<? super E> listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(SetChangeListener<? super E> listener) { return this.impl.removeListener(listener); }
 
-    @Override
-    protected boolean removeImpl(@Nullable Object element) {
-        throw new UnsupportedOperationException();
-    }
+    @Override public boolean contains(Object o) { return this.impl.contains(o); }
+    @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }
+    @Override public boolean isEmpty() { return this.impl.isEmpty(); }
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
 
             private final Iterator<E> impl = UnmodifiableObservableSet.this.impl.iterator();
 
@@ -87,9 +87,20 @@ public final class UnmodifiableObservableSet<E> extends AbstractObservableSet<E>
         };
     }
 
+    @Override public int size() { return this.impl.size(); }
+    @Override public Object[] toArray() { return this.impl.toArray(); }
+
     @Override
-    public int size() {
-        return this.impl.size();
+    public <T> T[] toArray(T[] a) {
+        //noinspection SuspiciousToArrayCall
+        return this.impl.toArray(a);
     }
+
+    @Override public void clear() { throw new UnsupportedOperationException(); }
+    @Override public boolean add(E e) { throw new UnsupportedOperationException(); }
+    @Override public boolean addAll(Collection<? extends E> c)  { throw new UnsupportedOperationException(); }
+    @Override public boolean remove(Object o) { throw new UnsupportedOperationException(); }
+    @Override public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+    @Override public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
 
 }

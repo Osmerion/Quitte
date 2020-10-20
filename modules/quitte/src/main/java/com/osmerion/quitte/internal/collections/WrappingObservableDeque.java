@@ -33,6 +33,7 @@ package com.osmerion.quitte.internal.collections;
 import java.util.Deque;
 import java.util.Iterator;
 import javax.annotation.Nullable;
+import com.osmerion.quitte.collections.AbstractObservableDeque;
 import com.osmerion.quitte.collections.DequeChangeListener;
 
 /**
@@ -46,13 +47,15 @@ import com.osmerion.quitte.collections.DequeChangeListener;
  *
  * @author  Leon Linhart
  */
-public final class WrappingObservableDeque<E> extends AbstractWrappingObservableDeque<E> {
+public final class WrappingObservableDeque<E> extends AbstractObservableDeque<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -4084123783773885840L;
 
+    private final Deque<E> impl;
+
     public WrappingObservableDeque(Deque<E> impl) {
-        super(impl);
+        this.impl = impl;
     }
 
     @Override protected void addFirstImpl(@Nullable E element) { this.impl.addFirst(element); }
@@ -63,6 +66,39 @@ public final class WrappingObservableDeque<E> extends AbstractWrappingObservable
     @Override protected E removeLastImpl() { return this.impl.removeLast(); }
     @Override protected E pollFirstImpl() { return this.impl.pollFirst(); }
     @Override protected E pollLastImpl() { return this.impl.pollLast(); }
+
+    @Override public E element() { return this.impl.element(); }
+
+    @Override
+    public Iterator<E> descendingIterator() {
+        return new Iterator<>() {
+
+            private final Iterator<E> impl = WrappingObservableDeque.this.impl.descendingIterator();
+            @Nullable private E cursor;
+
+            @Override
+            public boolean hasNext() {
+                return this.impl.hasNext();
+            }
+
+            @Override
+            public E next() {
+                return (this.cursor = this.impl.next());
+            }
+
+            @Override
+            public void remove() {
+                try (ChangeBuilder changeBuilder = WrappingObservableDeque.this.beginChange()) {
+                    this.impl.remove();
+                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, this.cursor);
+                }
+            }
+
+        };
+    }
+
+    @Override public E getFirst() { return this.impl.getFirst(); }
+    @Override public E getLast() { return this.impl.getLast(); }
 
     @Override
     public Iterator<E> iterator() {
@@ -92,32 +128,9 @@ public final class WrappingObservableDeque<E> extends AbstractWrappingObservable
         };
     }
 
-    @Override
-    public Iterator<E> descendingIterator() {
-        return new Iterator<>() {
-
-            private final Iterator<E> impl = WrappingObservableDeque.this.impl.descendingIterator();
-            @Nullable private E cursor;
-
-            @Override
-            public boolean hasNext() {
-                return this.impl.hasNext();
-            }
-
-            @Override
-            public E next() {
-                return (this.cursor = this.impl.next());
-            }
-
-            @Override
-            public void remove() {
-                try (ChangeBuilder changeBuilder = WrappingObservableDeque.this.beginChange()) {
-                    this.impl.remove();
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, this.cursor);
-                }
-            }
-
-        };
-    }
+    @Override public E peek() { return this.impl.peek(); }
+    @Override public E peekFirst() { return this.impl.peekFirst(); }
+    @Override public E peekLast() { return this.impl.peekLast(); }
+    @Override public int size() { return this.impl.size(); }
 
 }

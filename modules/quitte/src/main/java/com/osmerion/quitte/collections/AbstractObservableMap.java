@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import com.osmerion.quitte.InvalidationListener;
 
 /**
- * A basic implementation for {@link ObservableMap}.
+ * A basic implementation for a modifiable {@link ObservableMap}.
  *
  * @param <K>   the type of the map's keys
  * @param <V>   the type of the map's values
@@ -375,23 +375,6 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             return new WrappingObservableEntry(entry);
         }
 
-    }
-
-    /**
-     * An unmodifiable wrapper for a map's entry-set.
-     *
-     * @since   0.1.0
-     */
-    protected final class UnmodifiableObservableEntrySet extends AbstractObservableEntrySet {
-
-        public UnmodifiableObservableEntrySet(Set<Entry<K, V>> impl) {
-            super(impl);
-        }
-
-        @Override
-        public Entry<K, V> wrap(Entry<K, V> entry) {
-            return new SimpleImmutableEntry<>(entry);
-        }
     }
 
     /**

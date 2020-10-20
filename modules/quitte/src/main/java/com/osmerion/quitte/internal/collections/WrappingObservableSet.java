@@ -58,14 +58,11 @@ public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
         this.impl = Objects.requireNonNull(impl);
     }
 
-    @Override
-    protected boolean addImpl(@Nullable E element) {
-        return this.impl.add(element);
-    }
+    @Override protected boolean addImpl(@Nullable E element) { return this.impl.add(element); }
 
     @Override
-    @SuppressWarnings("SuspiciousMethodCalls")
     protected boolean removeImpl(@Nullable Object element) {
+        //noinspection SuspiciousMethodCalls
         return this.impl.remove(element);
     }
 
@@ -97,9 +94,6 @@ public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
         };
     }
 
-    @Override
-    public int size() {
-        return this.impl.size();
-    }
+    @Override public int size() { return this.impl.size(); }
 
 }
