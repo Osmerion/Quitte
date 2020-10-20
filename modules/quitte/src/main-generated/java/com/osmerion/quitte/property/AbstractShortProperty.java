@@ -69,7 +69,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindToBoxing(ObservableValue<Short> observable) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new ShortBinding.Generic<>(this::onBindingInvalidated, observable, Objects::requireNonNull);
         this.onBindingInvalidated();
     }
@@ -81,7 +81,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized <S> void bindToBoxing(ObservableValue<S> observable, Function<S, Short> transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new ShortBinding.Generic<>(this::onBindingInvalidated, observable, it -> Objects.requireNonNull(transform.apply(it)));
         this.onBindingInvalidated();
     }
@@ -93,7 +93,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableShortValue observable) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Short2ShortBinding(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
@@ -105,7 +105,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableBoolValue observable, Bool2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Bool2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -117,7 +117,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableByteValue observable, Byte2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Byte2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -129,7 +129,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableShortValue observable, Short2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Short2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -141,7 +141,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableIntValue observable, Int2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Int2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -153,7 +153,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableLongValue observable, Long2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Long2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -165,7 +165,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableFloatValue observable, Float2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Float2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -177,7 +177,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void bindTo(ObservableDoubleValue observable, Double2ShortFunction transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Double2ShortBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -189,7 +189,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2ShortFunction<S> transform) {
-        if (this.binding != null) throw new IllegalStateException();
+        if (this.isBound()) throw new IllegalStateException();
         this.binding = new Object2ShortBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
@@ -221,7 +221,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      */
     @Override
     public final synchronized void unbind() {
-        if (this.binding == null) throw new IllegalStateException();
+        if (!this.isBound()) throw new IllegalStateException();
 
         this.binding.release();
         this.binding = null;
