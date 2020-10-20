@@ -35,12 +35,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 import java.util.RandomAccess;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,7 +56,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableList<E> extends AbstractList<E> implements ObservableList<E> {
 
-    private transient final Set<ListChangeListener<? super E>> changeListeners = new LinkedHashSet<>(1);
+    private transient final CopyOnWriteArraySet<ListChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
