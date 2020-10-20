@@ -33,9 +33,7 @@ package com.osmerion.quitte.internal.collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.annotation.Nullable;
-import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.collections.AbstractObservableList;
 
 /**
