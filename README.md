@@ -1,6 +1,6 @@
 # Quitte
 [![License](https://img.shields.io/badge/license-BSD-blue.svg?style=flat-square&label=License)](https://github.com/Osmerion/Quitte/blob/master/LICENSE)
-[![Maven Central](https://img.shields.io/maven-central/v/com.osmerion.quitte/gw2ml.svg?style=flat-square&label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/com.osmerion.quitte/quitte)
+[![Maven Central](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/com.osmerion.quitte/quitte)
 [![JavaDoc](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=JavaDoc&color=blue)](https://javadoc.io/doc/com.osmerion.quitte/quitte)
 
 Specialized, observable properties and observable collections for the JVM.
