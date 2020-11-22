@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableObjectProperty<T> extends ReadableProperty<T>, ObservableObjectValue<T> {
+public interface ReadableObjectProperty<T> extends ReadableValueProperty<T>, ObservableObjectValue<T> {
 
     /**
      * {@inheritDoc}

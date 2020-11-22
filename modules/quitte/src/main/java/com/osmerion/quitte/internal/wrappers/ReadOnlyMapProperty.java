@@ -28,50 +28,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.osmerion.quitte.property;
+package com.osmerion.quitte.internal.wrappers;
 
-import com.osmerion.quitte.Observable;
-import com.osmerion.quitte.value.ObservableValue;
+import java.util.Map;
+
+import com.osmerion.quitte.internal.collections.UnmodifiableObservableMap;
+import com.osmerion.quitte.property.ReadableMapProperty;
 
 /**
- * A basic readable property.
+ * A read-only {@link Map} property.
  *
- * <p>A property may be {@link #isBound() bound} to an {@link Observable}. While a property is bound, its value will
- * depend on the value on the value of the observable it is bound to.</p>
- *
- * @since   0.1.0
+ * @param <K>   the type of the map's keys
+ * @param <V>   the type of the map's values
  *
  * @author  Leon Linhart
  */
-public interface ReadableProperty extends Observable {
+public final class ReadOnlyMapProperty<K, V> extends UnmodifiableObservableMap<K, V> implements ReadableMapProperty<K, V> {
 
-    /**
-     * Returns a read-only view of this property.
-     *
-     * @return  a read-only view of this property
-     *
-     * @since   0.1.0
-     */
-    ReadableProperty asReadOnlyProperty();
+    private final ReadableMapProperty<K, V> property;
 
-    /**
-     * Returns {@code true} if this property is bound to an {@link ObservableValue}, or {@code false} otherwise.
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to.</p>
-     *
-     * @return  {@code true} if this property is bound to an {@code ObservableValue}, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isBound();
+    public ReadOnlyMapProperty(ReadableMapProperty<K, V> property) {
+        super(property);
+        this.property = property;
+    }
 
-    /**
-     * Returns {@code true} if this property is writable, or {@code false} otherwise.
-     *
-     * @return {@code true} if this property is writable, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isWritable();
+    @Override
+    public ReadableMapProperty<K, V> asReadOnlyProperty() {
+        return this;
+    }
+
+    @Override
+    public boolean isBound() {
+        return this.property.isBound();
+    }
+
+    @Override
+    public boolean isWritable() {
+        return this.property.isWritable();
+    }
 
 }

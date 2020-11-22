@@ -30,7 +30,10 @@
  */
 package com.osmerion.quitte.collections;
 
+import java.util.Deque;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A listener that may be used to subscribe to changes to one or more {@link ObservableDeque observable deques}.
@@ -83,6 +86,37 @@ public interface DequeChangeListener<E> {
         }
 
         /**
+         * Applies this change to the given deque.
+         *
+         * @param target    the deque to apply this change to
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public void applyTo(Deque<E> target) {
+            this.localChanges.forEach(it -> it.applyTo(target));
+        }
+
+        /**
+         * Creates a copy of this change using the given {@code transform} to map the elements.
+         *
+         * @param <T>       the new type for the elements
+         * @param transform the transform function to be applied to the elements
+         *
+         * @return  a copy of this change
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public <T> DequeChangeListener.Change<T> copy(Function<? super E, T> transform) {
+            return new Change<>(this.localChanges.stream().map(it -> it.copy(transform)).collect(Collectors.toUnmodifiableList()));
+        }
+
+        /**
          * Returns a list of changes that are local to parts of the deque.
          *
          * <p><b>It is important to process local changes in order, since the order of the elements matters.</b></p>
@@ -117,6 +151,12 @@ public interface DequeChangeListener<E> {
             this.site = site;
             this.elements = elements;
         }
+
+        @Deprecated
+        abstract void applyTo(Deque<E> target);
+
+        @Deprecated
+        abstract <T> DequeChangeListener.LocalChange<T> copy(Function<? super E, T> transform);
 
         /**
          * A list of elements related to this change. How this list should be interpreted is defined by an implementing
@@ -153,6 +193,20 @@ public interface DequeChangeListener<E> {
                 super(site, elements);
             }
 
+            @Override
+            void applyTo(Deque<E> target) {
+                switch (this.getSite()) {
+                    case HEAD -> this.getElements().forEach(target::addFirst);
+                    case TAIL -> this.getElements().forEach(target::addLast);
+                    default -> throw new IllegalStateException();
+                }
+            }
+
+            @Override
+            <T> LocalChange<T> copy(Function<? super E, T> transform) {
+                return new Insertion<>(this.getSite(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+            }
+
         }
 
         /**
@@ -165,6 +219,22 @@ public interface DequeChangeListener<E> {
 
             Removal(Site site, List<E> elements) {
                 super(site, elements);
+            }
+
+            @Override
+            void applyTo(Deque<E> target) {
+                switch (this.getSite()) {
+                    case HEAD -> this.getElements().forEach(target::addFirst);
+                    case TAIL -> this.getElements().forEach(target::addLast);
+                    // TODO approximation might produce incorrect results, maybe we should disallow operations that produce opaque changes for bound observable deques?
+                    case OPAQUE -> this.getElements().forEach(target::remove);
+                    default -> throw new IllegalStateException();
+                }
+            }
+
+            @Override
+            <T> LocalChange<T> copy(Function<? super E, T> transform) {
+                return new Removal<>(this.getSite(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
             }
 
         }

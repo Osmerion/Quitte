@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableShortProperty extends ReadableProperty<Short>, ObservableShortValue {
+public interface ReadableShortProperty extends ReadableValueProperty<Short>, ObservableShortValue {
 
     /**
      * {@inheritDoc}

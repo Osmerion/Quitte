@@ -30,48 +30,31 @@
  */
 package com.osmerion.quitte.property;
 
-import com.osmerion.quitte.Observable;
-import com.osmerion.quitte.value.ObservableValue;
+import java.util.Set;
+
+import com.osmerion.quitte.collections.ObservableSet;
+import com.osmerion.quitte.internal.wrappers.ReadOnlySetProperty;
 
 /**
- * A basic readable property.
+ * A readable {@link Set} property.
  *
- * <p>A property may be {@link #isBound() bound} to an {@link Observable}. While a property is bound, its value will
- * depend on the value on the value of the observable it is bound to.</p>
+ * @param <E>   the type of elements in this set
+ *
+ * @see ObservableSet
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface ReadableProperty extends Observable {
+public interface ReadableSetProperty<E> extends ReadableProperty, ObservableSet<E> {
 
     /**
-     * Returns a read-only view of this property.
-     *
-     * @return  a read-only view of this property
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    ReadableProperty asReadOnlyProperty();
-
-    /**
-     * Returns {@code true} if this property is bound to an {@link ObservableValue}, or {@code false} otherwise.
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to.</p>
-     *
-     * @return  {@code true} if this property is bound to an {@code ObservableValue}, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isBound();
-
-    /**
-     * Returns {@code true} if this property is writable, or {@code false} otherwise.
-     *
-     * @return {@code true} if this property is writable, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isWritable();
+    default ReadableSetProperty<E> asReadOnlyProperty() {
+        return (!(this instanceof ReadOnlySetProperty) ? new ReadOnlySetProperty<>(this) : this);
+    }
 
 }

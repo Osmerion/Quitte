@@ -32,6 +32,8 @@ package com.osmerion.quitte.collections;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 /**
@@ -77,7 +79,7 @@ public interface SetChangeListener<E> {
     /**
      * A change done to an {@link ObservableSet}.
      *
-     * <p>Note that adding an element that is already in a set does not modify the set and therefor no change will be
+     * <p>Note that adding an element that is already in a set does not modify the set and therefore no change will be
      * generated.</p>
      *
      * @param <E>   the type of the set's elements
@@ -91,6 +93,42 @@ public interface SetChangeListener<E> {
         Change(@Nullable Set<E> added, @Nullable Set<E> removed) {
             this.added = added != null ? Collections.unmodifiableSet(added) : Collections.emptySet();
             this.removed = removed != null ? Collections.unmodifiableSet(removed) : Collections.emptySet();
+        }
+
+        /**
+         * Applies this change to the given set.
+         *
+         * @param target    the set to apply this change to
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated
+        public void applyTo(Set<E> target) {
+            target.addAll(this.added);
+            this.removed.forEach(target::remove);
+        }
+
+        /**
+         * Creates a copy of this change using the given {@code transform} to map the elements.
+         *
+         * @param <T>       the new type for the elements
+         * @param transform the transform function to be applied to the elements
+         *
+         * @return  a copy of this change
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public <T> SetChangeListener.Change<T> copy(Function<? super E, T> transform) {
+            return new Change<>(
+                this.added.stream().map(transform).collect(Collectors.toUnmodifiableSet()),
+                this.removed.stream().map(transform).collect(Collectors.toUnmodifiableSet())
+            );
         }
 
         /**

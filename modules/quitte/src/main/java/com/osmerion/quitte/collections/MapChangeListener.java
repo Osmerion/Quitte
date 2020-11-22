@@ -32,6 +32,8 @@ package com.osmerion.quitte.collections;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 /**
@@ -92,6 +94,49 @@ public interface MapChangeListener<K, V> {
             this.added = (added != null) ? Collections.unmodifiableMap(added) : Collections.emptyMap();
             this.removed = (removed != null) ? Collections.unmodifiableMap(removed) : Collections.emptyMap();
             this.updated = (updated != null) ? Collections.unmodifiableMap(updated) : Collections.emptyMap();
+        }
+
+        /**
+         * Applies this change to the given map.
+         *
+         * @param target    the map to apply this change to
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public void applyTo(Map<K, V> target) {
+            target.putAll(this.added);
+            this.removed.forEach(target::remove);
+            this.updated.forEach((k, v) -> target.put(k, v.getNewValue()));
+        }
+
+        /**
+         * Creates a copy of this change using the given {@code transform} to map the entries.
+         *
+         * @param <S>       the new type for the keys
+         * @param <T>       the new type for the values
+         * @param transform the transform function to be applied to the entries
+         *
+         * @return  a copy of this change
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public <S, T> Change<S, T> copy(BiFunction<? super K, ? super V, Map.Entry<S, T>> transform) {
+            return new Change<>(
+                this.added.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                this.removed.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                this.updated.entrySet().stream().map(e -> {
+                    Map.Entry<S, T> oldValue = transform.apply(e.getKey(), e.getValue().getOldValue());
+                    Map.Entry<S, T> newValue = transform.apply(e.getKey(), e.getValue().getNewValue());
+
+                    return Map.entry(newValue.getKey(), new Update<>(oldValue.getValue(), newValue.getValue()));
+                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         /**

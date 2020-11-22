@@ -32,6 +32,8 @@ package com.osmerion.quitte.collections;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A listener that may be used to subscribe to changes to one or more {@link ObservableList observable lists}.
@@ -89,6 +91,34 @@ public interface ListChangeListener<E> {
         private Change() {} // TODO This is an ideal candidate for a sealed record hierarchy.
 
         /**
+         * Applies this change to the given list.
+         *
+         * @param target    the list to apply this change to
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @SuppressWarnings("DeprecatedIsStillUsed")
+        @Deprecated
+        public abstract void applyTo(List<E> target);
+
+        /**
+         * Creates a copy of this change using the given {@code transform} to map the elements.
+         *
+         * @param <T>       the new type for the elements
+         * @param transform the transform function to be applied to the elements
+         *
+         * @return  a copy of this change
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public abstract <T> Change<T> copy(Function<? super E, T> transform);
+
+        /**
          * A change to a list in which its elements are rearranged.
          *
          * @since   0.1.0
@@ -99,6 +129,35 @@ public interface ListChangeListener<E> {
 
             Permutation(List<Integer> indices) {
                 this.indices = indices;
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @since   0.1.0
+             */
+            @Deprecated
+            @Override
+            public void applyTo(List<E> target) {
+                if (target.size() != this.indices.size()) throw new IndexOutOfBoundsException();
+
+                List<E> copy = List.copyOf(target);
+
+                for (int i = 0; i < target.size(); i++) {
+                    target.set(this.indices.get(i), copy.get(i));
+                }
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @since   0.1.0
+             */
+            @SuppressWarnings("unchecked")
+            @Deprecated
+            @Override
+            public <T> Change<T> copy(Function<? super E, T> transform) {
+                return (Permutation<T>) this;
             }
 
             /**
@@ -125,6 +184,28 @@ public interface ListChangeListener<E> {
 
             Update(List<LocalChange<E>> localChanges) {
                 this.localChanges = localChanges;
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @since   0.1.0
+             */
+            @Deprecated
+            @Override
+            public void applyTo(List<E> target) {
+                this.localChanges.forEach(it -> it.applyTo(target));
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @since   0.1.0
+             */
+            @Deprecated
+            @Override
+            public <T> Change<T> copy(Function<? super E, T> transform) {
+                return new Update<>(this.localChanges.stream().map(it -> it.copy(transform)).collect(Collectors.toUnmodifiableList()));
             }
 
             /**
@@ -164,6 +245,12 @@ public interface ListChangeListener<E> {
             this.index = index;
             this.elements = Collections.unmodifiableList(elements);
         }
+
+        @Deprecated
+        abstract void applyTo(List<E> target);
+
+        @Deprecated
+        abstract <T> LocalChange<T> copy(Function<? super E, T> transform);
 
         /**
          * Returns the index of the first element affected by this change.
@@ -216,6 +303,23 @@ public interface ListChangeListener<E> {
                 super(index, elements);
             }
 
+            @Override
+            void applyTo(List<E> target) {
+                if (target.size() < this.getIndex()) throw new IndexOutOfBoundsException();
+
+                List<E> elements = this.getElements();
+                int offset = this.getIndex();
+
+                for (int i = 0; i < elements.size(); i++) {
+                    target.addAll(offset + i, elements);
+                }
+            }
+
+            @Override
+            <T> LocalChange<T> copy(Function<? super E, T> transform) {
+                return new Insertion<>(this.getIndex(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+            }
+
         }
 
         /**
@@ -246,6 +350,23 @@ public interface ListChangeListener<E> {
                 super(index, elements);
             }
 
+            @Override
+            void applyTo(List<E> target) {
+                if (target.size() < this.getIndex() + this.getElements().size()) throw new IndexOutOfBoundsException();
+
+                List<E> elements = this.getElements();
+                int offset = this.getIndex();
+
+                for (int i = 0; i < elements.size(); i++) {
+                    target.remove(offset);
+                }
+            }
+
+            @Override
+            <T> LocalChange<T> copy(Function<? super E, T> transform) {
+                return new Removal<>(this.getIndex(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+            }
+
         }
 
         /**
@@ -274,6 +395,23 @@ public interface ListChangeListener<E> {
 
             Update(int index, List<E> elements) {
                 super(index, elements);
+            }
+
+            @Override
+            void applyTo(List<E> target) {
+                if (target.size() < this.getIndex() + this.getElements().size()) throw new IndexOutOfBoundsException();
+
+                List<E> elements = this.getElements();
+                int offset = this.getIndex();
+
+                for (int i = 0; i < elements.size(); i++) {
+                    target.set(offset + i, elements.get(i));
+                }
+            }
+
+            @Override
+            <T> LocalChange<T> copy(Function<? super E, T> transform) {
+                return new Update<>(this.getIndex(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
             }
 
         }

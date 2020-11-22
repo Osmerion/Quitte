@@ -30,60 +30,16 @@
  */
 package com.osmerion.quitte.property;
 
-import java.util.function.Function;
-import com.osmerion.quitte.value.ObservableValue;
-import com.osmerion.quitte.value.WritableValue;
-
 /**
  * A basic writable property.
+ *
+ * <p><b>Specialized versions of this interface should be used whenever possible.</b></p>
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface WritableProperty<T> extends ReadableProperty<T>, WritableValue<T> {
-
-    /**
-     * Binds this property to the given observable value.
-     *
-     * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
-     * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
-     * hold a strong reference to this property.</p>
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
-     * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
-     *
-     * <p>If the underlying property is set to {@code null} and this property does not support {@code null}, a
-     * {@link NullPointerException} is thrown when this property's value is updated to reflect the changes.</p>
-     *
-     * @param observable    the observable to bind this property to
-     *
-     * @throws  IllegalStateException   if this property is already bound
-     *
-     * @since   0.1.0
-     */
-    void bindToBoxing(ObservableValue<T> observable);
-
-    /**
-     * Binds this property to the given observable value.
-     *
-     * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
-     * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
-     * hold a strong reference to this property.</p>
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
-     * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
-     *
-     * <p>If the given transform function returns {@code null} and this property does not support {@code null}, a
-     * {@link NullPointerException} is thrown when this properties value is updated to reflect the changes.</p>
-     *
-     * @param <S>           the type of the value of the given observable
-     * @param observable    the observable to bind this property to
-     * @param transform     the transform function to be applied to the value before updating this property's value
-     *
-     * @since   0.1.0
-     */
-    <S> void bindToBoxing(ObservableValue<S> observable, Function<S, T> transform);
+public interface WritableProperty extends ReadableProperty {
 
     /**
      * Unbinds this property.

@@ -30,48 +30,26 @@
  */
 package com.osmerion.quitte.property;
 
-import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.value.ObservableValue;
 
 /**
- * A basic readable property.
+ * A basic readable property for a single value.
  *
- * <p>A property may be {@link #isBound() bound} to an {@link Observable}. While a property is bound, its value will
- * depend on the value on the value of the observable it is bound to.</p>
+ * @param <T>   the type of the value
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface ReadableProperty extends Observable {
+public interface ReadableValueProperty<T> extends ReadableProperty, ObservableValue<T> { // TODO consider sealing this
 
     /**
-     * Returns a read-only view of this property.
-     *
-     * @return  a read-only view of this property
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    ReadableProperty asReadOnlyProperty();
+    @Override
+    ReadableValueProperty<T> asReadOnlyProperty();
 
-    /**
-     * Returns {@code true} if this property is bound to an {@link ObservableValue}, or {@code false} otherwise.
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to.</p>
-     *
-     * @return  {@code true} if this property is bound to an {@code ObservableValue}, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isBound();
-
-    /**
-     * Returns {@code true} if this property is writable, or {@code false} otherwise.
-     *
-     * @return {@code true} if this property is writable, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isWritable();
 
 }

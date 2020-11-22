@@ -52,7 +52,7 @@ import com.osmerion.quitte.collections.ObservableMap;
  *
  * @author  Leon Linhart
  */
-public final class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
+public class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -6114641986818029081L;

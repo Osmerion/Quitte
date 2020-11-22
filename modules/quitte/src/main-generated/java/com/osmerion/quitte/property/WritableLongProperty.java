@@ -41,7 +41,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface WritableLongProperty extends WritableProperty<Long>, ReadableLongProperty, WritableLongValue {
+public interface WritableLongProperty extends WritableValueProperty<Long>, ReadableLongProperty, WritableLongValue {
 
     /**
      * Binds this property to the given observable value.

@@ -30,48 +30,31 @@
  */
 package com.osmerion.quitte.property;
 
-import com.osmerion.quitte.Observable;
-import com.osmerion.quitte.value.ObservableValue;
+import java.util.List;
+
+import com.osmerion.quitte.collections.ObservableList;
+import com.osmerion.quitte.internal.wrappers.ReadOnlyListProperty;
 
 /**
- * A basic readable property.
+ * A readable {@link List} property.
  *
- * <p>A property may be {@link #isBound() bound} to an {@link Observable}. While a property is bound, its value will
- * depend on the value on the value of the observable it is bound to.</p>
+ * @param <E>   the type of elements in this list
+ *
+ * @see ObservableList
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface ReadableProperty extends Observable {
+public interface ReadableListProperty<E> extends ReadableProperty, ObservableList<E> {
 
     /**
-     * Returns a read-only view of this property.
-     *
-     * @return  a read-only view of this property
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    ReadableProperty asReadOnlyProperty();
-
-    /**
-     * Returns {@code true} if this property is bound to an {@link ObservableValue}, or {@code false} otherwise.
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to.</p>
-     *
-     * @return  {@code true} if this property is bound to an {@code ObservableValue}, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isBound();
-
-    /**
-     * Returns {@code true} if this property is writable, or {@code false} otherwise.
-     *
-     * @return {@code true} if this property is writable, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isWritable();
+    default ReadableListProperty<E> asReadOnlyProperty() {
+        return (!(this instanceof ReadOnlyListProperty) ? new ReadOnlyListProperty<>(this) : this);
+    }
 
 }

@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableDoubleProperty extends ReadableProperty<Double>, ObservableDoubleValue {
+public interface ReadableDoubleProperty extends ReadableValueProperty<Double>, ObservableDoubleValue {
 
     /**
      * {@inheritDoc}

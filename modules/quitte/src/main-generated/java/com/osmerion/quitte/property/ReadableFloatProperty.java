@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableFloatProperty extends ReadableProperty<Float>, ObservableFloatValue {
+public interface ReadableFloatProperty extends ReadableValueProperty<Float>, ObservableFloatValue {
 
     /**
      * {@inheritDoc}

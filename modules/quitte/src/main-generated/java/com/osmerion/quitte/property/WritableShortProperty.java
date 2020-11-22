@@ -41,7 +41,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface WritableShortProperty extends WritableProperty<Short>, ReadableShortProperty, WritableShortValue {
+public interface WritableShortProperty extends WritableValueProperty<Short>, ReadableShortProperty, WritableShortValue {
 
     /**
      * Binds this property to the given observable value.

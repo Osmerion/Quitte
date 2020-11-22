@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableByteProperty extends ReadableProperty<Byte>, ObservableByteValue {
+public interface ReadableByteProperty extends ReadableValueProperty<Byte>, ObservableByteValue {
 
     /**
      * {@inheritDoc}

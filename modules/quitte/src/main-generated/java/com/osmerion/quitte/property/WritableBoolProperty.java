@@ -41,7 +41,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface WritableBoolProperty extends WritableProperty<Boolean>, ReadableBoolProperty, WritableBoolValue {
+public interface WritableBoolProperty extends WritableValueProperty<Boolean>, ReadableBoolProperty, WritableBoolValue {
 
     /**
      * Binds this property to the given observable value.

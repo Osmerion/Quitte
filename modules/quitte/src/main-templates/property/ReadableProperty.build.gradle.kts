@@ -53,7 +53,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface Readable${type.abbrevName}Property$typeParams extends ReadableProperty<${type.box}>, Observable${type.abbrevName}Value$typeParams {
+public interface Readable${type.abbrevName}Property$typeParams extends ReadableValueProperty<${type.box}>, Observable${type.abbrevName}Value$typeParams {
 
     /**
      * {@inheritDoc}

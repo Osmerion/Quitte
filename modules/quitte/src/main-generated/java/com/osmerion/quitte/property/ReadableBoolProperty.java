@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableBoolProperty extends ReadableProperty<Boolean>, ObservableBoolValue {
+public interface ReadableBoolProperty extends ReadableValueProperty<Boolean>, ObservableBoolValue {
 
     /**
      * {@inheritDoc}

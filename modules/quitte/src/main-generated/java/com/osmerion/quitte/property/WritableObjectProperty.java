@@ -41,7 +41,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface WritableObjectProperty<T> extends WritableProperty<T>, ReadableObjectProperty<T>, WritableObjectValue<T> {
+public interface WritableObjectProperty<T> extends WritableValueProperty<T>, ReadableObjectProperty<T>, WritableObjectValue<T> {
 
     /**
      * Binds this property to the given observable value.

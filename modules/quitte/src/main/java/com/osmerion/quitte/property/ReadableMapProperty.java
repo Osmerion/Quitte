@@ -30,48 +30,32 @@
  */
 package com.osmerion.quitte.property;
 
-import com.osmerion.quitte.Observable;
-import com.osmerion.quitte.value.ObservableValue;
+import java.util.Map;
+
+import com.osmerion.quitte.collections.ObservableMap;
+import com.osmerion.quitte.internal.wrappers.ReadOnlyMapProperty;
 
 /**
- * A basic readable property.
+ * A readable {@link Map} property.
  *
- * <p>A property may be {@link #isBound() bound} to an {@link Observable}. While a property is bound, its value will
- * depend on the value on the value of the observable it is bound to.</p>
+ * @param <K>   the type of the map's keys
+ * @param <V>   the type of the map's values
+ *
+ * @see ObservableMap
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface ReadableProperty extends Observable {
+public interface ReadableMapProperty<K, V> extends ReadableProperty, ObservableMap<K, V> {
 
     /**
-     * Returns a read-only view of this property.
-     *
-     * @return  a read-only view of this property
+     * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    ReadableProperty asReadOnlyProperty();
-
-    /**
-     * Returns {@code true} if this property is bound to an {@link ObservableValue}, or {@code false} otherwise.
-     *
-     * <p>While a property is bound, its value will depend on the value of the observable it is bound to.</p>
-     *
-     * @return  {@code true} if this property is bound to an {@code ObservableValue}, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isBound();
-
-    /**
-     * Returns {@code true} if this property is writable, or {@code false} otherwise.
-     *
-     * @return {@code true} if this property is writable, or {@code false} otherwise
-     *
-     * @since   0.1.0
-     */
-    boolean isWritable();
+    default ReadableMapProperty<K, V> asReadOnlyProperty() {
+        return (!(this instanceof ReadOnlyMapProperty) ? new ReadOnlyMapProperty<>(this) : this);
+    }
 
 }

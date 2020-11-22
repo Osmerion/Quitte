@@ -28,33 +28,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.osmerion.quitte.property"
+package com.osmerion.quitte.property;
 
-Type.values().forEach {
-    val type = it
-    val typeParams = if (type === Type.OBJECT) "<T>" else ""
+import java.util.Map;
+import java.util.function.BiFunction;
 
-    template("${packageName.replace('.', '/')}/Writable${type.abbrevName}Property") {
-        """package $packageName;
-
-import com.osmerion.quitte.functional.*;
-import com.osmerion.quitte.value.*;
+import com.osmerion.quitte.collections.ObservableMap;
 
 /**
- * ${if (type === Type.OBJECT)
-            "A generic writable property."
-        else
-            "A specialized writable {@code ${type.raw}} property."
-        }
+ * A writable {@link Map} property.
+ *
+ * @param <K>   the type of the map's keys
+ * @param <V>   the type of the map's values
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface Writable${type.abbrevName}Property$typeParams extends WritableValueProperty<${type.box}>, Readable${type.abbrevName}Property$typeParams, Writable${type.abbrevName}Value$typeParams {
+public interface WritableMapProperty<K, V> extends WritableProperty, ReadableMapProperty<K, V> {
 
     /**
-     * Binds this property to the given observable value.
+     * Binds this property to the given observable map.
      *
      * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
      * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
@@ -67,19 +61,10 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableV
      *
      * @since   0.1.0
      */
-    void bindTo(Observable${type.abbrevName}Value$typeParams observable);
-${Type.values().joinToString(separator = "") { sourceType ->
-            val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
-            val transformTypeParams = when {
-                sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
-                sourceType === Type.OBJECT -> "<S>"
-                type === Type.OBJECT -> "<T>"
-                else -> ""
-            }
+    void bindTo(ObservableMap<K, V> observable);
 
-            """
     /**
-     * Binds this property to the given observable value.
+     * Binds this property to the given observable map.
      *
      * <p>This method creates a unidirectional binding between this property and the given observable. This binding can
      * be destroyed again by calling {@link #unbind()}. However, to avoid memory leaks, the given observable will not
@@ -87,14 +72,14 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
      * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
-     *${if (sourceType === Type.OBJECT) "\n     * @param <S>           the type of the value of the given observable" else ""}
+     *
+     * @param <S>           the type of the source map's keys
+     * @param <T>           the type of the source map's values
      * @param observable    the observable to bind this property to
-     * @param transform     the transform function to be applied to the value before updating this property's value
+     * @param transform     the transform function to be applied to the elements of the observable
      *
      * @since   0.1.0
      */
-    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform);
-"""}}
-}"""
-    }
+    <S, T> void bindTo(ObservableMap<S, T> observable, BiFunction<S, T, Entry<K, V>> transform);
+
 }

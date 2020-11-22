@@ -48,7 +48,7 @@ import com.osmerion.quitte.collections.SetChangeListener;
  *
  * @author  Leon Linhart
  */
-public final class UnmodifiableObservableSet<E> implements ObservableSet<E> {
+public class UnmodifiableObservableSet<E> implements ObservableSet<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = 2291646691105830160L;

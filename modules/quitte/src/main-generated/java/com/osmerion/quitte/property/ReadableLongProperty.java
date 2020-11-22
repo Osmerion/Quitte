@@ -43,7 +43,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableLongProperty extends ReadableProperty<Long>, ObservableLongValue {
+public interface ReadableLongProperty extends ReadableValueProperty<Long>, ObservableLongValue {
 
     /**
      * {@inheritDoc}

@@ -28,30 +28,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-val packageName = "com.osmerion.quitte.property"
+package com.osmerion.quitte.property;
 
-Type.values().forEach {
-    val type = it
-    val typeParams = if (type === Type.OBJECT) "<T>" else ""
+import java.util.function.Function;
 
-    template("${packageName.replace('.', '/')}/Writable${type.abbrevName}Property") {
-        """package $packageName;
-
-import com.osmerion.quitte.functional.*;
-import com.osmerion.quitte.value.*;
+import com.osmerion.quitte.value.ObservableValue;
+import com.osmerion.quitte.value.WritableValue;
 
 /**
- * ${if (type === Type.OBJECT)
-            "A generic writable property."
-        else
-            "A specialized writable {@code ${type.raw}} property."
-        }
+ * A basic writable property for a single value.
+ *
+ * <p><b>Specialized versions of this interface should be used whenever possible.</b></p>
+ *
+ * @param <T>   the type of the value
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface Writable${type.abbrevName}Property$typeParams extends WritableValueProperty<${type.box}>, Readable${type.abbrevName}Property$typeParams, Writable${type.abbrevName}Value$typeParams {
+public interface WritableValueProperty<T> extends WritableProperty, WritableValue<T> {
 
     /**
      * Binds this property to the given observable value.
@@ -62,22 +57,18 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableV
      *
      * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
      * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
+     *
+     * <p>If the underlying property is set to {@code null} and this property does not support {@code null}, a
+     * {@link NullPointerException} is thrown when this property's value is updated to reflect the changes.</p>
      *
      * @param observable    the observable to bind this property to
      *
+     * @throws  IllegalStateException   if this property is already bound
+     *
      * @since   0.1.0
      */
-    void bindTo(Observable${type.abbrevName}Value$typeParams observable);
-${Type.values().joinToString(separator = "") { sourceType ->
-            val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
-            val transformTypeParams = when {
-                sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
-                sourceType === Type.OBJECT -> "<S>"
-                type === Type.OBJECT -> "<T>"
-                else -> ""
-            }
+    void bindToBoxing(ObservableValue<T> observable);
 
-            """
     /**
      * Binds this property to the given observable value.
      *
@@ -87,14 +78,16 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * <p>While a property is bound, its value will depend on the value of the observable it is bound to. A property
      * that is bound by calling this method, is not {@link #isWritable() writable}.</p>
-     *${if (sourceType === Type.OBJECT) "\n     * @param <S>           the type of the value of the given observable" else ""}
+     *
+     * <p>If the given transform function returns {@code null} and this property does not support {@code null}, a
+     * {@link NullPointerException} is thrown when this properties value is updated to reflect the changes.</p>
+     *
+     * @param <S>           the type of the value of the given observable
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
      * @since   0.1.0
      */
-    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform);
-"""}}
-}"""
-    }
+    <S> void bindToBoxing(ObservableValue<S> observable, Function<S, T> transform);
+
 }

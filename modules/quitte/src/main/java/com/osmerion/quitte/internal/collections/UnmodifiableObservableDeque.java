@@ -49,7 +49,7 @@ import com.osmerion.quitte.collections.ObservableDeque;
  *     
  * @author  Leon Linhart
  */
-public final class UnmodifiableObservableDeque<E> implements ObservableDeque<E> {
+public class UnmodifiableObservableDeque<E> implements ObservableDeque<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -1042323408562421394L;

@@ -41,7 +41,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface WritableFloatProperty extends WritableProperty<Float>, ReadableFloatProperty, WritableFloatValue {
+public interface WritableFloatProperty extends WritableValueProperty<Float>, ReadableFloatProperty, WritableFloatValue {
 
     /**
      * Binds this property to the given observable value.
