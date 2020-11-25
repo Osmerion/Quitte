@@ -175,7 +175,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
     @Override
     public final boolean setAll(Collection<E> elements) {
-        List<E> copyOfElements = this.equalContentsOrNull(elements);
+        List<E> copyOfElements = this.nullIfEqual(elements);
         if (copyOfElements == null) return false;
 
         try (ChangeBuilder ignored = this.beginChange()) {
@@ -186,17 +186,27 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
     }
 
     @Nullable
-    private List<E> equalContentsOrNull(Collection<E> elements) {
+    private List<E> nullIfEqual(Collection<E> elements) {
         List<E> copyOfElements = new ArrayList<>(elements.size());
-        Iterator<?> aItr = this.iterator();
-        Iterator<?> bItr = elements.iterator();
-        boolean aHasNext, bHasNext;
+        Iterator<E> aItr = this.iterator();
+        Iterator<E> bItr = elements.iterator();
+        boolean equal = true;
 
+        boolean aHasNext, bHasNext;
         while ((aHasNext = aItr.hasNext()) & (bHasNext = bItr.hasNext())) {
-            if (!Objects.equals(aItr.next(), bItr.next())) return null;
+            E element = bItr.next();
+
+            if (!Objects.equals(aItr.next(), element)) {
+                equal = false;
+                break;
+            }
+
         }
 
-        return (aHasNext == bHasNext) ? copyOfElements : null;
+        if (equal && (aHasNext == bHasNext)) return null;
+
+        bItr.forEachRemaining(copyOfElements::add);
+        return copyOfElements;
     }
 
     @Override
