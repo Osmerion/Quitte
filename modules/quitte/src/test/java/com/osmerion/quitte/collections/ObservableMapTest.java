@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * TODO doc
+ * Tests for {@link ObservableMap}.
  * 
  * @author  Leon Linhart
  */

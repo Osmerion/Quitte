@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * TODO doc
+ * Tests for {@link ObservableSet}.
  *
  * @author  Leon Linhart
  */
