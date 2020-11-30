@@ -43,8 +43,8 @@ val artifactName = project.name.replace('.', '-')
 java {
     modularity.inferModulePath.set(true)
 
-    sourceCompatibility = JavaVersion.VERSION_14
-    targetCompatibility = JavaVersion.VERSION_14
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
 }
 
 tasks {
