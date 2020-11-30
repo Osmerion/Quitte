@@ -43,7 +43,6 @@ import com.osmerion.quitte.collections.AbstractObservableSet;
 import com.osmerion.quitte.collections.ObservableSet;
 import com.osmerion.quitte.collections.SetChangeListener;
 import com.osmerion.quitte.internal.binding.SetBinding;
-import com.osmerion.quitte.internal.collections.WrappingObservableSet;
 
 /**
  * A {@link Set} property.
