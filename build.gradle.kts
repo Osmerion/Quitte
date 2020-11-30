@@ -29,12 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 import com.osmerion.quitte.build.*
+import com.osmerion.quitte.build.BuildType
 
 allprojects {
     group = "com.osmerion.quitte"
     val nextVersion = "0.1.0"
     version = when (deployment.type) {
-        com.osmerion.quitte.build.BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
+        BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
         else -> nextVersion
     }
 
