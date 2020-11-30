@@ -84,7 +84,11 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
     public final void bindTo(ObservableMap<K, V> observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new MapBinding<>(this::onBindingInvalidated, observable, Map::entry);
-        this.onBindingInvalidated();
+
+        try (ChangeBuilder ignored = this.beginChange()) {
+            this.clear();
+            this.putAll(observable);
+        }
     }
 
     /**
@@ -96,7 +100,14 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
     public final <S, T> void bindTo(ObservableMap<S, T> observable, BiFunction<S, T, Entry<K, V>> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new MapBinding<>(this::onBindingInvalidated, observable, transform);
-        this.onBindingInvalidated();
+
+        try (ChangeBuilder ignored = this.beginChange()) {
+            this.clear();
+            observable.forEach((k, v) -> {
+                Map.Entry<K, V> it = transform.apply(k, v);
+                this.put(it.getKey(), it.getValue());
+            });
+        }
     }
 
     /**

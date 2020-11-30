@@ -77,7 +77,11 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
     public final void bindTo(ObservableDeque<E> observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new DequeBinding<>(this::onBindingInvalidated, observable, Function.identity());
-        this.onBindingInvalidated();
+
+        try (ChangeBuilder ignored = this.beginChange()) {
+            this.clear();
+            this.addAll(observable);
+        }
     }
 
     /**
@@ -89,7 +93,11 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
     public final <S> void bindTo(ObservableDeque<S> observable, Function<S, E> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new DequeBinding<>(this::onBindingInvalidated, observable, transform);
-        this.onBindingInvalidated();
+
+        try (ChangeBuilder ignored = this.beginChange()) {
+            this.clear();
+            observable.forEach(it -> this.add(transform.apply(it)));
+        }
     }
 
     /**
