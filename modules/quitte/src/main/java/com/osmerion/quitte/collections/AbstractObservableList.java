@@ -416,16 +416,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             this.depth--;
 
             if (this.depth == 0) {
-                for (var listener : AbstractObservableList.this.invalidationListeners) {
-                    if (listener.isInvalid()) {
-                        AbstractObservableList.this.invalidationListeners.remove(listener);
-                        continue;
-                    }
-
-                    listener.onInvalidation(AbstractObservableList.this);
-                    if (listener.isInvalid()) AbstractObservableList.this.invalidationListeners.remove(listener);
-                }
-
                 AbstractObservableList.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
 
@@ -442,6 +432,16 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
                     listener.onChanged(change);
                     if (listener.isInvalid()) AbstractObservableList.this.changeListeners.remove(listener);
+                }
+
+                for (var listener : AbstractObservableList.this.invalidationListeners) {
+                    if (listener.isInvalid()) {
+                        AbstractObservableList.this.invalidationListeners.remove(listener);
+                        continue;
+                    }
+
+                    listener.onInvalidation(AbstractObservableList.this);
+                    if (listener.isInvalid()) AbstractObservableList.this.invalidationListeners.remove(listener);
                 }
             }
         }

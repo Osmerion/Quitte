@@ -175,16 +175,6 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             this.depth--;
 
             if (this.depth == 0) {
-                for (var listener : AbstractObservableMap.this.invalidationListeners) {
-                    if (listener.isInvalid()) {
-                        AbstractObservableMap.this.invalidationListeners.remove(listener);
-                        continue;
-                    }
-
-                    listener.onInvalidation(AbstractObservableMap.this);
-                    if (listener.isInvalid()) AbstractObservableMap.this.invalidationListeners.remove(listener);
-                }
-
                 AbstractObservableMap.this.changeBuilder = null;
                 if ((this.added == null || this.added.isEmpty()) &&
                     (this.removed == null || this.removed.isEmpty()) &&
@@ -200,6 +190,16 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
 
                     listener.onChanged(change);
                     if (listener.isInvalid()) AbstractObservableMap.this.changeListeners.remove(listener);
+                }
+
+                for (var listener : AbstractObservableMap.this.invalidationListeners) {
+                    if (listener.isInvalid()) {
+                        AbstractObservableMap.this.invalidationListeners.remove(listener);
+                        continue;
+                    }
+
+                    listener.onInvalidation(AbstractObservableMap.this);
+                    if (listener.isInvalid()) AbstractObservableMap.this.invalidationListeners.remove(listener);
                 }
             }
         }

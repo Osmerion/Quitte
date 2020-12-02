@@ -354,16 +354,6 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
             this.depth--;
 
             if (this.depth == 0) {
-                for (var listener : AbstractObservableDeque.this.invalidationListeners) {
-                    if (listener.isInvalid()) {
-                        AbstractObservableDeque.this.invalidationListeners.remove(listener);
-                        continue;
-                    }
-
-                    listener.onInvalidation(AbstractObservableDeque.this);
-                    if (listener.isInvalid()) AbstractObservableDeque.this.invalidationListeners.remove(listener);
-                }
-
                 AbstractObservableDeque.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
 
@@ -377,6 +367,16 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
 
                     listener.onChanged(change);
                     if (listener.isInvalid()) AbstractObservableDeque.this.changeListeners.remove(listener);
+                }
+
+                for (var listener : AbstractObservableDeque.this.invalidationListeners) {
+                    if (listener.isInvalid()) {
+                        AbstractObservableDeque.this.invalidationListeners.remove(listener);
+                        continue;
+                    }
+
+                    listener.onInvalidation(AbstractObservableDeque.this);
+                    if (listener.isInvalid()) AbstractObservableDeque.this.invalidationListeners.remove(listener);
                 }
             }
         }
