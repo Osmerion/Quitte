@@ -37,12 +37,8 @@ Type.values().forEach {
     template("${packageName.replace('.', '/')}/Abstract${type.abbrevName}Expression") {
         """package $packageName;
 
-import java.util.IdentityHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-
-import javax.annotation.Nullable;
-
-import com.osmerion.quitte.*;
+${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
@@ -58,13 +54,9 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class Abstract${type.abbrevName}Expression$typeParams implements Expression<${type.box}>, Observable${type.abbrevName}Value$typeParams {
+public abstract class Abstract${type.abbrevName}Expression$typeParams extends AbstractExpression implements ValueExpression<${type.box}>, Observable${type.abbrevName}Value$typeParams {
 
     private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeParams> changeListeners = new CopyOnWriteArraySet<>();
-    private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
-
-    @Nullable
-    private transient IdentityHashMap<Observable, WeakInvalidationListener> dependencies;
 
     // package-private constructor for an effectively sealed class
     Abstract${type.abbrevName}Expression() {}
@@ -115,24 +107,6 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams implements
      *
      * @since   0.1.0
      */
-    public final boolean addListener(InvalidationListener listener) {
-        return this.invalidationListeners.add(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
-    public final boolean removeListener(InvalidationListener listener) {
-        return this.invalidationListeners.remove(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since   0.1.0
-     */
     @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     public ${type.raw} get() {
         return this.getImpl();
@@ -148,99 +122,9 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams implements
      */
     abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
-    /**
-     * Invalidates the result of this expression.
-     *
-     * @since   0.1.0
-     */
-    protected final void invalidate() {
-        this.doInvalidate();
-    }
-
+    @Override
     void doInvalidate() {
         if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
-    }
-
-    final void notifyInvalidationListeners() {
-        for (var listener : this.invalidationListeners) {
-            if (listener.isInvalid()) {
-                this.invalidationListeners.remove(listener);
-                continue;
-            }
-
-            listener.onInvalidation(this);
-            if (listener.isInvalid()) this.invalidationListeners.remove(listener);
-        }
-    }
-
-    /**
-     * Adds a dependency for this expression. This expression will be invalidated when the given {@link Observable} is
-     * invalidated.
-     *
-     * @param observable    the observable on which this expression should depend
-     *
-     * @throws IllegalArgumentException if this expression already depends on the given {@code Observable}
-     *
-     * @since   0.1.0
-     */
-    protected final void addDependency(Observable observable) {
-        if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
-
-        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.doInvalidate());
-        this.dependencies.compute(observable, (key, oldValue) -> {
-            if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
-
-            observable.addListener(listener);
-            return listener;
-        });
-    }
-
-    /**
-     * Adds a dependency for this expression. This expression will be invalidated when the given {@link Observable} is
-     * invalidated.
-     *
-     * <p>The given {@link Runnable} is executed when the given {@link Observable} is invalidated and may be used to
-     * implemented side effects.</p>
-     *
-     * @param observable    the observable on which this expression should depend
-     * @param action        the action that should be performed when the dependency is invalidated but before the value
-     *                      of this action is recomputed
-     *
-     * @throws IllegalArgumentException if this expression already depends on the given {@code Observable}
-     *
-     * @since   0.1.0
-     */
-    protected final void addDependency(Observable observable, Runnable action) {
-        if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
-
-        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
-            action.run();
-            this.doInvalidate();
-        });
-        this.dependencies.compute(observable, (key, oldValue) -> {
-            if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
-
-            observable.addListener(listener);
-            return listener;
-        });
-    }
-
-    /**
-     * Removes a dependency for this expression.
-     *
-     * @param observable    the observable on which this expression should not longer depend
-     *
-     * @throws IllegalArgumentException if this expression does not depend on the given {@code Observable}
-     *
-     * @since   0.1.0
-     */
-    protected final void removeDependency(Observable observable) {
-        if (this.dependencies == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
-
-        WeakInvalidationListener listener = this.dependencies.remove(observable);
-        if (listener == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
-
-        observable.removeListener(listener);
     }
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected abstract ${type.raw} recomputeValue();
@@ -255,7 +139,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         }
 
         if (notifyListeners) {
-            if (this.onChangedInternal(prev, value) && !changed) return changed;
+            if (this.onChangedInternal(prev, value) && !changed) return false;
             this.onChanged(prev, value);
 
             for (var listener : this.changeListeners) {

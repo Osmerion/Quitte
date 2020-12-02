@@ -30,14 +30,17 @@
  */
 package com.osmerion.quitte.expression;
 
-import com.osmerion.quitte.Observable;
+import com.osmerion.quitte.value.ObservableValue;
 
 /**
- * A {@code ValueExpression} is an {@link Observable observable} which is derived from some state. Typically,
- * expressions yield the result of a function applied to one or more other observables.
+ * A {@code ValueExpression} is an {@link ObservableValue observable value} which is derived from some state. Contrary
+ * to a {@link com.osmerion.quitte.property.WritableValueProperty}, an expression's value may not be set but it is
+ * computed instead. Typically, expressions yield the result of a function applied to one or more other observables.
+ *
+ * @param <T>   the type of the value yielded by the expression
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface Expression extends Observable {}
+public interface ValueExpression<T> extends Expression, ObservableValue<T> {}
