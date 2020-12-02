@@ -2,14 +2,14 @@ name: CI
 on: push
 
 jobs:
-  jdk13:
-    name: OpenJDK 14 (Ubuntu)
+  jdk15:
+    name: OpenJDK 15 (Ubuntu)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: AdoptOpenJDK/install-jdk@v1
         with:
-          version: '14'
+          version: '15'
       - name: Gradle Build
         run: |
           ./gradlew --version --console=plain
