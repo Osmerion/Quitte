@@ -57,6 +57,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
     @Nullable
     private transient DequeBinding<?, E> binding;
+    private transient boolean inBoundUpdate;
 
     /**
      * Creates a new {@code DequeProperty}.
@@ -78,9 +79,15 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new DequeBinding<>(this::onBindingInvalidated, observable, Function.identity());
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            this.addAll(observable);
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                this.addAll(observable);
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -94,9 +101,15 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new DequeBinding<>(this::onBindingInvalidated, observable, transform);
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            observable.forEach(it -> this.add(transform.apply(it)));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                observable.forEach(it -> this.add(transform.apply(it)));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -140,7 +153,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final void addFirstImpl(@Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         this.impl.addFirst(element);
     }
 
@@ -151,7 +164,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final void addLastImpl(@Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         this.impl.addLast(element);
     }
 
@@ -162,7 +175,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final boolean offerFirstImpl(@Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.offerFirst(element);
     }
 
@@ -173,7 +186,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final boolean offerLastImpl(@Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.offerLast(element);
     }
 
@@ -184,7 +197,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final E removeFirstImpl() {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.removeFirst();
     }
 
@@ -195,7 +208,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final E removeLastImpl() {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.removeLast();
     }
 
@@ -206,7 +219,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final E pollFirstImpl() {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.pollFirst();
     }
 
@@ -217,7 +230,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      */
     @Override
     protected final E pollLastImpl() {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.pollLast();
     }
 
@@ -255,7 +268,8 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
             @Override
             public void remove() {
-                if (DequeProperty.this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+                if (DequeProperty.this.binding != null && !DequeProperty.this.inBoundUpdate)
+                    throw new IllegalStateException("A bound property's value may not be set explicitly");
 
                 try (ChangeBuilder changeBuilder = DequeProperty.this.beginChange()) {
                     this.impl.remove();
@@ -310,7 +324,8 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
             @Override
             public void remove() {
-                if (DequeProperty.this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+                if (DequeProperty.this.binding != null && !DequeProperty.this.inBoundUpdate)
+                    throw new IllegalStateException("A bound property's value may not be set explicitly");
 
                 try (ChangeBuilder changeBuilder = DequeProperty.this.beginChange()) {
                     this.impl.remove();
@@ -367,8 +382,14 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
         List<DequeChangeListener.Change<E>> changes = this.binding.getChanges();
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            changes.forEach(change -> change.applyTo(this));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                changes.forEach(change -> change.applyTo(this));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 

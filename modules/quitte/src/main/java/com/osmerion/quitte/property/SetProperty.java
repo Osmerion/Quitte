@@ -59,6 +59,7 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
 
     @Nullable
     private transient SetBinding<?, E> binding;
+    private transient boolean inBoundUpdate;
 
     /**
      * Creates a new {@code SetProperty}.
@@ -96,9 +97,15 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new SetBinding<>(this::onBindingInvalidated, observable, Function.identity());
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            this.addAll(observable);
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                this.addAll(observable);
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -112,9 +119,15 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new SetBinding<>(this::onBindingInvalidated, observable, transform);
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            observable.forEach(it -> this.add(transform.apply(it)));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                observable.forEach(it -> this.add(transform.apply(it)));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -158,7 +171,7 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
      */
     @Override
     protected boolean addImpl(@Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.add(element);
     }
 
@@ -169,7 +182,7 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
      */
     @Override
     protected boolean removeImpl(@Nullable Object element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
 
         //noinspection SuspiciousMethodCalls
         return this.impl.remove(element);
@@ -199,7 +212,8 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
 
             @Override
             public void remove() {
-                if (SetProperty.this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+                if (SetProperty.this.binding != null && !SetProperty.this.inBoundUpdate)
+                    throw new IllegalStateException("A bound property's value may not be set explicitly");
 
                 try (ChangeBuilder changeBuilder = SetProperty.this.beginChange()) {
                     this.impl.remove();
@@ -226,8 +240,14 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
 
         List<SetChangeListener.Change<E>> changes = this.binding.getChanges();
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            changes.forEach(change -> change.applyTo(this));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                changes.forEach(change -> change.applyTo(this));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 

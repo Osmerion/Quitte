@@ -58,6 +58,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
 
     @Nullable
     private transient ListBinding<?, E> binding;
+    private transient boolean inBoundUpdate;
 
     /**
      * Creates a new {@code ListProperty}.
@@ -95,8 +96,14 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ListBinding<>(this::onBindingInvalidated, observable, Function.identity());
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.setAll(observable);
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.setAll(observable);
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -110,9 +117,15 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ListBinding<>(this::onBindingInvalidated, observable, transform);
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            observable.forEach(it -> this.add(transform.apply(it)));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                observable.forEach(it -> this.add(transform.apply(it)));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -156,7 +169,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
      */
     @Override
     protected final void addImpl(int index, @Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         this.impl.add(index, element);
     }
 
@@ -168,7 +181,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
     @Nullable
     @Override
     protected final E removeImpl(int index) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.remove(index);
     }
 
@@ -179,7 +192,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
      */
     @Override
     protected final void sortImpl(Comparator<? super E> c) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         this.impl.sort(c);
     }
 
@@ -191,7 +204,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
     @Nullable
     @Override
     protected final E setImpl(int index, @Nullable E element) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.set(index, element);
     }
 
@@ -221,8 +234,14 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
 
         List<ListChangeListener.Change<E>> changes = this.binding.getChanges();
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            changes.forEach(change -> change.applyTo(this));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                changes.forEach(change -> change.applyTo(this));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 

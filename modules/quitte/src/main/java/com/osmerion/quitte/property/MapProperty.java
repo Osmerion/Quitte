@@ -61,6 +61,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
 
     @Nullable
     private transient MapBinding<?, ?, K, V> binding;
+    private transient boolean inBoundUpdate;
 
     @Nullable
     private transient Set<Entry<K, V>> entrySet;
@@ -85,9 +86,15 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new MapBinding<>(this::onBindingInvalidated, observable, Map::entry);
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            this.putAll(observable);
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                this.putAll(observable);
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -101,12 +108,18 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new MapBinding<>(this::onBindingInvalidated, observable, transform);
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            this.clear();
-            observable.forEach((k, v) -> {
-                Map.Entry<K, V> it = transform.apply(k, v);
-                this.put(it.getKey(), it.getValue());
-            });
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                this.clear();
+                observable.forEach((k, v) -> {
+                    Map.Entry<K, V> it = transform.apply(k, v);
+                    this.put(it.getKey(), it.getValue());
+                });
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -146,7 +159,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
     @Nullable
     @Override
     protected V putImpl(@Nullable K key, @Nullable V value) {
-        if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+        if (this.binding != null && !this.inBoundUpdate) throw new IllegalStateException("A bound property's value may not be set explicitly");
         return this.impl.put(key, value);
     }
 
@@ -162,8 +175,14 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
 
         List<MapChangeListener.Change<K, V>> changes = this.binding.getChanges();
 
-        try (ChangeBuilder ignored = this.beginChange()) {
-            changes.forEach(change -> change.applyTo(this));
+        try {
+            this.inBoundUpdate = true;
+
+            try (ChangeBuilder ignored = this.beginChange()) {
+                changes.forEach(change -> change.applyTo(this));
+            }
+        } finally {
+            this.inBoundUpdate = false;
         }
     }
 
@@ -214,7 +233,8 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
         @SuppressWarnings("unchecked")
         @Override
         public boolean remove(Object element) {
-            if (MapProperty.this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+            if (MapProperty.this.binding != null && !MapProperty.this.inBoundUpdate)
+                throw new IllegalStateException("A bound property's value may not be set explicitly");
 
             if (this.impl.remove(element)) {
                 try (ChangeBuilder changeBuilder = MapProperty.this.beginChange()) {
@@ -301,7 +321,8 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
          */
         @Override
         public V setValue(V value) {
-            if (MapProperty.this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
+            if (MapProperty.this.binding != null && !MapProperty.this.inBoundUpdate)
+                throw new IllegalStateException("A bound property's value may not be set explicitly");
 
             V prevValue = this.impl.setValue(value);
 
