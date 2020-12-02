@@ -51,5 +51,4 @@ public interface ReadableValueProperty<T> extends ReadableProperty, ObservableVa
     @Override
     ReadableValueProperty<T> asReadOnlyProperty();
 
-
 }
