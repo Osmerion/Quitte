@@ -232,7 +232,7 @@ public final class SimpleBoolPropertyGeneratedTest {
         SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.BoolValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.BoolValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

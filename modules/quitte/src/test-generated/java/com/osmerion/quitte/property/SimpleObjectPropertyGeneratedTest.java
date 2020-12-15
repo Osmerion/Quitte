@@ -234,7 +234,7 @@ public final class SimpleObjectPropertyGeneratedTest {
         SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.ObjectValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.ObjectValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

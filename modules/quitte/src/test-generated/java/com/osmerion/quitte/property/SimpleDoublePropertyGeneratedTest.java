@@ -232,7 +232,7 @@ public final class SimpleDoublePropertyGeneratedTest {
         SimpleDoubleProperty other = new SimpleDoubleProperty(TestValues.DoubleValue_L);
         SimpleDoubleProperty property = new SimpleDoubleProperty(TestValues.DoubleValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.DoubleValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.DoubleValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

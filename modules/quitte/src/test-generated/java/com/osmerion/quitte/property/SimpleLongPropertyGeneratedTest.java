@@ -232,7 +232,7 @@ public final class SimpleLongPropertyGeneratedTest {
         SimpleLongProperty other = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.LongValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.LongValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

@@ -232,7 +232,7 @@ public final class SimpleIntPropertyGeneratedTest {
         SimpleIntProperty other = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.IntValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.IntValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

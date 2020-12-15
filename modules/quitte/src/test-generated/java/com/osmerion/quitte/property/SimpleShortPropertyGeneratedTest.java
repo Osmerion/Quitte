@@ -232,7 +232,7 @@ public final class SimpleShortPropertyGeneratedTest {
         SimpleShortProperty other = new SimpleShortProperty(TestValues.ShortValue_L);
         SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.ShortValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.ShortValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

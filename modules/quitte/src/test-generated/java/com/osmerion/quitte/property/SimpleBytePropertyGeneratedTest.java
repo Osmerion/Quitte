@@ -232,7 +232,7 @@ public final class SimpleBytePropertyGeneratedTest {
         SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.ByteValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.ByteValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\

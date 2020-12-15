@@ -232,7 +232,7 @@ public final class SimpleFloatPropertyGeneratedTest {
         SimpleFloatProperty other = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         property.bindTo(other);
-        assertThrows(IllegalStateException.class, () -> property.set(TestValues.FloatValue_H));
+        assertThrows(IllegalStateException.class, () -> property.setValue(TestValues.FloatValue_H));
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
