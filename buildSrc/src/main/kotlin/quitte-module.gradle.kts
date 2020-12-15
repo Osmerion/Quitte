@@ -28,6 +28,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+@file:Suppress("UnstableApiUsage")
+
 import com.osmerion.quitte.build.*
 import com.osmerion.quitte.build.BuildType
 
@@ -43,11 +45,16 @@ val artifactName = project.name.replace('.', '-')
 java {
     modularity.inferModulePath.set(true)
 
-    sourceCompatibility = JavaVersion.VERSION_15
-    targetCompatibility = JavaVersion.VERSION_15
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(15))
+    }
 }
 
 tasks {
+    withType<JavaCompile> {
+        options.release.set(15)
+    }
+
     jar {
         archiveBaseName.set(artifactName)
 
