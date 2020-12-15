@@ -228,6 +228,13 @@ public final class SimpleDoublePropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleDoubleProperty property = new SimpleDoubleProperty(TestValues.DoubleValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.DoubleValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleDoubleProperty other = new SimpleDoubleProperty(TestValues.DoubleValue_L);
         SimpleDoubleProperty property = new SimpleDoubleProperty(TestValues.DoubleValue_L);

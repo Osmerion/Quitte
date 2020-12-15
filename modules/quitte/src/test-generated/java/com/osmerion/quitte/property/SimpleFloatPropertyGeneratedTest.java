@@ -228,6 +228,13 @@ public final class SimpleFloatPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.FloatValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleFloatProperty other = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);

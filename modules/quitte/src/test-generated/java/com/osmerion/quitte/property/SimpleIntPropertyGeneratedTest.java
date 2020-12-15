@@ -228,6 +228,13 @@ public final class SimpleIntPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.IntValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleIntProperty other = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);

@@ -228,6 +228,13 @@ public final class SimpleLongPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.LongValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleLongProperty other = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);

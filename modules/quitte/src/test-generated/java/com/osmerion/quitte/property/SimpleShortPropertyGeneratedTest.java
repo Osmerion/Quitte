@@ -228,6 +228,13 @@ public final class SimpleShortPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.ShortValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleShortProperty other = new SimpleShortProperty(TestValues.ShortValue_L);
         SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);

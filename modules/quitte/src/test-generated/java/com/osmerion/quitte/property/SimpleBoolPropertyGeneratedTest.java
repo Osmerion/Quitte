@@ -228,6 +228,13 @@ public final class SimpleBoolPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.BoolValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleBoolProperty other = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);

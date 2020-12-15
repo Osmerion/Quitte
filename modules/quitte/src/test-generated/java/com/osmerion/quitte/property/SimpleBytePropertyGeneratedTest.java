@@ -228,6 +228,13 @@ public final class SimpleBytePropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.ByteValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleByteProperty other = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);

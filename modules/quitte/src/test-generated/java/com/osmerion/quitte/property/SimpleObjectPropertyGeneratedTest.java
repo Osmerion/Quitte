@@ -230,6 +230,13 @@ public final class SimpleObjectPropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue$setValue_NullConversion() {
+        SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
+        property.setValue(null);
+        assertEquals(TestValues.ObjectValue_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue$setValue_ThrowForBound() {
         SimpleObjectProperty<Object> other = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);

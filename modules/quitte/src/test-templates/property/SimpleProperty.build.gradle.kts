@@ -236,6 +236,13 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     @Test
+    public void test_WritableValue${'$'}setValue_NullConversion() {
+        Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
+        property.setValue(null);
+        assertEquals(TestValues.${type.abbrevName}Value_N, property.getValue());
+    }
+
+    @Test
     public void test_WritableValue${'$'}setValue_ThrowForBound() {
         Simple${type.abbrevName}Property$typeParams other = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
