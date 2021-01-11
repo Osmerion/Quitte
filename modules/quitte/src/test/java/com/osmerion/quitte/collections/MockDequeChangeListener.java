@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Leon Linhart,
+ * Copyright (c) 2018-2021 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,19 +43,19 @@ final class MockDequeChangeListener<E> implements DequeChangeListener<E> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onChanged(DequeChangeListener.Change<? extends E> change) {
+    public void onChanged(Change<? extends E> change) {
         if (this.context == null) return;
 
         change.getLocalChanges().stream()
             .map(it -> {
-                if (it instanceof DequeChangeListener.LocalChange.Insertion) {
-                    DequeChangeListener.LocalChange.Insertion<E> localChange = ((DequeChangeListener.LocalChange.Insertion<E>) it);
+                if (it instanceof LocalChange.Insertion) {
+                    LocalChange.Insertion<E> localChange = ((LocalChange.Insertion<E>) it);
                     return new Operation(OpType.INSERTION, localChange.getSite(), localChange.getElements());
-                } else if (it instanceof DequeChangeListener.LocalChange.Removal) {
-                    DequeChangeListener.LocalChange.Removal<E> localChange = ((DequeChangeListener.LocalChange.Removal<E>) it);
+                } else if (it instanceof LocalChange.Removal) {
+                    LocalChange.Removal<E> localChange = ((LocalChange.Removal<E>) it);
                     return new Operation(OpType.REMOVAL, localChange.getSite(), localChange.getElements());
                 } else {
-                    throw new UnsupportedOperationException();
+                    throw new IllegalStateException();
                 }
             })
             .forEach(this.context.operations::add);

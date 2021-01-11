@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020 Leon Linhart,
+ * Copyright (c) 2018-2021 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@ package com.osmerion.quitte.collections;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -398,6 +399,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
     protected final class ChangeBuilder implements AutoCloseable {
 
         private final List<WorkingLocalChange<E>> localChanges = new ArrayList<>(1);
+        private int sizeDelta = 0;
 
         private int depth = 0;
 
@@ -418,6 +420,20 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             if (this.depth == 0) {
                 AbstractObservableList.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
+
+//                if (this.sizeDelta == 0) {
+//                    // TODO could be a permutation
+//                } else {
+//
+//                }
+//
+//                List<ListChangeListener.LocalChange<E>> localChanges = new ArrayList<>(1);
+//
+//                for (WorkingLocalChange<E> workingLocalChange : this.localChanges) {
+//
+//                }
+//
+//                var change = new ListChangeListener.Change.Update<>(Collections.unmodifiableList(localChanges));
 
                 ListChangeListener.Change<E> change = new ListChangeListener.Change.Update<>(this.localChanges.stream()
                     .map(WorkingLocalChange::complete)
@@ -448,10 +464,12 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
         public void logAdd(int from, int to) {
             this.localChanges.add(new WorkingLocalChange.Insertion<>(from, to, new ArrayList<>(AbstractObservableList.this.subList(from, to))));
+            this.sizeDelta += to - from;
         }
 
         public void logRemove(int index, @Nullable E old) {
             this.localChanges.add(new WorkingLocalChange.Removal<>(index, index, old));
+            this.sizeDelta--;
         }
 
         public void logRemove(int index, List<? extends E> old) {
