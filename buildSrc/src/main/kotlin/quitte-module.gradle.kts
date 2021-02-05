@@ -40,7 +40,7 @@ plugins {
     id("de.jjohannes.extra-java-module-info")
 }
 
-val artifactName = project.name.replace('.', '-')
+val artifactName = project.name
 
 java {
     modularity.inferModulePath.set(true)
