@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
+
 import com.osmerion.quitte.InvalidationListener;
 
 /**
@@ -49,7 +50,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private transient final CopyOnWriteArraySet<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super ObservableSet.Change<? extends E>>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -61,7 +62,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(SetChangeListener<? super E> listener) {
+    public final boolean addListener(CollectionChangeListener<? super ObservableSet.Change<? extends E>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -71,7 +72,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(SetChangeListener<? super E> listener) {
+    public final boolean removeListener(CollectionChangeListener<? super ObservableSet.Change<? extends E>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -193,9 +194,9 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                 AbstractObservableSet.this.changeBuilder = null;
                 if ((this.added == null || this.added.isEmpty()) && (this.removed == null || this.removed.isEmpty())) return;
 
-                var change = new SetChangeListener.Change<>(this.added, this.removed);
+                var change = new ObservableSet.Change<>(this.added, this.removed);
 
-                for (SetChangeListener<? super E> listener : AbstractObservableSet.this.changeListeners) {
+                for (var listener : AbstractObservableSet.this.changeListeners) {
                     if (listener.isInvalid()) {
                         AbstractObservableSet.this.changeListeners.remove(listener);
                         continue;

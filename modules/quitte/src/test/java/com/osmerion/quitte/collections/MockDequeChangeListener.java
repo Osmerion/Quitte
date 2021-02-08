@@ -36,23 +36,23 @@ import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class MockDequeChangeListener<E> implements DequeChangeListener<E> {
+final class MockDequeChangeListener<E> implements CollectionChangeListener<ObservableDeque.Change<? extends E>> {
 
     @Nullable
     private Context context;
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onChanged(Change<? extends E> change) {
+    public void onChanged(ObservableDeque.Change<? extends E> change) {
         if (this.context == null) return;
 
         change.getLocalChanges().stream()
             .map(it -> {
-                if (it instanceof LocalChange.Insertion) {
-                    LocalChange.Insertion<E> localChange = ((LocalChange.Insertion<E>) it);
+                if (it instanceof ObservableDeque.LocalChange.Insertion) {
+                    ObservableDeque.LocalChange.Insertion<E> localChange = ((ObservableDeque.LocalChange.Insertion<E>) it);
                     return new Operation(OpType.INSERTION, localChange.getSite(), localChange.getElements());
-                } else if (it instanceof LocalChange.Removal) {
-                    LocalChange.Removal<E> localChange = ((LocalChange.Removal<E>) it);
+                } else if (it instanceof ObservableDeque.LocalChange.Removal) {
+                    ObservableDeque.LocalChange.Removal<E> localChange = ((ObservableDeque.LocalChange.Removal<E>) it);
                     return new Operation(OpType.REMOVAL, localChange.getSite(), localChange.getElements());
                 } else {
                     throw new IllegalStateException();
@@ -79,11 +79,11 @@ final class MockDequeChangeListener<E> implements DequeChangeListener<E> {
             this.assertEmpty();
         }
 
-        public void assertInsertion(Site site, E element) {
+        public void assertInsertion(ObservableDeque.Site site, E element) {
             this.assertInsertion(site, List.of(element));
         }
 
-        public void assertInsertion(Site site, List<? extends E> elements) {
+        public void assertInsertion(ObservableDeque.Site site, List<? extends E> elements) {
             Operation operation = this.operations.pollFirst();
 
             assertNotNull(operation);
@@ -92,11 +92,11 @@ final class MockDequeChangeListener<E> implements DequeChangeListener<E> {
             assertEquals(elements, operation.elements);
         }
 
-        public void assertRemoval(Site site, E element) {
+        public void assertRemoval(ObservableDeque.Site site, E element) {
             this.assertRemoval(site, List.of(element));
         }
 
-        public void assertRemoval(Site site, List<? extends E> elements) {
+        public void assertRemoval(ObservableDeque.Site site, List<? extends E> elements) {
             Operation operation = this.operations.pollFirst();
 
             assertNotNull(operation);
@@ -115,10 +115,10 @@ final class MockDequeChangeListener<E> implements DequeChangeListener<E> {
     private final class Operation {
 
         private final OpType type;
-        @Nullable private final Site site;
+        @Nullable private final ObservableDeque.Site site;
         private final List<? extends E> elements;
 
-        Operation(OpType type, @Nullable Site site, List<? extends E> elements) {
+        Operation(OpType type, @Nullable ObservableDeque.Site site, List<? extends E> elements) {
             this.type = type;
             this.site = site;
             this.elements = elements;

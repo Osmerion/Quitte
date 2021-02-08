@@ -33,8 +33,9 @@ package com.osmerion.quitte.internal.collections;
 import java.util.Deque;
 import java.util.Iterator;
 import javax.annotation.Nullable;
+
 import com.osmerion.quitte.collections.AbstractObservableDeque;
-import com.osmerion.quitte.collections.DequeChangeListener;
+import com.osmerion.quitte.collections.ObservableDeque;
 
 /**
  * An observable wrapper for a {@link Deque}.
@@ -90,7 +91,7 @@ public final class WrappingObservableDeque<E> extends AbstractObservableDeque<E>
             public void remove() {
                 try (ChangeBuilder changeBuilder = WrappingObservableDeque.this.beginChange()) {
                     this.impl.remove();
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, this.cursor);
+                    changeBuilder.logRemove(ObservableDeque.Site.OPAQUE, this.cursor);
                 }
             }
 
@@ -121,7 +122,7 @@ public final class WrappingObservableDeque<E> extends AbstractObservableDeque<E>
             public void remove() {
                 try (ChangeBuilder changeBuilder = WrappingObservableDeque.this.beginChange()) {
                     this.impl.remove();
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, this.cursor);
+                    changeBuilder.logRemove(ObservableDeque.Site.OPAQUE, this.cursor);
                 }
             }
 

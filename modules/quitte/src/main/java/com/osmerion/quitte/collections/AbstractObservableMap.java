@@ -39,6 +39,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
+
 import com.osmerion.quitte.InvalidationListener;
 
 /**
@@ -53,7 +54,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
-    private transient final CopyOnWriteArraySet<MapChangeListener<? super K, ? super V>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super Change<? extends K, ? extends V>>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -65,7 +66,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(MapChangeListener<? super K, ? super V> listener) {
+    public final boolean addListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -75,7 +76,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(MapChangeListener<? super K, ? super V> listener) {
+    public final boolean removeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -154,7 +155,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
         private HashMap<K, V> added, removed;
 
         @Nullable
-        private HashMap<K, MapChangeListener.Change.Update<V>> updated;
+        private HashMap<K, Change.Update<V>> updated;
 
         private int depth = 0;
 
@@ -180,9 +181,9 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
                     (this.removed == null || this.removed.isEmpty()) &&
                     (this.updated == null || this.updated.isEmpty())) return;
 
-                var change = new MapChangeListener.Change<>(this.added, this.removed, this.updated);
+                var change = new Change<>(this.added, this.removed, this.updated);
 
-                for (MapChangeListener<? super K, ? super V> listener : AbstractObservableMap.this.changeListeners) {
+                for (CollectionChangeListener<? super Change<? extends K, ? extends V>> listener : AbstractObservableMap.this.changeListeners) {
                     if (listener.isInvalid()) {
                         AbstractObservableMap.this.changeListeners.remove(listener);
                         continue;
@@ -257,7 +258,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             }
 
             if (this.updated == null) this.updated = new HashMap<>();
-            this.updated.put(key, new MapChangeListener.Change.Update<>(oldValue, newValue));
+            this.updated.put(key, new Change.Update<>(oldValue, newValue));
         }
 
     }

@@ -38,7 +38,6 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableDeque;
-import com.osmerion.quitte.collections.DequeChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
 import com.osmerion.quitte.internal.binding.DequeBinding;
 
@@ -273,7 +272,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
                 try (ChangeBuilder changeBuilder = DequeProperty.this.beginChange()) {
                     this.impl.remove();
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, this.cursor);
+                    changeBuilder.logRemove(ObservableDeque.Site.OPAQUE, this.cursor);
                 }
             }
 
@@ -329,7 +328,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
                 try (ChangeBuilder changeBuilder = DequeProperty.this.beginChange()) {
                     this.impl.remove();
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, this.cursor);
+                    changeBuilder.logRemove(ObservableDeque.Site.OPAQUE, this.cursor);
                 }
             }
 
@@ -376,17 +375,40 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
         return this.impl.size();
     }
 
-    @SuppressWarnings("deprecation")
     void onBindingInvalidated() {
         assert (this.binding != null);
 
-        List<DequeChangeListener.Change<E>> changes = this.binding.getChanges();
+        List<ObservableDeque.Change<E>> changes = this.binding.getChanges();
 
         try {
             this.inBoundUpdate = true;
 
             try (ChangeBuilder ignored = this.beginChange()) {
-                changes.forEach(change -> change.applyTo(this));
+                for (var change : changes) {
+                    for (var localChange : change.getLocalChanges()) {
+                        if (localChange instanceof LocalChange.Insertion) {
+                            LocalChange.Insertion<E> insertion = (LocalChange.Insertion<E>) localChange;
+
+                            switch (insertion.getSite()) {
+                                case HEAD -> insertion.getElements().forEach(this::addFirst);
+                                case TAIL -> insertion.getElements().forEach(this::addLast);
+                                default -> throw new IllegalStateException();
+                            }
+                        } else if (localChange instanceof LocalChange.Removal) {
+                            LocalChange.Removal<E> removal = (LocalChange.Removal<E>) localChange;
+
+                            switch (removal.getSite()) {
+                                case HEAD -> removal.getElements().forEach(it -> this.removeFirst());
+                                case TAIL -> removal.getElements().forEach(it -> this.removeLast());
+                                // TODO approximation might produce incorrect results, maybe we should disallow operations that produce opaque changes for bound observable deques?
+                                case OPAQUE -> removal.getElements().forEach(this::remove);
+                                default -> throw new IllegalStateException();
+                            }
+                        } else {
+                            throw new IllegalStateException();
+                        }
+                    }
+                }
             }
         } finally {
             this.inBoundUpdate = false;

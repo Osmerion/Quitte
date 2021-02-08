@@ -30,69 +30,41 @@
  */
 package com.osmerion.quitte.collections;
 
-import java.lang.ref.WeakReference;
-import java.util.Objects;
-
 /**
- * A {@code WeakListChangeListener} may be used to wrap a listener that should only be referenced weakly from an
- * {@link ObservableList}.
+ * A listener that may be used to subscribe to changes to one or more observable collections.
  *
- * @param <E>   the type of the list's elements
- *
- * @see WeakReference
+ * @param <C>   the type of change this listener can process
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public final class WeakListChangeListener<E> implements ListChangeListener<E> {
-
-    private final WeakReference<ListChangeListener<E>> ref;
-
-    private boolean wasGarbageCollected;
+public interface CollectionChangeListener<C> {
 
     /**
-     * Wraps the given {@link ListChangeListener listener}.
+     * Processes changes to an observable collection this listener is attached to.
      *
-     * @param listener  the listener to wrap
-     *
-     * @throws NullPointerException if the given listener is {@code null}
+     * @param change    the change to process
      *
      * @since   0.1.0
      */
-    public WeakListChangeListener(ListChangeListener<E> listener) {
-        this.ref = new WeakReference<>(Objects.requireNonNull(listener));
-    }
+    void onChanged(C change);
 
     /**
-     * {@inheritDoc}
+     * Returns whether or not this listener is invalid.
+     *
+     * <p>Once an observable collection discovers that a listener is invalid, it will stop notifying the listener of
+     * updates and release all strong references to the listener.</p>
+     *
+     * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
+     * Breaking this contract may result in unexpected behavior.</p>
+     *
+     * @return  whether or not this listener is invalid
      *
      * @since   0.1.0
      */
-    @Override
-    public void onChanged(Change<? extends E> change) {
-        ListChangeListener<E> listener = this.ref.get();
-
-        if (listener != null) {
-            listener.onChanged(change);
-        } else {
-            this.wasGarbageCollected = true;
-        }
-    }
-
-    /**
-     * Returns whether or not the underlying listener was garbage collected or has become invalid.
-     *
-     * @return  whether or not the underlying listener was garbage collected or has become invalid
-     *
-     * @since   0.1.0
-     */
-    @Override
-    public boolean isInvalid() {
-        if (this.wasGarbageCollected) return true;
-
-        var listener = this.ref.get();
-        return (listener != null && listener.isInvalid());
+    default boolean isInvalid() {
+        return false;
     }
 
 }

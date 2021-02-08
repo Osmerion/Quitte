@@ -36,8 +36,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
+
 import com.osmerion.quitte.InvalidationListener;
-import com.osmerion.quitte.collections.MapChangeListener;
+import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableMap;
 
 /**
@@ -65,8 +66,8 @@ public class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
 
     @Override public boolean addListener(InvalidationListener listener) { return this.impl.addListener(listener); }
     @Override public boolean removeListener(InvalidationListener listener) { return this.impl.removeListener(listener); }
-    @Override public boolean addListener(MapChangeListener<? super K, ? super V> listener) { return this.impl.addListener(listener); }
-    @Override public boolean removeListener(MapChangeListener<? super K, ? super V> listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) { return this.impl.removeListener(listener); }
 
     @Override public boolean containsKey(Object key) { return this.impl.containsKey(key); }
     @Override public boolean containsValue(Object value) { return this.impl.containsValue(value); }

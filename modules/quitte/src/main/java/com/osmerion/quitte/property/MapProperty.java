@@ -41,7 +41,6 @@ import java.util.function.BiFunction;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableMap;
-import com.osmerion.quitte.collections.MapChangeListener;
 import com.osmerion.quitte.collections.ObservableMap;
 import com.osmerion.quitte.internal.binding.MapBinding;
 
@@ -169,17 +168,20 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
         return this.entrySet;
     }
 
-    @SuppressWarnings("deprecation")
     void onBindingInvalidated() {
         assert (this.binding != null);
 
-        List<MapChangeListener.Change<K, V>> changes = this.binding.getChanges();
+        List<? extends ObservableMap.Change<K, V>> changes = this.binding.getChanges();
 
         try {
             this.inBoundUpdate = true;
 
             try (ChangeBuilder ignored = this.beginChange()) {
-                changes.forEach(change -> change.applyTo(this));
+                for (var change : changes) {
+                    this.putAll(change.getAddedElements());
+                    change.getRemovedElements().forEach(this::remove);
+                    change.getUpdatedElements().forEach((k, u) -> this.put(k, u.getNewValue()));
+                }
             }
         } finally {
             this.inBoundUpdate = false;

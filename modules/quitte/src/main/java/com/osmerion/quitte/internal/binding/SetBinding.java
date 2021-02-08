@@ -40,9 +40,9 @@ import java.util.function.Function;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
+import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableSet;
-import com.osmerion.quitte.collections.SetChangeListener;
-import com.osmerion.quitte.collections.WeakSetChangeListener;
+import com.osmerion.quitte.collections.WeakCollectionChangeListener;
 
 /**
  * A specialized {@link Set} binding.
@@ -51,12 +51,12 @@ import com.osmerion.quitte.collections.WeakSetChangeListener;
  */
 public final class SetBinding<S, E> implements Binding {
 
-    private final Deque<SetChangeListener.Change<? extends S>> changes = new ArrayDeque<>();
+    private final Deque<ObservableSet.Change<? extends S>> changes = new ArrayDeque<>();
 
     private final ObservableSet<S> source;
 
     private final InvalidationListener invalidationListener;
-    private final SetChangeListener<S> changeListener;
+    private final CollectionChangeListener<ObservableSet.Change<? extends S>> changeListener;
 
     private final Function<S, E> transform;
 
@@ -65,16 +65,16 @@ public final class SetBinding<S, E> implements Binding {
         this.transform = transform;
 
         this.source.addListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addListener(new WeakSetChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
     @SuppressWarnings("deprecation")
-    public List<SetChangeListener.Change<E>> getChanges() {
-        List<SetChangeListener.Change<E>> changes = new ArrayList<>(this.changes.size());
-        Iterator<SetChangeListener.Change<? extends S>> changeItr = this.changes.iterator();
+    public List<ObservableSet.Change<E>> getChanges() {
+        List<ObservableSet.Change<E>> changes = new ArrayList<>(this.changes.size());
+        Iterator<ObservableSet.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            SetChangeListener.Change<? extends S> change = changeItr.next();
+            ObservableSet.Change<? extends S> change = changeItr.next();
             changes.add(change.copy(this.transform));
             changeItr.remove();
         }

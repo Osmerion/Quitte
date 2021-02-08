@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
+
 import com.osmerion.quitte.InvalidationListener;
 
 /**
@@ -52,7 +53,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> implements ObservableDeque<E> {
 
-    private transient final CopyOnWriteArraySet<DequeChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super ObservableDeque.Change<? extends E>>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -64,7 +65,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(DequeChangeListener<? super E> listener) {
+    public final boolean addListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -74,7 +75,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(DequeChangeListener<? super E> listener) {
+    public final boolean removeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -119,7 +120,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         this.addFirstImpl(element);
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logAdd(DequeChangeListener.Site.HEAD, element);
+            changeBuilder.logAdd(ObservableDeque.Site.HEAD, element);
         }
     }
 
@@ -130,7 +131,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         this.addLastImpl(element);
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logAdd(DequeChangeListener.Site.TAIL, element);
+            changeBuilder.logAdd(ObservableDeque.Site.TAIL, element);
         }
     }
 
@@ -140,7 +141,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     public final boolean offerFirst(E element) {
         if (this.offerFirstImpl(element)) {
             try (ChangeBuilder changeBuilder = this.beginChange()) {
-                changeBuilder.logAdd(DequeChangeListener.Site.HEAD, element);
+                changeBuilder.logAdd(ObservableDeque.Site.HEAD, element);
             }
 
             return true;
@@ -155,7 +156,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     public final boolean offerLast(@Nullable E element) {
         if (this.offerLastImpl(element)) {
             try (ChangeBuilder changeBuilder = this.beginChange()) {
-                changeBuilder.logAdd(DequeChangeListener.Site.TAIL, element);
+                changeBuilder.logAdd(ObservableDeque.Site.TAIL, element);
             }
 
             return true;
@@ -173,7 +174,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         E element = this.removeFirstImpl();
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logRemove(DequeChangeListener.Site.HEAD, element);
+            changeBuilder.logRemove(ObservableDeque.Site.HEAD, element);
         }
 
         return element;
@@ -188,7 +189,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         E element = this.removeLastImpl();
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logRemove(DequeChangeListener.Site.TAIL, element);
+            changeBuilder.logRemove(ObservableDeque.Site.TAIL, element);
         }
 
         return element;
@@ -203,7 +204,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         E element = this.pollFirstImpl();
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logRemove(DequeChangeListener.Site.HEAD, element);
+            changeBuilder.logRemove(ObservableDeque.Site.HEAD, element);
         }
 
         return element;
@@ -217,7 +218,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
         E element = this.pollLastImpl();
 
         try (ChangeBuilder changeBuilder = this.beginChange()) {
-            changeBuilder.logRemove(DequeChangeListener.Site.TAIL, element);
+            changeBuilder.logRemove(ObservableDeque.Site.TAIL, element);
         }
 
         return element;
@@ -234,7 +235,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
                 itr.remove();
 
                 try (ChangeBuilder changeBuilder = this.beginChange()) {
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, element);
+                    changeBuilder.logRemove(ObservableDeque.Site.OPAQUE, element);
                 }
 
                 return true;
@@ -255,7 +256,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
                 itr.remove();
 
                 try (ChangeBuilder changeBuilder = this.beginChange()) {
-                    changeBuilder.logRemove(DequeChangeListener.Site.OPAQUE, element);
+                    changeBuilder.logRemove(ObservableDeque.Site.OPAQUE, element);
                 }
 
                 return true;
@@ -333,7 +334,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
      */
     protected final class ChangeBuilder implements AutoCloseable {
 
-        private final List<DequeChangeListener.LocalChange<E>> localChanges = new ArrayList<>(1);
+        private final List<ObservableDeque.LocalChange<E>> localChanges = new ArrayList<>(1);
 
         private int depth = 0;
 
@@ -357,7 +358,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
                 AbstractObservableDeque.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
 
-                var change = new DequeChangeListener.Change<>(Collections.unmodifiableList(this.localChanges));
+                var change = new ObservableDeque.Change<>(Collections.unmodifiableList(this.localChanges));
 
                 for (var listener : AbstractObservableDeque.this.changeListeners) {
                     if (listener.isInvalid()) {
@@ -389,16 +390,16 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
          *
          * @since   0.1.0
          */
-        public void logAdd(DequeChangeListener.Site site, @Nullable E element) {
+        public void logAdd(ObservableDeque.Site site, @Nullable E element) {
             if (!this.localChanges.isEmpty()) {
                 int lastIndex = this.localChanges.size() - 1;
-                DequeChangeListener.LocalChange<E> lastLocalChange = this.localChanges.get(lastIndex);
+                ObservableDeque.LocalChange<E> lastLocalChange = this.localChanges.get(lastIndex);
 
-                if (lastLocalChange instanceof DequeChangeListener.LocalChange.Insertion && site == lastLocalChange.getSite()) {
+                if (lastLocalChange instanceof ObservableDeque.LocalChange.Insertion && site == lastLocalChange.getSite()) {
                     ArrayList<E> elements = new ArrayList<>(lastLocalChange.getElements());
                     elements.add(element);
 
-                    this.localChanges.set(lastIndex, new DequeChangeListener.LocalChange.Insertion<>(site, Collections.unmodifiableList(elements)));
+                    this.localChanges.set(lastIndex, new ObservableDeque.LocalChange.Insertion<>(site, Collections.unmodifiableList(elements)));
                     return;
                 }
             }
@@ -407,7 +408,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
             elements.add(element);
 
             //noinspection Java9CollectionFactory
-            this.localChanges.add(new DequeChangeListener.LocalChange.Insertion<>(site, Collections.unmodifiableList(elements)));
+            this.localChanges.add(new ObservableDeque.LocalChange.Insertion<>(site, Collections.unmodifiableList(elements)));
         }
 
         /**
@@ -418,16 +419,16 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
          *
          * @since   0.1.0
          */
-        public void logRemove(DequeChangeListener.Site site, @Nullable E element) {
+        public void logRemove(ObservableDeque.Site site, @Nullable E element) {
             if (!this.localChanges.isEmpty()) {
                 int lastIndex = this.localChanges.size() - 1;
-                DequeChangeListener.LocalChange<E> lastLocalChange = this.localChanges.get(lastIndex);
+                ObservableDeque.LocalChange<E> lastLocalChange = this.localChanges.get(lastIndex);
 
-                if (lastLocalChange instanceof DequeChangeListener.LocalChange.Removal && site == lastLocalChange.getSite()) {
+                if (lastLocalChange instanceof ObservableDeque.LocalChange.Removal && site == lastLocalChange.getSite()) {
                     ArrayList<E> elements = new ArrayList<>(lastLocalChange.getElements());
                     elements.add(element);
 
-                    this.localChanges.set(lastIndex, new DequeChangeListener.LocalChange.Removal<>(site, Collections.unmodifiableList(elements)));
+                    this.localChanges.set(lastIndex, new ObservableDeque.LocalChange.Removal<>(site, Collections.unmodifiableList(elements)));
                     return;
                 }
             }
@@ -436,7 +437,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
             elements.add(element);
 
             //noinspection Java9CollectionFactory
-            this.localChanges.add(new DequeChangeListener.LocalChange.Removal<>(site, Collections.unmodifiableList(elements)));
+            this.localChanges.add(new ObservableDeque.LocalChange.Removal<>(site, Collections.unmodifiableList(elements)));
         }
 
     }

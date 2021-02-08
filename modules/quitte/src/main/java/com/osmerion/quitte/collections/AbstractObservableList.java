@@ -33,7 +33,6 @@ package com.osmerion.quitte.collections;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +43,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
 import com.osmerion.quitte.InvalidationListener;
 
 /**
@@ -57,7 +57,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableList<E> extends AbstractList<E> implements ObservableList<E> {
 
-    private transient final CopyOnWriteArraySet<ListChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super ObservableList.Change<? extends E>>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -69,7 +69,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ListChangeListener<? super E> listener) {
+    public final boolean addListener(CollectionChangeListener<? super Change<? extends E>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -79,7 +79,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ListChangeListener<? super E> listener) {
+    public final boolean removeListener(CollectionChangeListener<? super Change<? extends E>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -121,8 +121,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
     @Nullable
     protected abstract E removeImpl(int index);
-
-    protected abstract void sortImpl(Comparator<? super E> c);
 
     @Nullable
     protected abstract E setImpl(int index, @Nullable E element);
@@ -213,7 +211,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
     @Override
     public final void sort(Comparator<? super E> comparator) {
         try (ChangeBuilder ignored = this.beginChange()) {
-            this.sortImpl(comparator);
+            super.sort(comparator);
         }
     }
 
@@ -421,23 +419,10 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                 AbstractObservableList.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
 
-//                if (this.sizeDelta == 0) {
-//                    // TODO could be a permutation
-//                } else {
-//
-//                }
-//
-//                List<ListChangeListener.LocalChange<E>> localChanges = new ArrayList<>(1);
-//
-//                for (WorkingLocalChange<E> workingLocalChange : this.localChanges) {
-//
-//                }
-//
-//                var change = new ListChangeListener.Change.Update<>(Collections.unmodifiableList(localChanges));
-
-                ListChangeListener.Change<E> change = new ListChangeListener.Change.Update<>(this.localChanges.stream()
-                    .map(WorkingLocalChange::complete)
-                    .collect(Collectors.toUnmodifiableList())
+                ObservableList.Change<E> change = new ObservableList.Change.Update<>(
+                    this.localChanges.stream()
+                        .map(WorkingLocalChange::complete)
+                        .collect(Collectors.toUnmodifiableList())
                 );
 
                 for (var listener : AbstractObservableList.this.changeListeners) {
@@ -492,11 +477,11 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             this.to = to;
         }
 
-        abstract ListChangeListener.LocalChange<E> complete();
+        abstract LocalChange<E> complete();
 
         private static final class Insertion<E> extends WorkingLocalChange<E> {
 
-            private List<E> elements;
+            private final List<E> elements;
 
             private Insertion(int from, int to, List<E> elements) {
                 super(from, to);
@@ -504,15 +489,15 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             }
 
             @Override
-            ListChangeListener.LocalChange<E> complete() {
-                return new ListChangeListener.LocalChange.Insertion<>(this.from, this.elements);
+            LocalChange<E> complete() {
+                return new LocalChange.Insertion<>(this.from, this.elements);
             }
 
         }
 
         private static final class Removal<E> extends WorkingLocalChange<E> {
 
-            private List<E> elements;
+            private final List<E> elements;
 
             private Removal(int from, int to, @Nullable E element) {
                 this(from, to, Stream.ofNullable(element).collect(Collectors.toList()));
@@ -524,8 +509,8 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             }
 
             @Override
-            ListChangeListener.LocalChange<E> complete() {
-                return new ListChangeListener.LocalChange.Removal<>(this.from, this.elements);
+            LocalChange<E> complete() {
+                return new LocalChange.Removal<>(this.from, this.elements);
             }
 
         }

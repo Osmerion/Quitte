@@ -41,7 +41,6 @@ import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableSet;
 import com.osmerion.quitte.collections.ObservableSet;
-import com.osmerion.quitte.collections.SetChangeListener;
 import com.osmerion.quitte.internal.binding.SetBinding;
 
 /**
@@ -234,17 +233,19 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
         return this.impl.size();
     }
 
-    @SuppressWarnings("deprecation")
     void onBindingInvalidated() {
         assert (this.binding != null);
 
-        List<SetChangeListener.Change<E>> changes = this.binding.getChanges();
+        List<ObservableSet.Change<E>> changes = this.binding.getChanges();
 
         try {
             this.inBoundUpdate = true;
 
             try (ChangeBuilder ignored = this.beginChange()) {
-                changes.forEach(change -> change.applyTo(this));
+                for (var change : changes) {
+                    this.addAll(change.getAddedElements());
+                    change.getRemovedElements().forEach(this::remove);
+                }
             }
         } finally {
             this.inBoundUpdate = false;

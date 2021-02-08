@@ -32,8 +32,9 @@ package com.osmerion.quitte.internal.collections;
 
 import java.util.AbstractList;
 import java.util.Collection;
+
 import com.osmerion.quitte.InvalidationListener;
-import com.osmerion.quitte.collections.ListChangeListener;
+import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableList;
 
 /**
@@ -60,8 +61,8 @@ public class UnmodifiableObservableList<E> extends AbstractList<E> implements Ob
 
     @Override public boolean addListener(InvalidationListener listener) { return this.impl.addListener(listener); }
     @Override public boolean removeListener(InvalidationListener listener) { return this.impl.removeListener(listener); }
-    @Override public boolean addListener(ListChangeListener<? super E> listener) { return this.impl.addListener(listener); }
-    @Override public boolean removeListener(ListChangeListener<? super E> listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addListener(CollectionChangeListener<? super Change<? extends E>> listener) { return this.impl.addListener(listener); }
+    @Override public boolean removeListener(CollectionChangeListener<? super ObservableList.Change<? extends E>> listener) { return this.impl.removeListener(listener); }
 
     @Override public boolean contains(Object o) { return this.impl.contains(o); }
     @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }

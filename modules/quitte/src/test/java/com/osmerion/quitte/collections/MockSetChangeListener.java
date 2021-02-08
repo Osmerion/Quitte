@@ -37,13 +37,13 @@ import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class MockSetChangeListener<E> implements SetChangeListener<E> {
+final class MockSetChangeListener<E> implements CollectionChangeListener<ObservableSet.Change<? extends E>> {
 
     @Nullable
     private Context context;
 
     @Override
-    public void onChanged(Change<? extends E> change) {
+    public void onChanged(ObservableSet.Change<? extends E> change) {
         if (this.context == null) return;
 
         change.getAddedElements().forEach(e -> this.context.operations.add(new Addition(e)));

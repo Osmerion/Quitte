@@ -39,9 +39,9 @@ import java.util.function.Function;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
-import com.osmerion.quitte.collections.ListChangeListener;
+import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableList;
-import com.osmerion.quitte.collections.WeakListChangeListener;
+import com.osmerion.quitte.collections.WeakCollectionChangeListener;
 
 /**
  * A specialized {@link List} binding.
@@ -50,30 +50,30 @@ import com.osmerion.quitte.collections.WeakListChangeListener;
  */
 public final class ListBinding<S, E> implements Binding {
 
-    private final Deque<ListChangeListener.Change<? extends S>> changes = new ArrayDeque<>();
+    private final Deque<ObservableList.Change<? extends S>> changes = new ArrayDeque<>();
 
     private final ObservableList<S> source;
 
     private final InvalidationListener invalidationListener;
-    private final ListChangeListener<S> changeListener;
+    private final CollectionChangeListener<ObservableList.Change<? extends S>> changeListener;
 
-    private final Function<S, E> transform;
+    private final Function<? super S, E> transform;
 
-    public ListBinding(Runnable invalidator, ObservableList<S> source, Function<S, E> transform) {
+    public ListBinding(Runnable invalidator, ObservableList<S> source, Function<? super S, E> transform) {
         this.source = source;
         this.transform = transform;
 
         this.source.addListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addListener(new WeakListChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
     @SuppressWarnings("deprecation")
-    public List<ListChangeListener.Change<E>> getChanges() {
-        List<ListChangeListener.Change<E>> changes = new ArrayList<>(this.changes.size());
-        Iterator<ListChangeListener.Change<? extends S>> changeItr = this.changes.iterator();
+    public List<ObservableList.Change<E>> getChanges() {
+        List<ObservableList.Change<E>> changes = new ArrayList<>(this.changes.size());
+        Iterator<ObservableList.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            ListChangeListener.Change<? extends S> change = changeItr.next();
+            ObservableList.Change<? extends S> change = changeItr.next();
             changes.add(change.copy(this.transform));
             changeItr.remove();
         }

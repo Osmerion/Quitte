@@ -39,9 +39,9 @@ import java.util.function.Function;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
-import com.osmerion.quitte.collections.DequeChangeListener;
+import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
-import com.osmerion.quitte.collections.WeakDequeueChangeListener;
+import com.osmerion.quitte.collections.WeakCollectionChangeListener;
 
 /**
  * A specialized {@link Deque} binding.
@@ -50,30 +50,30 @@ import com.osmerion.quitte.collections.WeakDequeueChangeListener;
  */
 public final class DequeBinding<S, E> implements Binding {
 
-    private final Deque<DequeChangeListener.Change<? extends S>> changes = new ArrayDeque<>();
+    private final Deque<ObservableDeque.Change<? extends S>> changes = new ArrayDeque<>();
 
     private final ObservableDeque<S> source;
 
     private final InvalidationListener invalidationListener;
-    private final DequeChangeListener<S> changeListener;
+    private final CollectionChangeListener<ObservableDeque.Change<? extends S>> changeListener;
 
-    private final Function<S, E> transform;
+    private final Function<? super S, E> transform;
 
-    public DequeBinding(Runnable invalidator, ObservableDeque<S> source, Function<S, E> transform) {
+    public DequeBinding(Runnable invalidator, ObservableDeque<S> source, Function<? super S, E> transform) {
         this.source = source;
         this.transform = transform;
 
         this.source.addListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addListener(new WeakDequeueChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
     @SuppressWarnings("deprecation")
-    public List<DequeChangeListener.Change<E>> getChanges() {
-        List<DequeChangeListener.Change<E>> changes = new ArrayList<>(this.changes.size());
-        Iterator<DequeChangeListener.Change<? extends S>> changeItr = this.changes.iterator();
+    public List<ObservableDeque.Change<E>> getChanges() {
+        List<ObservableDeque.Change<E>> changes = new ArrayList<>(this.changes.size());
+        Iterator<ObservableDeque.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            DequeChangeListener.Change<? extends S> change = changeItr.next();
+            ObservableDeque.Change<? extends S> change = changeItr.next();
             changes.add(change.copy(this.transform));
             changeItr.remove();
         }

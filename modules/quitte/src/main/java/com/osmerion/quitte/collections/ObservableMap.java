@@ -30,8 +30,12 @@
  */
 package com.osmerion.quitte.collections;
 
+import java.util.Collections;
 import java.util.Map;
-import com.osmerion.quitte.Observable;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableMap;
 import com.osmerion.quitte.internal.collections.WrappingObservableMap;
 
@@ -45,7 +49,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableMap;
  *
  * @author  Leon Linhart
  */
-public interface ObservableMap<K, V> extends Map<K, V>, Observable {
+public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<ObservableMap.Change<? extends K, ? extends V>> {
 
     /**
      * Returns an observable view of the specified map. Query operations on the returned map "read and write through"
@@ -88,47 +92,125 @@ public interface ObservableMap<K, V> extends Map<K, V>, Observable {
     }
 
     /**
-     * Attaches the given {@link MapChangeListener change listener} to this map.
+     * A change done to an {@link ObservableMap}.
      *
-     * <p>If the given listener is already attached to this map, this method does nothing and returns {@code false}.</p>
-     *
-     * <p>While an {@code MapChangeListener} is attached to a map, it will be {@link MapChangeListener#onChanged(MapChangeListener.Change)}
-     * notified} whenever the map is updated.</p>
-     *
-     * <p>This map stores a strong reference to the given listener until the listener is either removed explicitly by
-     * calling {@link #removeListener(MapChangeListener)} or implicitly when this map discovers that the listener has
-     * become {@link MapChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
-     * {@link WeakMapChangeListener} when possible to avoid leaking instances.</p>
-     *
-     * @param listener  the listener to be attached to this map
-     *
-     * @return  {@code true} if the listener was not previously attached to this map and has been successfully attached,
-     *          or {@code false} otherwise
-     *
-     * @throws NullPointerException if the given listener is {@code null}
-     *
-     * @see #removeListener(MapChangeListener)
+     * @param <K>   the type of the map's elements
+     * @param <V>   the type of the map's elements
      *
      * @since   0.1.0
      */
-    boolean addListener(MapChangeListener<? super K, ? super V> listener);
+    final class Change<K, V> {
 
-    /**
-     * Detaches the given {@link MapChangeListener change listener} from this map.
-     *
-     * <p>If the given listener is not attached to this map, this method does nothing and returns {@code false}.</p>
-     *
-     * @param listener  the listener to be detached from this map
-     *
-     * @return  {@code true} if the listener was attached to and has been detached from this map, or {@code false}
-     *          otherwise
-     *
-     * @throws NullPointerException if the given listener is {@code null}
-     *
-     * @see #addListener(MapChangeListener)
-     *
-     * @since   0.1.0
-     */
-    boolean removeListener(MapChangeListener<? super K, ? super V> listener);
+        private final Map<K, V> added, removed;
+        private final Map<K, Update<V>> updated;
+
+        Change(@Nullable Map<K, V> added, @Nullable Map<K, V> removed, @Nullable Map<K, Update<V>> updated) {
+            this.added = (added != null) ? Collections.unmodifiableMap(added) : Collections.emptyMap();
+            this.removed = (removed != null) ? Collections.unmodifiableMap(removed) : Collections.emptyMap();
+            this.updated = (updated != null) ? Collections.unmodifiableMap(updated) : Collections.emptyMap();
+        }
+
+        /**
+         * Creates a copy of this change using the given {@code transform} to map the entries.
+         *
+         * @param <S>       the new type for the keys
+         * @param <T>       the new type for the values
+         * @param transform the transform function to be applied to the entries
+         *
+         * @return  a copy of this change
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public <S, T> Change<S, T> copy(BiFunction<? super K, ? super V, Entry<S, T>> transform) {
+            return new Change<>(
+                this.added.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                this.removed.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                this.updated.entrySet().stream().map(e -> {
+                    Map.Entry<S, T> oldValue = transform.apply(e.getKey(), e.getValue().getOldValue());
+                    Map.Entry<S, T> newValue = transform.apply(e.getKey(), e.getValue().getNewValue());
+
+                    return Map.entry(newValue.getKey(), new Update<>(oldValue.getValue(), newValue.getValue()));
+                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
+        }
+
+        /**
+         * Returns the entries that were added to the observed map as part of this change.
+         *
+         * @return  the entries that were added to the observed map as part of this change
+         *
+         * @since   0.1.0
+         */
+        public Map<K, V> getAddedElements() {
+            return this.added;
+        }
+
+        /**
+         * Returns the entries that were removed from the observed map as part of this change.
+         *
+         * @return  the entries that were removed from the observed map as part of this change
+         *
+         * @since   0.1.0
+         */
+        public Map<K, V> getRemovedElements() {
+            return this.removed;
+        }
+
+        /**
+         * Returns the entries that were updated in the observed map as part of this change.
+         *
+         * @return  the entries that were updated in the observed map as part of this change
+         *
+         * @since   0.1.0
+         */
+        public Map<K, Update<V>> getUpdatedElements() {
+            return this.updated;
+        }
+
+        /**
+         * Describes an update to a map entry's value.
+         *
+         * @since   0.1.0
+         */
+        public static final class Update<V> {
+
+            @Nullable
+            private final V oldValue, newValue;
+
+            Update(@Nullable V oldValue, @Nullable V newValue) {
+                this.oldValue = oldValue;
+                this.newValue = newValue;
+            }
+
+            /**
+             * Returns the old value.
+             *
+             * @return  the old value
+             *
+             * @since   0.1.0
+             */
+            @Nullable
+            public V getOldValue() {
+                return this.oldValue;
+            }
+
+            /**
+             * Returns the new value.
+             *
+             * @return  the new value
+             *
+             * @since   0.1.0
+             */
+            @Nullable
+            public V getNewValue() {
+                return this.newValue;
+            }
+
+        }
+
+    }
 
 }

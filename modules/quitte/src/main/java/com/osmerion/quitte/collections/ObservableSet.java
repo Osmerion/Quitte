@@ -30,8 +30,12 @@
  */
 package com.osmerion.quitte.collections;
 
+import java.util.Collections;
 import java.util.Set;
-import com.osmerion.quitte.Observable;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableSet;
 import com.osmerion.quitte.internal.collections.WrappingObservableSet;
 
@@ -44,7 +48,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableSet;
  *
  * @author  Leon Linhart
  */
-public interface ObservableSet<E> extends Set<E>, Observable {
+public interface ObservableSet<E> extends Set<E>, ObservableCollection<ObservableSet.Change<? extends E>> {
 
     /**
      * Returns an observable view of the specified set. Query operations on the returned set "read and write through"
@@ -85,47 +89,66 @@ public interface ObservableSet<E> extends Set<E>, Observable {
     }
 
     /**
-     * Attaches the given {@link SetChangeListener change listener} to this set.
+     * A change done to an {@link ObservableSet}.
      *
-     * <p>If the given listener is already attached to this set, this method does nothing and returns {@code false}.</p>
+     * <p>Note that adding an element that is already in a set does not modify the set and therefore no change will be
+     * generated.</p>
      *
-     * <p>While an {@code SetChangeListener} is attached to a set, it will be {@link SetChangeListener#onChanged(SetChangeListener.Change)}
-     * notified} whenever the set is updated.</p>
-     *
-     * <p>This set stores a strong reference to the given listener until the listener is either removed explicitly by
-     * calling {@link #removeListener(SetChangeListener)} or implicitly when this set discovers that the listener has
-     * become {@link SetChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
-     * {@link WeakSetChangeListener} when possible to avoid leaking instances.</p>
-     *
-     * @param listener  the listener to be attached to this set
-     *
-     * @return  {@code true} if the listener was not previously attached to this set and has been successfully attached,
-     *          or {@code false} otherwise
-     *
-     * @throws NullPointerException if the given listener is {@code null}
-     *
-     * @see #removeListener(SetChangeListener)
+     * @param <E>   the type of the set's elements
      *
      * @since   0.1.0
      */
-    boolean addListener(SetChangeListener<? super E> listener);
+    final class Change<E> {
 
-    /**
-     * Detaches the given {@link SetChangeListener change listener} from this set.
-     *
-     * <p>If the given listener is not attached to this set, this method does nothing and returns {@code false}.</p>
-     *
-     * @param listener  the listener to be detached from this set
-     *
-     * @return  {@code true} if the listener was attached to and has been detached from this set, or {@code false}
-     *          otherwise
-     *
-     * @throws NullPointerException if the given listener is {@code null}
-     *
-     * @see #addListener(SetChangeListener)
-     *
-     * @since   0.1.0
-     */
-    boolean removeListener(SetChangeListener<? super E> listener);
+        private final Set<E> added, removed;
+
+        Change(@Nullable Set<E> added, @Nullable Set<E> removed) {
+            this.added = added != null ? Collections.unmodifiableSet(added) : Collections.emptySet();
+            this.removed = removed != null ? Collections.unmodifiableSet(removed) : Collections.emptySet();
+        }
+
+        /**
+         * Creates a copy of this change using the given {@code transform} to map the elements.
+         *
+         * @param <T>       the new type for the elements
+         * @param transform the transform function to be applied to the elements
+         *
+         * @return  a copy of this change
+         *
+         * @deprecated  This is an unsupported method that may be removed at any time.
+         *
+         * @since   0.1.0
+         */
+        @Deprecated
+        public <T> Change<T> copy(Function<? super E, T> transform) {
+            return new Change<>(
+                this.added.stream().map(transform).collect(Collectors.toUnmodifiableSet()),
+                this.removed.stream().map(transform).collect(Collectors.toUnmodifiableSet())
+            );
+        }
+
+        /**
+         * Returns the elements that were added to the observed set as part of this change.
+         *
+         * @return  the elements that were added to the observed set as part of this change
+         *
+         * @since   0.1.0
+         */
+        public Set<E> getAddedElements() {
+            return this.added;
+        }
+
+        /**
+         * Returns the elements that were removed from the observed set as part of this change.
+         *
+         * @return  the elements that were removed from the observed set as part of this change
+         *
+         * @since   0.1.0
+         */
+        public Set<E> getRemovedElements() {
+            return this.removed;
+        }
+
+    }
 
 }

@@ -31,6 +31,7 @@
 package com.osmerion.quitte.internal.collections;
 
 import java.util.RandomAccess;
+
 import com.osmerion.quitte.collections.ObservableList;
 
 /**

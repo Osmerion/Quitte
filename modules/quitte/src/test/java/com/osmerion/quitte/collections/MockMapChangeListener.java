@@ -36,13 +36,13 @@ import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
+final class MockMapChangeListener<K, V> implements CollectionChangeListener<ObservableMap.Change<? extends K, ? extends V>> {
 
     @Nullable
     private Context context;
 
     @Override
-    public void onChanged(Change<? extends K, ? extends V> change) {
+    public void onChanged(ObservableMap.Change<? extends K, ? extends V> change) {
         if (this.context == null) return;
 
         change.getAddedElements().forEach((k, v) -> this.context.operations.add(new Addition(k, v)));

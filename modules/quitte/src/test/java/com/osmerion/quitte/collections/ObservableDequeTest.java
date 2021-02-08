@@ -33,12 +33,12 @@ package com.osmerion.quitte.collections;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link ObservableDeque}.
@@ -63,14 +63,14 @@ public final class ObservableDequeTest {
     public void testClear() {
         try (var changeCtx = this.changeListener.push()) {
             this.observableDeque.addAll(List.of("foo", "bar"));
-            changeCtx.assertInsertion(DequeChangeListener.Site.TAIL, List.of("foo", "bar"));
+            changeCtx.assertInsertion(ObservableDeque.Site.TAIL, List.of("foo", "bar"));
             changeCtx.assertEmpty();
 
             this.observableDeque.add("foo");
-            changeCtx.assertInsertion(DequeChangeListener.Site.TAIL, "foo");
+            changeCtx.assertInsertion(ObservableDeque.Site.TAIL, "foo");
 
             this.observableDeque.clear();
-            changeCtx.assertRemoval(DequeChangeListener.Site.OPAQUE, List.of("foo", "bar", "foo"));
+            changeCtx.assertRemoval(ObservableDeque.Site.OPAQUE, List.of("foo", "bar", "foo"));
             changeCtx.assertEmpty();
         }
     }

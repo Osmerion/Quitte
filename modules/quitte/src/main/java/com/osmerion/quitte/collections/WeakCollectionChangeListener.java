@@ -34,11 +34,8 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 /**
- * A {@code WeakMapChangeListener} may be used to wrap a listener that should only be referenced weakly from an
- * {@link ObservableMap}.
- *
- * @param <K>   the type of an observed map's keys
- * @param <V>   the type of an observed map's values
+ * A {@code WeakCollectionChangeListener} may be used to wrap a listener that should only be referenced weakly from an
+ * {@link ObservableCollection}.
  *
  * @see WeakReference
  *
@@ -46,14 +43,14 @@ import java.util.Objects;
  *
  * @author  Leon Linhart
  */
-public final class WeakMapChangeListener<K, V> implements MapChangeListener<K, V> {
+public final class WeakCollectionChangeListener<C> implements CollectionChangeListener<C> {
 
-    private final WeakReference<MapChangeListener<K, V>> ref;
+    private final WeakReference<CollectionChangeListener<C>> ref;
 
     private boolean wasGarbageCollected;
 
     /**
-     * Wraps the given {@link MapChangeListener listener}.
+     * Wraps the given {@link CollectionChangeListener listener}.
      *
      * @param listener  the listener to wrap
      *
@@ -61,7 +58,7 @@ public final class WeakMapChangeListener<K, V> implements MapChangeListener<K, V
      *
      * @since   0.1.0
      */
-    public WeakMapChangeListener(MapChangeListener<K, V> listener) {
+    public WeakCollectionChangeListener(CollectionChangeListener<C> listener) {
         this.ref = new WeakReference<>(Objects.requireNonNull(listener));
     }
 
@@ -71,8 +68,8 @@ public final class WeakMapChangeListener<K, V> implements MapChangeListener<K, V
      * @since   0.1.0
      */
     @Override
-    public void onChanged(Change<? extends K, ? extends V> change) {
-        MapChangeListener<K, V> listener = this.ref.get();
+    public void onChanged(C change) {
+        CollectionChangeListener<C> listener = this.ref.get();
 
         if (listener != null) {
             listener.onChanged(change);
