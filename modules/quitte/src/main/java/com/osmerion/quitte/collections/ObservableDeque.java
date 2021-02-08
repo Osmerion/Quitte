@@ -69,7 +69,7 @@ public interface ObservableDeque<E> extends Deque<E>, Observable {
     }
 
     /**
-     * Returns an unmodifiable view of the specified {@link ObservableSet}.
+     * Returns an unmodifiable view of the specified {@link ObservableDeque}.
      *
      * @param <T>   the type of deque's elements
      * @param deque the deque to wrap
