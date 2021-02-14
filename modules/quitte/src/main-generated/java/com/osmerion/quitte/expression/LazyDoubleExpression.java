@@ -199,7 +199,6 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected double recomputeValue() {
                 var parent = observable.get();

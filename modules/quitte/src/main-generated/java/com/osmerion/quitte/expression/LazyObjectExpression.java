@@ -208,7 +208,6 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Nullable
             @Override
             protected T recomputeValue() {

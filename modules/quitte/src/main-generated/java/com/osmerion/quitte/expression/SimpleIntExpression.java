@@ -196,7 +196,6 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected int recomputeValue() {
                 var parent = observable.get();

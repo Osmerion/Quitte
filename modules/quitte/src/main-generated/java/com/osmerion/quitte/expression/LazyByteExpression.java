@@ -199,7 +199,6 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected byte recomputeValue() {
                 var parent = observable.get();

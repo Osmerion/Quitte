@@ -115,7 +115,6 @@ ${Type.values().joinToString(separator = "") { sourceType ->
                 observable.addListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
-
 ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
             @Override
             protected ${type.raw} recomputeValue() {
@@ -161,7 +160,6 @@ ${if (type === Type.OBJECT) """
                 observable.addListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
-
 ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
             @Override
             protected ${type.raw} recomputeValue() {

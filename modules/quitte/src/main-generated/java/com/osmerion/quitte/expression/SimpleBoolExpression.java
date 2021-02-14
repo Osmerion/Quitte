@@ -196,7 +196,6 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected boolean recomputeValue() {
                 var parent = observable.get();

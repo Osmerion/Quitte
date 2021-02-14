@@ -196,7 +196,6 @@ public abstract class SimpleByteExpression extends AbstractByteExpression {
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected byte recomputeValue() {
                 var parent = observable.get();

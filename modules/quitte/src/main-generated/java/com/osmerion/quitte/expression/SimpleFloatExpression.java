@@ -196,7 +196,6 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected float recomputeValue() {
                 var parent = observable.get();

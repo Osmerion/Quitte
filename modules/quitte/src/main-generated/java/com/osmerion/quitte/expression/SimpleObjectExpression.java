@@ -207,7 +207,6 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Nullable
             @Override
             protected T recomputeValue() {
@@ -254,7 +253,6 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
                 observable.addListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
-
 
             @Nullable
             @Override

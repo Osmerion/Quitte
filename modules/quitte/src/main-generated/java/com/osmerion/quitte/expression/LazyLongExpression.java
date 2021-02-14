@@ -199,7 +199,6 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected long recomputeValue() {
                 var parent = observable.get();

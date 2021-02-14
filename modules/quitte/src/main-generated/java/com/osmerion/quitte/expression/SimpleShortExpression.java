@@ -196,7 +196,6 @@ public abstract class SimpleShortExpression extends AbstractShortExpression {
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected short recomputeValue() {
                 var parent = observable.get();

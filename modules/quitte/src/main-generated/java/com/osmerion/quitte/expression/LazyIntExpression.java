@@ -199,7 +199,6 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected int recomputeValue() {
                 var parent = observable.get();

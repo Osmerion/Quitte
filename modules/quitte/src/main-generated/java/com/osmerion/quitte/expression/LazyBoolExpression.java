@@ -199,7 +199,6 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected boolean recomputeValue() {
                 var parent = observable.get();

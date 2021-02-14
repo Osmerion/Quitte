@@ -196,7 +196,6 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected double recomputeValue() {
                 var parent = observable.get();

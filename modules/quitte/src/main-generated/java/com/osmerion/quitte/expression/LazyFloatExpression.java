@@ -199,7 +199,6 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-
             @Override
             protected float recomputeValue() {
                 var parent = observable.get();
