@@ -82,6 +82,8 @@ tasks {
                 "implSpec:a:Implementation Requirements:",
                 "implNote:a:Implementation Note:"
             )
+
+            addStringOption("-release", "15")
         }
     }
 
