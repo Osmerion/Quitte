@@ -107,7 +107,7 @@ public abstract class AbstractExpression implements Expression {
      *
      * @since   0.1.0
      */
-    protected final void addDependency(Observable observable) {
+    protected final synchronized void addDependency(Observable observable) {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
         WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.doInvalidate());
@@ -134,7 +134,7 @@ public abstract class AbstractExpression implements Expression {
      *
      * @since   0.1.0
      */
-    protected final void addDependency(Observable observable, Runnable action) {
+    protected final synchronized void addDependency(Observable observable, Runnable action) {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
         WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
@@ -158,7 +158,7 @@ public abstract class AbstractExpression implements Expression {
      *
      * @since   0.1.0
      */
-    protected final void removeDependency(Observable observable) {
+    protected final synchronized void removeDependency(Observable observable) {
         if (this.dependencies == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
 
         WeakInvalidationListener listener = this.dependencies.remove(observable);
