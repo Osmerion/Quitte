@@ -140,5 +140,5 @@ dependencies {
     compileOnly(group = "com.google.code.findbugs", name = "jsr305", version = "3.0.2")
     testCompileOnly(group = "com.google.code.findbugs", name = "jsr305", version = "3.0.2")
 
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.6.2")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.7.1")
 }
