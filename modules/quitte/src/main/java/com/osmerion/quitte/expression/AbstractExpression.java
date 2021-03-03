@@ -38,6 +38,7 @@ import javax.annotation.Nullable;
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.WeakInvalidationListener;
+import com.osmerion.quitte.functional.BoolSupplier;
 
 /**
  * Common logic for expressions.
@@ -111,6 +112,31 @@ public abstract class AbstractExpression implements Expression {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
         WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.doInvalidate());
+        this.dependencies.compute(observable, (key, oldValue) -> {
+            if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
+
+            observable.addListener(listener);
+            return listener;
+        });
+    }
+
+    /**
+     * Adds a dependency for this expression. This expression will be invalidated when the given {@link Observable} is
+     * invalidated and the given verifier function returns {@code true}.
+     *
+     * @param observable    the observable on which this expression should depend
+     * @param verifier      the verifier that decides whether an invalidation should be propagated
+     *
+     * @throws IllegalArgumentException if this expression already depends on the given {@code Observable}
+     *
+     * @since   0.1.0
+     */
+    protected final synchronized void addDependency(Observable observable, BoolSupplier verifier) {
+        if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
+
+        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
+            if (verifier.get()) this.doInvalidate();
+        });
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
