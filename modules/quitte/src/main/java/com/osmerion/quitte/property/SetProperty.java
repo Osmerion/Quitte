@@ -92,7 +92,7 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
      * @since   0.1.0
      */
     @Override
-    public final void bindTo(ObservableSet<E> observable) {
+    public final synchronized void bindTo(ObservableSet<E> observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new SetBinding<>(this::onBindingInvalidated, observable, Function.identity());
 
@@ -114,7 +114,7 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
      * @since   0.1.0
      */
     @Override
-    public final <S> void bindTo(ObservableSet<S> observable, Function<S, E> transform) {
+    public final synchronized <S> void bindTo(ObservableSet<S> observable, Function<S, E> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new SetBinding<>(this::onBindingInvalidated, observable, transform);
 

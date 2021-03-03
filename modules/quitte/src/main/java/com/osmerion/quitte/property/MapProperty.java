@@ -81,7 +81,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
      * @since   0.1.0
      */
     @Override
-    public final void bindTo(ObservableMap<K, V> observable) {
+    public final synchronized void bindTo(ObservableMap<K, V> observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new MapBinding<>(this::onBindingInvalidated, observable, Map::entry);
 
@@ -103,7 +103,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
      * @since   0.1.0
      */
     @Override
-    public final <S, T> void bindTo(ObservableMap<S, T> observable, BiFunction<S, T, Entry<K, V>> transform) {
+    public final synchronized <S, T> void bindTo(ObservableMap<S, T> observable, BiFunction<S, T, Entry<K, V>> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new MapBinding<>(this::onBindingInvalidated, observable, transform);
 

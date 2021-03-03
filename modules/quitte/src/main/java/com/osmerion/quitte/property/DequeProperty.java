@@ -74,7 +74,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      * @since   0.1.0
      */
     @Override
-    public final void bindTo(ObservableDeque<E> observable) {
+    public final synchronized void bindTo(ObservableDeque<E> observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new DequeBinding<>(this::onBindingInvalidated, observable, Function.identity());
 
@@ -96,7 +96,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
      * @since   0.1.0
      */
     @Override
-    public final <S> void bindTo(ObservableDeque<S> observable, Function<S, E> transform) {
+    public final synchronized <S> void bindTo(ObservableDeque<S> observable, Function<S, E> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new DequeBinding<>(this::onBindingInvalidated, observable, transform);
 

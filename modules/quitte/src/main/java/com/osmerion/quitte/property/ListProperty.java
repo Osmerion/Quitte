@@ -90,7 +90,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
      * @since   0.1.0
      */
     @Override
-    public final void bindTo(ObservableList<E> observable) {
+    public final synchronized void bindTo(ObservableList<E> observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ListBinding<>(this::onBindingInvalidated, observable, Function.identity());
 
@@ -111,7 +111,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
      * @since   0.1.0
      */
     @Override
-    public final <S> void bindTo(ObservableList<S> observable, Function<S, E> transform) {
+    public final synchronized <S> void bindTo(ObservableList<S> observable, Function<S, E> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ListBinding<>(this::onBindingInvalidated, observable, transform);
 
