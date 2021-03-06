@@ -161,8 +161,7 @@ public final class I18n {
         };
     }
 
-    // Private constructor for utility class
     @Deprecated
-    private I18n() {}
+    private I18n() { throw new UnsupportedOperationException(); }
 
 }
