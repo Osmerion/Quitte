@@ -3,11 +3,8 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/com.osmerion.quitte/quitte)
 [![JavaDoc](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=JavaDoc&color=blue)](https://javadoc.io/doc/com.osmerion.quitte/quitte)
 
-Specialized, observable properties and observable collections for the JVM.
-
-Quitte was originally designed as a replacement for JavaFX's properties for [Osmerion](https://github.com/Osmerion/Osmerion).
-This library does not provide any advanced functionality on its own. However, it can be useful anywhere when observable values,
-properties, or collections are required.
+Quitte provides specialized, observable properties, expressions and observable
+collections for the JVM.
 
 
 ## Usage
@@ -22,7 +19,7 @@ follows:
 SimpleIntProperty myIntProperty = new SimpleIntProperty(0);
 int initialValue = myIntProperty.get();
 
-myIntProperty.addChangeListener((observable, oldValue, newValue) -> {
+myIntProperty.addListener((observable, oldValue, newValue) -> {
     /*
      * In this example this lambda will be invoked exactly once, with the following values:
      * observable == myIntProperty
