@@ -30,6 +30,8 @@
  */
 package com.osmerion.quitte;
 
+import javax.annotation.Nullable;
+
 public final class TestValues {
 
     public static final boolean BoolValue_N = false;
@@ -60,6 +62,7 @@ public final class TestValues {
     public static final double DoubleValue_L = Double.MIN_VALUE;
     public static final double DoubleValue_H = Double.MAX_VALUE;
 
+    @Nullable
     public static final Object ObjectValue_N = null;
     public static final Object ObjectValue_L = "LOW";
     public static final Object ObjectValue_H = "HIGH";
