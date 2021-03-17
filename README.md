@@ -6,6 +6,7 @@
 Quitte provides specialized, observable properties, expressions and observable
 collections for the JVM.
 
+Quitte is compatible with Java 16 or later.
 
 ## Usage
 
