@@ -46,13 +46,13 @@ java {
     modularity.inferModulePath.set(true)
 
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(15))
+        languageVersion.set(JavaLanguageVersion.of(16))
     }
 }
 
 tasks {
     withType<JavaCompile> {
-        options.release.set(15)
+        options.release.set(16)
     }
 
     jar {
@@ -83,7 +83,7 @@ tasks {
                 "implNote:a:Implementation Note:"
             )
 
-            addStringOption("-release", "15")
+            addStringOption("-release", "16")
         }
     }
 
