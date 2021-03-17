@@ -281,7 +281,7 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
             @Deprecated
             @Override
             public <T> Change<T> copy(Function<? super E, T> transform) {
-                return new Update<>(this.localChanges.stream().map(it -> it.copy(transform)).collect(Collectors.toUnmodifiableList()));
+                return new Update<>(this.localChanges.stream().map(it -> it.copy(transform)).toList());
             }
 
             /**
@@ -378,7 +378,7 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
 
             @Override
             <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Insertion<>(this.getIndex(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+                return new Insertion<>(this.getIndex(), this.getElements().stream().map(transform).toList());
             }
 
         }
@@ -413,7 +413,7 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
 
             @Override
             <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Removal<>(this.getIndex(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+                return new Removal<>(this.getIndex(), this.getElements().stream().map(transform).toList());
             }
 
         }
@@ -448,7 +448,7 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
 
             @Override
             <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Update<>(this.getIndex(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+                return new Update<>(this.getIndex(), this.getElements().stream().map(transform).toList());
             }
 
         }

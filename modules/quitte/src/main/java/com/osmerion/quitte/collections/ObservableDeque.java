@@ -241,7 +241,7 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
 
             @Override
             <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Insertion<>(this.getSite(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+                return new Insertion<>(this.getSite(), this.getElements().stream().map(transform).toList());
             }
 
         }
@@ -260,7 +260,7 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
 
             @Override
             <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Removal<>(this.getSite(), this.getElements().stream().map(transform).collect(Collectors.toUnmodifiableList()));
+                return new Removal<>(this.getSite(), this.getElements().stream().map(transform).toList());
             }
 
         }
