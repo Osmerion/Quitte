@@ -118,7 +118,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
     protected abstract V putImpl(@Nullable K key, @Nullable V value);
 
     @Override
-    public final V put(K key, V value) {
+    public final V put(@Nullable K key, @Nullable V value) {
         V prevValue;
 
         if (this.containsKey(key)) {
