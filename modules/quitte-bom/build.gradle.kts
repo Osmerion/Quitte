@@ -38,6 +38,16 @@ plugins {
 }
 
 publishing {
+    repositories {
+        maven {
+            url = uri(deployment.repo)
+
+            credentials {
+                username = deployment.user
+                password = deployment.password
+            }
+        }
+    }
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["javaPlatform"])
