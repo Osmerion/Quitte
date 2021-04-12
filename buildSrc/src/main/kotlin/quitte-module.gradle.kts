@@ -43,8 +43,6 @@ plugins {
 val artifactName = project.name
 
 java {
-    modularity.inferModulePath.set(true)
-
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(16))
     }
