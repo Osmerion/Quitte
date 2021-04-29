@@ -3,13 +3,13 @@ on: push
 
 jobs:
   jdk15:
-    name: OpenJDK 15 (Ubuntu)
+    name: OpenJDK 16 (Ubuntu)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: AdoptOpenJDK/install-jdk@v1
         with:
-          version: '15'
+          version: '16'
       - name: Gradle Build
         run: |
           ./gradlew --version --console=plain
