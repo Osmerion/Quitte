@@ -83,3 +83,7 @@ publishing {
         }
     }
 }
+
+dependencies {
+    compileOnlyApi(libs.jsr305)
+}

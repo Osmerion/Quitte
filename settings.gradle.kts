@@ -30,6 +30,9 @@
  */
 rootProject.name = "Quitte"
 
+//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
+enableFeaturePreview("VERSION_CATALOGS")
+
 file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
     fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
 

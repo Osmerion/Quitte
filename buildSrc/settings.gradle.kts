@@ -28,18 +28,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-plugins {
-    `kotlin-dsl`
-}
+@file:Suppress("UnstableApiUsage")
 
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
-}
+enableFeaturePreview("VERSION_CATALOGS")
 
-dependencies {
-    implementation(group = "de.jjohannes.gradle", name = "extra-java-module-info", version = "0.1")
-
-    // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
-    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
