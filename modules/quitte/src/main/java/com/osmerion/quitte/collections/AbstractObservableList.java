@@ -427,23 +427,19 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                 ObservableList.Change<E> change = null;
 
                 /*
-                 * Compressing changes is a non-trivial task and to keep the implementation relatively simple, we only
-                 * compress operations defined in ObservableList.
+                 * Compressing changes is a non-trivial task and to keep the implementation relatively simple, only
+                 * operations defined in ObservableList are required to be compressed as much as possible.
                  *
-                 * We start by checking if the current list is equal in size to the initial list and attempt to
-                 * reconstruct a permutation.
+                 * If the size of the list didn't change, attempt to construct a permutation mapping. This is done by
+                 * processing working changes change by change in the order they occurred.
                  */
                 if (this.sizeDelta == 0) {
                     /*
-                     * The `permutation` holds the permutation mapping. Its size is fixed and equal to the size of the
-                     * observable list.
+                     * `permutation` holds the permutation mapping (i.e. it maps from the original indices to the
+                     * current indices).
                      *
-                     * The `currentToOriginalIndexMapping` is used to map the current indices to their original
-                     * position. Its size is dynamically updated and reflects how many elements are in the list in the
-                     * current computation step.
-                     * -  For an insertion, `insertion.elements.size()` additional entries are inserted starting at
-                     *    `insertion.from` and setup to point to -1.
-                     * -  For a removal, `removal.elements().size()` entries are removed starting at `removal.from`.
+                     * `currentToOriginalIndexMapping` tracks the original indices and is dynamically in-/decreased
+                     * during each computation step.
                      */
                     int[] permutation = new int[AbstractObservableList.this.size()];
                     List<Integer> currentToOriginalIndexMapping = new ArrayList<>(AbstractObservableList.this.size());
@@ -455,16 +451,21 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                     }
 
                     /*
-                     * - expectedAdditions tracks the list of original indices for an element that currently do not
-                     *   have a mapping.
-                     * - expectedRemovals tracks the list of current indices for an element that do not have an original
-                     *   index mapping.
+                     * To track the positions of elements after they have been removed, `expectedAdditions` stores all
+                     * original indices which do not have a mapping to a current index.
+                     *
+                     * Similarly, `expectedRemovals` tracks the list of current indices which do not have a mapping to
+                     * an original index.
                      */
                     Map<E, List<Integer>> expectedAdditions = new HashMap<>();
                     Map<E, List<Integer>> expectedRemovals = new HashMap<>();
 
                     for (WorkingLocalChange<E> workingLocalChange : this.localChanges) {
                         if (workingLocalChange instanceof WorkingLocalChange.Insertion<E> insertion) {
+                            /*
+                             * Shift all current indices (starting from the insertion's offset) by adding the number of
+                             * elements inserted.
+                             */
                             for (int i = insertion.from; i < permutation.length; i++) {
                                 if (permutation[i] >= insertion.from) {
                                     permutation[i] += insertion.elements.size();
@@ -478,6 +479,14 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                                 List<Integer> eAIs = expectedAdditions.get(element);
                                 int currentIndex = insertion.from + i;
 
+                                /*
+                                 * If the element is expected to be added (i.e. it has previously been removed
+                                 * unexpectedly), an original index without a mapping to a current index exists. The
+                                 * current index is then mapped to the original index.
+                                 *
+                                 * Otherwise, if the element is not expected to be added, it is expected that it will be
+                                 * removed again.
+                                 */
                                 if (eAIs != null && !eAIs.isEmpty()) {
                                     int originalIndex = eAIs.remove(0);
 
@@ -494,6 +503,14 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                                 List<Integer> eRIs = expectedRemovals.get(element);
                                 int originalIndex = currentToOriginalIndexMapping.remove(removal.from + i);
 
+                                /*
+                                 * If the element is expected to be removed (i.e. it has previously been added
+                                 * unexpectedly), a current index without a mapping to an original index exists. The
+                                 * original index is then mapped to the current index.
+                                 *
+                                 * Otherwise, if the element is not expected to be removed, it is expected that it will
+                                 * be added again.
+                                 */
                                 if (eRIs != null && !eRIs.isEmpty()) {
                                     int currentIndex = eRIs.remove(0);
 
@@ -504,6 +521,10 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                                 }
                             }
 
+                            /*
+                             * Shift all current indices (starting from the removal's offset) by subtracting the number
+                             * of elements removed.
+                             */
                             for (int i = 0; i < permutation.length; i++) {
                                 if (permutation[i] >= removal.from) {
                                     permutation[i] -= removal.elements.size();
@@ -516,6 +537,10 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                         }
                     }
 
+                    /*
+                     * If elements are still expected to be added/removed, the change was not actually a permutation but
+                     * the resulting list just happened to be equal in size to the original ist.
+                     */
                     if (expectedAdditions.values().stream().allMatch(List::isEmpty) && expectedRemovals.values().stream().allMatch(List::isEmpty)) {
                         change = new ObservableList.Change.Permutation<>(IntStream.of(permutation).boxed().toList());
                     }
