@@ -225,8 +225,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
 
             try (ChangeBuilder ignored = this.beginChange()) {
                 for (var change : changes) {
-                    if (change instanceof Change.Permutation) {
-                        Change.Permutation<E> perm = (Change.Permutation<E>) change;
+                    if (change instanceof Change.Permutation<E> perm) {
                         List<Integer> indices = perm.getIndices();
 
                         if (this.size() != indices.size()) throw new IndexOutOfBoundsException();
@@ -236,13 +235,9 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
                         for (int i = 0; i < this.size(); i++) {
                             this.set(indices.get(i), copy.get(i));
                         }
-                    } else if (change instanceof Change.Update) {
-                        Change.Update<E> update = (Change.Update<E>) change;
-
+                    } else if (change instanceof Change.Update<E> update) {
                         for (var localChange : update.getLocalChanges()) {
-                            if (localChange instanceof LocalChange.Insertion) {
-                                LocalChange.Insertion<E> insertion = (LocalChange.Insertion<E>) localChange;
-
+                            if (localChange instanceof LocalChange.Insertion<E> insertion) {
                                 if (this.size() < insertion.getIndex()) throw new IndexOutOfBoundsException();
 
                                 List<E> elements = insertion.getElements();
@@ -251,9 +246,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
                                 for (int i = 0; i < elements.size(); i++) {
                                     this.addAll(offset + i, elements);
                                 }
-                            } else if (localChange instanceof LocalChange.Removal) {
-                                LocalChange.Removal<E> removal = (LocalChange.Removal<E>) localChange;
-
+                            } else if (localChange instanceof LocalChange.Removal<E> removal) {
                                 if (this.size() < removal.getIndex() + removal.getElements().size()) throw new IndexOutOfBoundsException();
 
                                 List<E> elements = removal.getElements();
@@ -262,9 +255,7 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
                                 for (int i = 0; i < elements.size(); i++) {
                                     this.remove(offset);
                                 }
-                            } else if (localChange instanceof LocalChange.Update) {
-                                LocalChange.Update<E> localUpdate = (LocalChange.Update<E>) localChange;
-
+                            } else if (localChange instanceof LocalChange.Update<E> localUpdate) {
                                 if (this.size() < localUpdate.getIndex() + localUpdate.getElements().size()) throw new IndexOutOfBoundsException();
 
                                 List<E> elements = localUpdate.getElements();

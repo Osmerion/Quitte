@@ -386,17 +386,13 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
             try (ChangeBuilder ignored = this.beginChange()) {
                 for (var change : changes) {
                     for (var localChange : change.getLocalChanges()) {
-                        if (localChange instanceof LocalChange.Insertion) {
-                            LocalChange.Insertion<E> insertion = (LocalChange.Insertion<E>) localChange;
-
+                        if (localChange instanceof LocalChange.Insertion<E> insertion) {
                             switch (insertion.getSite()) {
                                 case HEAD -> insertion.getElements().forEach(this::addFirst);
                                 case TAIL -> insertion.getElements().forEach(this::addLast);
                                 default -> throw new IllegalStateException();
                             }
-                        } else if (localChange instanceof LocalChange.Removal) {
-                            LocalChange.Removal<E> removal = (LocalChange.Removal<E>) localChange;
-
+                        } else if (localChange instanceof LocalChange.Removal<E> removal) {
                             switch (removal.getSite()) {
                                 case HEAD -> removal.getElements().forEach(it -> this.removeFirst());
                                 case TAIL -> removal.getElements().forEach(it -> this.removeLast());

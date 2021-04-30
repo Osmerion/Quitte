@@ -78,10 +78,8 @@ public final class I18n {
                 contextUpdateFun.run();
 
                 this.i18nParameters = Arrays.stream(arguments).map(it -> {
-                    if (it instanceof I18nParameter.Dynamic) {
-                        I18nParameter.Dynamic dynamic = (I18nParameter.Dynamic) it;
+                    if (it instanceof I18nParameter.Dynamic dynamic) {
                         this.addDependency(dynamic.observable);
-
                         return dynamic;
                     } else {
                         return new I18nParameter.Static(it);
@@ -136,10 +134,8 @@ public final class I18n {
                 contextUpdateFun.run();
 
                 this.i18nParameters = Arrays.stream(arguments).map(it -> {
-                    if (it instanceof I18nParameter.Dynamic) {
-                        I18nParameter.Dynamic dynamic = (I18nParameter.Dynamic) it;
+                    if (it instanceof I18nParameter.Dynamic dynamic) {
                         this.addDependency(dynamic.observable);
-
                         return dynamic;
                     } else {
                         return new I18nParameter.Static(it);
