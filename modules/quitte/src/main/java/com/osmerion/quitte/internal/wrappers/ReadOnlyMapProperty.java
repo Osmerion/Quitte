@@ -64,7 +64,7 @@ public final class ReadOnlyMapProperty<K, V> extends UnmodifiableObservableMap<K
 
     @Override
     public boolean isWritable() {
-        return this.property.isWritable();
+        return false;
     }
 
 }

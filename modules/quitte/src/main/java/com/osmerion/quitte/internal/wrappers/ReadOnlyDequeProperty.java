@@ -63,7 +63,7 @@ public final class ReadOnlyDequeProperty<E> extends UnmodifiableObservableDeque<
 
     @Override
     public boolean isWritable() {
-        return this.property.isWritable();
+        return false;
     }
 
 }
