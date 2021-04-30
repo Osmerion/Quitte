@@ -32,7 +32,6 @@ package com.osmerion.quitte.collections;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,6 +48,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
+
+import static java.lang.Math.*;
 
 /**
  * A basic implementation for a modifiable {@link ObservableList}.
@@ -540,9 +541,9 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                                     if (batchFrom == wlc.from && batchElements.size() == ((WorkingLocalChange.Insertion<E>) wlc).elements.size()) {
                                         if (!updateElements.isEmpty()) {
                                             if (wlc.from <= updateFrom + updateElements.size() && updateFrom <= wlc.to) {
-                                                int offset = Math.abs(wlc.from - updateFrom);
+                                                int offset = abs(wlc.from - updateFrom);
 
-                                                updateFrom = Math.min(wlc.from, updateFrom);
+                                                updateFrom = min(wlc.from, updateFrom);
                                                 updateElements.addAll(offset, ((WorkingLocalChange.Insertion<E>) wlc).elements);
                                             } else {
                                                 localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
@@ -576,9 +577,9 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                                 batchType = 1;
                                 batchElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
                             } else if (wlc.from <= batchFrom + batchElements.size() && batchFrom <= wlc.to) {
-                                int offset = Math.abs(wlc.from - batchFrom);
+                                int offset = abs(wlc.from - batchFrom);
 
-                                batchFrom = Math.min(wlc.from, batchFrom);
+                                batchFrom = min(wlc.from, batchFrom);
                                 batchElements.addAll(offset, ((WorkingLocalChange.Insertion<E>) wlc).elements);
                             } else {
                                 if (!updateElements.isEmpty()) {
@@ -604,9 +605,9 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
                                 if (!batchElements.isEmpty()) localChanges.add(new LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
                             } else if (wlc.from <= batchFrom + batchElements.size() && batchFrom <= wlc.to) {
-                                int offset = Math.abs(wlc.from - batchFrom);
+                                int offset = abs(wlc.from - batchFrom);
 
-                                batchFrom = Math.min(wlc.from, batchFrom);
+                                batchFrom = min(wlc.from, batchFrom);
                                 batchElements.addAll(offset, ((WorkingLocalChange.Removal<E>) wlc).elements);
 
                                 continue;
