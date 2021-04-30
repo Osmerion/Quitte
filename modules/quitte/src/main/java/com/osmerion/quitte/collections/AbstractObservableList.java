@@ -32,15 +32,19 @@ package com.osmerion.quitte.collections;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
@@ -419,11 +423,224 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                 AbstractObservableList.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
 
-                ObservableList.Change<E> change = new ObservableList.Change.Update<>(
-                    this.localChanges.stream()
-                        .map(WorkingLocalChange::complete)
-                        .collect(Collectors.toUnmodifiableList())
-                );
+                ObservableList.Change<E> change = null;
+
+                /*
+                 * Compressing changes is a non-trivial task and to keep the implementation relatively simple, we only
+                 * compress operations defined in ObservableList.
+                 *
+                 * We start by checking if the current list is equal in size to the initial list and attempt to
+                 * reconstruct a permutation.
+                 */
+                if (this.sizeDelta == 0) {
+                    /*
+                     * The `permutation` holds the permutation mapping. Its size is fixed and equal to the size of the
+                     * observable list.
+                     *
+                     * The `currentToOriginalIndexMapping` is used to map the current indices to their original
+                     * position. Its size is dynamically updated and reflects how many elements are in the list in the
+                     * current computation step.
+                     * -  For an insertion, `insertion.elements.size()` additional entries are inserted starting at
+                     *    `insertion.from` and setup to point to -1.
+                     * -  For a removal, `removal.elements().size()` entries are removed starting at `removal.from`.
+                     */
+                    int[] permutation = new int[AbstractObservableList.this.size()];
+                    List<Integer> currentToOriginalIndexMapping = new ArrayList<>(AbstractObservableList.this.size());
+
+                    /* Populate the permutation and the currentToOriginalIndex mappings. */
+                    for (int i = 0; i < permutation.length; i++) {
+                        permutation[i] = i;
+                        currentToOriginalIndexMapping.add(i);
+                    }
+
+                    /*
+                     * - expectedAdditions tracks the list of original indices for an element that currently do not
+                     *   have a mapping.
+                     * - expectedRemovals tracks the list of current indices for an element that do not have an original
+                     *   index mapping.
+                     */
+                    Map<E, List<Integer>> expectedAdditions = new HashMap<>();
+                    Map<E, List<Integer>> expectedRemovals = new HashMap<>();
+
+                    for (WorkingLocalChange<E> workingLocalChange : this.localChanges) {
+                        if (workingLocalChange instanceof WorkingLocalChange.Insertion<E> insertion) {
+                            for (int i = insertion.from; i < permutation.length; i++) {
+                                if (permutation[i] >= insertion.from) {
+                                    permutation[i] += insertion.elements.size();
+                                }
+
+                                expectedRemovals.forEach((k, v) -> v.replaceAll(index -> index >= insertion.from ? index + insertion.elements.size() : index));
+                            }
+
+                            for (int i = 0; i < insertion.elements.size(); i++) {
+                                E element = insertion.elements.get(i);
+                                List<Integer> eAIs = expectedAdditions.get(element);
+                                int currentIndex = insertion.from + i;
+
+                                if (eAIs != null && !eAIs.isEmpty()) {
+                                    int originalIndex = eAIs.remove(0);
+
+                                    currentToOriginalIndexMapping.add(currentIndex, originalIndex);
+                                    permutation[originalIndex] = currentIndex;
+                                } else {
+                                    expectedRemovals.computeIfAbsent(element, e -> new ArrayList<>()).add(currentIndex);
+                                    currentToOriginalIndexMapping.add(currentIndex, -1);
+                                }
+                            }
+                        } else if (workingLocalChange instanceof WorkingLocalChange.Removal<E> removal) {
+                            for (int i = 0; i < removal.elements.size(); i++) {
+                                E element = removal.elements.get(i);
+                                List<Integer> eRIs = expectedRemovals.get(element);
+                                int originalIndex = currentToOriginalIndexMapping.remove(removal.from + i);
+
+                                if (eRIs != null && !eRIs.isEmpty()) {
+                                    int currentIndex = eRIs.remove(0);
+
+                                    currentToOriginalIndexMapping.set(currentIndex, originalIndex);
+                                    permutation[originalIndex] = currentIndex;
+                                } else {
+                                    expectedAdditions.computeIfAbsent(element, e -> new ArrayList<>()).add(originalIndex);
+                                }
+                            }
+
+                            for (int i = 0; i < permutation.length; i++) {
+                                if (permutation[i] >= removal.from) {
+                                    permutation[i] -= removal.elements.size();
+                                }
+
+                                expectedRemovals.forEach((k, v) -> v.replaceAll(index -> index >= removal.from ? index - removal.elements.size() : index));
+                            }
+                        } else {
+                            throw new IllegalStateException();
+                        }
+                    }
+
+                    if (expectedAdditions.values().stream().allMatch(List::isEmpty) && expectedRemovals.values().stream().allMatch(List::isEmpty)) {
+                        change = new ObservableList.Change.Permutation<>(IntStream.of(permutation).boxed().toList());
+                    }
+                }
+
+                /* We couldn't reconstruct a permutation and need to "compress" local changes. */
+                if (change == null) {
+                    List<LocalChange<E>> localChanges = new ArrayList<>(this.localChanges.size());
+
+                    List<E> updateElements = new ArrayList<>();
+                    int updateFrom = -1;
+
+                    List<E> batchElements = new ArrayList<>();
+                    int batchFrom = -1;
+
+                    /* Keep track of the type of the current change. (Insertion: 1, Removal: 2) */
+                    int batchType = 0;
+
+                    for (WorkingLocalChange<E> wlc : this.localChanges) {
+                        if (wlc instanceof WorkingLocalChange.Insertion) {
+                            if (batchType != 1) {
+                                if (batchType == 2) {
+                                    if (batchFrom == wlc.from && batchElements.size() == ((WorkingLocalChange.Insertion<E>) wlc).elements.size()) {
+                                        if (!updateElements.isEmpty()) {
+                                            if (wlc.from <= updateFrom + updateElements.size() && updateFrom <= wlc.to) {
+                                                int offset = Math.abs(wlc.from - updateFrom);
+
+                                                updateFrom = Math.min(wlc.from, updateFrom);
+                                                updateElements.addAll(offset, ((WorkingLocalChange.Insertion<E>) wlc).elements);
+                                            } else {
+                                                localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                                updateElements.clear();
+
+                                                updateFrom = batchFrom;
+                                                updateElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
+                                            }
+                                        } else {
+                                            updateFrom = batchFrom;
+                                            updateElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
+                                        }
+
+                                        batchType = 0;
+                                        batchElements.clear();
+
+                                        continue;
+                                    } else {
+                                        if (!updateElements.isEmpty()) {
+                                            localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                            updateFrom = -1;
+                                            updateElements.clear();
+                                        }
+
+                                        localChanges.add(new LocalChange.Removal<>(batchFrom, new ArrayList<>(batchElements)));
+                                        batchElements.clear();
+                                    }
+                                }
+
+                                batchFrom = wlc.from;
+                                batchType = 1;
+                                batchElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
+                            } else if (wlc.from <= batchFrom + batchElements.size() && batchFrom <= wlc.to) {
+                                int offset = Math.abs(wlc.from - batchFrom);
+
+                                batchFrom = Math.min(wlc.from, batchFrom);
+                                batchElements.addAll(offset, ((WorkingLocalChange.Insertion<E>) wlc).elements);
+                            } else {
+                                if (!updateElements.isEmpty()) {
+                                    localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                    updateFrom = -1;
+                                    updateElements.clear();
+                                }
+
+                                localChanges.add(new LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
+                                batchElements.clear();
+
+                                batchFrom = wlc.from;
+                                batchType = 1;
+                                batchElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
+                            }
+                        } else if (wlc instanceof WorkingLocalChange.Removal) {
+                            if (batchType != 2) {
+                                if (!updateElements.isEmpty()) {
+                                    localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                    updateFrom = -1;
+                                    updateElements.clear();
+                                }
+
+                                if (!batchElements.isEmpty()) localChanges.add(new LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
+                            } else if (wlc.from <= batchFrom + batchElements.size() && batchFrom <= wlc.to) {
+                                int offset = Math.abs(wlc.from - batchFrom);
+
+                                batchFrom = Math.min(wlc.from, batchFrom);
+                                batchElements.addAll(offset, ((WorkingLocalChange.Removal<E>) wlc).elements);
+
+                                continue;
+                            } else {
+                                if (!updateElements.isEmpty()) {
+                                    localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                    updateFrom = -1;
+                                    updateElements.clear();
+                                }
+
+                                localChanges.add(new LocalChange.Removal<>(batchFrom, new ArrayList<>(batchElements)));
+                                batchElements.clear();
+                            }
+
+                            batchFrom = wlc.from;
+                            batchType = 2;
+                            batchElements.addAll(((WorkingLocalChange.Removal<E>) wlc).elements);
+                        } else {
+                            throw new IllegalStateException();
+                        }
+                    }
+
+                    if (!updateElements.isEmpty()) localChanges.add(new LocalChange.Update<>(updateFrom, updateElements));
+
+                    if (!batchElements.isEmpty()) {
+                        localChanges.add(switch (batchType) {
+                            case 1 -> new LocalChange.Insertion<>(batchFrom, batchElements);
+                            case 2 -> new LocalChange.Removal<>(batchFrom, batchElements);
+                            default -> throw new IllegalStateException();
+                        });
+                    }
+
+                    change = new ObservableList.Change.Update<>(List.copyOf(localChanges));
+                }
 
                 for (var listener : AbstractObservableList.this.changeListeners) {
                     if (listener.isInvalid()) {
@@ -477,8 +694,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             this.to = to;
         }
 
-        abstract LocalChange<E> complete();
-
         private static final class Insertion<E> extends WorkingLocalChange<E> {
 
             private final List<E> elements;
@@ -486,11 +701,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             private Insertion(int from, int to, List<E> elements) {
                 super(from, to);
                 this.elements = elements;
-            }
-
-            @Override
-            LocalChange<E> complete() {
-                return new LocalChange.Insertion<>(this.from, this.elements);
             }
 
         }
@@ -506,11 +716,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             private Removal(int from, int to, List<E> elements) {
                 super(from, to);
                 this.elements = elements;
-            }
-
-            @Override
-            LocalChange<E> complete() {
-                return new LocalChange.Removal<>(this.from, this.elements);
             }
 
         }
