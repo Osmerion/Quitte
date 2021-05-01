@@ -33,6 +33,7 @@ package com.osmerion.quitte.collections;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,9 +43,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
@@ -736,7 +735,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
             private final List<E> elements;
 
             private Removal(int from, int to, @Nullable E element) {
-                this(from, to, Stream.ofNullable(element).collect(Collectors.toList()));
+                this(from, to, Collections.singletonList(element));
             }
 
             private Removal(int from, int to, List<E> elements) {
