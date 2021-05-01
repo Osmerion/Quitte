@@ -3,8 +3,8 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/com.osmerion.quitte/quitte)
 [![JavaDoc](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=JavaDoc&color=blue)](https://javadoc.io/doc/com.osmerion.quitte/quitte)
 
-Quitte provides specialized, observable properties, expressions and observable
-collections for the JVM.
+Quitte provides specialized observable properties and expressions with lazy
+variants, and observable collections.
 
 Quitte is compatible with Java 16 or later.
 
