@@ -44,15 +44,15 @@ val Project.deployment: Deployment
             (when {
                 hasProperty("release") -> Deployment(
                     BuildType.RELEASE,
-                    "https://s01.oss.sonatype.org",
-                    getProperty("sonatypeUsername"),
-                    getProperty("sonatypePassword")
+                    "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/",
+                    getProperty("osmerionSonatypeUsername"),
+                    getProperty("osmerionSonatypePassword")
                 )
                 hasProperty("snapshot") -> Deployment(
                     BuildType.SNAPSHOT,
-                    "https://s01.oss.sonatype.org",
-                    getProperty("sonatypeUsername"),
-                    getProperty("sonatypePassword")
+                    "https://s01.oss.sonatype.org/content/repositories/snapshots/",
+                    getProperty("osmerionSonatypeUsername"),
+                    getProperty("osmerionSonatypePassword")
                 )
                 else -> Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
             }).also { extra[DEPLOYMENT_KEY] = it }
