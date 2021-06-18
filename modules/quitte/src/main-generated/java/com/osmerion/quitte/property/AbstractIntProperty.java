@@ -94,7 +94,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
     @Override
     public final synchronized void bindTo(ObservableIntValue observable) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Int2IntBinding(this::onBindingInvalidated, observable, it -> it);
+        this.binding = new IntToIntBinding(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 
@@ -104,9 +104,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableBoolValue observable, Bool2IntFunction transform) {
+    public final synchronized void bindTo(ObservableBoolValue observable, BoolToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Bool2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new BoolToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -116,9 +116,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableByteValue observable, Byte2IntFunction transform) {
+    public final synchronized void bindTo(ObservableByteValue observable, ByteToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Byte2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ByteToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -128,9 +128,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableShortValue observable, Short2IntFunction transform) {
+    public final synchronized void bindTo(ObservableShortValue observable, ShortToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Short2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ShortToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -140,9 +140,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableIntValue observable, Int2IntFunction transform) {
+    public final synchronized void bindTo(ObservableIntValue observable, IntToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Int2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new IntToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -152,9 +152,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableLongValue observable, Long2IntFunction transform) {
+    public final synchronized void bindTo(ObservableLongValue observable, LongToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Long2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new LongToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -164,9 +164,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableFloatValue observable, Float2IntFunction transform) {
+    public final synchronized void bindTo(ObservableFloatValue observable, FloatToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Float2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new FloatToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -176,9 +176,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableDoubleValue observable, Double2IntFunction transform) {
+    public final synchronized void bindTo(ObservableDoubleValue observable, DoubleToIntFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Double2IntBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new DoubleToIntBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -188,9 +188,9 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2IntFunction<S> transform) {
+    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Object2IntBinding<>(this::onBindingInvalidated, observable, transform);
+        this.binding = new ObjectToIntBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 

@@ -48,9 +48,9 @@ public interface LongBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2LongFunction<T> transform;
+        private final ObjectToLongFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2LongFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToLongFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

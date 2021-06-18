@@ -74,7 +74,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2FloatFunction transform);
+    void bindTo(ObservableBoolValue observable, BoolToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2FloatFunction transform);
+    void bindTo(ObservableByteValue observable, ByteToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2FloatFunction transform);
+    void bindTo(ObservableShortValue observable, ShortToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2FloatFunction transform);
+    void bindTo(ObservableIntValue observable, IntToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2FloatFunction transform);
+    void bindTo(ObservableLongValue observable, LongToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2FloatFunction transform);
+    void bindTo(ObservableFloatValue observable, FloatToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2FloatFunction transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToFloatFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableFloatProperty extends WritableValueProperty<Float>, Rea
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2FloatFunction<S> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToFloatFunction<S> transform);
 
 }

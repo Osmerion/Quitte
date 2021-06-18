@@ -51,9 +51,9 @@ public interface ObjectBinding<T> extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2ObjectFunction<T, R> transform;
+        private final ObjectToObjectFunction<T, R> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2ObjectFunction<T, R> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToObjectFunction<T, R> transform) {
             this.source = source;
             this.transform = transform;
             

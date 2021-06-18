@@ -94,7 +94,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
     @Override
     public final synchronized void bindTo(ObservableByteValue observable) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Byte2ByteBinding(this::onBindingInvalidated, observable, it -> it);
+        this.binding = new ByteToByteBinding(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 
@@ -104,9 +104,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableBoolValue observable, Bool2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableBoolValue observable, BoolToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Bool2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new BoolToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -116,9 +116,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableByteValue observable, Byte2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableByteValue observable, ByteToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Byte2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ByteToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -128,9 +128,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableShortValue observable, Short2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableShortValue observable, ShortToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Short2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ShortToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -140,9 +140,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableIntValue observable, Int2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableIntValue observable, IntToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Int2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new IntToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -152,9 +152,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableLongValue observable, Long2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableLongValue observable, LongToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Long2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new LongToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -164,9 +164,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableFloatValue observable, Float2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableFloatValue observable, FloatToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Float2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new FloatToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -176,9 +176,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableDoubleValue observable, Double2ByteFunction transform) {
+    public final synchronized void bindTo(ObservableDoubleValue observable, DoubleToByteFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Double2ByteBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new DoubleToByteBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -188,9 +188,9 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform) {
+    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Object2ByteBinding<>(this::onBindingInvalidated, observable, transform);
+        this.binding = new ObjectToByteBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 

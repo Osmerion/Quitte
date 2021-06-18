@@ -48,9 +48,9 @@ public interface ShortBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2ShortFunction<T> transform;
+        private final ObjectToShortFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2ShortFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToShortFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

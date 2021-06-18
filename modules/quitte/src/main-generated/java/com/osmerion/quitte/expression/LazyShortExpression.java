@@ -62,8 +62,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableBoolValue observable, Bool2ShortFunction transform) {
-        return new Transform(ex -> new Bool2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableBoolValue observable, BoolToShortFunction transform) {
+        return new Transform(ex -> new BoolToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableByteValue observable, Byte2ShortFunction transform) {
-        return new Transform(ex -> new Byte2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableByteValue observable, ByteToShortFunction transform) {
+        return new Transform(ex -> new ByteToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -90,8 +90,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableShortValue observable, Short2ShortFunction transform) {
-        return new Transform(ex -> new Short2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableShortValue observable, ShortToShortFunction transform) {
+        return new Transform(ex -> new ShortToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -104,8 +104,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableIntValue observable, Int2ShortFunction transform) {
-        return new Transform(ex -> new Int2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableIntValue observable, IntToShortFunction transform) {
+        return new Transform(ex -> new IntToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableLongValue observable, Long2ShortFunction transform) {
-        return new Transform(ex -> new Long2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableLongValue observable, LongToShortFunction transform) {
+        return new Transform(ex -> new LongToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -132,8 +132,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableFloatValue observable, Float2ShortFunction transform) {
-        return new Transform(ex -> new Float2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableFloatValue observable, FloatToShortFunction transform) {
+        return new Transform(ex -> new FloatToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -146,8 +146,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static LazyShortExpression of(ObservableDoubleValue observable, Double2ShortFunction transform) {
-        return new Transform(ex -> new Double2ShortBinding(ex::doInvalidate, observable, transform));
+    public static LazyShortExpression of(ObservableDoubleValue observable, DoubleToShortFunction transform) {
+        return new Transform(ex -> new DoubleToShortBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -161,8 +161,8 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
      *
      * @since   0.1.0
      */
-    public static <S> LazyShortExpression of(ObservableObjectValue<S> observable, Object2ShortFunction<S> transform) {
-        return new Transform(ex -> new Object2ShortBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> LazyShortExpression of(ObservableObjectValue<S> observable, ObjectToShortFunction<S> transform) {
+        return new Transform(ex -> new ObjectToShortBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

@@ -48,9 +48,9 @@ public interface FloatBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2FloatFunction<T> transform;
+        private final ObjectToFloatFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2FloatFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToFloatFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

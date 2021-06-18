@@ -32,7 +32,7 @@ val packageName = "com.osmerion.quitte.functional"
 
 Type.values().forEach { sourceType ->
     Type.values().forEach { targetType ->
-        val className = "${sourceType.abbrevName}2${targetType.abbrevName}Function"
+        val className = "${sourceType.abbrevName}To${targetType.abbrevName}Function"
         val sourceTypeName = if (sourceType === Type.OBJECT) "T" else sourceType.raw
         val targetTypeName = if (targetType === Type.OBJECT) "R" else targetType.raw
         val typeParams = when {

@@ -48,9 +48,9 @@ public interface DoubleBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2DoubleFunction<T> transform;
+        private final ObjectToDoubleFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2DoubleFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToDoubleFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

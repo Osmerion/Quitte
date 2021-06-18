@@ -74,7 +74,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2LongFunction transform);
+    void bindTo(ObservableBoolValue observable, BoolToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2LongFunction transform);
+    void bindTo(ObservableByteValue observable, ByteToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2LongFunction transform);
+    void bindTo(ObservableShortValue observable, ShortToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2LongFunction transform);
+    void bindTo(ObservableIntValue observable, IntToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2LongFunction transform);
+    void bindTo(ObservableLongValue observable, LongToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2LongFunction transform);
+    void bindTo(ObservableFloatValue observable, FloatToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2LongFunction transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToLongFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableLongProperty extends WritableValueProperty<Long>, Reada
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2LongFunction<S> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform);
 
 }

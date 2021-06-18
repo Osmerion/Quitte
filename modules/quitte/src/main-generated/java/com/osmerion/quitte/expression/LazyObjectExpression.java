@@ -63,8 +63,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableBoolValue observable, Bool2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Bool2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableBoolValue observable, BoolToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new BoolToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -78,8 +78,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableByteValue observable, Byte2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Byte2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableByteValue observable, ByteToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new ByteToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -93,8 +93,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableShortValue observable, Short2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Short2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableShortValue observable, ShortToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new ShortToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -108,8 +108,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableIntValue observable, Int2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Int2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableIntValue observable, IntToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new IntToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -123,8 +123,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableLongValue observable, Long2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Long2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableLongValue observable, LongToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new LongToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -138,8 +138,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableFloatValue observable, Float2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Float2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableFloatValue observable, FloatToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new FloatToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -153,8 +153,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableDoubleValue observable, Double2ObjectFunction<T> transform) {
-        return new Transform<>(ex -> new Double2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <T> LazyObjectExpression<T> of(ObservableDoubleValue observable, DoubleToObjectFunction<T> transform) {
+        return new Transform<>(ex -> new DoubleToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -169,8 +169,8 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <S, T> LazyObjectExpression<T> of(ObservableObjectValue<S> observable, Object2ObjectFunction<S, T> transform) {
-        return new Transform<>(ex -> new Object2ObjectBinding<>(ex::doInvalidate, observable, transform));
+    public static <S, T> LazyObjectExpression<T> of(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
+        return new Transform<>(ex -> new ObjectToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

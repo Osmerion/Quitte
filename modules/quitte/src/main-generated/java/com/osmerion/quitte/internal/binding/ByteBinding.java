@@ -48,9 +48,9 @@ public interface ByteBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2ByteFunction<T> transform;
+        private final ObjectToByteFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2ByteFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToByteFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

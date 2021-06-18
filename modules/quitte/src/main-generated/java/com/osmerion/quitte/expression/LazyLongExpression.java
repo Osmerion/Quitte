@@ -62,8 +62,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableBoolValue observable, Bool2LongFunction transform) {
-        return new Transform(ex -> new Bool2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableBoolValue observable, BoolToLongFunction transform) {
+        return new Transform(ex -> new BoolToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableByteValue observable, Byte2LongFunction transform) {
-        return new Transform(ex -> new Byte2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableByteValue observable, ByteToLongFunction transform) {
+        return new Transform(ex -> new ByteToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -90,8 +90,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableShortValue observable, Short2LongFunction transform) {
-        return new Transform(ex -> new Short2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableShortValue observable, ShortToLongFunction transform) {
+        return new Transform(ex -> new ShortToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -104,8 +104,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableIntValue observable, Int2LongFunction transform) {
-        return new Transform(ex -> new Int2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableIntValue observable, IntToLongFunction transform) {
+        return new Transform(ex -> new IntToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableLongValue observable, Long2LongFunction transform) {
-        return new Transform(ex -> new Long2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableLongValue observable, LongToLongFunction transform) {
+        return new Transform(ex -> new LongToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -132,8 +132,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableFloatValue observable, Float2LongFunction transform) {
-        return new Transform(ex -> new Float2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableFloatValue observable, FloatToLongFunction transform) {
+        return new Transform(ex -> new FloatToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -146,8 +146,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyLongExpression of(ObservableDoubleValue observable, Double2LongFunction transform) {
-        return new Transform(ex -> new Double2LongBinding(ex::doInvalidate, observable, transform));
+    public static LazyLongExpression of(ObservableDoubleValue observable, DoubleToLongFunction transform) {
+        return new Transform(ex -> new DoubleToLongBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -161,8 +161,8 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyLongExpression of(ObservableObjectValue<S> observable, Object2LongFunction<S> transform) {
-        return new Transform(ex -> new Object2LongBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> LazyLongExpression of(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform) {
+        return new Transform(ex -> new ObjectToLongBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

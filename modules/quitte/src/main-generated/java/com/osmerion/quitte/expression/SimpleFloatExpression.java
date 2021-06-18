@@ -59,8 +59,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableBoolValue observable, Bool2FloatFunction transform) {
-        return new Transform(ex -> new Bool2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableBoolValue observable, BoolToFloatFunction transform) {
+        return new Transform(ex -> new BoolToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -73,8 +73,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableByteValue observable, Byte2FloatFunction transform) {
-        return new Transform(ex -> new Byte2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableByteValue observable, ByteToFloatFunction transform) {
+        return new Transform(ex -> new ByteToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -87,8 +87,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableShortValue observable, Short2FloatFunction transform) {
-        return new Transform(ex -> new Short2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableShortValue observable, ShortToFloatFunction transform) {
+        return new Transform(ex -> new ShortToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -101,8 +101,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableIntValue observable, Int2FloatFunction transform) {
-        return new Transform(ex -> new Int2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableIntValue observable, IntToFloatFunction transform) {
+        return new Transform(ex -> new IntToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -115,8 +115,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableLongValue observable, Long2FloatFunction transform) {
-        return new Transform(ex -> new Long2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableLongValue observable, LongToFloatFunction transform) {
+        return new Transform(ex -> new LongToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -129,8 +129,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableFloatValue observable, Float2FloatFunction transform) {
-        return new Transform(ex -> new Float2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableFloatValue observable, FloatToFloatFunction transform) {
+        return new Transform(ex -> new FloatToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -143,8 +143,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleFloatExpression of(ObservableDoubleValue observable, Double2FloatFunction transform) {
-        return new Transform(ex -> new Double2FloatBinding(ex::doInvalidate, observable, transform));
+    public static SimpleFloatExpression of(ObservableDoubleValue observable, DoubleToFloatFunction transform) {
+        return new Transform(ex -> new DoubleToFloatBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -158,8 +158,8 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleFloatExpression of(ObservableObjectValue<S> observable, Object2FloatFunction<S> transform) {
-        return new Transform(ex -> new Object2FloatBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> SimpleFloatExpression of(ObservableObjectValue<S> observable, ObjectToFloatFunction<S> transform) {
+        return new Transform(ex -> new ObjectToFloatBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

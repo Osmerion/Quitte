@@ -48,9 +48,9 @@ public interface BoolBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2BoolFunction<T> transform;
+        private final ObjectToBoolFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2BoolFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToBoolFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

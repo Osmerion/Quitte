@@ -59,8 +59,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableBoolValue observable, Bool2DoubleFunction transform) {
-        return new Transform(ex -> new Bool2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableBoolValue observable, BoolToDoubleFunction transform) {
+        return new Transform(ex -> new BoolToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -73,8 +73,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableByteValue observable, Byte2DoubleFunction transform) {
-        return new Transform(ex -> new Byte2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableByteValue observable, ByteToDoubleFunction transform) {
+        return new Transform(ex -> new ByteToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -87,8 +87,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableShortValue observable, Short2DoubleFunction transform) {
-        return new Transform(ex -> new Short2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableShortValue observable, ShortToDoubleFunction transform) {
+        return new Transform(ex -> new ShortToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -101,8 +101,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableIntValue observable, Int2DoubleFunction transform) {
-        return new Transform(ex -> new Int2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableIntValue observable, IntToDoubleFunction transform) {
+        return new Transform(ex -> new IntToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -115,8 +115,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableLongValue observable, Long2DoubleFunction transform) {
-        return new Transform(ex -> new Long2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableLongValue observable, LongToDoubleFunction transform) {
+        return new Transform(ex -> new LongToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -129,8 +129,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableFloatValue observable, Float2DoubleFunction transform) {
-        return new Transform(ex -> new Float2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableFloatValue observable, FloatToDoubleFunction transform) {
+        return new Transform(ex -> new FloatToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -143,8 +143,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleDoubleExpression of(ObservableDoubleValue observable, Double2DoubleFunction transform) {
-        return new Transform(ex -> new Double2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static SimpleDoubleExpression of(ObservableDoubleValue observable, DoubleToDoubleFunction transform) {
+        return new Transform(ex -> new DoubleToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -158,8 +158,8 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleDoubleExpression of(ObservableObjectValue<S> observable, Object2DoubleFunction<S> transform) {
-        return new Transform(ex -> new Object2DoubleBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> SimpleDoubleExpression of(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
+        return new Transform(ex -> new ObjectToDoubleBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

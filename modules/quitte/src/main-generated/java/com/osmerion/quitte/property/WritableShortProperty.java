@@ -74,7 +74,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2ShortFunction transform);
+    void bindTo(ObservableBoolValue observable, BoolToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2ShortFunction transform);
+    void bindTo(ObservableByteValue observable, ByteToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2ShortFunction transform);
+    void bindTo(ObservableShortValue observable, ShortToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2ShortFunction transform);
+    void bindTo(ObservableIntValue observable, IntToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2ShortFunction transform);
+    void bindTo(ObservableLongValue observable, LongToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2ShortFunction transform);
+    void bindTo(ObservableFloatValue observable, FloatToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2ShortFunction transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToShortFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableShortProperty extends WritableValueProperty<Short>, Rea
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2ShortFunction<S> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToShortFunction<S> transform);
 
 }

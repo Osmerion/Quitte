@@ -74,7 +74,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2BoolFunction transform);
+    void bindTo(ObservableBoolValue observable, BoolToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2BoolFunction transform);
+    void bindTo(ObservableByteValue observable, ByteToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2BoolFunction transform);
+    void bindTo(ObservableShortValue observable, ShortToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2BoolFunction transform);
+    void bindTo(ObservableIntValue observable, IntToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2BoolFunction transform);
+    void bindTo(ObservableLongValue observable, LongToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2BoolFunction transform);
+    void bindTo(ObservableFloatValue observable, FloatToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2BoolFunction transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToBoolFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform);
 
 }

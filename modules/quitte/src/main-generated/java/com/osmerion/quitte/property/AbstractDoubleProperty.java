@@ -94,7 +94,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
     @Override
     public final synchronized void bindTo(ObservableDoubleValue observable) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Double2DoubleBinding(this::onBindingInvalidated, observable, it -> it);
+        this.binding = new DoubleToDoubleBinding(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 
@@ -104,9 +104,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableBoolValue observable, Bool2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableBoolValue observable, BoolToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Bool2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new BoolToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -116,9 +116,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableByteValue observable, Byte2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableByteValue observable, ByteToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Byte2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ByteToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -128,9 +128,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableShortValue observable, Short2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableShortValue observable, ShortToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Short2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ShortToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -140,9 +140,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableIntValue observable, Int2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableIntValue observable, IntToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Int2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new IntToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -152,9 +152,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableLongValue observable, Long2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableLongValue observable, LongToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Long2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new LongToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -164,9 +164,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableFloatValue observable, Float2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableFloatValue observable, FloatToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Float2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new FloatToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -176,9 +176,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableDoubleValue observable, Double2DoubleFunction transform) {
+    public final synchronized void bindTo(ObservableDoubleValue observable, DoubleToDoubleFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Double2DoubleBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new DoubleToDoubleBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -188,9 +188,9 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2DoubleFunction<S> transform) {
+    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Object2DoubleBinding<>(this::onBindingInvalidated, observable, transform);
+        this.binding = new ObjectToDoubleBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 

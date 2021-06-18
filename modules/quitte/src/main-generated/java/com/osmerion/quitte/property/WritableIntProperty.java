@@ -74,7 +74,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2IntFunction transform);
+    void bindTo(ObservableBoolValue observable, BoolToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2IntFunction transform);
+    void bindTo(ObservableByteValue observable, ByteToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2IntFunction transform);
+    void bindTo(ObservableShortValue observable, ShortToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2IntFunction transform);
+    void bindTo(ObservableIntValue observable, IntToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2IntFunction transform);
+    void bindTo(ObservableLongValue observable, LongToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2IntFunction transform);
+    void bindTo(ObservableFloatValue observable, FloatToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2IntFunction transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToIntFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableIntProperty extends WritableValueProperty<Integer>, Rea
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2IntFunction<S> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform);
 
 }

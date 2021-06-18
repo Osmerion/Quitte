@@ -48,9 +48,9 @@ public interface IntBinding extends Binding {
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2IntFunction<T> transform;
+        private final ObjectToIntFunction<T> transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2IntFunction<T> transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToIntFunction<T> transform) {
             this.source = source;
             this.transform = transform;
             

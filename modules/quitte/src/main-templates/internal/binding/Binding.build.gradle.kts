@@ -59,9 +59,9 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
 
         private final ObservableValue<T> source;
         private final InvalidationListener listener;
-        private final Object2${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform;
+        private final ObjectTo${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform;
 
-        public Generic(Runnable invalidator, ObservableValue<T> source, Object2${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform) {
+        public Generic(Runnable invalidator, ObservableValue<T> source, ObjectTo${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform) {
             this.source = source;
             this.transform = transform;
             

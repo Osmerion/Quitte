@@ -59,8 +59,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableBoolValue observable, Bool2IntFunction transform) {
-        return new Transform(ex -> new Bool2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableBoolValue observable, BoolToIntFunction transform) {
+        return new Transform(ex -> new BoolToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -73,8 +73,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableByteValue observable, Byte2IntFunction transform) {
-        return new Transform(ex -> new Byte2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableByteValue observable, ByteToIntFunction transform) {
+        return new Transform(ex -> new ByteToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -87,8 +87,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableShortValue observable, Short2IntFunction transform) {
-        return new Transform(ex -> new Short2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableShortValue observable, ShortToIntFunction transform) {
+        return new Transform(ex -> new ShortToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -101,8 +101,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableIntValue observable, Int2IntFunction transform) {
-        return new Transform(ex -> new Int2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableIntValue observable, IntToIntFunction transform) {
+        return new Transform(ex -> new IntToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -115,8 +115,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableLongValue observable, Long2IntFunction transform) {
-        return new Transform(ex -> new Long2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableLongValue observable, LongToIntFunction transform) {
+        return new Transform(ex -> new LongToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -129,8 +129,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableFloatValue observable, Float2IntFunction transform) {
-        return new Transform(ex -> new Float2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableFloatValue observable, FloatToIntFunction transform) {
+        return new Transform(ex -> new FloatToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -143,8 +143,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static SimpleIntExpression of(ObservableDoubleValue observable, Double2IntFunction transform) {
-        return new Transform(ex -> new Double2IntBinding(ex::doInvalidate, observable, transform));
+    public static SimpleIntExpression of(ObservableDoubleValue observable, DoubleToIntFunction transform) {
+        return new Transform(ex -> new DoubleToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -158,8 +158,8 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleIntExpression of(ObservableObjectValue<S> observable, Object2IntFunction<S> transform) {
-        return new Transform(ex -> new Object2IntBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> SimpleIntExpression of(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
+        return new Transform(ex -> new ObjectToIntBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

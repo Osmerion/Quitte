@@ -62,8 +62,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableBoolValue observable, Bool2IntFunction transform) {
-        return new Transform(ex -> new Bool2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableBoolValue observable, BoolToIntFunction transform) {
+        return new Transform(ex -> new BoolToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableByteValue observable, Byte2IntFunction transform) {
-        return new Transform(ex -> new Byte2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableByteValue observable, ByteToIntFunction transform) {
+        return new Transform(ex -> new ByteToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -90,8 +90,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableShortValue observable, Short2IntFunction transform) {
-        return new Transform(ex -> new Short2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableShortValue observable, ShortToIntFunction transform) {
+        return new Transform(ex -> new ShortToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -104,8 +104,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableIntValue observable, Int2IntFunction transform) {
-        return new Transform(ex -> new Int2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableIntValue observable, IntToIntFunction transform) {
+        return new Transform(ex -> new IntToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableLongValue observable, Long2IntFunction transform) {
-        return new Transform(ex -> new Long2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableLongValue observable, LongToIntFunction transform) {
+        return new Transform(ex -> new LongToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -132,8 +132,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableFloatValue observable, Float2IntFunction transform) {
-        return new Transform(ex -> new Float2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableFloatValue observable, FloatToIntFunction transform) {
+        return new Transform(ex -> new FloatToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -146,8 +146,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static LazyIntExpression of(ObservableDoubleValue observable, Double2IntFunction transform) {
-        return new Transform(ex -> new Double2IntBinding(ex::doInvalidate, observable, transform));
+    public static LazyIntExpression of(ObservableDoubleValue observable, DoubleToIntFunction transform) {
+        return new Transform(ex -> new DoubleToIntBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -161,8 +161,8 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static <S> LazyIntExpression of(ObservableObjectValue<S> observable, Object2IntFunction<S> transform) {
-        return new Transform(ex -> new Object2IntBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> LazyIntExpression of(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
+        return new Transform(ex -> new ObjectToIntBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

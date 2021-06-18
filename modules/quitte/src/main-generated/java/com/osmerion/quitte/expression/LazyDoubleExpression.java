@@ -62,8 +62,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableBoolValue observable, Bool2DoubleFunction transform) {
-        return new Transform(ex -> new Bool2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableBoolValue observable, BoolToDoubleFunction transform) {
+        return new Transform(ex -> new BoolToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableByteValue observable, Byte2DoubleFunction transform) {
-        return new Transform(ex -> new Byte2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableByteValue observable, ByteToDoubleFunction transform) {
+        return new Transform(ex -> new ByteToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -90,8 +90,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableShortValue observable, Short2DoubleFunction transform) {
-        return new Transform(ex -> new Short2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableShortValue observable, ShortToDoubleFunction transform) {
+        return new Transform(ex -> new ShortToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -104,8 +104,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableIntValue observable, Int2DoubleFunction transform) {
-        return new Transform(ex -> new Int2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableIntValue observable, IntToDoubleFunction transform) {
+        return new Transform(ex -> new IntToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableLongValue observable, Long2DoubleFunction transform) {
-        return new Transform(ex -> new Long2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableLongValue observable, LongToDoubleFunction transform) {
+        return new Transform(ex -> new LongToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -132,8 +132,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableFloatValue observable, Float2DoubleFunction transform) {
-        return new Transform(ex -> new Float2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableFloatValue observable, FloatToDoubleFunction transform) {
+        return new Transform(ex -> new FloatToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -146,8 +146,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static LazyDoubleExpression of(ObservableDoubleValue observable, Double2DoubleFunction transform) {
-        return new Transform(ex -> new Double2DoubleBinding(ex::doInvalidate, observable, transform));
+    public static LazyDoubleExpression of(ObservableDoubleValue observable, DoubleToDoubleFunction transform) {
+        return new Transform(ex -> new DoubleToDoubleBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -161,8 +161,8 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static <S> LazyDoubleExpression of(ObservableObjectValue<S> observable, Object2DoubleFunction<S> transform) {
-        return new Transform(ex -> new Object2DoubleBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> LazyDoubleExpression of(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
+        return new Transform(ex -> new ObjectToDoubleBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

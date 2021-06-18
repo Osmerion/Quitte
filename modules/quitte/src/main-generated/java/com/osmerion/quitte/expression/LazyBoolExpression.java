@@ -62,8 +62,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableBoolValue observable, Bool2BoolFunction transform) {
-        return new Transform(ex -> new Bool2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableBoolValue observable, BoolToBoolFunction transform) {
+        return new Transform(ex -> new BoolToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableByteValue observable, Byte2BoolFunction transform) {
-        return new Transform(ex -> new Byte2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableByteValue observable, ByteToBoolFunction transform) {
+        return new Transform(ex -> new ByteToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -90,8 +90,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableShortValue observable, Short2BoolFunction transform) {
-        return new Transform(ex -> new Short2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableShortValue observable, ShortToBoolFunction transform) {
+        return new Transform(ex -> new ShortToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -104,8 +104,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableIntValue observable, Int2BoolFunction transform) {
-        return new Transform(ex -> new Int2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableIntValue observable, IntToBoolFunction transform) {
+        return new Transform(ex -> new IntToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableLongValue observable, Long2BoolFunction transform) {
-        return new Transform(ex -> new Long2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableLongValue observable, LongToBoolFunction transform) {
+        return new Transform(ex -> new LongToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -132,8 +132,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableFloatValue observable, Float2BoolFunction transform) {
-        return new Transform(ex -> new Float2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableFloatValue observable, FloatToBoolFunction transform) {
+        return new Transform(ex -> new FloatToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -146,8 +146,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyBoolExpression of(ObservableDoubleValue observable, Double2BoolFunction transform) {
-        return new Transform(ex -> new Double2BoolBinding(ex::doInvalidate, observable, transform));
+    public static LazyBoolExpression of(ObservableDoubleValue observable, DoubleToBoolFunction transform) {
+        return new Transform(ex -> new DoubleToBoolBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -161,8 +161,8 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyBoolExpression of(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform) {
-        return new Transform(ex -> new Object2BoolBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> LazyBoolExpression of(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform) {
+        return new Transform(ex -> new ObjectToBoolBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

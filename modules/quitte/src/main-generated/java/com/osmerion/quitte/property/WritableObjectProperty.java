@@ -74,7 +74,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2ObjectFunction<T> transform);
+    void bindTo(ObservableBoolValue observable, BoolToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2ObjectFunction<T> transform);
+    void bindTo(ObservableByteValue observable, ByteToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2ObjectFunction<T> transform);
+    void bindTo(ObservableShortValue observable, ShortToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2ObjectFunction<T> transform);
+    void bindTo(ObservableIntValue observable, IntToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2ObjectFunction<T> transform);
+    void bindTo(ObservableLongValue observable, LongToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2ObjectFunction<T> transform);
+    void bindTo(ObservableFloatValue observable, FloatToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2ObjectFunction<T> transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToObjectFunction<T> transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2ObjectFunction<S, T> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform);
 
 }

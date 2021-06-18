@@ -94,7 +94,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
     @Override
     public final synchronized void bindTo(ObservableBoolValue observable) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Bool2BoolBinding(this::onBindingInvalidated, observable, it -> it);
+        this.binding = new BoolToBoolBinding(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 
@@ -104,9 +104,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableBoolValue observable, Bool2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableBoolValue observable, BoolToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Bool2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new BoolToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -116,9 +116,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableByteValue observable, Byte2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableByteValue observable, ByteToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Byte2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ByteToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -128,9 +128,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableShortValue observable, Short2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableShortValue observable, ShortToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Short2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ShortToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -140,9 +140,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableIntValue observable, Int2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableIntValue observable, IntToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Int2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new IntToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -152,9 +152,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableLongValue observable, Long2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableLongValue observable, LongToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Long2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new LongToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -164,9 +164,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableFloatValue observable, Float2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableFloatValue observable, FloatToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Float2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new FloatToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -176,9 +176,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableDoubleValue observable, Double2BoolFunction transform) {
+    public final synchronized void bindTo(ObservableDoubleValue observable, DoubleToBoolFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Double2BoolBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new DoubleToBoolBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -188,9 +188,9 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2BoolFunction<S> transform) {
+    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Object2BoolBinding<>(this::onBindingInvalidated, observable, transform);
+        this.binding = new ObjectToBoolBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 

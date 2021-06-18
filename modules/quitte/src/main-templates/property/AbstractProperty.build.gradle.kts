@@ -104,7 +104,7 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
     @Override
     public final synchronized void bindTo(Observable${type.abbrevName}Value$typeParams observable) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new ${type.abbrevName}2${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, it -> it);
+        this.binding = new ${type.abbrevName}To${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 ${Type.values().joinToString(separator = "") { sourceType ->
@@ -123,9 +123,9 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
+    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, transform);
+        this.binding = new ${sourceType.abbrevName}To${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 """}}

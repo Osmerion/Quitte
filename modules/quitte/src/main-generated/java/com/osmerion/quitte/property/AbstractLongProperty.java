@@ -94,7 +94,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
     @Override
     public final synchronized void bindTo(ObservableLongValue observable) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Long2LongBinding(this::onBindingInvalidated, observable, it -> it);
+        this.binding = new LongToLongBinding(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 
@@ -104,9 +104,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableBoolValue observable, Bool2LongFunction transform) {
+    public final synchronized void bindTo(ObservableBoolValue observable, BoolToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Bool2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new BoolToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -116,9 +116,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableByteValue observable, Byte2LongFunction transform) {
+    public final synchronized void bindTo(ObservableByteValue observable, ByteToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Byte2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ByteToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -128,9 +128,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableShortValue observable, Short2LongFunction transform) {
+    public final synchronized void bindTo(ObservableShortValue observable, ShortToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Short2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new ShortToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -140,9 +140,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableIntValue observable, Int2LongFunction transform) {
+    public final synchronized void bindTo(ObservableIntValue observable, IntToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Int2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new IntToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -152,9 +152,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableLongValue observable, Long2LongFunction transform) {
+    public final synchronized void bindTo(ObservableLongValue observable, LongToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Long2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new LongToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -164,9 +164,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableFloatValue observable, Float2LongFunction transform) {
+    public final synchronized void bindTo(ObservableFloatValue observable, FloatToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Float2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new FloatToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -176,9 +176,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(ObservableDoubleValue observable, Double2LongFunction transform) {
+    public final synchronized void bindTo(ObservableDoubleValue observable, DoubleToLongFunction transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Double2LongBinding(this::onBindingInvalidated, observable, transform);
+        this.binding = new DoubleToLongBinding(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 
@@ -188,9 +188,9 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, Object2LongFunction<S> transform) {
+    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform) {
         if (this.isBound()) throw new IllegalStateException();
-        this.binding = new Object2LongBinding<>(this::onBindingInvalidated, observable, transform);
+        this.binding = new ObjectToLongBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
     }
 

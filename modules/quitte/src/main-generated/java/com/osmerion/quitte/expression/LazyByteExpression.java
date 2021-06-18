@@ -62,8 +62,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableBoolValue observable, Bool2ByteFunction transform) {
-        return new Transform(ex -> new Bool2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableBoolValue observable, BoolToByteFunction transform) {
+        return new Transform(ex -> new BoolToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableByteValue observable, Byte2ByteFunction transform) {
-        return new Transform(ex -> new Byte2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableByteValue observable, ByteToByteFunction transform) {
+        return new Transform(ex -> new ByteToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -90,8 +90,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableShortValue observable, Short2ByteFunction transform) {
-        return new Transform(ex -> new Short2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableShortValue observable, ShortToByteFunction transform) {
+        return new Transform(ex -> new ShortToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -104,8 +104,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableIntValue observable, Int2ByteFunction transform) {
-        return new Transform(ex -> new Int2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableIntValue observable, IntToByteFunction transform) {
+        return new Transform(ex -> new IntToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableLongValue observable, Long2ByteFunction transform) {
-        return new Transform(ex -> new Long2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableLongValue observable, LongToByteFunction transform) {
+        return new Transform(ex -> new LongToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -132,8 +132,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableFloatValue observable, Float2ByteFunction transform) {
-        return new Transform(ex -> new Float2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableFloatValue observable, FloatToByteFunction transform) {
+        return new Transform(ex -> new FloatToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -146,8 +146,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static LazyByteExpression of(ObservableDoubleValue observable, Double2ByteFunction transform) {
-        return new Transform(ex -> new Double2ByteBinding(ex::doInvalidate, observable, transform));
+    public static LazyByteExpression of(ObservableDoubleValue observable, DoubleToByteFunction transform) {
+        return new Transform(ex -> new DoubleToByteBinding(ex::doInvalidate, observable, transform));
     }
 
     /**
@@ -161,8 +161,8 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyByteExpression of(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform) {
-        return new Transform(ex -> new Object2ByteBinding<>(ex::doInvalidate, observable, transform));
+    public static <S> LazyByteExpression of(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform) {
+        return new Transform(ex -> new ObjectToByteBinding<>(ex::doInvalidate, observable, transform));
     }
 
     /**

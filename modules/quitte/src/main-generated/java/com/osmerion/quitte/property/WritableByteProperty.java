@@ -74,7 +74,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableBoolValue observable, Bool2ByteFunction transform);
+    void bindTo(ObservableBoolValue observable, BoolToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -91,7 +91,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableByteValue observable, Byte2ByteFunction transform);
+    void bindTo(ObservableByteValue observable, ByteToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -108,7 +108,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableShortValue observable, Short2ByteFunction transform);
+    void bindTo(ObservableShortValue observable, ShortToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -125,7 +125,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableIntValue observable, Int2ByteFunction transform);
+    void bindTo(ObservableIntValue observable, IntToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -142,7 +142,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableLongValue observable, Long2ByteFunction transform);
+    void bindTo(ObservableLongValue observable, LongToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -159,7 +159,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableFloatValue observable, Float2ByteFunction transform);
+    void bindTo(ObservableFloatValue observable, FloatToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -176,7 +176,7 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    void bindTo(ObservableDoubleValue observable, Double2ByteFunction transform);
+    void bindTo(ObservableDoubleValue observable, DoubleToByteFunction transform);
 
     /**
      * Binds this property to the given observable value.
@@ -194,6 +194,6 @@ public interface WritableByteProperty extends WritableValueProperty<Byte>, Reada
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, Object2ByteFunction<S> transform);
+    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform);
 
 }

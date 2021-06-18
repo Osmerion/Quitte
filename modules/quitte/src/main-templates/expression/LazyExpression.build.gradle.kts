@@ -81,8 +81,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * @since   0.1.0
      */
-    public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Lazy${type.abbrevName}Expression$typeParams of(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}2${type.abbrevName}Function$transformTypeParams transform) {
-        return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}2${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::doInvalidate, observable, transform));
+    public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Lazy${type.abbrevName}Expression$typeParams of(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform) {
+        return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}To${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::doInvalidate, observable, transform));
     }
 """}}
     /**
