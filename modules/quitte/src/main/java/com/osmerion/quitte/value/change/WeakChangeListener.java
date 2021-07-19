@@ -81,7 +81,7 @@ public final class WeakChangeListener<T> implements ChangeListener<T> {
         if (listener != null) {
             listener.onChanged(observable, oldValue, newValue);
         } else {
-            this.wasGarbageCollected = false;
+            this.wasGarbageCollected = true;
         }
     }
 
