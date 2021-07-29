@@ -74,6 +74,12 @@ listOf("main", "test").forEach { templateCategory ->
     }
 }
 
+tasks {
+    sourcesJar {
+        dependsOn(generate)
+    }
+}
+
 publishing {
     publications {
         getByName<MavenPublication>("mavenJava") {
