@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "de.jjohannes.gradle", name = "extra-java-module-info", version = "0.9")
+    implementation(libs.extra.java.module.info)
 
     // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
