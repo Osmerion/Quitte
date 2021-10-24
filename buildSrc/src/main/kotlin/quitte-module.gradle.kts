@@ -57,6 +57,11 @@ tasks {
         options.release.set(16)
     }
 
+    compileJava {
+        options.compilerArgs.add("--module-version")
+        options.compilerArgs.add("$version")
+    }
+
     jar {
         archiveBaseName.set(artifactName)
 
