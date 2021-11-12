@@ -48,13 +48,13 @@ val libs = the<LibrariesForLibs>()
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
 tasks {
     withType<JavaCompile> {
-        options.release.set(16)
+        options.release.set(17)
     }
 
     compileJava {
@@ -90,7 +90,7 @@ tasks {
                 "implNote:a:Implementation Note:"
             )
 
-            addStringOption("-release", "16")
+            addStringOption("-release", "17")
         }
     }
 
