@@ -6,7 +6,7 @@
 Quitte provides specialized observable properties and expressions with lazy
 variants, and observable collections.
 
-Quitte is compatible with Java 16 or later.
+Quitte is compatible with Java 17 or later.
 
 ## Usage
 
