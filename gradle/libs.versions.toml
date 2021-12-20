@@ -1,6 +1,6 @@
 [versions]
 jsr305 = "3.0.2"
-junit = "5.8.1"
+junit = "5.8.2"
 
 [libraries]
 # com.google.code.findbugs:jsr305 - JSR305
