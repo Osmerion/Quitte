@@ -7,7 +7,7 @@ junit = "5.8.2"
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 
 # de.jjohannes.gradle:extra-java-module-info - Extra Java Module-Info
-extra-java-module-info = { module = "de.jjohannes.gradle:extra-java-module-info", version = "0.9" }
+extra-java-module-info = { module = "de.jjohannes.gradle:extra-java-module-info", version = "0.10" }
 
 # org.junit - JUnit
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
