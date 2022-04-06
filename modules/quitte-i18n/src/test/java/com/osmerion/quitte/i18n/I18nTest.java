@@ -48,7 +48,7 @@ public class I18nTest {
         Locale locale$de_DE = new Locale("de", "DE");
         Locale locale$en_US = new Locale("en", "US");
         Function<Locale, MessageFormat> message$DE = locale -> new MessageFormat("Hallo, {0}! Für den Döner bekomm ich {1}€.", locale);
-        Function<Locale, MessageFormat> message$EN = locale -> new MessageFormat("Hello, {0}! the hot dog costs {1}$.", locale);
+        Function<Locale, MessageFormat> message$EN = locale -> new MessageFormat("Hello, {0}! The hot dog costs {1}$.", locale);
 
         SimpleObjectProperty<MessageFormat> messageFormat = new SimpleObjectProperty<>(message$DE.apply(locale$de_DE));
 
