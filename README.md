@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/license-BSD-blue.svg?style=flat-square&label=License)](https://github.com/Osmerion/Quitte/blob/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/com.osmerion.quitte/quitte)
 [![JavaDoc](https://img.shields.io/maven-central/v/com.osmerion.quitte/quitte.svg?style=flat-square&label=JavaDoc&color=blue)](https://javadoc.io/doc/com.osmerion.quitte/quitte)
-![Java](https://img.shields.io/badge/Java-17-green.svg?style=flat-square&color=b07219)
+![Java](https://img.shields.io/badge/Java-17-green.svg?style=flat-square&color=b07219&logo=java)
 
 Quitte provides specialized observable properties and expressions with lazy
 variants, and observable collections.
