@@ -2,6 +2,7 @@
 jsr305 = "3.0.2"
 junit = "5.8.2"
 
+
 [libraries]
 # com.google.code.findbugs:jsr305 - JSR305
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
