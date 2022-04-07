@@ -48,7 +48,7 @@ import com.osmerion.quitte.value.ObservableValue;
  *
  * @author  Leon Linhart
  */
-public abstract class I18nParameter {
+public abstract sealed class I18nParameter {
 
     /**
      * Wraps a given {@link ObservableValue} in an instance of {@link I18nParameter} for special treatment in formatting
@@ -96,7 +96,6 @@ public abstract class I18nParameter {
      * transparent with no special behavior. Hence, we can get away with incorrect JavaDoc here.
      */
 
-    // private constructor for an effectively sealed class
     private I18nParameter() {}
 
     abstract Object get();
