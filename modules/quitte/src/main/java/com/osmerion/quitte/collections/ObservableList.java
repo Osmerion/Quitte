@@ -36,8 +36,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.RandomAccess;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
+import com.osmerion.quitte.internal.collections.UnmodifiableObservableList;
 import com.osmerion.quitte.internal.collections.UnmodifiableRandomAccessObservableList;
 import com.osmerion.quitte.internal.collections.WrappingObservableList;
 import com.osmerion.quitte.internal.collections.WrappingRandomAccessObservableList;
@@ -88,7 +88,7 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
      * @since   0.1.0
      */
     static <T> ObservableList<T> unmodifiableViewOf(ObservableList<T> list) {
-        return list instanceof RandomAccess ? new UnmodifiableRandomAccessObservableList<>(list) : new UnmodifiableRandomAccessObservableList<>(list);
+        return list instanceof RandomAccess ? new UnmodifiableRandomAccessObservableList<>(list) : new UnmodifiableObservableList<>(list);
     }
 
     /**
