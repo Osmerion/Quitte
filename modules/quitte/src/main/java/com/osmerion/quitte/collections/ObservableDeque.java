@@ -160,7 +160,7 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
          */
         @Deprecated
         public <T> Change<T> copy(Function<? super E, T> transform) {
-            return new Change<>(this.localChanges.stream().map(it -> it.copy(transform)).collect(Collectors.toUnmodifiableList()));
+            return new Change<>(this.localChanges.stream().map(it -> it.copy(transform)).toList());
         }
 
         /**
