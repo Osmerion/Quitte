@@ -99,15 +99,16 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
      *
      * @since   0.1.0
      */
-    final class Change<K, V> {
+    record Change<K, V>(
+        Map<K, V> addedElements,
+        Map<K, V> removedElements,
+        Map<K, Update<V>> updatedElements
+    ) {
 
-        private final Map<K, V> added, removed;
-        private final Map<K, Update<V>> updated;
-
-        Change(@Nullable Map<K, V> added, @Nullable Map<K, V> removed, @Nullable Map<K, Update<V>> updated) {
-            this.added = (added != null) ? Collections.unmodifiableMap(added) : Collections.emptyMap();
-            this.removed = (removed != null) ? Collections.unmodifiableMap(removed) : Collections.emptyMap();
-            this.updated = (updated != null) ? Collections.unmodifiableMap(updated) : Collections.emptyMap();
+        public Change(@Nullable Map<K, V> addedElements, @Nullable Map<K, V> removedElements, @Nullable Map<K, Update<V>> updatedElements) {
+            this.addedElements = (addedElements != null) ? Collections.unmodifiableMap(addedElements) : Collections.emptyMap();
+            this.removedElements = (removedElements != null) ? Collections.unmodifiableMap(removedElements) : Collections.emptyMap();
+            this.updatedElements = (updatedElements != null) ? Collections.unmodifiableMap(updatedElements) : Collections.emptyMap();
         }
 
         /**
@@ -126,9 +127,9 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
         @Deprecated
         public <S, T> Change<S, T> copy(BiFunction<? super K, ? super V, Entry<S, T>> transform) {
             return new Change<>(
-                this.added.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
-                this.removed.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
-                this.updated.entrySet().stream().map(e -> {
+                this.addedElements.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                this.removedElements.entrySet().stream().map(e -> transform.apply(e.getKey(), e.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                this.updatedElements.entrySet().stream().map(e -> {
                     Map.Entry<S, T> oldValue = transform.apply(e.getKey(), e.getValue().getOldValue());
                     Map.Entry<S, T> newValue = transform.apply(e.getKey(), e.getValue().getNewValue());
 
@@ -142,10 +143,13 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
          *
          * @return  the entries that were added to the observed map as part of this change
          *
+         * @deprecated  Deprecated in favor of canonical record accessor {@link #addedElements()}.
+         *
          * @since   0.1.0
          */
+        @Deprecated(since = "0.3.0", forRemoval = true)
         public Map<K, V> getAddedElements() {
-            return this.added;
+            return this.addedElements;
         }
 
         /**
@@ -153,10 +157,13 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
          *
          * @return  the entries that were removed from the observed map as part of this change
          *
+         * @deprecated  Deprecated in favor of canonical record accessor {@link #removedElements()}.
+         *
          * @since   0.1.0
          */
+        @Deprecated(since = "0.3.0", forRemoval = true)
         public Map<K, V> getRemovedElements() {
-            return this.removed;
+            return this.removedElements;
         }
 
         /**
@@ -164,10 +171,13 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
          *
          * @return  the entries that were updated in the observed map as part of this change
          *
+         * @deprecated  Deprecated in favor of canonical record accessor {@link #updatedElements()}.
+         *
          * @since   0.1.0
          */
+        @Deprecated(since = "0.3.0", forRemoval = true)
         public Map<K, Update<V>> getUpdatedElements() {
-            return this.updated;
+            return this.updatedElements;
         }
 
         /**
@@ -175,15 +185,7 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
          *
          * @since   0.1.0
          */
-        public static final class Update<V> {
-
-            @Nullable
-            private final V oldValue, newValue;
-
-            Update(@Nullable V oldValue, @Nullable V newValue) {
-                this.oldValue = oldValue;
-                this.newValue = newValue;
-            }
+        public record Update<V>(@Nullable V oldValue, @Nullable V newValue) {
 
             /**
              * Returns the old value.

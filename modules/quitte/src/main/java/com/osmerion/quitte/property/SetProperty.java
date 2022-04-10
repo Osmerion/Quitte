@@ -243,8 +243,8 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
 
             try (ChangeBuilder ignored = this.beginChange()) {
                 for (var change : changes) {
-                    this.addAll(change.getAddedElements());
-                    change.getRemovedElements().forEach(this::remove);
+                    this.addAll(change.addedElements());
+                    change.removedElements().forEach(this::remove);
                 }
             }
         } finally {

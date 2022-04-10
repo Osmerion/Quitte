@@ -178,9 +178,9 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
 
             try (ChangeBuilder ignored = this.beginChange()) {
                 for (var change : changes) {
-                    this.putAll(change.getAddedElements());
-                    change.getRemovedElements().forEach(this::remove);
-                    change.getUpdatedElements().forEach((k, u) -> this.put(k, u.getNewValue()));
+                    this.putAll(change.addedElements());
+                    change.removedElements().forEach(this::remove);
+                    change.updatedElements().forEach((k, u) -> this.put(k, u.getNewValue()));
                 }
             }
         } finally {

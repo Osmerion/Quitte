@@ -98,13 +98,11 @@ public interface ObservableSet<E> extends Set<E>, ObservableCollection<Observabl
      *
      * @since   0.1.0
      */
-    final class Change<E> {
+    record Change<E>(Set<E> addedElements, Set<E> removedElements) {
 
-        private final Set<E> added, removed;
-
-        Change(@Nullable Set<E> added, @Nullable Set<E> removed) {
-            this.added = added != null ? Collections.unmodifiableSet(added) : Collections.emptySet();
-            this.removed = removed != null ? Collections.unmodifiableSet(removed) : Collections.emptySet();
+        public Change(@Nullable Set<E> addedElements, @Nullable Set<E> removedElements) {
+            this.addedElements = addedElements != null ? Collections.unmodifiableSet(addedElements) : Collections.emptySet();
+            this.removedElements = removedElements != null ? Collections.unmodifiableSet(removedElements) : Collections.emptySet();
         }
 
         /**
@@ -122,8 +120,8 @@ public interface ObservableSet<E> extends Set<E>, ObservableCollection<Observabl
         @Deprecated
         public <T> Change<T> copy(Function<? super E, T> transform) {
             return new Change<>(
-                this.added.stream().map(transform).collect(Collectors.toUnmodifiableSet()),
-                this.removed.stream().map(transform).collect(Collectors.toUnmodifiableSet())
+                this.addedElements.stream().map(transform).collect(Collectors.toUnmodifiableSet()),
+                this.removedElements.stream().map(transform).collect(Collectors.toUnmodifiableSet())
             );
         }
 
@@ -132,10 +130,13 @@ public interface ObservableSet<E> extends Set<E>, ObservableCollection<Observabl
          *
          * @return  the elements that were added to the observed set as part of this change
          *
+         * @deprecated  Deprecated in favor of canonical record accessor {@link #addedElements()}.
+         *
          * @since   0.1.0
          */
+        @Deprecated(since = "0.3.0", forRemoval = true)
         public Set<E> getAddedElements() {
-            return this.added;
+            return this.addedElements;
         }
 
         /**
@@ -143,10 +144,13 @@ public interface ObservableSet<E> extends Set<E>, ObservableCollection<Observabl
          *
          * @return  the elements that were removed from the observed set as part of this change
          *
+         * @deprecated  Deprecated in favor of canonical record accessor {@link #removedElements()}.
+         *
          * @since   0.1.0
          */
+        @Deprecated(since = "0.3.0", forRemoval = true)
         public Set<E> getRemovedElements() {
-            return this.removed;
+            return this.removedElements;
         }
 
     }

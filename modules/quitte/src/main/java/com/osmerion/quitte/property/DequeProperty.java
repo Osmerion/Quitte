@@ -385,7 +385,7 @@ public class DequeProperty<E> extends AbstractObservableDeque<E> implements Writ
 
             try (ChangeBuilder ignored = this.beginChange()) {
                 for (var change : changes) {
-                    for (var localChange : change.getLocalChanges()) {
+                    for (var localChange : change.localChanges()) {
                         if (localChange instanceof LocalChange.Insertion<E> insertion) {
                             switch (insertion.getSite()) {
                                 case HEAD -> insertion.getElements().forEach(this::addFirst);

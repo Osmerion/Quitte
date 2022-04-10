@@ -140,12 +140,10 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
      *
      * @since   0.1.0
      */
-    final class Change<E> {
+    record Change<E>(List<LocalChange<E>> localChanges) {
 
-        private final List<LocalChange<E>> localChanges;
-
-        Change(List<LocalChange<E>> localChanges) {
-            this.localChanges = localChanges;
+        public Change {
+            localChanges = List.copyOf(localChanges);
         }
 
         /**
@@ -172,8 +170,11 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
          *
          * @return  a list of changes that are local to parts of the deque
          *
+         * @deprecated  Deprecated in favor of canonical record accessor {@link #localChanges()}.
+         *
          * @since   0.1.0
          */
+        @Deprecated(since = "0.3.0", forRemoval = true)
         public List<LocalChange<E>> getLocalChanges() {
             return this.localChanges;
         }
