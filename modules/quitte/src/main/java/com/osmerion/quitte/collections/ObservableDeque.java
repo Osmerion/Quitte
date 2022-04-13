@@ -40,7 +40,7 @@ import com.osmerion.quitte.internal.collections.UnmodifiableObservableDeque;
 import com.osmerion.quitte.internal.collections.WrappingObservableDeque;
 
 /**
- * A observable deque with support for tracking changes to the deque's content.
+ * An observable deque with support for tracking changes to the deque's content.
  * 
  * @param <E>   the type of the deque's elements
  *
