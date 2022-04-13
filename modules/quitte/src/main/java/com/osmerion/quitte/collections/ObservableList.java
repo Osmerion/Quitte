@@ -43,7 +43,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableList;
 import com.osmerion.quitte.internal.collections.WrappingRandomAccessObservableList;
 
 /**
- * A observable list with support for tracking changes to the list's content.
+ * An observable list with support for tracking changes to the list's content.
  *
  * @param <E>   the type of elements in this list
  *

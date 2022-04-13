@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-/** Provides specialized variants of some of the functional interfaces provided by {@link java.util.function}. */
+/** Provides specialized variants of some functional interfaces provided by {@link java.util.function}. */
 @NonNullApi
 package com.osmerion.quitte.functional;
 

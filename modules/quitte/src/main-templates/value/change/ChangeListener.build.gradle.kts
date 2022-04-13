@@ -89,7 +89,7 @@ public interface ${type.abbrevName}ChangeListener$typeParams {
     void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue);
 
     /**
-     * Returns whether or not this listener is invalid.
+     * Returns whether this listener is invalid.
      *
      * <p>Once an {@link Observable observable} discovers that a listener is invalid, it will stop notifying the
      * listener of updates and release all strong references to the listener.</p>
@@ -97,7 +97,7 @@ public interface ${type.abbrevName}ChangeListener$typeParams {
      * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
      * Breaking this contract may result in unexpected behavior.</p>
      *
-     * @return  whether or not this listener is invalid
+     * @return  whether this listener is invalid
      *
      * @since   0.1.0
      */

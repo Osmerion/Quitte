@@ -178,7 +178,7 @@ public abstract class AbstractExpression implements Expression {
     /**
      * Removes a dependency for this expression.
      *
-     * @param observable    the observable on which this expression should not longer depend
+     * @param observable    the observable on which this expression should no longer depend
      *
      * @throws IllegalArgumentException if this expression does not depend on the given {@code Observable}
      *

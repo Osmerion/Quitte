@@ -85,9 +85,9 @@ public final class WeakLongChangeListener implements LongChangeListener {
     }
 
     /**
-     * Returns whether or not the underlying listener was garbage collected or has become invalid.
+     * Returns whether the underlying listener was garbage collected or has become invalid.
      *
-     * @return  whether or not the underlying listener was garbage collected or has become invalid
+     * @return  whether the underlying listener was garbage collected or has become invalid
      *
      * @since   0.1.0
      */

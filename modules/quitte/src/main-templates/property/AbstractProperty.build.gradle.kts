@@ -251,9 +251,9 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
 
     /**
-     * Attempts to set the value of this property and returns whether or not the current value was invalidated.
+     * Attempts to set the value of this property and returns whether the current value was invalidated.
      *
-     * @return  whether or not the value has been invalidated
+     * @return  whether the value has been invalidated
      */
     boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         var prev = this.getImpl();

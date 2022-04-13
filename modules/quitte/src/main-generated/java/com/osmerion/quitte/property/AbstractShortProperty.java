@@ -316,9 +316,9 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
     abstract void setImpl(short value);
 
     /**
-     * Attempts to set the value of this property and returns whether or not the current value was invalidated.
+     * Attempts to set the value of this property and returns whether the current value was invalidated.
      *
-     * @return  whether or not the value has been invalidated
+     * @return  whether the value has been invalidated
      */
     boolean setImplDeferrable(short value) {
         var prev = this.getImpl();

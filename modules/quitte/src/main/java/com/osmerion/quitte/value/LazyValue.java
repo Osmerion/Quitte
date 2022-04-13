@@ -91,9 +91,9 @@ public interface LazyValue {
         INVALID;
 
         /**
-         * Returns whether or not this state describes a valid value.
+         * Returns whether this state describes a valid value.
          *
-         * @return  whether or not this state describes a valid value
+         * @return  whether this state describes a valid value
          *
          * @since   0.1.0
          */

@@ -64,11 +64,11 @@ public final class WrappingLongChangeListener implements LongChangeListener {
     }
 
     /**
-     * Returns whether or not this wrapper is wrapping the given listener.
+     * Returns whether this wrapper is wrapping the given listener.
      *
      * @param listener  the listener to test for
      *
-     * @return  whether or not this wrapper is wrappping the given listener
+     * @return  whether this wrapper is wrappping the given listener
      */
     public boolean isWrapping(ChangeListener<Long> listener) {
         return this.listener == listener;
