@@ -34,7 +34,6 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableDeque;
