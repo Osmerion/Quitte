@@ -46,8 +46,8 @@ final class MockSetChangeListener<E> implements CollectionChangeListener<Observa
     public void onChanged(ObservableSet.Change<? extends E> change) {
         if (this.context == null) return;
 
-        change.getAddedElements().forEach(e -> this.context.operations.add(new Addition(e)));
-        change.getRemovedElements().forEach(e -> this.context.operations.add(new Removal(e)));
+        change.addedElements().forEach(e -> this.context.operations.add(new Addition(e)));
+        change.removedElements().forEach(e -> this.context.operations.add(new Removal(e)));
     }
 
     public Context push() {

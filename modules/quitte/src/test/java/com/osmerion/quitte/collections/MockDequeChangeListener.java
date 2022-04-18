@@ -46,7 +46,7 @@ final class MockDequeChangeListener<E> implements CollectionChangeListener<Obser
     public void onChanged(ObservableDeque.Change<? extends E> change) {
         if (this.context == null) return;
 
-        change.getLocalChanges().stream()
+        change.localChanges().stream()
             .map(it -> {
                 if (it instanceof ObservableDeque.LocalChange.Insertion) {
                     ObservableDeque.LocalChange.Insertion<E> localChange = ((ObservableDeque.LocalChange.Insertion<E>) it);

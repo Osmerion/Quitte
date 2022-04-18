@@ -45,9 +45,9 @@ final class MockMapChangeListener<K, V> implements CollectionChangeListener<Obse
     public void onChanged(ObservableMap.Change<? extends K, ? extends V> change) {
         if (this.context == null) return;
 
-        change.getAddedElements().forEach((k, v) -> this.context.operations.add(new Addition(k, v)));
-        change.getRemovedElements().forEach((k, v) -> this.context.operations.add(new Removal(k, v)));
-        change.getUpdatedElements().forEach((k, update) -> this.context.operations.add(new Update(k, update.getOldValue(), update.getNewValue())));
+        change.addedElements().forEach((k, v) -> this.context.operations.add(new Addition(k, v)));
+        change.removedElements().forEach((k, v) -> this.context.operations.add(new Removal(k, v)));
+        change.updatedElements().forEach((k, update) -> this.context.operations.add(new Update(k, update.getOldValue(), update.getNewValue())));
     }
 
     public Context push() {
