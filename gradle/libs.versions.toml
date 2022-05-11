@@ -1,4 +1,5 @@
 [versions]
+extra-java-module-info = "0.12"
 jsr305 = "3.0.2"
 junit = "5.8.2"
 kotlin = "1.6.21"
@@ -10,7 +11,7 @@ kotlinx-coroutines = "1.6.1"
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 
 # de.jjohannes.gradle:extra-java-module-info - Extra Java Module-Info
-extra-java-module-info = { module = "de.jjohannes.gradle:extra-java-module-info", version = "0.11" }
+extra-java-module-info = { module = "de.jjohannes.gradle:extra-java-module-info", version.ref = "extra-java-module-info" }
 
 # org.jetbrains.kotlinx:kotlinx-coroutines-[...] - kotlinx.coroutines
 kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "kotlinx-coroutines" }
