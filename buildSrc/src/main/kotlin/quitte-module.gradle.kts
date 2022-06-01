@@ -140,7 +140,7 @@ signing {
 }
 
 extraJavaModuleInfo {
-    automaticModule("jsr305-3.0.2.jar", "jsr305")
+    automaticModule("com.google.code.findbugs:jsr305", "jsr305")
 }
 
 dependencies {
