@@ -30,14 +30,14 @@
  */
 package com.osmerion.quitte.i18n;
 
-import java.text.MessageFormat;
+import java.text.Format;
 import java.util.concurrent.CopyOnWriteArraySet;
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.Observable;
 
 /**
  * An internationalization (<em>I18n</em>) context provides mappings from a localization key to a localized
- * {@link MessageFormat}.
+ * {@link Format}.
  *
  * <p>A context may update its mappings dynamically. When doing so, {@link InvalidationListener InvalidationListeners}
  * should be invoked by calling {@link #notifyListeners()}.</p>
@@ -88,7 +88,7 @@ public abstract class I18nContext implements Observable {
     }
 
     /**
-     * Returns the {@link MessageFormat} for the given localization key.
+     * Returns the {@link Format} for the given localization key.
      *
      * @param key   the localization key
      *
@@ -96,6 +96,6 @@ public abstract class I18nContext implements Observable {
      *
      * @since   0.1.0
      */
-    protected abstract MessageFormat getMessageFormat(String key);
+    protected abstract Format getFormat(String key);
 
 }

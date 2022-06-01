@@ -64,7 +64,7 @@ public class I18nTest {
             }
 
             @Override
-            protected MessageFormat getMessageFormat(String key) {
+            protected MessageFormat getFormat(String key) {
                 //noinspection ConstantConditions
                 return this.format.get();
             }
