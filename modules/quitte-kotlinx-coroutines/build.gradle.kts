@@ -83,4 +83,5 @@ dependencies {
     api(libs.kotlinx.coroutines.jdk8)
 
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

@@ -4,9 +4,13 @@ jsr305 = "3.0.2"
 junit = "5.8.2"
 kotlin = "1.6.21"
 kotlinx-coroutines = "1.6.2"
+turbine = "0.8.0"
 
 
 [libraries]
+# app.cash.turbine:turbine - Turbine
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
 # com.google.code.findbugs:jsr305 - JSR305
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 
