@@ -304,6 +304,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(float value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

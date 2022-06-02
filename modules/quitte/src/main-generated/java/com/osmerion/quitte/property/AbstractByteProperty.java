@@ -304,6 +304,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(byte value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

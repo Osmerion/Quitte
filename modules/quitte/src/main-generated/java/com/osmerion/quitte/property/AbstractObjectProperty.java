@@ -306,6 +306,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
 
         this.setInternal(value);
     }
+
     private void setInternal(@Nullable T value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

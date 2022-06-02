@@ -304,6 +304,7 @@ public abstract class AbstractDoubleProperty implements WritableDoubleProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(double value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

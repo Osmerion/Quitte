@@ -304,6 +304,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(short value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

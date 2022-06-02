@@ -304,6 +304,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(int value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

@@ -304,6 +304,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(boolean value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

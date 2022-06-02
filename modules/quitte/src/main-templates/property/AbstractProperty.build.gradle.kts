@@ -239,6 +239,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
 
         this.setInternal(value);
     }
+
     private void setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }

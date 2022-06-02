@@ -304,6 +304,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
 
         this.setInternal(value);
     }
+
     private void setInternal(long value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }
