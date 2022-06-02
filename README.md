@@ -13,55 +13,97 @@ Quitte is compatible with Java 17 or later.
 
 ## Usage
 
-Quitte only provides a set of building blocks that can be used in applications
-and libraries.
+### Quitte
 
-Simple observable properties are available and can be easily created and used as
-follows:
+The core module provides the basic set of observable building blocks.
+
+
+#### Properties
+
+Properties are mutable wrappers for values which support listening for changes.
+_Simple_ properties are the most basic kind of observable. They are simple
+wrappers for values with set- and get-access.
+
+_Lazy_ properties provide setter overloads to support lazy updates of their
+values. When, for example, `LazyIntProperty#set(IntSupplier)` is used, the
+properties value is not updated. Instead, the property is marked as invalid and
+only invalidation listeners are notified. The new value is only computed when
+the property's value is queried.
+
+> **Tip:** While properties are fundamentally mutable, it is generally
+> recommended using read-only views of properties to reduce the risk of unwanted
+> modifications. (See `ReadableProperty#asReadOnlyProperty()`)
+
+#### Expressions
+
+Expressions are observables which are derived from one or more observables using
+some processing step. They do not have a mutable value, but instead _yield_ the
+value of the calculation they represent. Similar to properties, expressions come
+in two flavours:
+
+- _Simple_ expressions which recompute their result eagerly when the value of an
+  input is changed, and
+- _Lazy_ expressions which avoid recomputing until their result is queried.
+
+
+#### Observable collections
+
+In addition to single-value observables, Quitte also supports observable
+collections. To support a variety of collection implementations, Quitte's
+observable collections are wrappers that delegate to a concrete implementation.
 
 ```java
-SimpleIntProperty myIntProperty = new SimpleIntProperty(0);
-int initialValue = myIntProperty.get();
-
-myIntProperty.addListener((observable, oldValue, newValue) -> {
-    /*
-     * In this example this lambda will be invoked exactly once, with the following values:
-     * observable == myIntProperty
-     * oldValue == initialValue == 0
-     * newValue == 42
-     */
-    System.out.println(String.format("Value of myIntProperty changed! (Old Value: %s, New Value: %s)", oldValue, newValue));
-});
-
-myIntProperty.set(42);
-```
-
-Observable collections provided by Quitte wrap around existing collection types
-for best compatibility with other libraries. They are created as follows:
-
-```
-List<String> someStrings = ...;
-
-ObservableList<String> observableStrings = ObservableList.of(someStrings);
-observableStrings.addChangeListener((change) -> {
-    System.out.println("The content of observableStrings has been changed.")
-});
+List<String> strings = new ArrayList<>();
+ObservableList<String> observableStrings = ObservableList.of(strings);
+observableStrings.addChangeListener(change -> System.out.println("The content of observableStrings has been changed."));
 
 observableStrings.add("foo");
 
 /*
- * Note that the call below does not notify the listeners but the content of the
- * list is still modified.
- * This is in line with Collections.unmodifiableList() since only an _observable
- * view_ which serves as proxy to someStrings is returned.
+ * WARNING: The call below does not notify the listeners since it accesses the
+ * list implementation directly. To avoid running into issues, holding a
+ * reference to the collection implementation is discouraged. Instead, use:
+ * 
+ * ObservableList<String> observableStrings = ObservableList.of(new ArrayList());
  */
-someStrings.add("bar");
+strings.add("bar");
 ```
 
-It is generally recommended to always pass a new list instance directly to
-`ObservableList.of` (e.g. `ObservableList.of(new ArrayList())`).
 
-For further information on how to use Quitte, please refer to the JavaDoc.
+### Quitte I18n
+
+The `quitte-i18n` module provides a basic API for using Quitte observables for
+localization.
+
+> **Tip:** [Billi](https://github.com/Osmerion/Billi) provides complete
+> localization and pluralization support on top of Quitte.
+
+
+### Quitte extensions for kotlinx.coroutines
+
+The `quitte-kotlinx-coroutines` module provides extensions for better
+interoperability with [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines).
+
+Simply convert observables to flows using any of the built-in conversion
+functions. Flow conversions are available for `ObservableValue`,
+`ObservableList`, `ObservableMap`, and `ObservableSet`.
+
+> **Tip:** `quitte-kotlinx-coroutines` enables convenient usage of Quitte
+> observables with Jetpack Compose.
+
+```kotlin
+interface MyModel {
+    val text: ObservableObjectValue<String>
+}
+
+@Composable
+fun MyComposable(model: MyModel) {
+    val textFlow by remember { model.text.asFlow() }
+    val text by textFlow.collectAsState()
+    
+    Text(text)
+}
+```
 
 
 ## Building from source
