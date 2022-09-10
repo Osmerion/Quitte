@@ -55,7 +55,7 @@ public final class ObservableDequeTest {
     @BeforeEach
     public void reset() {
         this.observableDeque = ObservableDeque.of(this.underlyingDeque = new ArrayDeque<>());
-        this.observableDeque.addListener(this.changeListener = new MockDequeChangeListener<>());
+        this.observableDeque.addChangeListener(this.changeListener = new MockDequeChangeListener<>());
     }
 
     @Test

@@ -87,11 +87,11 @@ public fun <E> ObservableList<E>.asFlow(): Flow<List<E>> = callbackFlow {
         trySend(this@asFlow.toList())
     }
 
-    addListener(listener)
+    addChangeListener(listener)
     send(this@asFlow.toList())
 
     awaitClose {
-        removeListener(listener)
+        removeChangeListener(listener)
     }
 }.conflate()
 
@@ -111,11 +111,11 @@ public fun <K, V> ObservableMap<K, V>.asFlow(): Flow<Map<K, V>> = callbackFlow {
         trySend(this@asFlow.toMap())
     }
 
-    addListener(listener)
+    addChangeListener(listener)
     send(this@asFlow.toMap())
 
     awaitClose {
-        removeListener(listener)
+        removeChangeListener(listener)
     }
 }.conflate()
 
@@ -135,10 +135,10 @@ public fun <E> ObservableSet<E>.asFlow(): Flow<Set<E>> = callbackFlow {
         trySend(this@asFlow.toSet())
     }
 
-    addListener(listener)
+    addChangeListener(listener)
     send(this@asFlow.toSet())
 
     awaitClose {
-        removeListener(listener)
+        removeChangeListener(listener)
     }
 }.conflate()

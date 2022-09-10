@@ -52,9 +52,9 @@ public interface ObservableCollection<C> extends Observable {
      * notified} whenever the map is updated.</p>
      *
      * <p>This map stores a strong reference to the given listener until the listener is either removed explicitly by
-     * calling {@link #removeListener(CollectionChangeListener)} or implicitly when this map discovers that the listener has
-     * become {@link CollectionChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
-     * {@link WeakCollectionChangeListener} when possible to avoid leaking instances.</p>
+     * calling {@link #removeChangeListener(CollectionChangeListener)} or implicitly when this map discovers that the
+     * listener has become {@link CollectionChangeListener#isInvalid() invalid}. Generally, it is recommended to use an
+     * instance of {@link WeakCollectionChangeListener} when possible to avoid leaking instances.</p>
      *
      * @param listener  the listener to be attached to this map
      *
@@ -63,11 +63,11 @@ public interface ObservableCollection<C> extends Observable {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(CollectionChangeListener)
+     * @see #removeChangeListener(CollectionChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(CollectionChangeListener<? super C> listener);
+    boolean addChangeListener(CollectionChangeListener<? super C> listener);
 
     /**
      * Detaches the given {@link CollectionChangeListener change listener} from this map.
@@ -81,10 +81,10 @@ public interface ObservableCollection<C> extends Observable {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(CollectionChangeListener)
+     * @see #addChangeListener(CollectionChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(CollectionChangeListener<? super C> listener);
+    boolean removeChangeListener(CollectionChangeListener<? super C> listener);
 
 }

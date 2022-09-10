@@ -64,7 +64,7 @@ public final class ListBinding<S, E> implements Binding {
         this.transform = transform;
 
         this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
     @SuppressWarnings("deprecation")
@@ -84,7 +84,7 @@ public final class ListBinding<S, E> implements Binding {
     @Override
     public void release() {
         this.source.removeInvalidationListener(this.invalidationListener);
-        this.source.removeListener(this.changeListener);
+        this.source.removeChangeListener(this.changeListener);
     }
 
 }

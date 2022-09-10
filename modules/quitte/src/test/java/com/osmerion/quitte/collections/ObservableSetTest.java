@@ -54,7 +54,7 @@ public final class ObservableSetTest {
     @BeforeEach
     public void reset() {
         this.observableSet = ObservableSet.of(this.underlyingSet = new HashSet<>());
-        this.observableSet.addListener(this.changeListener = new MockSetChangeListener<>());
+        this.observableSet.addChangeListener(this.changeListener = new MockSetChangeListener<>());
     }
 
     @Test

@@ -65,7 +65,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) {
+    public final boolean addChangeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) {
+    public final boolean removeChangeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 

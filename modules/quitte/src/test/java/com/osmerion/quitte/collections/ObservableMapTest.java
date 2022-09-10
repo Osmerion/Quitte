@@ -54,7 +54,7 @@ public final class ObservableMapTest {
     @BeforeEach
     public void reset() {
         this.observableMap = ObservableMap.of(this.underlyingMap = new HashMap<>());
-        this.observableMap.addListener(this.changeListener = new MockMapChangeListener<>());
+        this.observableMap.addChangeListener(this.changeListener = new MockMapChangeListener<>());
     }
 
     @Test

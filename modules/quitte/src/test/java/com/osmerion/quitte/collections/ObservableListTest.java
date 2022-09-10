@@ -56,7 +56,7 @@ public final class ObservableListTest {
     @BeforeEach
     public void reset() {
         this.observableList = ObservableList.of(this.underlyingList = new ArrayList<>());
-        this.observableList.addListener(this.changeListener = new MockListChangeListener<>());
+        this.observableList.addChangeListener(this.changeListener = new MockListChangeListener<>());
     }
 
     @Test

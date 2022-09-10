@@ -66,7 +66,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
+    public final boolean addChangeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
+    public final boolean removeChangeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 

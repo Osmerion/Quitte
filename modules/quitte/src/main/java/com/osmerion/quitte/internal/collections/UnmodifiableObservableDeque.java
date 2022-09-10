@@ -63,8 +63,8 @@ public class UnmodifiableObservableDeque<E> implements ObservableDeque<E> {
 
     @Override public boolean addInvalidationListener(InvalidationListener listener) { return this.impl.addInvalidationListener(listener); }
     @Override public boolean removeInvalidationListener(InvalidationListener listener) { return this.impl.removeInvalidationListener(listener); }
-    @Override public boolean addListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) { return this.impl.addListener(listener); }
-    @Override public boolean removeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) { return this.impl.removeListener(listener); }
+    @Override public boolean addChangeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) { return this.impl.addChangeListener(listener); }
+    @Override public boolean removeChangeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) { return this.impl.removeChangeListener(listener); }
 
     @Override public boolean contains(Object o) { return this.impl.contains(o); }
     @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }

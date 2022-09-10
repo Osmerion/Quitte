@@ -73,7 +73,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(CollectionChangeListener<? super Change<? extends E>> listener) {
+    public final boolean addChangeListener(CollectionChangeListener<? super Change<? extends E>> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(CollectionChangeListener<? super Change<? extends E>> listener) {
+    public final boolean removeChangeListener(CollectionChangeListener<? super Change<? extends E>> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
