@@ -3,7 +3,7 @@ extra-java-module-info = "0.14"
 jsr305 = "3.0.2"
 junit = "5.8.2"
 kotlin = "1.6.21"
-kotlinx-coroutines = "1.6.2"
+kotlinx-coroutines = "1.6.4"
 turbine = "0.8.0"
 
 
