@@ -63,11 +63,11 @@ public fun <T> ObservableValue<T>.asFlow(): Flow<T> = callbackFlow {
         trySend(value as T)
     }
 
-    addListener(listener)
+    addInvalidationListener(listener)
     send(value as T)
 
     awaitClose {
-        removeListener(listener)
+        removeInvalidationListener(listener)
     }
 }.conflate()
 

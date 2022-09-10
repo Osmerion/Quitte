@@ -50,7 +50,7 @@ public final class ShortToByteBinding implements ByteBinding {
         this.source = source;
         this.transform = transform;
         
-        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+        this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class ShortToByteBinding implements ByteBinding {
 
     @Override
     public void release() {
-        this.source.removeListener(this.listener);
+        this.source.removeInvalidationListener(this.listener);
     }
 
 }

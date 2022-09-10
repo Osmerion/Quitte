@@ -77,11 +77,11 @@ public final class LazyObjectExpressionGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         var expression = LazyObjectExpression.of(property, it -> it);
-        expression.addListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
+        expression.addInvalidationListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
 
         var state = expression.stateProperty();
         state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
-        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+        state.addInvalidationListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
 
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
 
@@ -189,7 +189,7 @@ public final class LazyObjectExpressionGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         var expression = LazyObjectExpression.of(property, it -> it);
-        expression.addListener(observable -> {
+        expression.addInvalidationListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
             assertEquals(TestValues.ObjectValue_H, expression.get());
@@ -232,7 +232,7 @@ public final class LazyObjectExpressionGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         var expression = LazyObjectExpression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

@@ -64,7 +64,7 @@ public final class $className$typeParams implements ${targetType.abbrevName}Bind
         this.source = source;
         this.transform = transform;
         
-        this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+        this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
     }
 
     @Override
@@ -74,7 +74,7 @@ public final class $className$typeParams implements ${targetType.abbrevName}Bind
 
     @Override
     public void release() {
-        this.source.removeListener(this.listener);
+        this.source.removeInvalidationListener(this.listener);
     }
 
 }"""

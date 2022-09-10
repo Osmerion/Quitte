@@ -184,16 +184,16 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.doInvalidate());
+                observable.addInvalidationListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
                         var nestedProperty = selector.apply(oldValue);
-                        nestedProperty.removeListener(this.nestedPropertyListener);
+                        nestedProperty.removeInvalidationListener(this.nestedPropertyListener);
                     }
 
                     var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
-                    nestedProperty.addListener(this.nestedPropertyListener);
+                    nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                 };
                 observable.addListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());

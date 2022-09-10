@@ -75,11 +75,11 @@ public final class LazyShortExpressionGeneratedTest {
 
         var property = new LazyShortProperty(TestValues.ShortValue_H);
         var expression = LazyShortExpression.of(property, it -> it);
-        expression.addListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
+        expression.addInvalidationListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
 
         var state = expression.stateProperty();
         state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
-        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+        state.addInvalidationListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
 
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
 
@@ -187,7 +187,7 @@ public final class LazyShortExpressionGeneratedTest {
 
         var property = new LazyShortProperty(TestValues.ShortValue_L);
         var expression = LazyShortExpression.of(property, it -> it);
-        expression.addListener(observable -> {
+        expression.addInvalidationListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, expression.getState());
             assertEquals(TestValues.ShortValue_H, expression.get());
@@ -230,7 +230,7 @@ public final class LazyShortExpressionGeneratedTest {
 
         var property = new LazyShortProperty(TestValues.ShortValue_L);
         var expression = LazyShortExpression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

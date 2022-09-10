@@ -82,7 +82,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(InvalidationListener listener) {
+    public final boolean addInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(InvalidationListener listener) {
+    public final boolean removeInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(Objects.requireNonNull(listener));
     }
 

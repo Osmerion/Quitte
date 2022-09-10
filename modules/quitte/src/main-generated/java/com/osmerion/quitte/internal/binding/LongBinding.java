@@ -54,7 +54,7 @@ public interface LongBinding extends Binding {
             this.source = source;
             this.transform = transform;
             
-            this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+            this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 
         @Override
@@ -64,7 +64,7 @@ public interface LongBinding extends Binding {
 
         @Override
         public void release() {
-            this.source.removeListener(this.listener);
+            this.source.removeInvalidationListener(this.listener);
         }
 
     }

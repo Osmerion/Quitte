@@ -132,7 +132,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        expression.addListener((observable -> {
+        expression.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.${type.abbrevName}Value_H, expression.get());
         }));
@@ -147,7 +147,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        expression.addListener(observable -> callCounter.getAndIncrement());
+        expression.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -183,7 +183,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

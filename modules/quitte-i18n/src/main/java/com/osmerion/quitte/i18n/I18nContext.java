@@ -57,7 +57,7 @@ public abstract class I18nContext implements Observable {
      *
      * @since   0.1.0
      */
-    public final boolean addListener(InvalidationListener listener) {
+    public final boolean addInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.add(listener);
     }
 
@@ -66,7 +66,7 @@ public abstract class I18nContext implements Observable {
      *
      * @since   0.1.0
      */
-    public final boolean removeListener(InvalidationListener listener) {
+    public final boolean removeInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(listener);
     }
 

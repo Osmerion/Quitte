@@ -84,12 +84,12 @@ public final class ReadOnly${type.abbrevName}Wrapper$typeParams implements Obser
     }
 
     @Override
-    public final boolean addListener(InvalidationListener listener) {
+    public final boolean addInvalidationListener(InvalidationListener listener) {
         return false;
     }
 
     @Override
-    public final boolean removeListener(InvalidationListener listener) {
+    public final boolean removeInvalidationListener(InvalidationListener listener) {
         return false;
     }
 

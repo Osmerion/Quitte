@@ -325,7 +325,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        property.addListener((observable -> {
+        property.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
         }));
@@ -339,7 +339,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        property.addListener(observable -> callCounter.getAndIncrement());
+        property.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -391,7 +391,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> assertEquals(TestValues.${type.abbrevName}Value_L, property.get());
                 case 1 -> assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
@@ -411,7 +411,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -456,7 +456,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
         });
@@ -471,7 +471,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -506,7 +506,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        property.addListener(new InvalidationListener() {
+        property.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

@@ -126,7 +126,7 @@ public final class SimpleObjectExpressionGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        expression.addListener((observable -> {
+        expression.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ObjectValue_H, expression.get());
         }));
@@ -141,7 +141,7 @@ public final class SimpleObjectExpressionGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        expression.addListener(observable -> callCounter.getAndIncrement());
+        expression.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
@@ -177,7 +177,7 @@ public final class SimpleObjectExpressionGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

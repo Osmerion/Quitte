@@ -64,7 +64,7 @@ public final class MapBinding<S, T, K, V> implements Binding {
         this.source = source;
         this.transform = transform;
 
-        this.source.addListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
+        this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
         this.source.addListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
@@ -84,7 +84,7 @@ public final class MapBinding<S, T, K, V> implements Binding {
 
     @Override
     public void release() {
-        this.source.removeListener(this.invalidationListener);
+        this.source.removeInvalidationListener(this.invalidationListener);
         this.source.removeListener(this.changeListener);
     }
 

@@ -62,7 +62,7 @@ public abstract class AbstractExpression implements Expression {
      *
      * @since   0.1.0
      */
-    public final boolean addListener(InvalidationListener listener) {
+    public final boolean addInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.add(listener);
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractExpression implements Expression {
      *
      * @since   0.1.0
      */
-    public final boolean removeListener(InvalidationListener listener) {
+    public final boolean removeInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(listener);
     }
 
@@ -115,7 +115,7 @@ public abstract class AbstractExpression implements Expression {
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
-            observable.addListener(listener);
+            observable.addInvalidationListener(listener);
             return listener;
         });
     }
@@ -140,7 +140,7 @@ public abstract class AbstractExpression implements Expression {
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
-            observable.addListener(listener);
+            observable.addInvalidationListener(listener);
             return listener;
         });
     }
@@ -170,7 +170,7 @@ public abstract class AbstractExpression implements Expression {
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
-            observable.addListener(listener);
+            observable.addInvalidationListener(listener);
             return listener;
         });
     }
@@ -190,7 +190,7 @@ public abstract class AbstractExpression implements Expression {
         WeakInvalidationListener listener = this.dependencies.remove(observable);
         if (listener == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
 
-        observable.removeListener(listener);
+        observable.removeInvalidationListener(listener);
     }
 
 }

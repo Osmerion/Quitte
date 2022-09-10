@@ -404,7 +404,7 @@ public final class SimpleBoolPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
-        property.addListener((observable -> {
+        property.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.BoolValue_H, property.get());
         }));
@@ -418,7 +418,7 @@ public final class SimpleBoolPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
-        property.addListener(observable -> callCounter.getAndIncrement());
+        property.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.BoolValue_L);
         assertEquals(0, callCounter.get());
@@ -470,7 +470,7 @@ public final class SimpleBoolPropertyGeneratedTest {
 
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolProperty wrapper = new SimpleBoolProperty(TestValues.BoolValue_H);
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> assertEquals(TestValues.BoolValue_L, property.get());
                 case 1 -> assertEquals(TestValues.BoolValue_H, property.get());
@@ -490,7 +490,7 @@ public final class SimpleBoolPropertyGeneratedTest {
 
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolProperty wrapper = new SimpleBoolProperty(TestValues.BoolValue_L);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -535,7 +535,7 @@ public final class SimpleBoolPropertyGeneratedTest {
         SimpleBoolProperty wrapper = new SimpleBoolProperty(TestValues.BoolValue_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.BoolValue_H, property.get());
         });
@@ -550,7 +550,7 @@ public final class SimpleBoolPropertyGeneratedTest {
 
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
         SimpleBoolProperty wrapper = new SimpleBoolProperty(TestValues.BoolValue_L);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.BoolValue_L);
         assertEquals(0, callCounter.get());
@@ -585,7 +585,7 @@ public final class SimpleBoolPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleBoolProperty property = new SimpleBoolProperty(TestValues.BoolValue_L);
-        property.addListener(new InvalidationListener() {
+        property.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

@@ -31,8 +31,8 @@
 package com.osmerion.quitte;
 
 /**
- * An {@code InvalidationListener} may be {@link Observable#addListener(InvalidationListener) attached} to an
- * {@link Observable} to get notified when the observable is invalidated. A listener may be attached to multiple
+ * An {@code InvalidationListener} may be {@link Observable#addInvalidationListener(InvalidationListener) attached} to
+ * an {@link Observable} to get notified when the observable is invalidated. A listener may be attached to multiple
  * observables.
  *
  * @see Observable

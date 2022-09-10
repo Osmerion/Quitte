@@ -65,7 +65,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
             this.source = source;
             this.transform = transform;
             
-            this.source.addListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
+            this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 
         @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
@@ -75,7 +75,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
 
         @Override
         public void release() {
-            this.source.removeListener(this.listener);
+            this.source.removeInvalidationListener(this.listener);
         }
 
     }

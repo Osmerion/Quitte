@@ -124,7 +124,7 @@ public final class SimpleLongExpressionGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        expression.addListener((observable -> {
+        expression.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.LongValue_H, expression.get());
         }));
@@ -139,7 +139,7 @@ public final class SimpleLongExpressionGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        expression.addListener(observable -> callCounter.getAndIncrement());
+        expression.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
@@ -175,7 +175,7 @@ public final class SimpleLongExpressionGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

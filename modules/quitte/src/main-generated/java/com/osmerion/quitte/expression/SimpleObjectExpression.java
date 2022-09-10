@@ -192,16 +192,16 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.doInvalidate());
+                observable.addInvalidationListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
                         var nestedProperty = selector.apply(oldValue);
-                        nestedProperty.removeListener(this.nestedPropertyListener);
+                        nestedProperty.removeInvalidationListener(this.nestedPropertyListener);
                     }
 
                     var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
-                    nestedProperty.addListener(this.nestedPropertyListener);
+                    nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                 };
                 observable.addListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
@@ -237,17 +237,17 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
             {
-                observable.addListener(ignored -> this.doInvalidate());
+                observable.addInvalidationListener(ignored -> this.doInvalidate());
 
                 ObjectChangeListener<S> parentChangeListener = (ignored, oldValue, newValue) -> {
                     if (oldValue != null) {
                         var nestedProperty = selector.apply(oldValue);
-                        nestedProperty.removeListener(this.nestedPropertyListener);
+                        nestedProperty.removeInvalidationListener(this.nestedPropertyListener);
                     }
 
                     if (newValue != null) {
                         var nestedProperty = selector.apply(newValue);
-                        nestedProperty.addListener(this.nestedPropertyListener);
+                        nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                     }
                 };
                 observable.addListener(parentChangeListener);

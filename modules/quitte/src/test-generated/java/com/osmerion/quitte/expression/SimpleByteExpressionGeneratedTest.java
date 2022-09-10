@@ -124,7 +124,7 @@ public final class SimpleByteExpressionGeneratedTest {
 
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        expression.addListener((observable -> {
+        expression.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ByteValue_H, expression.get());
         }));
@@ -139,7 +139,7 @@ public final class SimpleByteExpressionGeneratedTest {
 
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        expression.addListener(observable -> callCounter.getAndIncrement());
+        expression.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_L);
         assertEquals(0, callCounter.get());
@@ -175,7 +175,7 @@ public final class SimpleByteExpressionGeneratedTest {
 
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

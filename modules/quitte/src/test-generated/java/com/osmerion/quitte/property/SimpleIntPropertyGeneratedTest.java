@@ -404,7 +404,7 @@ public final class SimpleIntPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        property.addListener((observable -> {
+        property.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.IntValue_H, property.get());
         }));
@@ -418,7 +418,7 @@ public final class SimpleIntPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        property.addListener(observable -> callCounter.getAndIncrement());
+        property.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.IntValue_L);
         assertEquals(0, callCounter.get());
@@ -470,7 +470,7 @@ public final class SimpleIntPropertyGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_H);
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> assertEquals(TestValues.IntValue_L, property.get());
                 case 1 -> assertEquals(TestValues.IntValue_H, property.get());
@@ -490,7 +490,7 @@ public final class SimpleIntPropertyGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_L);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -535,7 +535,7 @@ public final class SimpleIntPropertyGeneratedTest {
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.IntValue_H, property.get());
         });
@@ -550,7 +550,7 @@ public final class SimpleIntPropertyGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_L);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.IntValue_L);
         assertEquals(0, callCounter.get());
@@ -585,7 +585,7 @@ public final class SimpleIntPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        property.addListener(new InvalidationListener() {
+        property.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

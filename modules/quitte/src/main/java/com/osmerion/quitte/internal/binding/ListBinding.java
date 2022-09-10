@@ -63,7 +63,7 @@ public final class ListBinding<S, E> implements Binding {
         this.source = source;
         this.transform = transform;
 
-        this.source.addListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
+        this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
         this.source.addListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
@@ -83,7 +83,7 @@ public final class ListBinding<S, E> implements Binding {
 
     @Override
     public void release() {
-        this.source.removeListener(this.invalidationListener);
+        this.source.removeInvalidationListener(this.invalidationListener);
         this.source.removeListener(this.changeListener);
     }
 

@@ -124,7 +124,7 @@ public final class SimpleFloatExpressionGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        expression.addListener((observable -> {
+        expression.addInvalidationListener((observable -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.FloatValue_H, expression.get());
         }));
@@ -139,7 +139,7 @@ public final class SimpleFloatExpressionGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        expression.addListener(observable -> callCounter.getAndIncrement());
+        expression.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.FloatValue_L);
         assertEquals(0, callCounter.get());
@@ -175,7 +175,7 @@ public final class SimpleFloatExpressionGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        expression.addListener(new InvalidationListener() {
+        expression.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {

@@ -264,11 +264,11 @@ public final class LazyObjectPropertyGeneratedTest {
         var stateInvalidatedCallCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener((observable -> propertyInvalidatedCallCounter.getAndIncrement()));
+        property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
-        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
 
@@ -310,11 +310,11 @@ public final class LazyObjectPropertyGeneratedTest {
         var stateInvalidatedCallCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_H);
-        property.addListener((observable -> propertyInvalidatedCallCounter.getAndIncrement()));
+        property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
-        state.addListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
 
@@ -475,7 +475,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener(observable -> {
+        property.addInvalidationListener(observable -> {
             callCounter.getAndIncrement();
             assertEquals(LazyValue.State.INVALID, property.getState());
             assertEquals(TestValues.ObjectValue_L, property.get());
@@ -525,7 +525,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener(new InvalidationListener() {
+        property.addInvalidationListener(new InvalidationListener() {
 
             @Override
             public void onInvalidation(Observable observable) {
@@ -575,7 +575,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_L);
-        wrapper.addListener(observable -> {
+        wrapper.addInvalidationListener(observable -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> assertEquals(TestValues.ObjectValue_H, property.get());
                 case 1 -> assertEquals(TestValues.ObjectValue_L, property.get());
@@ -631,7 +631,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         wrapper.bindTo(property);
 
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
         assertEquals(LazyValue.State.INVALID, wrapper.getState());
@@ -662,7 +662,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        wrapper.addListener(observable -> callCounter.getAndIncrement());
+        wrapper.addInvalidationListener(observable -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_H);
         assertEquals(0, callCounter.get());

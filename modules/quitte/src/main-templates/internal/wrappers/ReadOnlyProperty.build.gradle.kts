@@ -104,13 +104,13 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
     }
 
     @Override
-    public final boolean addListener(InvalidationListener listener) {
-        return this.property.addListener(listener);
+    public final boolean addInvalidationListener(InvalidationListener listener) {
+        return this.property.addInvalidationListener(listener);
     }
 
     @Override
-    public final boolean removeListener(InvalidationListener listener) {
-        return this.property.removeListener(listener);
+    public final boolean removeInvalidationListener(InvalidationListener listener) {
+        return this.property.removeInvalidationListener(listener);
     }
 
 }"""

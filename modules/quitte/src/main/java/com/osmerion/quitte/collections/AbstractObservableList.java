@@ -93,7 +93,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(InvalidationListener listener) {
+    public final boolean addInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.add(listener);
     }
 
@@ -103,7 +103,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(InvalidationListener listener) {
+    public final boolean removeInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(listener);
     }
 

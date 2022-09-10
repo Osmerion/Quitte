@@ -31,8 +31,8 @@
 package com.osmerion.quitte;
 
 /**
- * An {@code Observable} object wraps a state and allows {@link #addListener(InvalidationListener) listening} for
- * invalidation of the wrapped state.
+ * An {@code Observable} object wraps a state and allows {@link #addInvalidationListener(InvalidationListener) listening}
+ * for invalidation of the wrapped state.
  *
  * <p>Since it is not always reasonable to remove listeners manually, Quitte provides a basic API to mark listeners as
  * invalid (e.g. {@link InvalidationListener#isInvalid()}). An implementation of this class must check if a listener has
@@ -54,9 +54,10 @@ public interface Observable {
      * notified} whenever the observable is invalidated.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed
-     * explicitly by calling {@link #removeListener(InvalidationListener)} or implicitly when this observable discovers
-     * that the listener has become {@link InvalidationListener#isInvalid() invalid}. Generally, it is recommended to
-     * use an instance of {@link WeakInvalidationListener} when possible to avoid leaking instances.</p>
+     * explicitly by calling {@link #removeInvalidationListener(InvalidationListener)} or implicitly when this
+     * observable discovers that the listener has become {@link InvalidationListener#isInvalid() invalid}. Generally, it
+     * is recommended to use an instance of {@link WeakInvalidationListener} when possible to avoid leaking instances.
+     * </p>
      *
      * @param listener  the listener to be attached to this observable
      *
@@ -65,11 +66,11 @@ public interface Observable {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(InvalidationListener)
+     * @see #removeInvalidationListener(InvalidationListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(InvalidationListener listener);
+    boolean addInvalidationListener(InvalidationListener listener);
 
     /**
      * Detaches the given {@link InvalidationListener} from this observable.
@@ -84,10 +85,10 @@ public interface Observable {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(InvalidationListener)
+     * @see #addInvalidationListener(InvalidationListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(InvalidationListener listener);
+    boolean removeInvalidationListener(InvalidationListener listener);
 
 }
