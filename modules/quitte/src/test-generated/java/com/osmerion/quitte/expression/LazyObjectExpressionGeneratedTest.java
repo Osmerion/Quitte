@@ -80,8 +80,8 @@ public final class LazyObjectExpressionGeneratedTest {
         expression.addInvalidationListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
 
         var state = expression.stateProperty();
-        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
-        state.addInvalidationListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
 
@@ -134,8 +134,8 @@ public final class LazyObjectExpressionGeneratedTest {
         var expression = LazyObjectExpression.of(property, it -> it);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -144,10 +144,10 @@ public final class LazyObjectExpressionGeneratedTest {
         var expression = LazyObjectExpression.of(property, it -> it);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -156,7 +156,7 @@ public final class LazyObjectExpressionGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         var expression = LazyObjectExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, expression.getState());
             assertEquals(TestValues.ObjectValue_N, oldValue);
@@ -177,7 +177,7 @@ public final class LazyObjectExpressionGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         var expression = LazyObjectExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
@@ -208,7 +208,7 @@ public final class LazyObjectExpressionGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_L);
         var expression = LazyObjectExpression.of(property, it -> it);
-        expression.addListener(new ObjectChangeListener<>() {
+        expression.addChangeListener(new ObjectChangeListener<>() {
 
             @Override
             public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {

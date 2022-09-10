@@ -59,7 +59,7 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ObjectChangeListener<T> listener) {
+    public final boolean addChangeListener(ObjectChangeListener<T> listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -69,7 +69,7 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<T> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<T> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingObjectChangeListener && ((WrappingObjectChangeListener<T>) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ObjectChangeListener.wrap(listener));
     }
@@ -80,7 +80,7 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ObjectChangeListener<T> listener) {
+    public final boolean removeChangeListener(ObjectChangeListener<T> listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<T> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<T> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingObjectChangeListener && ((WrappingObjectChangeListener<T>) it).isWrapping(listener));
     }
 

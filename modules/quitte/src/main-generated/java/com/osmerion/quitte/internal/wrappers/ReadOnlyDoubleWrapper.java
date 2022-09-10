@@ -54,22 +54,22 @@ public final class ReadOnlyDoubleWrapper implements ObservableDoubleValue {
     }
 
     @Override
-    public boolean addListener(DoubleChangeListener listener) {
+    public boolean addChangeListener(DoubleChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Double> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Double> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(DoubleChangeListener listener) {
+    public boolean removeChangeListener(DoubleChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Double> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Double> listener) {
         return false;
     }
 

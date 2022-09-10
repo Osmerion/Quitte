@@ -36,7 +36,7 @@ import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.value.change.ChangeListener;
 
 /**
- * An {@code ObservableValue} object wraps a single value state and allows {@link #addBoxedListener(ChangeListener)
+ * An {@code ObservableValue} object wraps a single value state and allows {@link #addBoxedChangeListener(ChangeListener)
  * listening} for changes of the wrapped value.
  *
  * <p><b>Specialized versions of this interface should be used whenever possible.</b></p>
@@ -73,10 +73,10 @@ public interface ObservableValue<T> extends Observable {
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed
-     * explicitly by calling {@link #removeBoxedListener(ChangeListener)} or implicitly when this observable discovers
-     * that the listener has become {@link ChangeListener#isInvalid() invalid}. Generally, it is recommended to use an
-     * instance of {@link com.osmerion.quitte.value.change.WeakChangeListener WeakChangeListener} when possible
-     * to avoid leaking instances.</p>
+     * explicitly by calling {@link #removeBoxedChangeListener(ChangeListener)} or implicitly when this observable
+     * discovers that the listener has become {@link ChangeListener#isInvalid() invalid}. Generally, it is recommended
+     * to use an instance of {@link com.osmerion.quitte.value.change.WeakChangeListener WeakChangeListener} when
+     * possible to avoid leaking instances.</p>
      *
      * @param listener  the listener to be attached to this observable
      *
@@ -85,11 +85,11 @@ public interface ObservableValue<T> extends Observable {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeBoxedListener(ChangeListener)
+     * @see #removeBoxedChangeListener(ChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addBoxedListener(ChangeListener<T> listener);
+    boolean addBoxedChangeListener(ChangeListener<T> listener);
 
     /**
      * Detaches the given {@link ChangeListener} from this observable.
@@ -104,10 +104,10 @@ public interface ObservableValue<T> extends Observable {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addBoxedListener(ChangeListener)
+     * @see #addBoxedChangeListener(ChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeBoxedListener(ChangeListener<T> listener);
+    boolean removeBoxedChangeListener(ChangeListener<T> listener);
 
 }

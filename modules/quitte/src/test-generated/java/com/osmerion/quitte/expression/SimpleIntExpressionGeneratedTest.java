@@ -73,8 +73,8 @@ public final class SimpleIntExpressionGeneratedTest {
         var expression = SimpleIntExpression.of(property, it -> it);
         ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -83,10 +83,10 @@ public final class SimpleIntExpressionGeneratedTest {
         var expression = SimpleIntExpression.of(property, it -> it);
         ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -95,7 +95,7 @@ public final class SimpleIntExpressionGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntExpression expression = SimpleIntExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.IntValue_L, oldValue);
             assertEquals(TestValues.IntValue_H, newValue);
@@ -112,7 +112,7 @@ public final class SimpleIntExpressionGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntExpression expression = SimpleIntExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.IntValue_L);
         assertEquals(0, callCounter.get());
@@ -151,7 +151,7 @@ public final class SimpleIntExpressionGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntExpression expression = SimpleIntExpression.of(property, it -> it);
-        expression.addListener(new IntChangeListener() {
+        expression.addChangeListener(new IntChangeListener() {
 
             @Override
             public void onChanged(ObservableIntValue observable, int oldValue, int newValue) {

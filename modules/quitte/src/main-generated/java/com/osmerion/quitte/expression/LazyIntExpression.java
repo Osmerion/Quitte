@@ -195,7 +195,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
                     var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
                     nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                 };
-                observable.addListener(parentChangeListener);
+                observable.addChangeListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 

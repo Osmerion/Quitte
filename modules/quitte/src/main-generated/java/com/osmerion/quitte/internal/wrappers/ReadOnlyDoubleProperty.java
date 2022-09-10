@@ -74,23 +74,23 @@ public final class ReadOnlyDoubleProperty implements ReadableDoubleProperty {
     }
 
     @Override
-    public boolean addListener(DoubleChangeListener listener) {
-        return this.property.addListener(listener);
+    public boolean addChangeListener(DoubleChangeListener listener) {
+        return this.property.addChangeListener(listener);
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Double> listener) {
-        return this.property.addBoxedListener(listener);
+    public boolean addBoxedChangeListener(ChangeListener<Double> listener) {
+        return this.property.addBoxedChangeListener(listener);
     }
 
     @Override
-    public boolean removeListener(DoubleChangeListener listener) {
-        return this.property.removeListener(listener);
+    public boolean removeChangeListener(DoubleChangeListener listener) {
+        return this.property.removeChangeListener(listener);
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Double> listener) {
-        return this.property.removeBoxedListener(listener);
+    public boolean removeBoxedChangeListener(ChangeListener<Double> listener) {
+        return this.property.removeBoxedChangeListener(listener);
     }
 
     @Override

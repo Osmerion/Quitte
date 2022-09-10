@@ -98,11 +98,11 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(IntChangeListener)
+     * @see #removeChangeListener(IntChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(IntChangeListener listener);
+    boolean addChangeListener(IntChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Integer> listener) {
-        return this.addListener(IntChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Integer> listener) {
+        return this.addChangeListener(IntChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableIntValue extends ObservableValue<Integer> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(IntChangeListener)
+     * @see #addChangeListener(IntChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(IntChangeListener listener);
+    boolean removeChangeListener(IntChangeListener listener);
 
 }

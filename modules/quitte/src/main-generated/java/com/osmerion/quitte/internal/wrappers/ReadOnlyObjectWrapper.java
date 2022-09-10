@@ -54,22 +54,22 @@ public final class ReadOnlyObjectWrapper<T> implements ObservableObjectValue<T> 
     }
 
     @Override
-    public boolean addListener(ObjectChangeListener<T> listener) {
+    public boolean addChangeListener(ObjectChangeListener<T> listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<T> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<T> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(ObjectChangeListener<T> listener) {
+    public boolean removeChangeListener(ObjectChangeListener<T> listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<T> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<T> listener) {
         return false;
     }
 

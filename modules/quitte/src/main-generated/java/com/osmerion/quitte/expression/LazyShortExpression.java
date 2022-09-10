@@ -195,7 +195,7 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
                     var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
                     nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                 };
-                observable.addListener(parentChangeListener);
+                observable.addChangeListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 

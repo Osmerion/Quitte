@@ -233,7 +233,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ShortChangeListener listener) {
+    public final boolean addChangeListener(ShortChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Short> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Short> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingShortChangeListener && ((WrappingShortChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ShortChangeListener.wrap(listener));
     }
@@ -254,7 +254,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ShortChangeListener listener) {
+    public final boolean removeChangeListener(ShortChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -264,7 +264,7 @@ public abstract class AbstractShortProperty implements WritableShortProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Short> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Short> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingShortChangeListener && ((WrappingShortChangeListener) it).isWrapping(listener));
     }
 

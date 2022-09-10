@@ -98,11 +98,11 @@ public interface ObservableLongValue extends ObservableValue<Long> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(LongChangeListener)
+     * @see #removeChangeListener(LongChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(LongChangeListener listener);
+    boolean addChangeListener(LongChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableLongValue extends ObservableValue<Long> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Long> listener) {
-        return this.addListener(LongChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Long> listener) {
+        return this.addChangeListener(LongChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableLongValue extends ObservableValue<Long> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(LongChangeListener)
+     * @see #addChangeListener(LongChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(LongChangeListener listener);
+    boolean removeChangeListener(LongChangeListener listener);
 
 }

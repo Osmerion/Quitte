@@ -74,23 +74,23 @@ public final class ReadOnlyByteProperty implements ReadableByteProperty {
     }
 
     @Override
-    public boolean addListener(ByteChangeListener listener) {
-        return this.property.addListener(listener);
+    public boolean addChangeListener(ByteChangeListener listener) {
+        return this.property.addChangeListener(listener);
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Byte> listener) {
-        return this.property.addBoxedListener(listener);
+    public boolean addBoxedChangeListener(ChangeListener<Byte> listener) {
+        return this.property.addBoxedChangeListener(listener);
     }
 
     @Override
-    public boolean removeListener(ByteChangeListener listener) {
-        return this.property.removeListener(listener);
+    public boolean removeChangeListener(ByteChangeListener listener) {
+        return this.property.removeChangeListener(listener);
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Byte> listener) {
-        return this.property.removeBoxedListener(listener);
+    public boolean removeBoxedChangeListener(ChangeListener<Byte> listener) {
+        return this.property.removeBoxedChangeListener(listener);
     }
 
     @Override

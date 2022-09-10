@@ -115,7 +115,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
                     var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
                     nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                 };
-                observable.addListener(parentChangeListener);
+                observable.addChangeListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 ${if (type === Type.OBJECT) "\n            @Nullable" else ""}

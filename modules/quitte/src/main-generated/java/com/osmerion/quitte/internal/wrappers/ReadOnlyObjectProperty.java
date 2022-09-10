@@ -74,23 +74,23 @@ public final class ReadOnlyObjectProperty<T> implements ReadableObjectProperty<T
     }
 
     @Override
-    public boolean addListener(ObjectChangeListener<T> listener) {
-        return this.property.addListener(listener);
+    public boolean addChangeListener(ObjectChangeListener<T> listener) {
+        return this.property.addChangeListener(listener);
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<T> listener) {
-        return this.property.addBoxedListener(listener);
+    public boolean addBoxedChangeListener(ChangeListener<T> listener) {
+        return this.property.addBoxedChangeListener(listener);
     }
 
     @Override
-    public boolean removeListener(ObjectChangeListener<T> listener) {
-        return this.property.removeListener(listener);
+    public boolean removeChangeListener(ObjectChangeListener<T> listener) {
+        return this.property.removeChangeListener(listener);
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<T> listener) {
-        return this.property.removeBoxedListener(listener);
+    public boolean removeBoxedChangeListener(ChangeListener<T> listener) {
+        return this.property.removeBoxedChangeListener(listener);
     }
 
     @Override

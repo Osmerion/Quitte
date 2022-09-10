@@ -54,22 +54,22 @@ public final class ReadOnlyLongWrapper implements ObservableLongValue {
     }
 
     @Override
-    public boolean addListener(LongChangeListener listener) {
+    public boolean addChangeListener(LongChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Long> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Long> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(LongChangeListener listener) {
+    public boolean removeChangeListener(LongChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Long> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Long> listener) {
         return false;
     }
 

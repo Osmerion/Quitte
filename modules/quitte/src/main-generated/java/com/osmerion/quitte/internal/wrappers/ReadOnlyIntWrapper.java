@@ -54,22 +54,22 @@ public final class ReadOnlyIntWrapper implements ObservableIntValue {
     }
 
     @Override
-    public boolean addListener(IntChangeListener listener) {
+    public boolean addChangeListener(IntChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Integer> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Integer> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(IntChangeListener listener) {
+    public boolean removeChangeListener(IntChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Integer> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Integer> listener) {
         return false;
     }
 

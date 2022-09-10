@@ -154,7 +154,7 @@ public final class SimpleFloatPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -357,8 +357,8 @@ public final class SimpleFloatPropertyGeneratedTest {
         var property = new SimpleFloatProperty(TestValues.FloatValue_H);
         ChangeListener<Float> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -366,10 +366,10 @@ public final class SimpleFloatPropertyGeneratedTest {
         var property = new SimpleFloatProperty(TestValues.FloatValue_H);
         ChangeListener<Float> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -377,7 +377,7 @@ public final class SimpleFloatPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.FloatValue_L, oldValue);
             assertEquals(TestValues.FloatValue_H, newValue);
@@ -393,7 +393,7 @@ public final class SimpleFloatPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.FloatValue_L);
         assertEquals(0, callCounter.get());
@@ -430,7 +430,7 @@ public final class SimpleFloatPropertyGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatProperty wrapper = new SimpleFloatProperty(TestValues.FloatValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> {
                     assertEquals(TestValues.FloatValue_H, oldValue);
@@ -458,7 +458,7 @@ public final class SimpleFloatPropertyGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatProperty wrapper = new SimpleFloatProperty(TestValues.FloatValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -504,7 +504,7 @@ public final class SimpleFloatPropertyGeneratedTest {
         SimpleFloatProperty wrapper = new SimpleFloatProperty(TestValues.FloatValue_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.FloatValue_L, oldValue);
             assertEquals(TestValues.FloatValue_H, newValue);
@@ -521,7 +521,7 @@ public final class SimpleFloatPropertyGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatProperty wrapper = new SimpleFloatProperty(TestValues.FloatValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.FloatValue_L);
         assertEquals(0, callCounter.get());
@@ -561,7 +561,7 @@ public final class SimpleFloatPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
-        property.addListener(new FloatChangeListener() {
+        property.addChangeListener(new FloatChangeListener() {
 
             @Override
             public void onChanged(ObservableFloatValue observable, float oldValue, float newValue) {

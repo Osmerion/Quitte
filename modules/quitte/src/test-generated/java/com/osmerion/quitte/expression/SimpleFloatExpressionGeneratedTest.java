@@ -73,8 +73,8 @@ public final class SimpleFloatExpressionGeneratedTest {
         var expression = SimpleFloatExpression.of(property, it -> it);
         ChangeListener<Float> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -83,10 +83,10 @@ public final class SimpleFloatExpressionGeneratedTest {
         var expression = SimpleFloatExpression.of(property, it -> it);
         ChangeListener<Float> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -95,7 +95,7 @@ public final class SimpleFloatExpressionGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.FloatValue_L, oldValue);
             assertEquals(TestValues.FloatValue_H, newValue);
@@ -112,7 +112,7 @@ public final class SimpleFloatExpressionGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.FloatValue_L);
         assertEquals(0, callCounter.get());
@@ -151,7 +151,7 @@ public final class SimpleFloatExpressionGeneratedTest {
 
         SimpleFloatProperty property = new SimpleFloatProperty(TestValues.FloatValue_L);
         SimpleFloatExpression expression = SimpleFloatExpression.of(property, it -> it);
-        expression.addListener(new FloatChangeListener() {
+        expression.addChangeListener(new FloatChangeListener() {
 
             @Override
             public void onChanged(ObservableFloatValue observable, float oldValue, float newValue) {

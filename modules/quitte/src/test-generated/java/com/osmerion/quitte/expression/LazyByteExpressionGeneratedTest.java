@@ -78,8 +78,8 @@ public final class LazyByteExpressionGeneratedTest {
         expression.addInvalidationListener((observable -> expressionInvalidatedCallCounter.getAndIncrement()));
 
         var state = expression.stateProperty();
-        state.addListener(((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement()));
-        state.addInvalidationListener(((observable) -> stateInvalidatedCallCounter.getAndIncrement()));
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, expression.getState());
 
@@ -132,8 +132,8 @@ public final class LazyByteExpressionGeneratedTest {
         var expression = LazyByteExpression.of(property, it -> it);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -142,10 +142,10 @@ public final class LazyByteExpressionGeneratedTest {
         var expression = LazyByteExpression.of(property, it -> it);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -154,7 +154,7 @@ public final class LazyByteExpressionGeneratedTest {
 
         var property = new LazyByteProperty(TestValues.ByteValue_L);
         var expression = LazyByteExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, expression.getState());
             assertEquals(TestValues.ByteValue_N, oldValue);
@@ -175,7 +175,7 @@ public final class LazyByteExpressionGeneratedTest {
 
         var property = new LazyByteProperty(TestValues.ByteValue_L);
         var expression = LazyByteExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_L);
         assertEquals(0, callCounter.get());
@@ -206,7 +206,7 @@ public final class LazyByteExpressionGeneratedTest {
 
         var property = new LazyByteProperty(TestValues.ByteValue_L);
         var expression = LazyByteExpression.of(property, it -> it);
-        expression.addListener(new ByteChangeListener() {
+        expression.addChangeListener(new ByteChangeListener() {
 
             @Override
             public void onChanged(ObservableByteValue observable, byte oldValue, byte newValue) {

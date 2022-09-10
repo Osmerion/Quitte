@@ -73,8 +73,8 @@ public final class SimpleByteExpressionGeneratedTest {
         var expression = SimpleByteExpression.of(property, it -> it);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -83,10 +83,10 @@ public final class SimpleByteExpressionGeneratedTest {
         var expression = SimpleByteExpression.of(property, it -> it);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -95,7 +95,7 @@ public final class SimpleByteExpressionGeneratedTest {
 
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ByteValue_L, oldValue);
             assertEquals(TestValues.ByteValue_H, newValue);
@@ -112,7 +112,7 @@ public final class SimpleByteExpressionGeneratedTest {
 
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_L);
         assertEquals(0, callCounter.get());
@@ -151,7 +151,7 @@ public final class SimpleByteExpressionGeneratedTest {
 
         SimpleByteProperty property = new SimpleByteProperty(TestValues.ByteValue_L);
         SimpleByteExpression expression = SimpleByteExpression.of(property, it -> it);
-        expression.addListener(new ByteChangeListener() {
+        expression.addChangeListener(new ByteChangeListener() {
 
             @Override
             public void onChanged(ObservableByteValue observable, byte oldValue, byte newValue) {

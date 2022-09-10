@@ -57,7 +57,7 @@ public abstract class AbstractLongExpression extends AbstractExpression implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(LongChangeListener listener) {
+    public final boolean addChangeListener(LongChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractLongExpression extends AbstractExpression implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Long> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Long> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingLongChangeListener && ((WrappingLongChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(LongChangeListener.wrap(listener));
     }
@@ -78,7 +78,7 @@ public abstract class AbstractLongExpression extends AbstractExpression implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(LongChangeListener listener) {
+    public final boolean removeChangeListener(LongChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractLongExpression extends AbstractExpression implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Long> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Long> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingLongChangeListener && ((WrappingLongChangeListener) it).isWrapping(listener));
     }
 

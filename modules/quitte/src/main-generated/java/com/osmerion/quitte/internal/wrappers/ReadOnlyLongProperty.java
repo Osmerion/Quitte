@@ -74,23 +74,23 @@ public final class ReadOnlyLongProperty implements ReadableLongProperty {
     }
 
     @Override
-    public boolean addListener(LongChangeListener listener) {
-        return this.property.addListener(listener);
+    public boolean addChangeListener(LongChangeListener listener) {
+        return this.property.addChangeListener(listener);
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Long> listener) {
-        return this.property.addBoxedListener(listener);
+    public boolean addBoxedChangeListener(ChangeListener<Long> listener) {
+        return this.property.addBoxedChangeListener(listener);
     }
 
     @Override
-    public boolean removeListener(LongChangeListener listener) {
-        return this.property.removeListener(listener);
+    public boolean removeChangeListener(LongChangeListener listener) {
+        return this.property.removeChangeListener(listener);
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Long> listener) {
-        return this.property.removeBoxedListener(listener);
+    public boolean removeBoxedChangeListener(ChangeListener<Long> listener) {
+        return this.property.removeBoxedChangeListener(listener);
     }
 
     @Override

@@ -130,7 +130,7 @@ public final class LazyBytePropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -265,7 +265,7 @@ public final class LazyBytePropertyGeneratedTest {
         property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
         state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
@@ -311,7 +311,7 @@ public final class LazyBytePropertyGeneratedTest {
         property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
         state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
@@ -352,8 +352,8 @@ public final class LazyBytePropertyGeneratedTest {
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
         
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -361,8 +361,8 @@ public final class LazyBytePropertyGeneratedTest {
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -370,10 +370,10 @@ public final class LazyBytePropertyGeneratedTest {
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         ChangeListener<Byte> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -381,7 +381,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.ByteValue_H, oldValue);
@@ -401,7 +401,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(() -> TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, property.getState());
             assertEquals(TestValues.ByteValue_N, oldValue);
@@ -421,7 +421,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_H);
         assertEquals(0, callCounter.get());
@@ -432,7 +432,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(() -> TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_H);
         assertEquals(0, callCounter.get());
@@ -443,7 +443,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
 
         property.set(TestValues.ByteValue_H);
@@ -456,7 +456,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(() -> TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.getAndIncrement();
             assertEquals(1, callCounter.get());
             assertEquals(LazyValue.State.INITIALIZED, property.getState());
@@ -488,7 +488,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(() -> TestValues.ByteValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_L);
         assertEquals(0, callCounter.get());
@@ -499,7 +499,7 @@ public final class LazyBytePropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
-        property.addListener(new ByteChangeListener() {
+        property.addChangeListener(new ByteChangeListener() {
 
             @Override
             public void onChanged(ObservableByteValue observable, byte oldValue, byte newValue) {
@@ -548,7 +548,7 @@ public final class LazyBytePropertyGeneratedTest {
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         var wrapper = new LazyByteProperty(TestValues.ByteValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -560,7 +560,7 @@ public final class LazyBytePropertyGeneratedTest {
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         var wrapper = new LazyByteProperty(TestValues.ByteValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(TestValues.ByteValue_H, property.get());
@@ -597,7 +597,7 @@ public final class LazyBytePropertyGeneratedTest {
         var wrapper = new LazyByteProperty(TestValues.ByteValue_H);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.getAndIncrement();
             assertEquals(TestValues.ByteValue_H, oldValue);
             assertEquals(TestValues.ByteValue_L, newValue);
@@ -615,7 +615,7 @@ public final class LazyBytePropertyGeneratedTest {
 
         var property = new LazyByteProperty(TestValues.ByteValue_H);
         var wrapper = new LazyByteProperty(TestValues.ByteValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ByteValue_L);
         assertEquals(0, callCounter.get());

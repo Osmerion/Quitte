@@ -73,8 +73,8 @@ public final class SimpleShortExpressionGeneratedTest {
         var expression = SimpleShortExpression.of(property, it -> it);
         ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -83,10 +83,10 @@ public final class SimpleShortExpressionGeneratedTest {
         var expression = SimpleShortExpression.of(property, it -> it);
         ChangeListener<Short> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -95,7 +95,7 @@ public final class SimpleShortExpressionGeneratedTest {
 
         SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
         SimpleShortExpression expression = SimpleShortExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ShortValue_L, oldValue);
             assertEquals(TestValues.ShortValue_H, newValue);
@@ -112,7 +112,7 @@ public final class SimpleShortExpressionGeneratedTest {
 
         SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
         SimpleShortExpression expression = SimpleShortExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ShortValue_L);
         assertEquals(0, callCounter.get());
@@ -151,7 +151,7 @@ public final class SimpleShortExpressionGeneratedTest {
 
         SimpleShortProperty property = new SimpleShortProperty(TestValues.ShortValue_L);
         SimpleShortExpression expression = SimpleShortExpression.of(property, it -> it);
-        expression.addListener(new ShortChangeListener() {
+        expression.addChangeListener(new ShortChangeListener() {
 
             @Override
             public void onChanged(ObservableShortValue observable, short oldValue, short newValue) {

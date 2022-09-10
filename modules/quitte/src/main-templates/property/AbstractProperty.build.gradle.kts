@@ -168,7 +168,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public final boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -178,7 +178,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<${type.box}> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<${type.box}> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener))) return false;
         return this.changeListeners.add(${type.abbrevName}ChangeListener.wrap(listener));
     }
@@ -189,7 +189,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public final boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -199,7 +199,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<${type.box}> listener) {
         return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener));
     }
 

@@ -108,11 +108,11 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(${type.abbrevName}ChangeListener)
+     * @see #removeChangeListener(${type.abbrevName}ChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(${type.abbrevName}ChangeListener$typeParams listener);
+    boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener);
 
     /**
      * {@inheritDoc}
@@ -120,8 +120,8 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<${type.box}> listener) {
-        return this.addListener(${type.abbrevName}ChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<${type.box}> listener) {
+        return this.addChangeListener(${type.abbrevName}ChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -137,11 +137,11 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(${type.abbrevName}ChangeListener)
+     * @see #addChangeListener(${type.abbrevName}ChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener);
+    boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener);
 
 }"""
     }

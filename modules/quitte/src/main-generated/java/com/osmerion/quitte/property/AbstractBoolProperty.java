@@ -233,7 +233,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(BoolChangeListener listener) {
+    public final boolean addChangeListener(BoolChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Boolean> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Boolean> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingBoolChangeListener && ((WrappingBoolChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(BoolChangeListener.wrap(listener));
     }
@@ -254,7 +254,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(BoolChangeListener listener) {
+    public final boolean removeChangeListener(BoolChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -264,7 +264,7 @@ public abstract class AbstractBoolProperty implements WritableBoolProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Boolean> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Boolean> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingBoolChangeListener && ((WrappingBoolChangeListener) it).isWrapping(listener));
     }
 

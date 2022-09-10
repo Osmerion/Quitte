@@ -54,22 +54,22 @@ public final class ReadOnlyByteWrapper implements ObservableByteValue {
     }
 
     @Override
-    public boolean addListener(ByteChangeListener listener) {
+    public boolean addChangeListener(ByteChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Byte> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Byte> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(ByteChangeListener listener) {
+    public boolean removeChangeListener(ByteChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Byte> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Byte> listener) {
         return false;
     }
 

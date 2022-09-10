@@ -162,7 +162,7 @@ public final class Simple${type.abbrevName}PropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -278,8 +278,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         var property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -287,10 +287,10 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         var property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -298,7 +298,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.${type.abbrevName}Value_L, oldValue);
             assertEquals(TestValues.${type.abbrevName}Value_H, newValue);
@@ -314,7 +314,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -351,7 +351,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> {
                     assertEquals(TestValues.${type.abbrevName}Value_H, oldValue);
@@ -379,7 +379,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -425,7 +425,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.${type.abbrevName}Value_L, oldValue);
             assertEquals(TestValues.${type.abbrevName}Value_H, newValue);
@@ -442,7 +442,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Property$typeParams wrapper = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -482,7 +482,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         AtomicInteger callCounter = new AtomicInteger(0);
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
-        property.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
+        property.addChangeListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
 
             @Override
             public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} oldValue, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} newValue) {

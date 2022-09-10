@@ -154,7 +154,7 @@ public final class SimpleLongPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -357,8 +357,8 @@ public final class SimpleLongPropertyGeneratedTest {
         var property = new SimpleLongProperty(TestValues.LongValue_H);
         ChangeListener<Long> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -366,10 +366,10 @@ public final class SimpleLongPropertyGeneratedTest {
         var property = new SimpleLongProperty(TestValues.LongValue_H);
         ChangeListener<Long> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -377,7 +377,7 @@ public final class SimpleLongPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.LongValue_L, oldValue);
             assertEquals(TestValues.LongValue_H, newValue);
@@ -393,7 +393,7 @@ public final class SimpleLongPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
@@ -430,7 +430,7 @@ public final class SimpleLongPropertyGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongProperty wrapper = new SimpleLongProperty(TestValues.LongValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> {
                     assertEquals(TestValues.LongValue_H, oldValue);
@@ -458,7 +458,7 @@ public final class SimpleLongPropertyGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongProperty wrapper = new SimpleLongProperty(TestValues.LongValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -504,7 +504,7 @@ public final class SimpleLongPropertyGeneratedTest {
         SimpleLongProperty wrapper = new SimpleLongProperty(TestValues.LongValue_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.LongValue_L, oldValue);
             assertEquals(TestValues.LongValue_H, newValue);
@@ -521,7 +521,7 @@ public final class SimpleLongPropertyGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongProperty wrapper = new SimpleLongProperty(TestValues.LongValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
@@ -561,7 +561,7 @@ public final class SimpleLongPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
-        property.addListener(new LongChangeListener() {
+        property.addChangeListener(new LongChangeListener() {
 
             @Override
             public void onChanged(ObservableLongValue observable, long oldValue, long newValue) {

@@ -54,22 +54,22 @@ public final class ReadOnlyFloatWrapper implements ObservableFloatValue {
     }
 
     @Override
-    public boolean addListener(FloatChangeListener listener) {
+    public boolean addChangeListener(FloatChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Float> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Float> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(FloatChangeListener listener) {
+    public boolean removeChangeListener(FloatChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Float> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Float> listener) {
         return false;
     }
 

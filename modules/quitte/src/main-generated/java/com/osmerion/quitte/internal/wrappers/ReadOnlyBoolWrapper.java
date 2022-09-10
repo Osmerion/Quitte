@@ -54,22 +54,22 @@ public final class ReadOnlyBoolWrapper implements ObservableBoolValue {
     }
 
     @Override
-    public boolean addListener(BoolChangeListener listener) {
+    public boolean addChangeListener(BoolChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Boolean> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Boolean> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(BoolChangeListener listener) {
+    public boolean removeChangeListener(BoolChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Boolean> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Boolean> listener) {
         return false;
     }
 

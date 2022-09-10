@@ -73,8 +73,8 @@ public final class SimpleLongExpressionGeneratedTest {
         var expression = SimpleLongExpression.of(property, it -> it);
         ChangeListener<Long> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -83,10 +83,10 @@ public final class SimpleLongExpressionGeneratedTest {
         var expression = SimpleLongExpression.of(property, it -> it);
         ChangeListener<Long> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -95,7 +95,7 @@ public final class SimpleLongExpressionGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.LongValue_L, oldValue);
             assertEquals(TestValues.LongValue_H, newValue);
@@ -112,7 +112,7 @@ public final class SimpleLongExpressionGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.LongValue_L);
         assertEquals(0, callCounter.get());
@@ -151,7 +151,7 @@ public final class SimpleLongExpressionGeneratedTest {
 
         SimpleLongProperty property = new SimpleLongProperty(TestValues.LongValue_L);
         SimpleLongExpression expression = SimpleLongExpression.of(property, it -> it);
-        expression.addListener(new LongChangeListener() {
+        expression.addChangeListener(new LongChangeListener() {
 
             @Override
             public void onChanged(ObservableLongValue observable, long oldValue, long newValue) {

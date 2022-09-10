@@ -98,11 +98,11 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(FloatChangeListener)
+     * @see #removeChangeListener(FloatChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(FloatChangeListener listener);
+    boolean addChangeListener(FloatChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Float> listener) {
-        return this.addListener(FloatChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Float> listener) {
+        return this.addChangeListener(FloatChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableFloatValue extends ObservableValue<Float> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(FloatChangeListener)
+     * @see #addChangeListener(FloatChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(FloatChangeListener listener);
+    boolean removeChangeListener(FloatChangeListener listener);
 
 }

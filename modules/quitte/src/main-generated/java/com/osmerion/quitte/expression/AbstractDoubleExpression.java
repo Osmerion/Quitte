@@ -57,7 +57,7 @@ public abstract class AbstractDoubleExpression extends AbstractExpression implem
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(DoubleChangeListener listener) {
+    public final boolean addChangeListener(DoubleChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractDoubleExpression extends AbstractExpression implem
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Double> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Double> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingDoubleChangeListener && ((WrappingDoubleChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(DoubleChangeListener.wrap(listener));
     }
@@ -78,7 +78,7 @@ public abstract class AbstractDoubleExpression extends AbstractExpression implem
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(DoubleChangeListener listener) {
+    public final boolean removeChangeListener(DoubleChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractDoubleExpression extends AbstractExpression implem
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Double> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Double> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingDoubleChangeListener && ((WrappingDoubleChangeListener) it).isWrapping(listener));
     }
 

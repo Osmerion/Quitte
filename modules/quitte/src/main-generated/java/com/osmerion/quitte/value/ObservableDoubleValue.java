@@ -98,11 +98,11 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(DoubleChangeListener)
+     * @see #removeChangeListener(DoubleChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(DoubleChangeListener listener);
+    boolean addChangeListener(DoubleChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Double> listener) {
-        return this.addListener(DoubleChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Double> listener) {
+        return this.addChangeListener(DoubleChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableDoubleValue extends ObservableValue<Double> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(DoubleChangeListener)
+     * @see #addChangeListener(DoubleChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(DoubleChangeListener listener);
+    boolean removeChangeListener(DoubleChangeListener listener);
 
 }

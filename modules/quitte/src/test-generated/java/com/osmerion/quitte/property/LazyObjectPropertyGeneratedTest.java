@@ -132,7 +132,7 @@ public final class LazyObjectPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -267,7 +267,7 @@ public final class LazyObjectPropertyGeneratedTest {
         property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
         state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
@@ -313,7 +313,7 @@ public final class LazyObjectPropertyGeneratedTest {
         property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
         state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
@@ -354,8 +354,8 @@ public final class LazyObjectPropertyGeneratedTest {
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
         
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -363,8 +363,8 @@ public final class LazyObjectPropertyGeneratedTest {
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -372,10 +372,10 @@ public final class LazyObjectPropertyGeneratedTest {
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -383,7 +383,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.ObjectValue_H, oldValue);
@@ -403,7 +403,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, property.getState());
             assertEquals(TestValues.ObjectValue_N, oldValue);
@@ -423,7 +423,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_H);
         assertEquals(0, callCounter.get());
@@ -434,7 +434,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_H);
         assertEquals(0, callCounter.get());
@@ -445,7 +445,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
 
         property.set(TestValues.ObjectValue_H);
@@ -458,7 +458,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.getAndIncrement();
             assertEquals(1, callCounter.get());
             assertEquals(LazyValue.State.INITIALIZED, property.getState());
@@ -490,7 +490,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(() -> TestValues.ObjectValue_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
@@ -501,7 +501,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        property.addListener(new ObjectChangeListener<>() {
+        property.addChangeListener(new ObjectChangeListener<>() {
 
             @Override
             public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {
@@ -550,7 +550,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -562,7 +562,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(TestValues.ObjectValue_H, property.get());
@@ -599,7 +599,7 @@ public final class LazyObjectPropertyGeneratedTest {
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.getAndIncrement();
             assertEquals(TestValues.ObjectValue_H, oldValue);
             assertEquals(TestValues.ObjectValue_L, newValue);
@@ -617,7 +617,7 @@ public final class LazyObjectPropertyGeneratedTest {
 
         var property = new LazyObjectProperty<>(TestValues.ObjectValue_H);
         var wrapper = new LazyObjectProperty<>(TestValues.ObjectValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());

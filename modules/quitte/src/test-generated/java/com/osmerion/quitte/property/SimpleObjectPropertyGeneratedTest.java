@@ -156,7 +156,7 @@ public final class SimpleObjectPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -359,8 +359,8 @@ public final class SimpleObjectPropertyGeneratedTest {
         var property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -368,10 +368,10 @@ public final class SimpleObjectPropertyGeneratedTest {
         var property = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -379,7 +379,7 @@ public final class SimpleObjectPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ObjectValue_L, oldValue);
             assertEquals(TestValues.ObjectValue_H, newValue);
@@ -395,7 +395,7 @@ public final class SimpleObjectPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
@@ -432,7 +432,7 @@ public final class SimpleObjectPropertyGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> {
                     assertEquals(TestValues.ObjectValue_H, oldValue);
@@ -460,7 +460,7 @@ public final class SimpleObjectPropertyGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -506,7 +506,7 @@ public final class SimpleObjectPropertyGeneratedTest {
         SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ObjectValue_L, oldValue);
             assertEquals(TestValues.ObjectValue_H, newValue);
@@ -523,7 +523,7 @@ public final class SimpleObjectPropertyGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectProperty<Object> wrapper = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
@@ -563,7 +563,7 @@ public final class SimpleObjectPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
-        property.addListener(new ObjectChangeListener<>() {
+        property.addChangeListener(new ObjectChangeListener<>() {
 
             @Override
             public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {

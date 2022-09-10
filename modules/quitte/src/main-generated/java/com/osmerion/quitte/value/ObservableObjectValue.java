@@ -101,11 +101,11 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ObjectChangeListener)
+     * @see #removeChangeListener(ObjectChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(ObjectChangeListener<T> listener);
+    boolean addChangeListener(ObjectChangeListener<T> listener);
 
     /**
      * {@inheritDoc}
@@ -113,8 +113,8 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<T> listener) {
-        return this.addListener(ObjectChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<T> listener) {
+        return this.addChangeListener(ObjectChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -130,10 +130,10 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ObjectChangeListener)
+     * @see #addChangeListener(ObjectChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(ObjectChangeListener<T> listener);
+    boolean removeChangeListener(ObjectChangeListener<T> listener);
 
 }

@@ -81,8 +81,8 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
         var expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -91,10 +91,10 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
         var expression = Simple${type.abbrevName}Expression.of(property, it -> it);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -103,7 +103,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.${type.abbrevName}Value_L, oldValue);
             assertEquals(TestValues.${type.abbrevName}Value_H, newValue);
@@ -120,7 +120,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -159,7 +159,7 @@ public final class Simple${type.abbrevName}ExpressionGeneratedTest {
 
         Simple${type.abbrevName}Property$typeParams property = new Simple${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_L);
         Simple${type.abbrevName}Expression$typeParams expression = Simple${type.abbrevName}Expression.of(property, it -> it);
-        expression.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
+        expression.addChangeListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
 
             @Override
             public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} oldValue, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} newValue) {

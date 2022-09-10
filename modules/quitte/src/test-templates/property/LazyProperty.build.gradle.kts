@@ -138,7 +138,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -273,7 +273,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
         state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
@@ -319,7 +319,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         property.addInvalidationListener(observable -> propertyInvalidatedCallCounter.getAndIncrement());
 
         var state = property.stateProperty();
-        state.addListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
+        state.addChangeListener((observable, oldValue, newValue) -> stateChangedCallCounter.getAndIncrement());
         state.addInvalidationListener(observable -> stateInvalidatedCallCounter.getAndIncrement());
 
         assertEquals(LazyValue.State.UNINITIALIZED, property.getState());
@@ -360,8 +360,8 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
         
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -369,8 +369,8 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -378,10 +378,10 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         ChangeListener<${if (type !== Type.OBJECT) type.box else "Object"}> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -389,7 +389,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.VALID, property.getState());
             assertEquals(TestValues.${type.abbrevName}Value_H, oldValue);
@@ -409,7 +409,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(LazyValue.State.INITIALIZED, property.getState());
             assertEquals(TestValues.${type.abbrevName}Value_N, oldValue);
@@ -429,7 +429,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(0, callCounter.get());
@@ -440,7 +440,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_H);
         assertEquals(0, callCounter.get());
@@ -451,7 +451,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
         assertEquals(LazyValue.State.INITIALIZED, property.getState());
 
         property.set(TestValues.${type.abbrevName}Value_H);
@@ -464,7 +464,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.getAndIncrement();
             assertEquals(1, callCounter.get());
             assertEquals(LazyValue.State.INITIALIZED, property.getState());
@@ -496,7 +496,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(() -> TestValues.${type.abbrevName}Value_H);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());
@@ -507,7 +507,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var callCounter = new AtomicInteger(0);
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        property.addListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
+        property.addChangeListener(new ${type.abbrevName}ChangeListener$typeDiamond() {
 
             @Override
             public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} oldValue, $valAnno${if (type === Type.OBJECT) "Object" else type.raw} newValue) {
@@ -556,7 +556,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -568,7 +568,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(TestValues.${type.abbrevName}Value_H, property.get());
@@ -605,7 +605,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
         var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.getAndIncrement();
             assertEquals(TestValues.${type.abbrevName}Value_H, oldValue);
             assertEquals(TestValues.${type.abbrevName}Value_L, newValue);
@@ -623,7 +623,7 @@ public final class Lazy${type.abbrevName}PropertyGeneratedTest {
 
         var property = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
         var wrapper = new Lazy${type.abbrevName}Property$typeDiamond(TestValues.${type.abbrevName}Value_H);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.${type.abbrevName}Value_L);
         assertEquals(0, callCounter.get());

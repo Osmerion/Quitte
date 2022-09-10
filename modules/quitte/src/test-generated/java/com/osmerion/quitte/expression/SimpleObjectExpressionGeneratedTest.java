@@ -75,8 +75,8 @@ public final class SimpleObjectExpressionGeneratedTest {
         var expression = SimpleObjectExpression.of(property, it -> it);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        expression.addBoxedListener(changeListener);
-        assertTrue(expression.removeBoxedListener(changeListener));
+        expression.addBoxedChangeListener(changeListener);
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -85,10 +85,10 @@ public final class SimpleObjectExpressionGeneratedTest {
         var expression = SimpleObjectExpression.of(property, it -> it);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(expression.addBoxedListener(changeListener));
-        assertFalse(expression.addBoxedListener(changeListener));
-        assertTrue(expression.removeBoxedListener(changeListener));
-        assertTrue(expression.addBoxedListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
+        assertFalse(expression.addBoxedChangeListener(changeListener));
+        assertTrue(expression.removeBoxedChangeListener(changeListener));
+        assertTrue(expression.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -97,7 +97,7 @@ public final class SimpleObjectExpressionGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> {
+        expression.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.ObjectValue_L, oldValue);
             assertEquals(TestValues.ObjectValue_H, newValue);
@@ -114,7 +114,7 @@ public final class SimpleObjectExpressionGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        expression.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        expression.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.ObjectValue_L);
         assertEquals(0, callCounter.get());
@@ -153,7 +153,7 @@ public final class SimpleObjectExpressionGeneratedTest {
 
         SimpleObjectProperty<Object> property = new SimpleObjectProperty<>(TestValues.ObjectValue_L);
         SimpleObjectExpression<Object> expression = SimpleObjectExpression.of(property, it -> it);
-        expression.addListener(new ObjectChangeListener<>() {
+        expression.addChangeListener(new ObjectChangeListener<>() {
 
             @Override
             public void onChanged(ObservableObjectValue<Object> observable, @Nullable Object oldValue, @Nullable Object newValue) {

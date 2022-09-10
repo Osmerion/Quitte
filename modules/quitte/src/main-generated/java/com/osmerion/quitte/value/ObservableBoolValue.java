@@ -98,11 +98,11 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(BoolChangeListener)
+     * @see #removeChangeListener(BoolChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(BoolChangeListener listener);
+    boolean addChangeListener(BoolChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Boolean> listener) {
-        return this.addListener(BoolChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Boolean> listener) {
+        return this.addChangeListener(BoolChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(BoolChangeListener)
+     * @see #addChangeListener(BoolChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(BoolChangeListener listener);
+    boolean removeChangeListener(BoolChangeListener listener);
 
 }

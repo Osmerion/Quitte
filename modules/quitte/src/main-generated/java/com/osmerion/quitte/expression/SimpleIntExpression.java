@@ -192,7 +192,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
                     var nestedProperty = selector.apply(Objects.requireNonNull(newValue));
                     nestedProperty.addInvalidationListener(this.nestedPropertyListener);
                 };
-                observable.addListener(parentChangeListener);
+                observable.addChangeListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 

@@ -74,23 +74,23 @@ public final class ReadOnlyIntProperty implements ReadableIntProperty {
     }
 
     @Override
-    public boolean addListener(IntChangeListener listener) {
-        return this.property.addListener(listener);
+    public boolean addChangeListener(IntChangeListener listener) {
+        return this.property.addChangeListener(listener);
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Integer> listener) {
-        return this.property.addBoxedListener(listener);
+    public boolean addBoxedChangeListener(ChangeListener<Integer> listener) {
+        return this.property.addBoxedChangeListener(listener);
     }
 
     @Override
-    public boolean removeListener(IntChangeListener listener) {
-        return this.property.removeListener(listener);
+    public boolean removeChangeListener(IntChangeListener listener) {
+        return this.property.removeChangeListener(listener);
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Integer> listener) {
-        return this.property.removeBoxedListener(listener);
+    public boolean removeBoxedChangeListener(ChangeListener<Integer> listener) {
+        return this.property.removeBoxedChangeListener(listener);
     }
 
     @Override

@@ -98,11 +98,11 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ByteChangeListener)
+     * @see #removeChangeListener(ByteChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(ByteChangeListener listener);
+    boolean addChangeListener(ByteChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Byte> listener) {
-        return this.addListener(ByteChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Byte> listener) {
+        return this.addChangeListener(ByteChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableByteValue extends ObservableValue<Byte> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ByteChangeListener)
+     * @see #addChangeListener(ByteChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(ByteChangeListener listener);
+    boolean removeChangeListener(ByteChangeListener listener);
 
 }

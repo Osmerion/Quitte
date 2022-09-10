@@ -233,7 +233,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(FloatChangeListener listener) {
+    public final boolean addChangeListener(FloatChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Float> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Float> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingFloatChangeListener && ((WrappingFloatChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(FloatChangeListener.wrap(listener));
     }
@@ -254,7 +254,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(FloatChangeListener listener) {
+    public final boolean removeChangeListener(FloatChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -264,7 +264,7 @@ public abstract class AbstractFloatProperty implements WritableFloatProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Float> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Float> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingFloatChangeListener && ((WrappingFloatChangeListener) it).isWrapping(listener));
     }
 

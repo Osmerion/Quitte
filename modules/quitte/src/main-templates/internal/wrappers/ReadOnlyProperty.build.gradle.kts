@@ -84,23 +84,23 @@ public final class ReadOnly${type.abbrevName}Property$typeParams implements Read
     }
 
     @Override
-    public boolean addListener(${type.abbrevName}ChangeListener$typeParams listener) {
-        return this.property.addListener(listener);
+    public boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+        return this.property.addChangeListener(listener);
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
-        return this.property.addBoxedListener(listener);
+    public boolean addBoxedChangeListener(ChangeListener<${type.box}> listener) {
+        return this.property.addBoxedChangeListener(listener);
     }
 
     @Override
-    public boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener) {
-        return this.property.removeListener(listener);
+    public boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+        return this.property.removeChangeListener(listener);
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
-        return this.property.removeBoxedListener(listener);
+    public boolean removeBoxedChangeListener(ChangeListener<${type.box}> listener) {
+        return this.property.removeBoxedChangeListener(listener);
     }
 
     @Override

@@ -54,22 +54,22 @@ public final class ReadOnlyShortWrapper implements ObservableShortValue {
     }
 
     @Override
-    public boolean addListener(ShortChangeListener listener) {
+    public boolean addChangeListener(ShortChangeListener listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<Short> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<Short> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(ShortChangeListener listener) {
+    public boolean removeChangeListener(ShortChangeListener listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<Short> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<Short> listener) {
         return false;
     }
 

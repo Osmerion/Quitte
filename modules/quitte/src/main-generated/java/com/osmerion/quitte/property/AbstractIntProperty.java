@@ -233,7 +233,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(IntChangeListener listener) {
+    public final boolean addChangeListener(IntChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Integer> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Integer> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingIntChangeListener && ((WrappingIntChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(IntChangeListener.wrap(listener));
     }
@@ -254,7 +254,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(IntChangeListener listener) {
+    public final boolean removeChangeListener(IntChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -264,7 +264,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Integer> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Integer> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingIntChangeListener && ((WrappingIntChangeListener) it).isWrapping(listener));
     }
 

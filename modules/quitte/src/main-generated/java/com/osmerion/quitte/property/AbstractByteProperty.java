@@ -233,7 +233,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addListener(ByteChangeListener listener) {
+    public final boolean addChangeListener(ByteChangeListener listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean addBoxedListener(ChangeListener<Byte> listener) {
+    public final boolean addBoxedChangeListener(ChangeListener<Byte> listener) {
         if (this.changeListeners.stream().anyMatch(it -> it instanceof WrappingByteChangeListener && ((WrappingByteChangeListener) it).isWrapping(listener))) return false;
         return this.changeListeners.add(ByteChangeListener.wrap(listener));
     }
@@ -254,7 +254,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeListener(ByteChangeListener listener) {
+    public final boolean removeChangeListener(ByteChangeListener listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -264,7 +264,7 @@ public abstract class AbstractByteProperty implements WritableByteProperty {
      * @since   0.1.0
      */
     @Override
-    public final boolean removeBoxedListener(ChangeListener<Byte> listener) {
+    public final boolean removeBoxedChangeListener(ChangeListener<Byte> listener) {
         return this.changeListeners.removeIf(it -> it instanceof WrappingByteChangeListener && ((WrappingByteChangeListener) it).isWrapping(listener));
     }
 

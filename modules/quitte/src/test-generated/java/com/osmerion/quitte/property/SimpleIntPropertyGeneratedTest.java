@@ -154,7 +154,7 @@ public final class SimpleIntPropertyGeneratedTest {
     }
 
     /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\
-     * ObservableValue#addBoxedListener                                                                              *
+     * ObservableValue#addBoxedChangeListener                                                                              *
     \*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
     // TODO come up with proper tests
@@ -357,8 +357,8 @@ public final class SimpleIntPropertyGeneratedTest {
         var property = new SimpleIntProperty(TestValues.IntValue_H);
         ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        property.addBoxedListener(changeListener);
-        assertTrue(property.removeBoxedListener(changeListener));
+        property.addBoxedChangeListener(changeListener);
+        assertTrue(property.removeBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -366,10 +366,10 @@ public final class SimpleIntPropertyGeneratedTest {
         var property = new SimpleIntProperty(TestValues.IntValue_H);
         ChangeListener<Integer> changeListener = (observable, oldValue, newValue) -> System.out.println("blub");
 
-        assertTrue(property.addBoxedListener(changeListener));
-        assertFalse(property.addBoxedListener(changeListener));
-        assertTrue(property.removeBoxedListener(changeListener));
-        assertTrue(property.addBoxedListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
+        assertFalse(property.addBoxedChangeListener(changeListener));
+        assertTrue(property.removeBoxedChangeListener(changeListener));
+        assertTrue(property.addBoxedChangeListener(changeListener));
     }
 
     @Test
@@ -377,7 +377,7 @@ public final class SimpleIntPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        property.addListener((observable, oldValue, newValue) -> {
+        property.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.IntValue_L, oldValue);
             assertEquals(TestValues.IntValue_H, newValue);
@@ -393,7 +393,7 @@ public final class SimpleIntPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        property.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        property.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.IntValue_L);
         assertEquals(0, callCounter.get());
@@ -430,7 +430,7 @@ public final class SimpleIntPropertyGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_H);
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             switch (callCounter.getAndIncrement()) {
                 case 0 -> {
                     assertEquals(TestValues.IntValue_H, oldValue);
@@ -458,7 +458,7 @@ public final class SimpleIntPropertyGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         wrapper.bindTo(property);
         assertEquals(0, callCounter.get());
@@ -504,7 +504,7 @@ public final class SimpleIntPropertyGeneratedTest {
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_L);
         wrapper.bindTo(property);
 
-        wrapper.addListener((observable, oldValue, newValue) -> {
+        wrapper.addChangeListener((observable, oldValue, newValue) -> {
             callCounter.incrementAndGet();
             assertEquals(TestValues.IntValue_L, oldValue);
             assertEquals(TestValues.IntValue_H, newValue);
@@ -521,7 +521,7 @@ public final class SimpleIntPropertyGeneratedTest {
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
         SimpleIntProperty wrapper = new SimpleIntProperty(TestValues.IntValue_L);
-        wrapper.addListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
+        wrapper.addChangeListener((observable, oldValue, newValue) -> callCounter.getAndIncrement());
 
         property.set(TestValues.IntValue_L);
         assertEquals(0, callCounter.get());
@@ -561,7 +561,7 @@ public final class SimpleIntPropertyGeneratedTest {
         AtomicInteger callCounter = new AtomicInteger(0);
 
         SimpleIntProperty property = new SimpleIntProperty(TestValues.IntValue_L);
-        property.addListener(new IntChangeListener() {
+        property.addChangeListener(new IntChangeListener() {
 
             @Override
             public void onChanged(ObservableIntValue observable, int oldValue, int newValue) {

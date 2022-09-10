@@ -98,11 +98,11 @@ public interface ObservableShortValue extends ObservableValue<Short> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #removeListener(ShortChangeListener)
+     * @see #removeChangeListener(ShortChangeListener)
      *
      * @since   0.1.0
      */
-    boolean addListener(ShortChangeListener listener);
+    boolean addChangeListener(ShortChangeListener listener);
 
     /**
      * {@inheritDoc}
@@ -110,8 +110,8 @@ public interface ObservableShortValue extends ObservableValue<Short> {
      * @since   0.1.0
      */
     @Override
-    default boolean addBoxedListener(ChangeListener<Short> listener) {
-        return this.addListener(ShortChangeListener.wrap(requireNonNull(listener)));
+    default boolean addBoxedChangeListener(ChangeListener<Short> listener) {
+        return this.addChangeListener(ShortChangeListener.wrap(requireNonNull(listener)));
     }
 
     /**
@@ -127,10 +127,10 @@ public interface ObservableShortValue extends ObservableValue<Short> {
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @see #addListener(ShortChangeListener)
+     * @see #addChangeListener(ShortChangeListener)
      *
      * @since   0.1.0
      */
-    boolean removeListener(ShortChangeListener listener);
+    boolean removeChangeListener(ShortChangeListener listener);
 
 }

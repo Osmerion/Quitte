@@ -64,22 +64,22 @@ public final class ReadOnly${type.abbrevName}Wrapper$typeParams implements Obser
     }
 
     @Override
-    public boolean addListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
         return false;
     }
 
 	@Override
-    public boolean addBoxedListener(ChangeListener<${type.box}> listener) {
+    public boolean addBoxedChangeListener(ChangeListener<${type.box}> listener) {
         return false;
     }
 
     @Override
-    public boolean removeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
         return false;
     }
 
     @Override
-    public boolean removeBoxedListener(ChangeListener<${type.box}> listener) {
+    public boolean removeBoxedChangeListener(ChangeListener<${type.box}> listener) {
         return false;
     }
 
