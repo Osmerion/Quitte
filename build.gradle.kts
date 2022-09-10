@@ -33,7 +33,7 @@ import com.osmerion.quitte.build.BuildType
 
 allprojects {
     group = "com.osmerion.quitte"
-    val nextVersion = "0.3.0"
+    val nextVersion = "0.4.0"
     version = when (deployment.type) {
         BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
         else -> nextVersion
