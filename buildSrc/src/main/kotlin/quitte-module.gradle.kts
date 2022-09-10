@@ -38,7 +38,7 @@ plugins {
     `java-library`
     signing
     `maven-publish`
-    id("de.jjohannes.extra-java-module-info")
+    id("org.gradlex.extra-java-module-info")
 }
 
 val artifactName = project.name
