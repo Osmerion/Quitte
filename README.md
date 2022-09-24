@@ -79,17 +79,10 @@ localization.
 > localization and pluralization support on top of Quitte.
 
 
-### Quitte extensions for kotlinx.coroutines
+### Quitte extensions for Jetpack Compose
 
-The `quitte-kotlinx-coroutines` module provides extensions for better
-interoperability with [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines).
-
-Simply convert observables to flows using any of the built-in conversion
-functions. Flow conversions are available for `ObservableValue`,
-`ObservableList`, `ObservableMap`, and `ObservableSet`.
-
-> **Tip:** `quitte-kotlinx-coroutines` enables convenient usage of Quitte
-> observables with Jetpack Compose.
+The `quitte-compose` module provides extensions for better interoperability with
+[Jetpack Compose](https://developer.android.com/jetpack/compose).
 
 ```kotlin
 interface MyModel {
@@ -98,12 +91,21 @@ interface MyModel {
 
 @Composable
 fun MyComposable(model: MyModel) {
-    val textFlow by remember { model.text.asFlow() }
-    val text by textFlow.collectAsState()
+    val text by textFlow.observeAsState()
     
     Text(text)
 }
 ```
+
+
+### Quitte extensions for kotlinx.coroutines
+
+The `quitte-kotlinx-coroutines` module provides extensions for better
+interoperability with [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines).
+
+Simply convert observables to flows using any of the built-in conversion
+functions. Flow conversions are available for `ObservableValue`,
+`ObservableList`, `ObservableMap`, and `ObservableSet`.
 
 
 ## Building from source

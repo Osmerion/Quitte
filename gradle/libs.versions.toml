@@ -1,5 +1,6 @@
 [versions]
 extra-java-module-info = "1.0"
+jetbrains-compose = "1.2.0-beta01"
 jsr305 = "3.0.2"
 junit = "5.9.1"
 kotlin = "1.7.10"
@@ -27,5 +28,8 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 
 
 [plugins]
+# org.jetbrains.compose - Compose
+compose = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }
+
 # org.jetbrains.kotlin - Kotlin
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
