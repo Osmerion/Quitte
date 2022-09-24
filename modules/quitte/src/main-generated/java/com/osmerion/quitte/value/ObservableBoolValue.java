@@ -86,7 +86,7 @@ public interface ObservableBoolValue extends ObservableValue<Boolean> {
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed
-     * explicitly by calling {@link #removeListener(BoolChangeListener)} or implicitly when this
+     * explicitly by calling {@link #removeChangeListener(BoolChangeListener)} or implicitly when this
      * observable discovers that the listener has become {@link BoolChangeListener#isInvalid() invalid}.
      * Generally, it is recommended to use an instance of {@link com.osmerion.quitte.value.change.WeakBoolChangeListener WeakChangeListener}
      * when possible to avoid leaking instances.</p>

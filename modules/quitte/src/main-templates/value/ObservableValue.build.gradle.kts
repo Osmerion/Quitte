@@ -96,7 +96,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      * notified} whenever the value of the observable is changed.</p>
      *
      * <p>This observable stores a strong reference to the given listener until the listener is either removed
-     * explicitly by calling {@link #removeListener(${type.abbrevName}ChangeListener)} or implicitly when this
+     * explicitly by calling {@link #removeChangeListener(${type.abbrevName}ChangeListener)} or implicitly when this
      * observable discovers that the listener has become {@link ${type.abbrevName}ChangeListener#isInvalid() invalid}.
      * Generally, it is recommended to use an instance of {@link com.osmerion.quitte.value.change.Weak${type.abbrevName}ChangeListener WeakChangeListener}
      * when possible to avoid leaking instances.</p>
