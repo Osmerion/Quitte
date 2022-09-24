@@ -97,6 +97,9 @@ fun MyComposable(model: MyModel) {
 }
 ```
 
+> **Note**: The `quitte-compose` module targets Java 17 bytecode and is
+> currently only supported for [Compose for Desktop](https://www.jetbrains.com/lp/compose-mpp/).
+
 
 ### Quitte extensions for kotlinx.coroutines
 
