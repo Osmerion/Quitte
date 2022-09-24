@@ -6,7 +6,7 @@ on:
 
 
 env:
-  JDK_VERSION: '19'
+  JDK_VERSION: '18'
   WORKSPACE_ARCHIVE: workspace.tar
   WORKSPACE_ARTIFACT: build-results
 
@@ -45,7 +45,7 @@ jobs:
     name: Check
     strategy:
       matrix:
-        jdk: [ 17, 19 ]
+        jdk: [ 17, 18 ]
     needs: build
     runs-on: ubuntu-latest
     steps:
