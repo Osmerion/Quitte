@@ -30,6 +30,7 @@
  */
 plugins {
     `quitte-module`
+    alias(libs.plugins.gradle.toolchain.switches)
 }
 
 publishing {

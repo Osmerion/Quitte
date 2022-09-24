@@ -38,6 +38,7 @@ plugins {
     signing
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.gradle.toolchain.switches)
 }
 
 java {

@@ -34,6 +34,7 @@ import java.io.*
 
 plugins {
     `quitte-module`
+    alias(libs.plugins.gradle.toolchain.switches)
 }
 
 java {

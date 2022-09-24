@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
     `quitte-module`
+    alias(libs.plugins.gradle.toolchain.switches)
     alias(libs.plugins.kotlin.jvm)
 }
 
