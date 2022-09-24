@@ -50,6 +50,9 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 tasks {
@@ -76,13 +79,7 @@ tasks {
         }
     }
 
-    create<Jar>("sourcesJar") {
-        archiveBaseName.set(artifactName)
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
-    }
-
-    val javadoc = "javadoc"(Javadoc::class) {
+    "javadoc"(Javadoc::class) {
         with (options as StandardJavadocDocletOptions) {
             tags = listOf(
                 "apiNote:a:API Note:",
@@ -92,14 +89,6 @@ tasks {
 
             addStringOption("-release", "17")
         }
-    }
-
-    create<Jar>("javadocJar") {
-        dependsOn(javadoc)
-
-        archiveBaseName.set(artifactName)
-        archiveClassifier.set("javadoc")
-        from(javadoc.get().outputs)
     }
 
     test {
@@ -125,8 +114,6 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
 
             artifactId = artifactName
             decorateMavenPom(project.name)
