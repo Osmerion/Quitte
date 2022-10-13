@@ -45,7 +45,7 @@ jobs:
     name: Check
     strategy:
       matrix:
-        jdk: [ 17, 18 ]
+        jdk: [ 17, 19 ]
     needs: build
     runs-on: ubuntu-latest
     steps:
