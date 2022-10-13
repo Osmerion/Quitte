@@ -52,7 +52,7 @@ public abstract class AbstractExpression implements Expression {
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
-    private transient IdentityHashMap<Observable, WeakInvalidationListener> dependencies;
+    private transient IdentityHashMap<Observable, InvalidationListener> dependencies;
 
     // package-private constructor for an effectively sealed class
     AbstractExpression() {}
@@ -111,11 +111,11 @@ public abstract class AbstractExpression implements Expression {
     protected final synchronized void addDependency(Observable observable) {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
-        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> this.doInvalidate());
+        InvalidationListener listener = ignored -> this.doInvalidate();
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
-            observable.addInvalidationListener(listener);
+            observable.addInvalidationListener(new WeakInvalidationListener(listener));
             return listener;
         });
     }
@@ -134,13 +134,14 @@ public abstract class AbstractExpression implements Expression {
     protected final synchronized void addDependency(Observable observable, BoolSupplier verifier) {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
-        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
+        InvalidationListener listener = ignored -> {
             if (verifier.get()) this.doInvalidate();
-        });
+        };
+
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
-            observable.addInvalidationListener(listener);
+            observable.addInvalidationListener(new WeakInvalidationListener(listener));
             return listener;
         });
     }
@@ -163,14 +164,15 @@ public abstract class AbstractExpression implements Expression {
     protected final synchronized void addDependency(Observable observable, Runnable action) {
         if (this.dependencies == null) this.dependencies = new IdentityHashMap<>();
 
-        WeakInvalidationListener listener = new WeakInvalidationListener(ignored -> {
+        InvalidationListener listener = ignored -> {
             action.run();
             this.doInvalidate();
-        });
+        };
+
         this.dependencies.compute(observable, (key, oldValue) -> {
             if (oldValue != null) throw new IllegalArgumentException("Expression already depends on observable: " + observable);
 
-            observable.addInvalidationListener(listener);
+            observable.addInvalidationListener(new WeakInvalidationListener(listener));
             return listener;
         });
     }
@@ -187,7 +189,7 @@ public abstract class AbstractExpression implements Expression {
     protected final synchronized void removeDependency(Observable observable) {
         if (this.dependencies == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
 
-        WeakInvalidationListener listener = this.dependencies.remove(observable);
+        InvalidationListener listener = this.dependencies.remove(observable);
         if (listener == null) throw new IllegalArgumentException("Expression does not depend on observable: " + observable);
 
         observable.removeInvalidationListener(listener);
