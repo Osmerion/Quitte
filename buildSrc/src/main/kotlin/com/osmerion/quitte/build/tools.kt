@@ -71,7 +71,7 @@ fun MavenPublication.decorateMavenPom(projectName: String, packaging: String = "
 
         licenses {
             license {
-                name.set("BSD3")
+                name.set("BSD-3-Clause")
                 url.set("https://github.com/Osmerion/Quitte/blob/master/LICENSE")
                 distribution.set("repo")
             }
