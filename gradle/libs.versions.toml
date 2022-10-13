@@ -1,7 +1,7 @@
 [versions]
 extra-java-module-info = "1.0"
 gradle-toolchain-switches = "0.1.0"
-jetbrains-compose = "1.2.0-beta01"
+jetbrains-compose = "1.2.0"
 jsr305 = "3.0.2"
 junit = "5.9.1"
 kotlin = "1.7.20"
