@@ -1,20 +1,11 @@
-### 0.4.0
+### 0.5.0
 
-_Released 2022 Sep 24_
+_Released 2022 Nov 10_
 
 #### Improvements
 
-- New `quitte-compose` module with Jetpack Compose extensions.
-- Renamed listener methods for clarity and simpler use.
-  - Renamed `Observable#addListener(InvalidationListener)` to `addInvalidationListener`.
-  - Renamed `Observable#removeListener(InvalidationListener)` to `removeInvalidationListener`.
-  - Renamed `ObservableValue#addBoxedListener` to `addBoxedChangeListener`.
-  - Renamed `ObservableValue#removeBoxedListener` to `removeBoxedChangeListener`.
-  - Renamed `Observable${Type}Value#addListener(${Type}ChangeListener)` to `addChangeListener`.
-  - Renamed `Observable${Type}Value#removeListener(${Type}ChangeListener)` to `removeChangeListener`.
-  - Renamed `ObservableCollection#addListener(ChangeListener)` to `addChangeListener`.
-  - Renamed `ObservableCollection#removeListener(ChangeListener)` to `removeChangeListener`.
+- Changed the license information in the POM to use a valid [SPDX identifier](https://spdx.org/licenses/).
 
-#### Breaking Changes
+#### Fixes
 
-- Renamed listener related methods.
+- Fixed a bug that caused expression dependencies to be incorrectly tracked.
