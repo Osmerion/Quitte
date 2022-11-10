@@ -1,5 +1,5 @@
 [versions]
-extra-java-module-info = "1.0"
+extra-java-module-info = "1.1"
 gradle-toolchain-switches = "0.2.0"
 jetbrains-compose = "1.2.0"
 jsr305 = "3.0.2"
