@@ -64,7 +64,7 @@ open class Generate : DefaultTask() {
             else
                 "$indent/*\n${StringBuilder().apply {
                     this@format.lines().forEach {
-                        appendln("$indent *${if (it.isNotEmpty()) " $it" else ""}")
+                        appendLine("$indent *${if (it.isNotEmpty()) " $it" else ""}")
                     }
                 }}$indent */"
 
