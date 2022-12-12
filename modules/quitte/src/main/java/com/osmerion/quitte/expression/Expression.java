@@ -33,8 +33,8 @@ package com.osmerion.quitte.expression;
 import com.osmerion.quitte.Observable;
 
 /**
- * A {@code ValueExpression} is an {@link Observable observable} which is derived from some state. Typically,
- * expressions yield the result of a function applied to one or more other observables.
+ * An {@code Expression} is an {@link Observable observable} which is derived from some state. Typically, but not
+ * necessarily, expressions yield the result of a function applied to one or more other observables.
  *
  * @since   0.1.0
  *
