@@ -198,6 +198,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
         boolean aHasNext, bHasNext;
         while ((aHasNext = aItr.hasNext()) & (bHasNext = bItr.hasNext())) {
             E element = bItr.next();
+            copyOfElements.add(element);
 
             if (!Objects.equals(aItr.next(), element)) {
                 equal = false;
