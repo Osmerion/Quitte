@@ -143,6 +143,11 @@ public final class ObservableListTest {
         List<String> elements = List.of("A", "b");
         ObservableList<String> observableList = ObservableList.of(new ArrayList<>(elements));
         assertFalse(observableList.setAll(elements));
+
+        List<String> newElements = List.of("d", "e", "f");
+
+        observableList.setAll(newElements);
+        assertEquals(newElements, observableList);
     }
 
     @Test

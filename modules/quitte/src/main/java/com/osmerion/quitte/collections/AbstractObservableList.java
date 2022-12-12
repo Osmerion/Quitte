@@ -204,7 +204,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                 equal = false;
                 break;
             }
-
         }
 
         if (equal && (aHasNext == bHasNext)) return null;
