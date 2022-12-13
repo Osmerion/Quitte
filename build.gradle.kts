@@ -31,6 +31,10 @@
 import com.osmerion.quitte.build.*
 import com.osmerion.quitte.build.BuildType
 
+plugins {
+    alias(libs.plugins.kotlin.jvm) apply false
+}
+
 allprojects {
     group = "com.osmerion.quitte"
     val nextVersion = "0.6.0"
