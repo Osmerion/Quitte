@@ -355,7 +355,6 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
         @Override
         public <T> T[] toArray(T[] a) {
-            //noinspection SuspiciousToArrayCall
             return this.subList.toArray(a);
         }
 
@@ -712,7 +711,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
     private static abstract class WorkingLocalChange<E> {
 
-        int from, to;
+        final int from, to;
 
         WorkingLocalChange(int from, int to) {
             this.from = from;

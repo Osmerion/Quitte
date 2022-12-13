@@ -407,7 +407,6 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
             ArrayList<E> elements = new ArrayList<>();
             elements.add(element);
 
-            //noinspection Java9CollectionFactory
             this.localChanges.add(new ObservableDeque.LocalChange.Insertion<>(site, Collections.unmodifiableList(elements)));
         }
 
@@ -436,7 +435,6 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
             ArrayList<E> elements = new ArrayList<>();
             elements.add(element);
 
-            //noinspection Java9CollectionFactory
             this.localChanges.add(new ObservableDeque.LocalChange.Removal<>(site, Collections.unmodifiableList(elements)));
         }
 

@@ -317,7 +317,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             return array;
         }
 
-        @SuppressWarnings({ "unchecked", "SuspiciousToArrayCall" })
+        @SuppressWarnings("unchecked")
         @Override
         public final <T> T[] toArray(T[] a) {
             T[] array = this.impl.toArray(a);

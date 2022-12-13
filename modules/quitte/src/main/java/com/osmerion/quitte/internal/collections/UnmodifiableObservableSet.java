@@ -93,7 +93,6 @@ public class UnmodifiableObservableSet<E> implements ObservableSet<E> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        //noinspection SuspiciousToArrayCall
         return this.impl.toArray(a);
     }
 

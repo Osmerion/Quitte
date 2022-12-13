@@ -195,7 +195,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
      */
     protected final class WrappingObservableEntrySet extends AbstractSet<Entry<K, V>> {
 
-        protected final Set<Entry<K, V>> impl;
+        private final Set<Entry<K, V>> impl;
 
         public WrappingObservableEntrySet(Set<Entry<K, V>> impl) {
             super();
@@ -203,7 +203,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
         }
 
         @Override
-        public final Iterator<Entry<K, V>> iterator() {
+        public Iterator<Entry<K, V>> iterator() {
             return new Iterator<>() {
 
                 private final Iterator<Entry<K, V>> impl = WrappingObservableEntrySet.this.impl.iterator();
@@ -261,27 +261,27 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
 
         @SuppressWarnings("unchecked")
         @Override
-        public final Object[] toArray() {
+        public Object[] toArray() {
             Object[] array = this.impl.toArray();
             for (int i = 0; i < array.length; i++) array[i] = new WrappingObservableEntry((Entry<K, V>) array[i]);
 
             return array;
         }
 
-        @SuppressWarnings({ "unchecked", "SuspiciousToArrayCall" })
+        @SuppressWarnings("unchecked")
         @Override
-        public final <T> T[] toArray(T[] a) {
+        public <T> T[] toArray(T[] a) {
             T[] array = this.impl.toArray(a);
             for (int i = 0; i < array.length; i++) array[i] = (T) new WrappingObservableEntry((Entry<K, V>) array[i]);
 
             return array;
         }
 
-        @Override public final boolean contains(Object o) { return this.impl.contains(o); }
-        @Override public final boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }
-        @Override public final boolean isEmpty() { return this.impl.isEmpty(); }
-        @Override public final boolean retainAll(Collection<?> c) { return this.impl.retainAll(c); }
-        @Override public final int size() {
+        @Override public boolean contains(Object o) { return this.impl.contains(o); }
+        @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }
+        @Override public boolean isEmpty() { return this.impl.isEmpty(); }
+        @Override public boolean retainAll(Collection<?> c) { return this.impl.retainAll(c); }
+        @Override public int size() {
             return this.impl.size();
         }
 

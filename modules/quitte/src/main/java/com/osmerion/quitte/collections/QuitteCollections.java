@@ -65,6 +65,7 @@ public final class QuitteCollections {
         return new UnmodifiableDeque<>(deque);
     }
 
+    @SuppressWarnings("ClassCanBeRecord")
     private static class UnmodifiableDeque<E> implements Deque<E> {
 
         private final Deque<E> impl;
@@ -85,7 +86,6 @@ public final class QuitteCollections {
         @Override public int size() { return this.impl.size(); }
         @Override public Object[] toArray() { return this.impl.toArray(); }
 
-        @SuppressWarnings("SuspiciousToArrayCall")
         @Override public <T> T[] toArray(T[] a) { return this.impl.toArray(a); }
 
         @Override

@@ -75,7 +75,6 @@ public class UnmodifiableObservableList<E> extends AbstractList<E> implements Ob
 
     @Override
     public <T> T[] toArray(T[] a) {
-        //noinspection SuspiciousToArrayCall
         return this.impl.toArray(a);
     }
 
