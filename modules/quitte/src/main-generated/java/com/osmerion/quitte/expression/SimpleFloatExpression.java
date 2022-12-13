@@ -205,7 +205,7 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
         };
     }
 
-    protected float value;
+    private float value;
 
     /**
      * {@inheritDoc}
@@ -234,11 +234,11 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
 
         private Transform(Function<SimpleFloatExpression, FloatBinding> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
-        protected final float recomputeValue() {
+        protected float recomputeValue() {
             return this.binding.get();
         }
 

@@ -265,7 +265,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
     }
 
     @Nullable
-    protected T value;
+    private T value;
 
     /**
      * {@inheritDoc}
@@ -295,12 +295,12 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
 
         private Transform(Function<SimpleObjectExpression<T>, ObjectBinding<T>> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
         @Nullable
-        protected final T recomputeValue() {
+        protected T recomputeValue() {
             return this.binding.get();
         }
 

@@ -205,7 +205,7 @@ public abstract class SimpleLongExpression extends AbstractLongExpression {
         };
     }
 
-    protected long value;
+    private long value;
 
     /**
      * {@inheritDoc}
@@ -234,11 +234,11 @@ public abstract class SimpleLongExpression extends AbstractLongExpression {
 
         private Transform(Function<SimpleLongExpression, LongBinding> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
-        protected final long recomputeValue() {
+        protected long recomputeValue() {
             return this.binding.get();
         }
 

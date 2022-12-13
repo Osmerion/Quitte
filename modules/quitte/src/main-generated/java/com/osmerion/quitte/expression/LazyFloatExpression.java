@@ -221,7 +221,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
     @Nullable
     private FloatSupplier provider = this::recomputeValue;
 
-    protected float value;
+    private float value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
         }
 
         @Override
-        protected final float recomputeValue() {
+        protected float recomputeValue() {
             return this.binding.get();
         }
 

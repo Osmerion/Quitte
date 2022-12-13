@@ -141,7 +141,7 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
     @Nullable
     private ${type.abbrevName}Supplier$typeParams provider = this::recomputeValue;
 ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected ${type.raw} value;
+    private ${type.raw} value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -225,7 +225,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         }
 
         @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
-        protected final ${type.raw} recomputeValue() {
+        protected ${type.raw} recomputeValue() {
             return this.binding.get();
         }
 

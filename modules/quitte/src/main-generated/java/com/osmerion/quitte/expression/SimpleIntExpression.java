@@ -205,7 +205,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
         };
     }
 
-    protected int value;
+    private int value;
 
     /**
      * {@inheritDoc}
@@ -234,11 +234,11 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
 
         private Transform(Function<SimpleIntExpression, IntBinding> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
-        protected final int recomputeValue() {
+        protected int recomputeValue() {
             return this.binding.get();
         }
 

@@ -205,7 +205,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
         };
     }
 
-    protected boolean value;
+    private boolean value;
 
     /**
      * {@inheritDoc}
@@ -234,11 +234,11 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
 
         private Transform(Function<SimpleBoolExpression, BoolBinding> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
-        protected final boolean recomputeValue() {
+        protected boolean recomputeValue() {
             return this.binding.get();
         }
 

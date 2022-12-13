@@ -171,7 +171,7 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
     }
 
     @Nullable""" else ""}
-    protected ${type.raw} value;
+    private ${type.raw} value;
 
     /**
      * {@inheritDoc}
@@ -200,11 +200,11 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
 
         private Transform(Function<Simple${type.abbrevName}Expression$typeParams, ${type.abbrevName}Binding$typeParams> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
-        protected final ${type.raw} recomputeValue() {
+        protected ${type.raw} recomputeValue() {
             return this.binding.get();
         }
 

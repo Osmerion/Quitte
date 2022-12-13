@@ -221,7 +221,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
     @Nullable
     private IntSupplier provider = this::recomputeValue;
 
-    protected int value;
+    private int value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
         }
 
         @Override
-        protected final int recomputeValue() {
+        protected int recomputeValue() {
             return this.binding.get();
         }
 

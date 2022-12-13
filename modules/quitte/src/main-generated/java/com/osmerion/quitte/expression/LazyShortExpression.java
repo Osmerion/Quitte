@@ -221,7 +221,7 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
     @Nullable
     private ShortSupplier provider = this::recomputeValue;
 
-    protected short value;
+    private short value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyShortExpression extends AbstractShortExpression implem
         }
 
         @Override
-        protected final short recomputeValue() {
+        protected short recomputeValue() {
             return this.binding.get();
         }
 

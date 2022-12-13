@@ -205,7 +205,7 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
         };
     }
 
-    protected double value;
+    private double value;
 
     /**
      * {@inheritDoc}
@@ -234,11 +234,11 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
 
         private Transform(Function<SimpleDoubleExpression, DoubleBinding> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
-        protected final double recomputeValue() {
+        protected double recomputeValue() {
             return this.binding.get();
         }
 

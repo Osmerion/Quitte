@@ -221,7 +221,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
     @Nullable
     private DoubleSupplier provider = this::recomputeValue;
 
-    protected double value;
+    private double value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
         }
 
         @Override
-        protected final double recomputeValue() {
+        protected double recomputeValue() {
             return this.binding.get();
         }
 

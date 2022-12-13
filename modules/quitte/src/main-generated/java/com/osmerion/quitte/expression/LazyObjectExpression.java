@@ -232,7 +232,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     private ObjectSupplier<T> provider = this::recomputeValue;
 
     @Nullable
-    protected T value;
+    private T value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -319,7 +319,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
 
         @Override
         @Nullable
-        protected final T recomputeValue() {
+        protected T recomputeValue() {
             return this.binding.get();
         }
 

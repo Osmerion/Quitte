@@ -205,7 +205,7 @@ public abstract class SimpleShortExpression extends AbstractShortExpression {
         };
     }
 
-    protected short value;
+    private short value;
 
     /**
      * {@inheritDoc}
@@ -234,11 +234,11 @@ public abstract class SimpleShortExpression extends AbstractShortExpression {
 
         private Transform(Function<SimpleShortExpression, ShortBinding> factory) {
             this.binding = factory.apply(this);
-            this.value = this.recomputeValue();
+            this.invalidate();
         }
 
         @Override
-        protected final short recomputeValue() {
+        protected short recomputeValue() {
             return this.binding.get();
         }
 

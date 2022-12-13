@@ -221,7 +221,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
     @Nullable
     private ByteSupplier provider = this::recomputeValue;
 
-    protected byte value;
+    private byte value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
         }
 
         @Override
-        protected final byte recomputeValue() {
+        protected byte recomputeValue() {
             return this.binding.get();
         }
 

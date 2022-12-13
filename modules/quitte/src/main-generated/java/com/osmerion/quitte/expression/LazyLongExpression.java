@@ -221,7 +221,7 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
     @Nullable
     private LongSupplier provider = this::recomputeValue;
 
-    protected long value;
+    private long value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
         }
 
         @Override
-        protected final long recomputeValue() {
+        protected long recomputeValue() {
             return this.binding.get();
         }
 

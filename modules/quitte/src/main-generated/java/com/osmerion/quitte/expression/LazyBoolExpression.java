@@ -221,7 +221,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
     @Nullable
     private BoolSupplier provider = this::recomputeValue;
 
-    protected boolean value;
+    private boolean value;
 
     /**
      * Returns a read-only view of this expression's state.
@@ -305,7 +305,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
         }
 
         @Override
-        protected final boolean recomputeValue() {
+        protected boolean recomputeValue() {
             return this.binding.get();
         }
 
