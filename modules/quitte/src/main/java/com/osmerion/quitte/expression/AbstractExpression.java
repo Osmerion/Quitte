@@ -41,7 +41,7 @@ import com.osmerion.quitte.WeakInvalidationListener;
 import com.osmerion.quitte.functional.BoolSupplier;
 
 /**
- * Common logic for expressions.
+ * An {@code AbstractExpression} is an expression with basic dependency management functionalities.
  *
  * @since   0.1.0
  *
@@ -54,8 +54,12 @@ public abstract class AbstractExpression implements Expression {
     @Nullable
     private transient IdentityHashMap<Observable, InvalidationListener> dependencies;
 
-    // package-private constructor for an effectively sealed class
-    AbstractExpression() {}
+    /**
+     * Creates a new {@code AbstractExpression}.
+     *
+     * @since   0.7.0
+     */
+    public AbstractExpression() {}
 
     /**
      * {@inheritDoc}
@@ -76,7 +80,7 @@ public abstract class AbstractExpression implements Expression {
     }
 
     /**
-     * Invalidates the result of this expression.
+     * Invalidates this expression.
      *
      * @since   0.1.0
      */
@@ -84,7 +88,9 @@ public abstract class AbstractExpression implements Expression {
         this.doInvalidate();
     }
 
-    abstract void doInvalidate();
+    void doInvalidate() {
+        this.notifyInvalidationListeners();
+    }
 
     final void notifyInvalidationListeners() {
         for (var listener : this.invalidationListeners) {
@@ -154,8 +160,8 @@ public abstract class AbstractExpression implements Expression {
      * implemented side effects.</p>
      *
      * @param observable    the observable on which this expression should depend
-     * @param action        the action that should be performed when the dependency is invalidated but before the value
-     *                      of this action is recomputed
+     * @param action        the action that should be performed after the dependency is invalidated but before this
+     *                      expression is invalidated
      *
      * @throws IllegalArgumentException if this expression already depends on the given {@code Observable}
      *
