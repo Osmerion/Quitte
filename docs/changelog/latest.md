@@ -1,22 +1,8 @@
-### 0.6.0
+### 0.6.1
 
-_Released 2022 Dec 13_
-
-#### Improvements
-
-- `AbstractExpression` does now define a `public` constructor. Consequentially,
-  it may now be extended by consumers. [[GH-4](https://github.com/Osmerion/Quitte/issues/4)]
-- Various JavaDoc improvements.
+_Released 2022 Dec 19_
 
 #### Fixes
 
-- Fixed a bug that caused `ObservableList#setAll` to skip some elements. [[GH-5](https://github.com/Osmerion/Quitte/issues/5)]
-  (Thanks to [SkytAsul](https://github.com/SkytAsul))
-- Reduced the visibility of some accidentally exposed expression members.
-
-#### Breaking Changes
-
-- Several members of simple and lazy expressions had their visibility reduced
-  and may no longer be accessible. These methods were considered unsafe and
-  should not have been exposed in the first place. Proper alternatives are
-  available.
+- Adjusted the JavaDoc for property binding methods to reflect the actual
+  intended behavior.
