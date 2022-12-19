@@ -53,7 +53,7 @@ public interface FloatBinding extends Binding {
         public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToFloatFunction<T> transform) {
             this.source = source;
             this.transform = transform;
-            
+
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 

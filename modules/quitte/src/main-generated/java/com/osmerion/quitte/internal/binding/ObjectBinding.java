@@ -56,7 +56,7 @@ public interface ObjectBinding<T> extends Binding {
         public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToObjectFunction<T, R> transform) {
             this.source = source;
             this.transform = transform;
-            
+
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 

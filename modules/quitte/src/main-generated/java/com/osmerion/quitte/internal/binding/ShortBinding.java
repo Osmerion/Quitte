@@ -53,7 +53,7 @@ public interface ShortBinding extends Binding {
         public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToShortFunction<T> transform) {
             this.source = source;
             this.transform = transform;
-            
+
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 

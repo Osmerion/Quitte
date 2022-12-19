@@ -53,7 +53,7 @@ public interface IntBinding extends Binding {
         public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToIntFunction<T> transform) {
             this.source = source;
             this.transform = transform;
-            
+
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 

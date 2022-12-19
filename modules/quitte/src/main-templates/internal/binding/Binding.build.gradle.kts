@@ -64,7 +64,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         public Generic(Runnable invalidator, ObservableValue<T> source, ObjectTo${type.abbrevName}Function${if (type === Type.OBJECT) "<T, R>" else "<T>" } transform) {
             this.source = source;
             this.transform = transform;
-            
+
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 

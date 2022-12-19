@@ -53,7 +53,7 @@ public interface LongBinding extends Binding {
         public Generic(Runnable invalidator, ObservableValue<T> source, ObjectToLongFunction<T> transform) {
             this.source = source;
             this.transform = transform;
-            
+
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 
