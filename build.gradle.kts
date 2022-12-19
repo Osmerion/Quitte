@@ -37,7 +37,7 @@ plugins {
 
 allprojects {
     group = "com.osmerion.quitte"
-    val nextVersion = "0.6.0"
+    val nextVersion = "0.6.1"
     version = when (deployment.type) {
         BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
         else -> nextVersion
