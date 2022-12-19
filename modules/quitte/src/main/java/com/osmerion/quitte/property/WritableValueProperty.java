@@ -86,6 +86,8 @@ public interface WritableValueProperty<T> extends WritableProperty, WritableValu
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     <S> void bindToBoxing(ObservableValue<S> observable, Function<S, T> transform);

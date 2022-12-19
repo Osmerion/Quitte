@@ -44,7 +44,8 @@ public interface WritableProperty extends ReadableProperty {
     /**
      * Unbinds this property.
      *
-     * <p>If this property {@link #isBound() is unbound}, this method does nothing.</p>
+     * @throws IllegalStateException    if this property is not {@link #isBound()
+     *                                  bound} to an observable
      *
      * @since   0.1.0
      */

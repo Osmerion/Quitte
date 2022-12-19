@@ -65,6 +65,8 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableV
      *
      * @param observable    the observable to bind this property to
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(Observable${type.abbrevName}Value$typeParams observable);
@@ -90,6 +92,8 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *${if (sourceType === Type.OBJECT) "\n     * @param <S>           the type of the value of the given observable" else ""}
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */

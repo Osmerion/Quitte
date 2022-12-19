@@ -55,6 +55,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @param observable    the observable to bind this property to
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableBoolValue observable);
@@ -71,6 +73,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -89,6 +93,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableByteValue observable, ByteToBoolFunction transform);
@@ -105,6 +111,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -123,6 +131,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableIntValue observable, IntToBoolFunction transform);
@@ -139,6 +149,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -157,6 +169,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableFloatValue observable, FloatToBoolFunction transform);
@@ -173,6 +187,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -191,6 +207,8 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      * @param <S>           the type of the value of the given observable
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */

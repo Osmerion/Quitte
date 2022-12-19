@@ -55,6 +55,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @param observable    the observable to bind this property to
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableObjectValue<T> observable);
@@ -71,6 +73,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -89,6 +93,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableByteValue observable, ByteToObjectFunction<T> transform);
@@ -105,6 +111,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -123,6 +131,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableIntValue observable, IntToObjectFunction<T> transform);
@@ -139,6 +149,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -157,6 +169,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableFloatValue observable, FloatToObjectFunction<T> transform);
@@ -173,6 +187,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
@@ -191,6 +207,8 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      * @param <S>           the type of the value of the given observable
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the value before updating this property's value
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */

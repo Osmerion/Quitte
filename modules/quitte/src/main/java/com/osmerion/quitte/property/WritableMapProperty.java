@@ -59,6 +59,8 @@ public interface WritableMapProperty<K, V> extends WritableProperty, ReadableMap
      *
      * @param observable    the observable to bind this property to
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableMap<K, V> observable);
@@ -77,6 +79,8 @@ public interface WritableMapProperty<K, V> extends WritableProperty, ReadableMap
      * @param <T>           the type of the source map's values
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the elements of the observable
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */

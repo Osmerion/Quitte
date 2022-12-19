@@ -58,6 +58,8 @@ public interface WritableSetProperty<E> extends WritableProperty, ReadableSetPro
      *
      * @param observable    the observable to bind this property to
      *
+     * @throws IllegalStateException    if the property is already bound
+     *
      * @since   0.1.0
      */
     void bindTo(ObservableSet<E> observable);
@@ -75,6 +77,8 @@ public interface WritableSetProperty<E> extends WritableProperty, ReadableSetPro
      * @param <S>           the type of the source set's elements
      * @param observable    the observable to bind this property to
      * @param transform     the transform function to be applied to the elements of the observable
+     *
+     * @throws IllegalStateException    if the property is already bound
      *
      * @since   0.1.0
      */
