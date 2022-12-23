@@ -49,7 +49,7 @@ public final class I18n {
      * Returns a {@link SimpleObjectExpression} that yields a formatted and localized message using
      * {@link Format#format(Object)}.
      *
-     *  <p>The given {@code arguments} are passed to the formatting method as is with the exception of arguments of type
+     *  <p>The given {@code arguments} are passed to the formatting method as-is with the exception of arguments of type
      * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
      * arguments are treated as variable <em>parameters</em>.</p>
      *
@@ -105,7 +105,7 @@ public final class I18n {
      * Returns a {@link LazyObjectExpression} that yields a formatted and localized message using
      * {@link Format#format(Object)}.
      *
-     *  <p>The given {@code arguments} are passed to the formatting method as is with the exception of arguments of type
+     *  <p>The given {@code arguments} are passed to the formatting method as-is with the exception of arguments of type
      * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
      * arguments are treated as variable <em>parameters</em>.</p>
      *
