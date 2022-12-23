@@ -87,11 +87,11 @@ public abstract sealed class I18nParameter {
      * @since   0.1.0
      */
     public static <O extends Observable> I18nParameter i18n(O observable, Function<O, ?> mapper) {
-        return new I18nParameter.Dynamic(observable, () -> mapper.apply(observable));
+        return new Variable(observable, () -> mapper.apply(observable));
     }
 
     /*
-     * The JavaDoc of I18nParameter is not technically correct since instances of I18nParameter.Static do not receive
+     * The JavaDoc of I18nParameter is not technically correct since instances of I18nParameter.Constant do not receive
      * any special treatment. However, there is no way to obtain those from the (public) API and they are entirely
      * transparent with no special behavior. Hence, we can get away with incorrect JavaDoc here.
      */
@@ -100,12 +100,12 @@ public abstract sealed class I18nParameter {
 
     abstract Object get();
 
-    static final class Dynamic extends I18nParameter {
+    static final class Variable extends I18nParameter {
 
         final Observable observable;
         final Supplier<?> mapper;
 
-        Dynamic(Observable observable, Supplier<?> mapper) {
+        Variable(Observable observable, Supplier<?> mapper) {
             this.observable = observable;
             this.mapper = mapper;
         }
@@ -117,11 +117,11 @@ public abstract sealed class I18nParameter {
 
     }
 
-    static final class Static extends I18nParameter {
+    static final class Constant extends I18nParameter {
 
         private final Object value;
 
-        Static(Object value) {
+        Constant(Object value) {
             this.value = value;
         }
 
