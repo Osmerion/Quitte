@@ -273,6 +273,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      *
      * @since   0.1.0
      */
+    @Override
     public final boolean addInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.add(listener);
     }
@@ -282,6 +283,7 @@ public abstract class AbstractLongProperty implements WritableLongProperty {
      *
      * @since   0.1.0
      */
+    @Override
     public final boolean removeInvalidationListener(InvalidationListener listener) {
         return this.invalidationListeners.remove(listener);
     }
