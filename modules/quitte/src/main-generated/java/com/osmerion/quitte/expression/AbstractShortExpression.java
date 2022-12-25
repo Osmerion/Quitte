@@ -151,7 +151,7 @@ public abstract class AbstractShortExpression extends AbstractExpression impleme
     }
 
     /**
-     * Called when this property's value has changed.
+     * Called when this expression's value has changed.
      *
      * @param oldValue  the old value
      * @param newValue  the new value
@@ -161,7 +161,7 @@ public abstract class AbstractShortExpression extends AbstractExpression impleme
     protected void onChanged(short oldValue, short newValue) {}
 
     /**
-     * Called when this property was invalidated.
+     * Called when this expression was invalidated.
      *
      * @since   0.1.0
      */

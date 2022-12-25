@@ -161,7 +161,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     /**
-     * Called when this property's value has changed.
+     * Called when this expression's value has changed.
      *
      * @param oldValue  the old value
      * @param newValue  the new value
@@ -171,7 +171,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     protected void onChanged(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
 
     /**
-     * Called when this property was invalidated.
+     * Called when this expression was invalidated.
      *
      * @since   0.1.0
      */
