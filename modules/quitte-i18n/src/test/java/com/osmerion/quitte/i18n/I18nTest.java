@@ -47,24 +47,24 @@ public class I18nTest {
     public void testI18n() {
         Locale locale$de_DE = new Locale("de", "DE");
         Locale locale$en_US = new Locale("en", "US");
-        Function<Locale, MessageFormat> message$DE = locale -> new MessageFormat("Hallo, {0}! Für den Döner bekomm ich {1}€.", locale);
-        Function<Locale, MessageFormat> message$EN = locale -> new MessageFormat("Hello, {0}! The hot dog costs {1}$.", locale);
+        Function<Locale, I18nFormat> message$DE = locale -> I18nFormat.wrap(new MessageFormat("Hallo, {0}! Für den Döner bekomm ich {1}€.", locale));
+        Function<Locale, I18nFormat> message$EN = locale -> I18nFormat.wrap(new MessageFormat("Hello, {0}! The hot dog costs {1}$.", locale));
 
-        SimpleObjectProperty<MessageFormat> messageFormat = new SimpleObjectProperty<>(message$DE.apply(locale$de_DE));
+        SimpleObjectProperty<I18nFormat> formatter = new SimpleObjectProperty<>(message$DE.apply(locale$de_DE));
 
         I18nContext ctx = new I18nContext() {
 
             final I18nContext i18nCtx = this;
-            final SimpleObjectProperty<MessageFormat> format = new SimpleObjectProperty<>(null) {
+            final SimpleObjectProperty<I18nFormat> format = new SimpleObjectProperty<>(null) {
                 @Override protected void onInvalidated() { i18nCtx.notifyListeners(); }
             };
 
             {
-                this.format.bindTo(messageFormat);
+                this.format.bindTo(formatter);
             }
 
             @Override
-            protected MessageFormat getFormat(String key) {
+            protected I18nFormat getFormat(String key) {
                 //noinspection ConstantConditions
                 return this.format.get();
             }
@@ -74,19 +74,19 @@ public class I18nTest {
         SimpleDoubleProperty value = new SimpleDoubleProperty(10.5D);
         SimpleObjectExpression<String> message = I18n.format(ctx, "", "Willi", i18n(value));
         //noinspection ConstantConditions
-        assertEquals(messageFormat.get().format(new Object[]{ "Willi", value.get() }, new StringBuffer(), null).toString(), message.get());
+        assertEquals(formatter.get().format("Willi", value.get()), message.get());
 
         value.set(21.9);
-        assertEquals(messageFormat.get().format(new Object[]{ "Willi", value.get() }, new StringBuffer(), null).toString(), message.get());
+        assertEquals(formatter.get().format("Willi", value.get()), message.get());
 
-        messageFormat.set(message$EN.apply(locale$en_US));
-        assertEquals(messageFormat.get().format(new Object[]{ "Willi", value.get() }, new StringBuffer(), null).toString(), message.get());
+        formatter.set(message$EN.apply(locale$en_US));
+        assertEquals(formatter.get().format("Willi", value.get()), message.get());
 
-        messageFormat.set(message$EN.apply(locale$de_DE));
-        assertEquals(messageFormat.get().format(new Object[]{ "Willi", value.get() }, new StringBuffer(), null).toString(), message.get());
+        formatter.set(message$EN.apply(locale$de_DE));
+        assertEquals(formatter.get().format("Willi", value.get()), message.get());
 
         value.set(10.5);
-        assertEquals(messageFormat.get().format(new Object[]{ "Willi", value.get() }, new StringBuffer(), null).toString(), message.get());
+        assertEquals(formatter.get().format("Willi", value.get()), message.get());
     }
 
 }

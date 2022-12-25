@@ -30,7 +30,6 @@
  */
 package com.osmerion.quitte.i18n;
 
-import java.text.Format;
 import java.util.Arrays;
 import com.osmerion.quitte.expression.LazyObjectExpression;
 import com.osmerion.quitte.expression.SimpleObjectExpression;
@@ -47,19 +46,19 @@ public final class I18n {
 
     /**
      * Returns a {@link SimpleObjectExpression} that yields a formatted and localized message using
-     * {@link Format#format(Object)}.
+     * {@link I18nFormat#format(Object...)}.
      *
      *  <p>The given {@code arguments} are passed to the formatting method as-is with the exception of arguments of type
      * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
      * arguments are treated as variable <em>parameters</em>.</p>
      *
-     * <p>The {@link Format} is identified by the given localization key and provided by the {@link I18nContext}.
+     * <p>The {@link I18nFormat format} is identified by the given localization key and provided by the {@link I18nContext}.
      * The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
      *
      * @param context   the localization context from which to retrieve the format for the message
-     * @param key       the localization key that will be used to retrieve the appropriate {@link Format} from the given
-     *                  {@code context}
-     * @param arguments the arguments to be passed to {@link Format#format(Object)}
+     * @param key       the localization key that will be used to retrieve the appropriate {@link I18nFormat format}
+     *                  from the given {@code context}
+     * @param arguments the arguments to be passed to {@link I18nFormat#format(Object...)}
      *
      * @return  a {@code SimpleObjectExpression} that yields a formatted and localized message
      *
@@ -70,7 +69,7 @@ public final class I18n {
         return new SimpleObjectExpression<>() {
 
             private final I18nParameter[] i18nParameters;
-            private Format format;
+            private I18nFormat format;
 
             {
                 Runnable contextUpdateFun = () -> this.format = context.getFormat(key);
@@ -91,7 +90,7 @@ public final class I18n {
 
             @Override
             protected String recomputeValue() {
-                Object arguments = Arrays.stream(this.i18nParameters)
+                Object[] arguments = Arrays.stream(this.i18nParameters)
                     .map(I18nParameter::get)
                     .toArray();
 
@@ -103,19 +102,19 @@ public final class I18n {
 
     /**
      * Returns a {@link LazyObjectExpression} that yields a formatted and localized message using
-     * {@link Format#format(Object)}.
+     * {@link I18nFormat#format(Object...)}.
      *
      *  <p>The given {@code arguments} are passed to the formatting method as-is with the exception of arguments of type
      * {@link I18nParameter} obtained via {@link I18nParameter#i18n(ObservableValue)} (or any other overload). These
      * arguments are treated as variable <em>parameters</em>.</p>
      *
-     * <p>The {@link Format} is identified by the given localization key and provided by the {@link I18nContext}. The
-     * returned expression is invalidated when the context or any of its parameters is invalidated.</p>
+     * <p>The {@link I18nFormat format} is identified by the given localization key and provided by the {@link I18nContext}.
+     * The returned expression is invalidated when the context or any of its parameters is invalidated.</p>
      *
      * @param context   the localization context from which to retrieve the format for the message
-     * @param key       the localization key that will be used to retrieve the appropriate {@link Format} from the given
-     *                  {@code context}
-     * @param arguments the arguments to be passed to {@link Format#format(Object)}
+     * @param key       the localization key that will be used to retrieve the appropriate {@link I18nFormat format}
+     *                  from the given {@code context}
+     * @param arguments the arguments to be passed to {@link I18nFormat#format(Object...)}
      *
      * @return  a {@code LazyObjectExpression} that yields a formatted and localized message
      *
@@ -126,10 +125,10 @@ public final class I18n {
         return new LazyObjectExpression<>() {
 
             private final I18nParameter[] i18nParameters;
-            private Format format;
+            private I18nFormat formatter;
 
             {
-                Runnable contextUpdateFun = () -> this.format = context.getFormat(key);
+                Runnable contextUpdateFun = () -> this.formatter = context.getFormat(key);
                 this.addDependency(context, contextUpdateFun);
                 contextUpdateFun.run();
 
@@ -151,7 +150,7 @@ public final class I18n {
                     .map(I18nParameter::get)
                     .toArray();
 
-                return this.format.format(arguments);
+                return this.formatter.format(arguments);
             }
 
         };
