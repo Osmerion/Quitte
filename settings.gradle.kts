@@ -30,6 +30,7 @@
  */
 rootProject.name = "Quitte"
 
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 //enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
 
 pluginManagement {
