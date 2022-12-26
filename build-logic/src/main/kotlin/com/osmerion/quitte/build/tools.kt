@@ -28,22 +28,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
+package com.osmerion.quitte.build
 
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
+import org.gradle.api.*
+import org.gradle.api.publish.maven.*
+import org.gradle.kotlin.dsl.*
 
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
-}
+private const val DEPLOYMENT_KEY = "com.osmerion.quitte.build.Deployment"
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
+val Project.deployment: Deployment
+    get() =
+        if (extra.has(DEPLOYMENT_KEY)) {
+            extra[DEPLOYMENT_KEY] as Deployment
+        } else
+            (when {
+                hasProperty("release") -> Deployment(
+                    BuildType.RELEASE,
+                    "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/",
+                    getProperty("osmerionSonatypeUsername"),
+                    getProperty("osmerionSonatypePassword")
+                )
+                hasProperty("snapshot") -> Deployment(
+                    BuildType.SNAPSHOT,
+                    "https://s01.oss.sonatype.org/content/repositories/snapshots/",
+                    getProperty("osmerionSonatypeUsername"),
+                    getProperty("osmerionSonatypePassword")
+                )
+                else -> Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
+            }).also { extra[DEPLOYMENT_KEY] = it }
 
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
-
-        include(projectName)
-        project(":$projectName").projectDir = dir
-    }
-}
+fun Project.getProperty(k: String): String =
+    if (extra.has(k))
+        extra[k] as String
+    else
+        System.getenv(k) ?: ""

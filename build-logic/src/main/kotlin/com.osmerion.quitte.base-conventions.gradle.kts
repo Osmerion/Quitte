@@ -28,22 +28,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
+import com.osmerion.quitte.build.*
+import com.osmerion.quitte.build.BuildType
 
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
+group = "com.osmerion.quitte"
 
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
+val nextVersion = "0.7.0"
+version = when (deployment.type) {
+    BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
+    else -> nextVersion
 }
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
-
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
-
-        include(projectName)
-        project(":$projectName").projectDir = dir
-    }
+repositories {
+    mavenCentral()
 }

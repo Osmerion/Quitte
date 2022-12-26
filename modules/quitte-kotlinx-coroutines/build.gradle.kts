@@ -31,7 +31,7 @@
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
-    `quitte-module`
+    id("com.osmerion.quitte.library-module-conventions")
     alias(libs.plugins.gradle.toolchain.switches)
     alias(libs.plugins.kotlin.jvm)
 }

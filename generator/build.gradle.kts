@@ -28,22 +28,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
-
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
-
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
+plugins {
+    `kotlin-dsl`
 }
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
-
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
-
-        include(projectName)
-        project(":$projectName").projectDir = dir
+gradlePlugin {
+    plugins {
+        create("generator") {
+            id = "com.osmerion.quitte.generator"
+            implementationClass = "com.osmerion.quitte.build.generator.plugins.QuitteGeneratorPlugin"
+        }
     }
+}
+
+tasks {
+    validatePlugins {
+        enableStricterValidation.set(true)
+    }
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation(libs.extra.java.module.info)
+
+    // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

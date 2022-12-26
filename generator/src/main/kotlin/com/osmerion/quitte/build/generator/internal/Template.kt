@@ -28,22 +28,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
+package com.osmerion.quitte.build.generator.internal
 
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
+@Suppress("DataClassPrivateConstructor")
+data class Template private constructor(
+    val path: String,
+    private val factory: () -> String
+) {
 
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
-}
+    constructor(
+        packageName: String,
+        className: String,
+        factory: () -> String
+    ) : this("${packageName.replace('.', '/')}/${className}.java", factory)
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
-
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
-
-        include(projectName)
-        project(":$projectName").projectDir = dir
+    val content by lazy {
+        factory.invoke().lines()
+            .dropWhile(String::isBlank)
+            .asReversed()
+            .dropWhile(String::isBlank)
+            .asReversed()
+            .joinToString(separator = "\n")
     }
+
 }

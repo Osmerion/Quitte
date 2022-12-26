@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022 Leon Linhart,
+ * Copyright (c) 2022 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,22 +28,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
+package com.osmerion.quitte.build.generator.internal.templates.main.internal.binding
 
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
-
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
-}
-
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
-
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
-
-        include(projectName)
-        project(":$projectName").projectDir = dir
-    }
-}
+const val PACKAGE_NAME = "com.osmerion.quitte.internal.binding"

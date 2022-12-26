@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022 Leon Linhart,
+ * Copyright (c) 2022 Leon Linhart,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,22 +28,51 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
+package com.osmerion.quitte.build.generator.internal.templates.main.property
 
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
+import com.osmerion.quitte.build.generator.internal.Template
+import com.osmerion.quitte.build.generator.internal.TemplateProvider
+import com.osmerion.quitte.build.generator.internal.Type
 
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
-}
+object ReadableProperty : TemplateProvider {
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
+    override fun provideTemplates(): List<Template> = Type.values().map { type ->
+        val typeParams = if (type === Type.OBJECT) "<T>" else ""
 
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
+        Template(PACKAGE_NAME, "Readable${type.abbrevName}Property") {
+            """
+package $PACKAGE_NAME;
 
-        include(projectName)
-        project(":$projectName").projectDir = dir
+import com.osmerion.quitte.internal.wrappers.*;
+import com.osmerion.quitte.value.*;
+
+/**
+ * ${if (type === Type.OBJECT)
+                "A generic readable property."
+            else
+                "A specialized readable {@code ${type.raw}} property."
+            }
+ *
+ * @see Observable${type.abbrevName}Value
+ *
+ * @since   0.1.0
+ *
+ * @author  Leon Linhart
+ */
+public interface Readable${type.abbrevName}Property$typeParams extends ReadableValueProperty<${type.box}>, Observable${type.abbrevName}Value$typeParams {
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.1.0
+     */
+    default Readable${type.abbrevName}Property$typeParams asReadOnlyProperty() {
+        return (!(this instanceof ReadOnly${type.abbrevName}Property) ? new ReadOnly${type.abbrevName}Property${if (type === Type.OBJECT) "<>" else ""}(this) : this);
     }
+
+}
+            """
+        }
+    }
+
 }

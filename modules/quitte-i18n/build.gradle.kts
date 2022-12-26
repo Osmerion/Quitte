@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 plugins {
-    `quitte-module`
+    id("com.osmerion.quitte.library-module-conventions")
     alias(libs.plugins.gradle.toolchain.switches)
 }
 
@@ -45,4 +45,7 @@ publishing {
 
 dependencies {
     api(project(":quitte"))
+
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }

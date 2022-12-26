@@ -28,22 +28,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
-
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
-
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
+plugins {
+    `java-library`
+    id("com.osmerion.quitte.base-conventions")
 }
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    }
 
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
+    withJavadocJar()
+    withSourcesJar()
+}
 
-        include(projectName)
-        project(":$projectName").projectDir = dir
+tasks {
+    withType<JavaCompile>().configureEach {
+        options.release.set(19)
+    }
+
+    withType<JavaExec>().configureEach {
+        javaLauncher.convention(project.javaToolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(19))
+        })
     }
 }

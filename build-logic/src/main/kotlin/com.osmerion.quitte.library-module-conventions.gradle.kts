@@ -28,41 +28,68 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@file:OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 import com.osmerion.quitte.build.*
-import com.osmerion.quitte.build.BuildType
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
+    id("com.osmerion.quitte.java-library-conventions")
     id("com.osmerion.quitte.maven-publish-conventions")
-    alias(libs.plugins.compose)
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.gradle.toolchain.switches)
+    id("org.gradlex.extra-java-module-info")
 }
 
-kotlin {
-    explicitApi = ExplicitApiMode.Strict
 
-    target {
-        compilations.all {
-            kotlinOptions {
-                languageVersion = "1.6"
-                apiVersion = "1.6"
-                jvmTarget = "17"
+val artifactName = project.name
 
-                @Suppress("SuspiciousCollectionReassignment")
-                freeCompilerArgs += listOf(
-                    "-opt-in=kotlin.RequiresOptIn",
-                    "-Xjsr305=strict"
-                )
-            }
-        }
+// https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
+val libs = the<LibrariesForLibs>()
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 tasks {
+    withType<JavaCompile> {
+        options.release.set(17)
+    }
+
+    compileJava {
+        options.compilerArgs.add("--module-version")
+        options.compilerArgs.add("$version")
+    }
+
+    jar {
+        archiveBaseName.set(artifactName)
+
+        manifest {
+            attributes(mapOf(
+                "Name" to artifactName,
+                "Specification-Version" to project.version,
+                "Specification-Vendor" to "Leon Linhart <themrmilchmann@gmail.com>",
+                "Implementation-Version" to project.version,
+                "Implementation-Vendor" to "Leon Linhart <themrmilchmann@gmail.com>"
+            ))
+        }
+    }
+
+    "javadoc"(Javadoc::class) {
+        with (options as StandardJavadocDocletOptions) {
+            tags = listOf(
+                "apiNote:a:API Note:",
+                "implSpec:a:Implementation Requirements:",
+                "implNote:a:Implementation Note:"
+            )
+
+            addStringOption("-release", "17")
+        }
+    }
+
     test {
-        useJUnit()
+        useJUnitPlatform()
 
         testLogging {
             events("passed", "skipped", "failed")
@@ -71,22 +98,30 @@ tasks {
 }
 
 publishing {
+    repositories {
+        maven {
+            url = uri(deployment.repo)
+
+            credentials {
+                username = deployment.user
+                password = deployment.password
+            }
+        }
+    }
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
 
-            pom {
-                description.set("Quitte extensions for Jetpack Compose.")
-            }
+            artifactId = artifactName
         }
     }
 }
 
+extraJavaModuleInfo {
+    automaticModule("com.google.code.findbugs:jsr305", "jsr305")
+}
+
 dependencies {
-    api(project(":quitte"))
-
-    api(compose.foundation)
-
-    testImplementation(compose.desktop.currentOs)
-    testImplementation(compose.uiTestJUnit4)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }

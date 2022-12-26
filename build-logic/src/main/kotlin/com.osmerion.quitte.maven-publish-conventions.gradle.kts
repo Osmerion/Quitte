@@ -28,22 +28,59 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-rootProject.name = "Quitte"
+import com.osmerion.quitte.build.*
+import com.osmerion.quitte.build.BuildType
 
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
-
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
+plugins {
+    signing
+    `maven-publish`
+    id("com.osmerion.quitte.base-conventions")
 }
 
-file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
-    fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
+publishing {
+    repositories {
+        maven {
+            url = uri(deployment.repo)
 
-    if (hasBuildscript(dir)) {
-        val projectName = dir.name
-
-        include(projectName)
-        project(":$projectName").projectDir = dir
+            credentials {
+                username = deployment.user
+                password = deployment.password
+            }
+        }
     }
+    publications.withType<MavenPublication>().configureEach {
+        pom {
+            name.set(project.name)
+            this@pom.packaging = packaging
+            url.set("https://github.com/Osmerion/Quitte")
+
+            licenses {
+                license {
+                    name.set("BSD-3-Clause")
+                    url.set("https://github.com/Osmerion/Quitte/blob/master/LICENSE")
+                    distribution.set("repo")
+                }
+            }
+
+            developers {
+                developer {
+                    id.set("TheMrMilchmann")
+                    name.set("Leon Linhart")
+                    email.set("themrmilchmann@gmail.com")
+                    url.set("https://github.com/TheMrMilchmann")
+                }
+            }
+
+            scm {
+                connection.set("scm:git:git://github.com/Osmerion/Quitte.git")
+                developerConnection.set("scm:git:git://github.com/Osmerion/Quitte.git")
+                url.set("https://github.com/Osmerion/Quitte.git")
+            }
+        }
+    }
+}
+
+signing {
+    isRequired = (deployment.type === BuildType.RELEASE)
+    sign(publishing.publications)
 }

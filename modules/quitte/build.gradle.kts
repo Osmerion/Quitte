@@ -28,12 +28,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.osmerion.quitte.build.codegen.*
-import com.osmerion.quitte.build.tasks.*
 import java.io.*
 
 plugins {
-    `quitte-module`
+    id("com.osmerion.quitte.library-module-conventions")
+    id("com.osmerion.quitte.generator")
     alias(libs.plugins.gradle.toolchain.switches)
 }
 
@@ -43,36 +42,6 @@ java {
 
     sourceSets["main"].java.srcDir(mainGen)
     sourceSets["test"].java.srcDir(testGen)
-}
-
-val generate = tasks.create("generate") {
-    tasks.compileJava.get().dependsOn(this)
-}
-
-listOf("main", "test").forEach { templateCategory ->
-    val templateDir = file("src/$templateCategory-templates")
-    val templateDirPath = templateDir.toPath()
-
-    fileTree(templateDir).forEach { templateSource ->
-        val mangledName = templateDirPath.relativize(templateSource.toPath()).toString()
-            .replace(File.separatorChar, '$')
-            .removeSuffix(".build.gradle.kts")
-
-        tasks.create("generate$${templateCategory.let { "${it.substring(0, 1).toUpperCase()}${it.substring(1)}" }}$$mangledName", Generate::class) {
-            generate.dependsOn(this)
-
-            templateCat = templateCategory
-
-            project.extra["${templateCategory}Templates"] = mutableListOf<Template>()
-            apply(from = templateSource)
-
-            @Suppress("UNCHECKED_CAST")
-            templates = project.extra["${templateCategory}Templates"] as List<Template>
-
-            input = templateSource
-            header = rootProject.file(".dev/resources/LICENSE_HEADER_GEN")
-        }
-    }
 }
 
 tasks {
