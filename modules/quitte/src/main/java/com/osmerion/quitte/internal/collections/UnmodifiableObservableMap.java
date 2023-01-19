@@ -81,6 +81,8 @@ public class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
         return this.entrySet;
     }
 
+    @Override public V get(Object key) { return this.impl.get(key); }
+
     @Override public boolean isEmpty() { return this.impl.isEmpty(); }
 
     @Override
@@ -96,7 +98,6 @@ public class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
     }
 
     @Override public void clear() { throw new UnsupportedOperationException(); }
-    @Override public V get(Object key) { throw new UnsupportedOperationException(); }
     @Override public V put(K key, V value) { throw new UnsupportedOperationException(); }
     @Override public void putAll(Map<? extends K, ? extends V> m) { throw new UnsupportedOperationException(); }
     @Override public V remove(Object key) { throw new UnsupportedOperationException(); }
