@@ -40,7 +40,6 @@ import java.text.Format;
  *
  * @author  Leon Linhart
  */
-@FunctionalInterface
 public interface I18nFormat {
 
     /**
