@@ -40,6 +40,8 @@ publishing {
             artifactId = "quitte-bom"
 
             pom {
+                packaging = "pom"
+
                 description.set("Bill of Materials for Quitte artifacts.")
             }
         }
