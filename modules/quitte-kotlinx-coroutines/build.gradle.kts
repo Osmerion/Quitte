@@ -31,6 +31,7 @@
 import org.jetbrains.kotlin.gradle.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
 plugins {
     id("com.osmerion.quitte.library-module-conventions")
     alias(libs.plugins.gradle.toolchain.switches)

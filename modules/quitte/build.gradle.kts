@@ -30,6 +30,7 @@
  */
 import java.io.*
 
+@Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
 plugins {
     id("com.osmerion.quitte.library-module-conventions")
     id("com.osmerion.quitte.generator")
