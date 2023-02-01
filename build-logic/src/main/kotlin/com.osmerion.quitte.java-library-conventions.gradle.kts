@@ -44,12 +44,12 @@ java {
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(19)
+        options.release.set(17)
     }
 
     withType<JavaExec>().configureEach {
         javaLauncher.convention(project.javaToolchains.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of(19))
+            languageVersion.set(JavaLanguageVersion.of(17))
         })
     }
 }

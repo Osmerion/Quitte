@@ -28,7 +28,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+import org.jetbrains.kotlin.gradle.dsl.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.osmerion.quitte.library-module-conventions")
@@ -41,21 +42,23 @@ kotlin {
 
     target {
         compilations.all {
-            kotlinOptions {
-                languageVersion = "1.6"
-                apiVersion = "1.6"
+            compilerOptions.configure {
+                apiVersion.set(KotlinVersion.KOTLIN_1_8)
+                languageVersion.set(KotlinVersion.KOTLIN_1_8)
 
-                @Suppress("SuspiciousCollectionReassignment")
-                freeCompilerArgs += listOf(
-                    "-opt-in=kotlin.RequiresOptIn",
-                    "-Xjsr305=strict"
-                )
+                freeCompilerArgs.add("-Xjsr305=strict")
             }
         }
     }
 }
 
 tasks {
+    withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
     jar {
         manifest {
             attributes("Automatic-Module-Name" to "com.osmerion.quitte.kotlinx.coroutines")

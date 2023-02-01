@@ -29,9 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 @file:OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-import com.osmerion.quitte.build.*
-import com.osmerion.quitte.build.BuildType
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+import org.jetbrains.kotlin.gradle.dsl.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.osmerion.quitte.maven-publish-conventions")
@@ -45,22 +44,23 @@ kotlin {
 
     target {
         compilations.all {
-            kotlinOptions {
-                languageVersion = "1.6"
-                apiVersion = "1.6"
-                jvmTarget = "17"
+            compilerOptions.configure {
+                apiVersion.set(KotlinVersion.KOTLIN_1_8)
+                languageVersion.set(KotlinVersion.KOTLIN_1_8)
 
-                @Suppress("SuspiciousCollectionReassignment")
-                freeCompilerArgs += listOf(
-                    "-opt-in=kotlin.RequiresOptIn",
-                    "-Xjsr305=strict"
-                )
+                freeCompilerArgs.add("-Xjsr305=strict")
             }
         }
     }
 }
 
 tasks {
+    withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
     test {
         useJUnit()
 
