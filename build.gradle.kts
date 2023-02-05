@@ -28,16 +28,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
+/*
+ * See
+ * - https://github.com/gradle/gradle/issues/22797 for the warning, and
+ * - https://github.com/gradle/gradle/issues/23784 for the scope
+ */
+@file:Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
 }
-
-/*
- * Oh no. What's this about?
- *
- * Well, Gradle extracts the plugin block when compiling the buildscript.
- * Since there would be no other content in here, the compilation of the script
- * would then fail. Thus, we need literally anything in here.
- */
-val whatonearthisthispleaseremovethisasap = ""
