@@ -65,6 +65,9 @@ public final class QuitteCollections {
         return new UnmodifiableDeque<>(deque);
     }
 
+    @Deprecated
+    private QuitteCollections() { throw new UnsupportedOperationException(); }
+
     @SuppressWarnings("ClassCanBeRecord")
     private static class UnmodifiableDeque<E> implements Deque<E> {
 
