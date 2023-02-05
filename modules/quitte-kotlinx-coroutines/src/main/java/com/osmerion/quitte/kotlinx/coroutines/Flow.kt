@@ -36,7 +36,6 @@ import com.osmerion.quitte.collections.ObservableList
 import com.osmerion.quitte.collections.ObservableMap
 import com.osmerion.quitte.collections.ObservableSet
 import com.osmerion.quitte.value.ObservableValue
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -56,7 +55,6 @@ import kotlinx.coroutines.flow.conflate
  *
  * @since   0.3.0
  */
-@ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 public fun <T> ObservableValue<T>.asFlow(): Flow<T> = callbackFlow {
     val listener = InvalidationListener {
@@ -81,7 +79,6 @@ public fun <T> ObservableValue<T>.asFlow(): Flow<T> = callbackFlow {
  *
  * @since   0.3.0
  */
-@ExperimentalCoroutinesApi
 public fun <E> ObservableList<E>.asFlow(): Flow<List<E>> = callbackFlow {
     val listener = CollectionChangeListener<ObservableList.Change<out E>> {
         trySend(this@asFlow.toList())
@@ -105,7 +102,6 @@ public fun <E> ObservableList<E>.asFlow(): Flow<List<E>> = callbackFlow {
  *
  * @since   0.3.0
  */
-@ExperimentalCoroutinesApi
 public fun <K, V> ObservableMap<K, V>.asFlow(): Flow<Map<K, V>> = callbackFlow {
     val listener = CollectionChangeListener<ObservableMap.Change<out K, out V>> {
         trySend(this@asFlow.toMap())
@@ -129,7 +125,6 @@ public fun <K, V> ObservableMap<K, V>.asFlow(): Flow<Map<K, V>> = callbackFlow {
  *
  * @since   0.3.0
  */
-@ExperimentalCoroutinesApi
 public fun <E> ObservableSet<E>.asFlow(): Flow<Set<E>> = callbackFlow {
     val listener = CollectionChangeListener<ObservableSet.Change<out E>> {
         trySend(this@asFlow.toSet())
