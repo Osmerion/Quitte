@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
 plugins {
+    id("com.osmerion.quitte.java-library-conventions")
     id("com.osmerion.quitte.maven-publish-conventions")
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.jvm)

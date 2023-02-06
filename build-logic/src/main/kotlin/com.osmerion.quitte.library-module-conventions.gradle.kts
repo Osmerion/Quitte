@@ -43,20 +43,7 @@ val artifactName = project.name
 // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
 val libs = the<LibrariesForLibs>()
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-
-    withJavadocJar()
-    withSourcesJar()
-}
-
 tasks {
-    withType<JavaCompile> {
-        options.release.set(17)
-    }
-
     compileJava {
         options.compilerArgs.add("--module-version")
         options.compilerArgs.add("$version")
