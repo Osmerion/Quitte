@@ -4,7 +4,7 @@ _Released 2023 Feb 06_
 
 #### Improvements
 
-- Flow-conversion utilities provided by `quitte-kotlinx-coroutines` are now
+- Flow-conversion utilities provided by `quitte-kotlinx-coroutines` are no
   longer marked with `@ExperimentalCoroutinesApi`.
 - Replaced `java.text.format` with a more general `I18nFormat` API.
 
