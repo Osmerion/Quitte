@@ -156,6 +156,8 @@ changes using the git history.
 
 ## License
 
+Quitte is available under the terms of the [3-Clause BSD license](https://spdx.org/licenses/BSD-3-Clause.html).
+
 ```
 Copyright (c) 2018-2023 Leon Linhart,
 All rights reserved.
