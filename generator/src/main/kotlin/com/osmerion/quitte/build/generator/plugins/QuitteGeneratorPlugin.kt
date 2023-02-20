@@ -38,6 +38,8 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.kotlin.dsl.*
+import java.io.InputStreamReader
+import java.io.StringReader
 
 open class QuitteGeneratorPlugin : Plugin<Project> {
 
@@ -83,24 +85,26 @@ open class QuitteGeneratorPlugin : Plugin<Project> {
     override fun apply(target: Project) = applyTo(target) {
         pluginManager.apply(JavaBasePlugin::class)
 
+        val licenseHeader = InputStreamReader(QuitteGeneratorPlugin::class.java.getResourceAsStream("/LICENSE_HEADER")!!).use { it.readText() }
+
         val generateTask = tasks.create("generate")
-        templates.forEach { templates -> createGenerateTemplateTask(templates, generateTask) }
+        templates.forEach { templates -> createGenerateTemplateTask(templates, generateTask, licenseHeader) }
 
         tasks.named("compileJava").configure {
             dependsOn(generateTask)
         }
 
         val generateTestTask = tasks.create("generateTest")
-        testTemplates.forEach { templates -> createGenerateTestTemplateTask(templates, generateTestTask) }
+        testTemplates.forEach { templates -> createGenerateTestTemplateTask(templates, generateTestTask, licenseHeader) }
 
         tasks.named("compileTestJava").configure {
             dependsOn(generateTestTask)
         }
     }
 
-    private fun Project.createGenerateTemplateTask(templateProvider: TemplateProvider, aggregateTask: Task) {
+    private fun Project.createGenerateTemplateTask(templateProvider: TemplateProvider, aggregateTask: Task, licenseHeader: String) {
         val generateTemplateTask = tasks.create<Generate>("generate${templateProvider::class.simpleName}") {
-            header = rootProject.file(".dev/resources/LICENSE_HEADER_GEN")
+            header = licenseHeader
             input = rootProject.file("generator/src/main/kotlin/${templateProvider::class.qualifiedName!!.replace('.', '/')}.kt")
 
             outputBasePath = projectDir.absolutePath
@@ -112,9 +116,9 @@ open class QuitteGeneratorPlugin : Plugin<Project> {
         aggregateTask.dependsOn(generateTemplateTask)
     }
 
-    private fun Project.createGenerateTestTemplateTask(templateProvider: TemplateProvider, aggregateTask: Task) {
+    private fun Project.createGenerateTestTemplateTask(templateProvider: TemplateProvider, aggregateTask: Task, licenseHeader: String) {
         val generateTemplateTask = tasks.create<Generate>("generate${templateProvider::class.simpleName}Test") {
-            header = rootProject.file(".dev/resources/LICENSE_HEADER_GEN")
+            header = licenseHeader
             input = rootProject.file("generator/src/main/kotlin/${templateProvider::class.qualifiedName!!.replace('.', '/')}.kt")
 
             outputBasePath = projectDir.absolutePath

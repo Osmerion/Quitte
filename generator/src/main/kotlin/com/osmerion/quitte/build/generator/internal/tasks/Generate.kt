@@ -31,10 +31,7 @@
 package com.osmerion.quitte.build.generator.internal.tasks
 
 import com.osmerion.quitte.build.generator.internal.Template
-import com.osmerion.quitte.build.generator.internal.TemplateProvider
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.Directory
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.*
 import java.io.File
 
@@ -45,9 +42,8 @@ internal open class Generate : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     lateinit var input: File
 
-    @get:InputFile
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    lateinit var header: File
+    @get:Input
+    lateinit var header: String
 
     @get:Input
     lateinit var outputBasePath: String
@@ -77,12 +73,10 @@ internal open class Generate : DefaultTask() {
                     }
                 }}$indent */"
 
-        val licenseHeader = header.readText(Charsets.UTF_8).format()
-
         templates.forEach { template ->
             File(outputBasePath, "src/$templateCat-generated/java/${template.path}").apply {
                 parentFile.mkdirs()
-                writeText("$licenseHeader\n${template.content}", Charsets.UTF_8)
+                writeText("${header.format()}\n${template.content}", Charsets.UTF_8)
             }
         }
     }
