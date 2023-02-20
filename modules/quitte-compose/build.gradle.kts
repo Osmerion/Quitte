@@ -41,6 +41,10 @@ plugins {
     alias(libs.plugins.gradle.toolchain.switches)
 }
 
+compose {
+    kotlinCompilerPlugin.set(libs.compose.compiler.get().toString())
+}
+
 kotlin {
     explicitApi = ExplicitApiMode.Strict
 
@@ -82,6 +86,10 @@ publishing {
             }
         }
     }
+}
+
+repositories {
+    google()
 }
 
 dependencies {
