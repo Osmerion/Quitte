@@ -69,7 +69,7 @@ tasks {
 
 publishing {
     publications {
-        getByName<MavenPublication>("mavenJava") {
+        named<MavenPublication>("mavenJava") {
             pom {
                 description.set("Quitte extensions for kotlinx.coroutines")
             }

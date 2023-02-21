@@ -36,7 +36,7 @@ plugins {
 
 publishing {
     publications {
-        getByName<MavenPublication>("mavenJava") {
+        named<MavenPublication>("mavenJava") {
             pom {
                 description.set("Internationalization capabilities for seamless interoperability with Quitte observables.")
             }

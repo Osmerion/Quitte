@@ -53,7 +53,7 @@ tasks {
 
 publishing {
     publications {
-        getByName<MavenPublication>("mavenJava") {
+        named<MavenPublication>("mavenJava") {
             pom {
                 description.set("Specialized, observable properties and observable collections for the JVM.")
             }
