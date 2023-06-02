@@ -92,8 +92,8 @@ public abstract sealed class I18nParameter {
 
     /*
      * The JavaDoc of I18nParameter is not technically correct since instances of I18nParameter.Constant do not receive
-     * any special treatment. However, there is no way to obtain those from the (public) API and they are entirely
-     * transparent with no special behavior. Hence, we can get away with incorrect JavaDoc here.
+     * any special treatment. However, there is no way to obtain those from the (public) API, and they are entirely
+     * transparent with no special behavior. Hence, we can get away with technically incorrect JavaDoc here.
      */
 
     private I18nParameter() {}
