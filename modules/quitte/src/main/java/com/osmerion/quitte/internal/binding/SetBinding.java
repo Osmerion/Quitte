@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
@@ -68,15 +69,20 @@ public final class SetBinding<S, E> implements Binding {
         this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
-    @SuppressWarnings("deprecation")
     public List<ObservableSet.Change<E>> getChanges() {
         List<ObservableSet.Change<E>> changes = new ArrayList<>(this.changes.size());
         Iterator<ObservableSet.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
             ObservableSet.Change<? extends S> change = changeItr.next();
-            changes.add(change.copy(this.transform));
             changeItr.remove();
+
+            ObservableSet.Change<E> transformedChange = new ObservableSet.Change<>(
+                change.addedElements().stream().map(this.transform).collect(Collectors.toUnmodifiableSet()),
+                change.removedElements().stream().map(this.transform).collect(Collectors.toUnmodifiableSet())
+            );
+
+            changes.add(transformedChange);
         }
 
         return changes;

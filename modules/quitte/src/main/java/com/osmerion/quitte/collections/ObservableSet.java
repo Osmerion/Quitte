@@ -32,8 +32,6 @@ package com.osmerion.quitte.collections;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableSet;
@@ -103,54 +101,6 @@ public interface ObservableSet<E> extends Set<E>, ObservableCollection<Observabl
         public Change(@Nullable Set<E> addedElements, @Nullable Set<E> removedElements) {
             this.addedElements = addedElements != null ? Collections.unmodifiableSet(addedElements) : Collections.emptySet();
             this.removedElements = removedElements != null ? Collections.unmodifiableSet(removedElements) : Collections.emptySet();
-        }
-
-        /**
-         * Creates a copy of this change using the given {@code transform} to map the elements.
-         *
-         * @param <T>       the new type for the elements
-         * @param transform the transform function to be applied to the elements
-         *
-         * @return  a copy of this change
-         *
-         * @deprecated  This is an unsupported method that may be removed at any time.
-         *
-         * @since   0.1.0
-         */
-        @Deprecated
-        public <T> Change<T> copy(Function<? super E, T> transform) {
-            return new Change<>(
-                this.addedElements.stream().map(transform).collect(Collectors.toUnmodifiableSet()),
-                this.removedElements.stream().map(transform).collect(Collectors.toUnmodifiableSet())
-            );
-        }
-
-        /**
-         * Returns the elements that were added to the observed set as part of this change.
-         *
-         * @return  the elements that were added to the observed set as part of this change
-         *
-         * @deprecated  Deprecated in favor of canonical record accessor {@link #addedElements()}.
-         *
-         * @since   0.1.0
-         */
-        @Deprecated(since = "0.3.0", forRemoval = true)
-        public Set<E> getAddedElements() {
-            return this.addedElements;
-        }
-
-        /**
-         * Returns the elements that were removed from the observed set as part of this change.
-         *
-         * @return  the elements that were removed from the observed set as part of this change
-         *
-         * @deprecated  Deprecated in favor of canonical record accessor {@link #removedElements()}.
-         *
-         * @since   0.1.0
-         */
-        @Deprecated(since = "0.3.0", forRemoval = true)
-        public Set<E> getRemovedElements() {
-            return this.removedElements;
         }
 
     }
