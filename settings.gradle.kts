@@ -28,15 +28,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+pluginManagement {
+    plugins {
+        id("org.gradle.toolchains.foojay-resolver-convention") version("0.5.0")
+    }
+
+    includeBuild("build-logic")
+    includeBuild("generator")
+
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention")
+}
+
 rootProject.name = "Quitte"
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 //enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") - See https://github.com/gradle/gradle/issues/16608
-
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("generator")
-}
 
 file("modules").listFiles(File::isDirectory)!!.forEach { dir ->
     fun hasBuildscript(it: File) = File(it, "build.gradle.kts").exists()
