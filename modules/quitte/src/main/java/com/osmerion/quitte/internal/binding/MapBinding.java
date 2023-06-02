@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
@@ -68,15 +69,26 @@ public final class MapBinding<S, T, K, V> implements Binding {
         this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
     }
 
-    @SuppressWarnings("deprecation")
     public List<ObservableMap.Change<K, V>> getChanges() {
         List<ObservableMap.Change<K, V>> changes = new ArrayList<>(this.changes.size());
         Iterator<ObservableMap.Change<? extends S, ? extends T>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
             ObservableMap.Change<? extends S, ? extends T> change = changeItr.next();
-            changes.add(change.copy(this.transform));
             changeItr.remove();
+
+            ObservableMap.Change<K, V> transformedChange = new ObservableMap.Change<>(
+                change.addedElements().entrySet().stream().map(e -> this.transform.apply(e.getKey(), e.getValue())).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)),
+                change.removedElements().entrySet().stream().map(e -> this.transform.apply(e.getKey(), e.getValue())).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)),
+                change.updatedElements().entrySet().stream().map(e -> {
+                    Map.Entry<K, V> oldValue = this.transform.apply(e.getKey(), e.getValue().oldValue());
+                    Map.Entry<K, V> newValue = this.transform.apply(e.getKey(), e.getValue().newValue());
+
+                    return Map.entry(newValue.getKey(), new ObservableMap.Change.Update<>(oldValue.getValue(), newValue.getValue()));
+                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
+
+            changes.add(transformedChange);
         }
 
         return changes;
