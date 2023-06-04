@@ -28,59 +28,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import org.jetbrains.kotlin.gradle.dsl.*
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+/** Defines Quitte extensions for kotlinx.coroutines. */
+module com.osmerion.quitte.kotlinx.coroutines {
 
-@Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
-plugins {
-    id("com.osmerion.quitte.library-module-conventions")
-    alias(libs.plugins.gradle.toolchain.switches)
-    alias(libs.plugins.kotlin.jvm)
-}
+    requires transitive com.osmerion.quitte;
+    requires transitive kotlinx.coroutines.core;
 
-kotlin {
-    explicitApi = ExplicitApiMode.Strict
-
-    target {
-        compilations.all {
-            compilerOptions.configure {
-                apiVersion.set(KotlinVersion.KOTLIN_1_8)
-                languageVersion.set(KotlinVersion.KOTLIN_1_8)
-
-                freeCompilerArgs.add("-Xjsr305=strict")
-            }
-        }
-    }
-}
-
-tasks {
-    withType<KotlinCompile>().configureEach {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
-}
-
-publishing {
-    publications {
-        named<MavenPublication>("mavenJava") {
-            pom {
-                description.set("Quitte extensions for kotlinx.coroutines")
-            }
-        }
-    }
-}
-
-extraJavaModuleInfo {
-    failOnMissingModuleInfo.set(false)
-}
-
-dependencies {
-    api(project(":quitte"))
-
-    api(kotlin("stdlib-jdk8"))
-    api(libs.kotlinx.coroutines.jdk8)
-
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
 }
