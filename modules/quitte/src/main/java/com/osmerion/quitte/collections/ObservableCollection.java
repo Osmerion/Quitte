@@ -32,59 +32,13 @@ package com.osmerion.quitte.collections;
 
 import com.osmerion.quitte.Observable;
 
+import java.util.Collection;
+
 /**
  * An observable collection.
- *
- * @param <C>   the type of change produced by this collection
  *
  * @since   0.1.0
  *
  * @author  Leon Linhart
  */
-public interface ObservableCollection<C> extends Observable {
-
-    /**
-     * Attaches the given {@link CollectionChangeListener change listener} to this map.
-     *
-     * <p>If the given listener is already attached to this map, this method does nothing and returns {@code false}.</p>
-     *
-     * <p>While an {@code MapChangeListener} is attached to a map, it will be {@link CollectionChangeListener#onChanged(Object)}
-     * notified} whenever the map is updated.</p>
-     *
-     * <p>This map stores a strong reference to the given listener until the listener is either removed explicitly by
-     * calling {@link #removeChangeListener(CollectionChangeListener)} or implicitly when this map discovers that the
-     * listener has become {@link CollectionChangeListener#isInvalid() invalid}. Generally, it is recommended to use an
-     * instance of {@link WeakCollectionChangeListener} when possible to avoid leaking instances.</p>
-     *
-     * @param listener  the listener to be attached to this map
-     *
-     * @return  {@code true} if the listener was not previously attached to this map and has been successfully attached,
-     *          or {@code false} otherwise
-     *
-     * @throws NullPointerException if the given listener is {@code null}
-     *
-     * @see #removeChangeListener(CollectionChangeListener)
-     *
-     * @since   0.1.0
-     */
-    boolean addChangeListener(CollectionChangeListener<? super C> listener);
-
-    /**
-     * Detaches the given {@link CollectionChangeListener change listener} from this map.
-     *
-     * <p>If the given listener is not attached to this map, this method does nothing and returns {@code false}.</p>
-     *
-     * @param listener  the listener to be detached from this map
-     *
-     * @return  {@code true} if the listener was attached to and has been detached from this map, or {@code false}
-     *          otherwise
-     *
-     * @throws NullPointerException if the given listener is {@code null}
-     *
-     * @see #addChangeListener(CollectionChangeListener)
-     *
-     * @since   0.1.0
-     */
-    boolean removeChangeListener(CollectionChangeListener<? super C> listener);
-
-}
+public interface ObservableCollection<E> extends Collection<E>, Observable {}

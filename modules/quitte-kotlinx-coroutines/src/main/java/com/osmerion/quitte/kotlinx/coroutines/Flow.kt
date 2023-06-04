@@ -31,10 +31,12 @@
 package com.osmerion.quitte.kotlinx.coroutines
 
 import com.osmerion.quitte.InvalidationListener
-import com.osmerion.quitte.collections.CollectionChangeListener
+import com.osmerion.quitte.collections.ListChangeListener
+import com.osmerion.quitte.collections.MapChangeListener
 import com.osmerion.quitte.collections.ObservableList
 import com.osmerion.quitte.collections.ObservableMap
 import com.osmerion.quitte.collections.ObservableSet
+import com.osmerion.quitte.collections.SetChangeListener
 import com.osmerion.quitte.value.ObservableValue
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -80,7 +82,7 @@ public fun <T> ObservableValue<T>.asFlow(): Flow<T> = callbackFlow {
  * @since   0.3.0
  */
 public fun <E> ObservableList<E>.asFlow(): Flow<List<E>> = callbackFlow {
-    val listener = CollectionChangeListener<ObservableList.Change<out E>> {
+    val listener = ListChangeListener<E> { _, _ ->
         trySend(this@asFlow.toList())
     }
 
@@ -103,7 +105,7 @@ public fun <E> ObservableList<E>.asFlow(): Flow<List<E>> = callbackFlow {
  * @since   0.3.0
  */
 public fun <K, V> ObservableMap<K, V>.asFlow(): Flow<Map<K, V>> = callbackFlow {
-    val listener = CollectionChangeListener<ObservableMap.Change<out K, out V>> {
+    val listener = MapChangeListener<K, V> { _, _ ->
         trySend(this@asFlow.toMap())
     }
 
@@ -126,7 +128,7 @@ public fun <K, V> ObservableMap<K, V>.asFlow(): Flow<Map<K, V>> = callbackFlow {
  * @since   0.3.0
  */
 public fun <E> ObservableSet<E>.asFlow(): Flow<Set<E>> = callbackFlow {
-    val listener = CollectionChangeListener<ObservableSet.Change<out E>> {
+    val listener = SetChangeListener<E> { _, _ ->
         trySend(this@asFlow.toSet())
     }
 

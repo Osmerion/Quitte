@@ -31,40 +31,48 @@
 package com.osmerion.quitte.collections;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class MockListChangeListener<E> implements CollectionChangeListener<ObservableList.Change<? extends E>> {
+final class MockListChangeListener<E> implements ListChangeListener<E> {
 
     @Nullable
     private Context context;
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onChanged(ObservableList.Change<? extends E> change) {
+    public void onChanged(ObservableList<? extends E> observable, ListChangeListener.Change<? extends E> change) {
         if (this.context == null) return;
 
-        if (change instanceof ObservableList.Change.Permutation) {
-            ObservableList.Change.Permutation<E> permutation = (ObservableList.Change.Permutation<E>) change;
-            this.context.operations.add(new Permutation<>(permutation.getIndices()));
-        } else if (change instanceof ObservableList.Change.Update) {
-            ObservableList.Change.Update<E> update = (ObservableList.Change.Update<E>) change;
-            update.getLocalChanges().forEach(localChange -> {
+        if (change instanceof ListChangeListener.Change.Permutation) {
+            ListChangeListener.Change.Permutation<E> permutation = (ListChangeListener.Change.Permutation<E>) change;
+            this.context.operations.add(new Permutation<>(permutation.indices()));
+        } else if (change instanceof ListChangeListener.Change.Update) {
+            ListChangeListener.Change.Update<E> update = (ListChangeListener.Change.Update<E>) change;
+            update.localChanges().forEach(localChange -> {
                 OpType type;
+                List<E> oldElements, newElements;
 
-                if (localChange instanceof ObservableList.LocalChange.Insertion) {
+                if (localChange instanceof ListChangeListener.LocalChange.Insertion<E> localInsertion) {
                     type = OpType.INSERTION;
-                } else if (localChange instanceof ObservableList.LocalChange.Removal) {
+                    oldElements = List.of();
+                    newElements = localInsertion.elements();
+                } else if (localChange instanceof ListChangeListener.LocalChange.Removal<E> localRemoval) {
                     type = OpType.REMOVAL;
-                } else if (localChange instanceof ObservableList.LocalChange.Update) {
+                    oldElements = localRemoval.elements();
+                    newElements = List.of();
+                } else if (localChange instanceof ListChangeListener.LocalChange.Update<E> localUpdate) {
                     type = OpType.UPDATE;
+                    oldElements = localUpdate.oldElements();
+                    newElements = localUpdate.newElements();
                 } else {
                     throw new IllegalStateException();
                 }
 
-                this.context.operations.add(new Update<>(type, localChange.getIndex(), localChange.getElements()));
+                this.context.operations.add(new Update<>(type, localChange.index(), oldElements, newElements));
             });
         } else {
             throw new UnsupportedOperationException();
@@ -103,7 +111,7 @@ final class MockListChangeListener<E> implements CollectionChangeListener<Observ
             }
 
             assertEquals(offset, update.offset);
-            assertEquals(elements, update.elements);
+            assertEquals(elements, update.newElements());
         }
 
         @SafeVarargs
@@ -120,7 +128,7 @@ final class MockListChangeListener<E> implements CollectionChangeListener<Observ
             }
 
             assertEquals(offset, update.offset);
-            assertEquals(elements, update.elements);
+            assertEquals(elements, update.oldElements());
         }
 
         public void assertPermutation(List<Integer> indices) {
@@ -134,18 +142,45 @@ final class MockListChangeListener<E> implements CollectionChangeListener<Observ
             assertEquals(indices, permutation.indices);
         }
 
+        @SafeVarargs
+        public final void assertUpdate(int offset, E... elements) {
+            List<E> oldElements = new ArrayList<>();
+            List<E> newElements = new ArrayList<>();
+
+            for (int i = 0; i < elements.length / 2; i += 2) {
+                oldElements.add(elements[i]);
+                newElements.add(elements[i + 1]);
+            }
+
+            assertUpdate(offset, List.copyOf(oldElements), List.copyOf(newElements));
+        }
+
+        public void assertUpdate(int offset, List<E> oldElements, List<E> newElements) {
+            Operation<E> operation = this.operations.pollFirst();
+
+            if (!(operation instanceof Update<E> update) || update.type != OpType.UPDATE) {
+                fail();
+                return;
+            }
+
+            assertEquals(offset, update.offset());
+            assertEquals(oldElements, update.oldElements());
+            assertEquals(newElements, update.newElements());
+        }
+
         /** Asserts that there are no unconsumed operations left in the current context. */
         public void assertEmpty() {
             assertTrue(this.operations.isEmpty());
         }
-        
+
     }
 
-    private interface Operation<E> {}
+    @SuppressWarnings("unused")
+    private sealed interface Operation<E> {}
 
-    private static record Permutation<E>(List<Integer> indices) implements Operation<E> {}
+    private record Permutation<E>(List<Integer> indices) implements Operation<E> {}
 
-    private record Update<E>(OpType type, int offset, List<E> elements) implements Operation<E> {}
+    private record Update<E>(OpType type, int offset, List<E> oldElements, List<E> newElements) implements Operation<E> {}
 
     enum OpType {
         INSERTION,

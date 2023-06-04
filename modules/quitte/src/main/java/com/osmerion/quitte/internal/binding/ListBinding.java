@@ -36,12 +36,13 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
+import com.osmerion.quitte.collections.ListChangeListener;
 import com.osmerion.quitte.collections.ObservableList;
-import com.osmerion.quitte.collections.WeakCollectionChangeListener;
+import com.osmerion.quitte.collections.WeakListChangeListener;
 
 /**
  * A specialized {@link List} binding.
@@ -50,12 +51,12 @@ import com.osmerion.quitte.collections.WeakCollectionChangeListener;
  */
 public final class ListBinding<S, E> implements Binding {
 
-    private final Deque<ObservableList.Change<? extends S>> changes = new ArrayDeque<>();
+    private final Deque<ListChangeListener.Change<? extends S>> changes = new ArrayDeque<>();
 
     private final ObservableList<S> source;
 
     private final InvalidationListener invalidationListener;
-    private final CollectionChangeListener<ObservableList.Change<? extends S>> changeListener;
+    private final ListChangeListener<S> changeListener;
 
     private final Function<? super S, E> transform;
 
@@ -64,18 +65,55 @@ public final class ListBinding<S, E> implements Binding {
         this.transform = transform;
 
         this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addChangeListener(new WeakListChangeListener<>(this.changeListener = (observable, change) -> this.changes.addLast(change)));
     }
 
-    @SuppressWarnings("deprecation")
-    public List<ObservableList.Change<E>> getChanges() {
-        List<ObservableList.Change<E>> changes = new ArrayList<>(this.changes.size());
-        Iterator<ObservableList.Change<? extends S>> changeItr = this.changes.iterator();
+    public List<ListChangeListener.Change<E>> getChanges() {
+        List<ListChangeListener.Change<E>> changes = new ArrayList<>(this.changes.size());
+        Iterator<ListChangeListener.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            ObservableList.Change<? extends S> change = changeItr.next();
-            changes.add(change.copy(this.transform));
+            ListChangeListener.Change<? extends S> change = changeItr.next();
             changeItr.remove();
+
+            ListChangeListener.Change<E> transformedChange;
+
+            if (change instanceof ListChangeListener.Change.Permutation<? extends S> permutation) {
+                transformedChange = new ListChangeListener.Change.Permutation<>(permutation.indices());
+            } else if (change instanceof ListChangeListener.Change.Update<? extends S> update) {
+                List<? extends ListChangeListener.LocalChange<E>> transformedLocalChanges = update.localChanges().stream()
+                    .map(it -> {
+                        if (it instanceof ListChangeListener.LocalChange.Insertion<? extends S> localInsertion) {
+                            //noinspection SimplifyStreamApiCallChains
+                            return new ListChangeListener.LocalChange.Insertion<>(
+                                localInsertion.index(),
+                                localInsertion.elements().stream().map(this.transform).collect(Collectors.toUnmodifiableList())
+                            );
+                        } else if (it instanceof ListChangeListener.LocalChange.Removal<? extends S> localRemoval) {
+                            //noinspection SimplifyStreamApiCallChains
+                            return new ListChangeListener.LocalChange.Removal<>(
+                                localRemoval.index(),
+                                localRemoval.elements().stream().map(this.transform).collect(Collectors.toUnmodifiableList())
+                            );
+                        } else if (it instanceof ListChangeListener.LocalChange.Update<? extends S> localUpdate) {
+                            //noinspection SimplifyStreamApiCallChains
+                            return new ListChangeListener.LocalChange.Update<>(
+                                localUpdate.index(),
+                                localUpdate.oldElements().stream().map(this.transform).collect(Collectors.toUnmodifiableList()),
+                                localUpdate.newElements().stream().map(this.transform).collect(Collectors.toUnmodifiableList())
+                            );
+                        } else {
+                            throw new IllegalStateException();
+                        }
+                    })
+                    .toList();
+
+                transformedChange = new ListChangeListener.Change.Update<>(transformedLocalChanges);
+            } else {
+                throw new IllegalStateException();
+            }
+
+            changes.add(transformedChange);
         }
 
         return changes;

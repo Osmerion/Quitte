@@ -55,6 +55,8 @@ public final class ObservableMapTest {
     public void reset() {
         this.observableMap = ObservableMap.of(this.underlyingMap = new HashMap<>());
         this.observableMap.addChangeListener(this.changeListener = new MockMapChangeListener<>());
+        this.observableMap.entrySet().addChangeListener(this.changeListener.entrySetListener);
+        this.observableMap.keySet().addChangeListener(this.changeListener.keySetListener);
     }
 
     @Test
@@ -74,6 +76,17 @@ public final class ObservableMapTest {
             changeCtx.assertRemoval("foo", "blub");
             changeCtx.assertRemoval("wackel", "pudding");
             changeCtx.assertEmpty();
+        }
+    }
+
+    @Test
+    @DisplayName("ObservableMap#entrySet() => remove(Object)")
+    public void testEntrySetRemove() {
+        this.observableMap.put("foo", "bar");
+
+        try (var changeCtx = this.changeListener.push()) {
+            this.observableMap.entrySet().remove(Map.entry("foo", "bar"));
+            changeCtx.assertRemoval("foo", "bar");
         }
     }
 
@@ -114,6 +127,29 @@ public final class ObservableMapTest {
             assertEquals(0, this.observableMap.size());
             changeCtx.assertRemoval(null, null);
             changeCtx.assertEmpty();
+        }
+    }
+
+    @Test
+    @DisplayName("ObservableMap#put(Object, Object)")
+    public void testPut() {
+        try (var changeCtx = this.changeListener.push()) {
+            this.observableMap.put("foo", "bar");
+            changeCtx.assertAddition("foo", "bar");
+
+            this.observableMap.put("foo", "boo");
+            changeCtx.assertUpdate("foo", "bar", "boo");
+        }
+    }
+
+    @Test
+    @DisplayName("ObservableMap#remove(Object)")
+    public void testRemove() {
+        this.observableMap.put("foo", "bar");
+
+        try (var changeCtx = this.changeListener.push()) {
+            this.observableMap.remove("foo");
+            changeCtx.assertRemoval("foo", "bar");
         }
     }
 

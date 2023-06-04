@@ -32,8 +32,6 @@ package com.osmerion.quitte.collections;
 
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableDeque;
@@ -48,7 +46,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableDeque;
  * 
  * @author  Leon Linhart
  */
-public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<ObservableDeque.Change<? extends E>> {
+public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<E> {
 
     /**
      * Returns an observable view of the specified deque. Query operations on the returned deque "read and write
@@ -89,10 +87,55 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
     }
 
     /**
+     * Attaches the given {@link DequeChangeListener change listener} to this deque.
+     *
+     * <p>If the given listener is already attached to this deque, this method does nothing and returns {@code false}.
+     * </p>
+     *
+     * <p>While an {@code DequeChangeListener} is attached to a deque, it will be {@link DequeChangeListener#onChanged(ObservableDeque, DequeChangeListener.Change)}
+     * notified} whenever the deque is updated.</p>
+     *
+     * <p>This deque stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeChangeListener(DequeChangeListener)} or implicitly when this list discovers that the
+     * listener has become {@link DequeChangeListener#isInvalid() invalid}. Generally, it is recommended to use an
+     * instance of {@link WeakDequeChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this deque
+     *
+     * @return  {@code true} if the listener was not previously attached to this deque and has been successfully
+     *          attached, or {@code false} otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #removeChangeListener(DequeChangeListener)
+     *
+     * @since   0.8.0
+     */
+    boolean addChangeListener(DequeChangeListener<? super E> listener);
+
+    /**
+     * Detaches the given {@link DequeChangeListener change listener} from this deque.
+     *
+     * <p>If the given listener is not attached to this deque, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this deque
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this deque, or {@code false}
+     *          otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #addChangeListener(DequeChangeListener)
+     *
+     * @since   0.8.0
+     */
+    boolean removeChangeListener(DequeChangeListener<? super E> listener);
+
+    /**
      * {@inheritDoc}
      *
      * <p><b>Modifications to an observable deque using the returned iterator should be made with caution as they
-     * produce {@link Site#OPAQUE opaque changes}.
+     * produce {@link DequeChangeListener.Site#OPAQUE opaque changes}.
      * </b></p>
      */
     @Override
@@ -102,7 +145,7 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
      * {@inheritDoc}
      *
      * <p><b>Modifications to an observable deque using the returned iterator should be made with caution as they
-     * produce {@link Site#OPAQUE opaque changes}.</b></p>
+     * produce {@link DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     Iterator<E> descendingIterator();
@@ -110,7 +153,7 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
     /**
      * {@inheritDoc}
      *
-     * <p><b>This method should be used with caution as it produces {@link Site#OPAQUE opaque changes}.</b></p>
+     * <p><b>This method should be used with caution as it produces {@link DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     boolean remove(@Nullable Object o);
@@ -118,7 +161,7 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
     /**
      * {@inheritDoc}
      *
-     * <p><b>This method should be used with caution as it produces {@link Site#OPAQUE opaque changes}.</b></p>
+     * <p><b>This method should be used with caution as it produces {@link DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     boolean removeFirstOccurrence(Object o);
@@ -126,173 +169,9 @@ public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<Obser
     /**
      * {@inheritDoc}
      *
-     * <p><b>This method should be used with caution as it produces {@link Site#OPAQUE opaque changes}.</b></p>
+     * <p><b>This method should be used with caution as it produces {@link DequeChangeListener.Site#OPAQUE opaque changes}.</b></p>
      */
     @Override
     boolean removeLastOccurrence(Object o);
-
-    /**
-     * A change to a deque consists of one or more {@link LocalChange local updates} that apply to a specific
-     * {@link Site site} of the deque.
-     *
-     * @param <E>   the type of the deque's elements
-     *
-     * @since   0.1.0
-     */
-    record Change<E>(List<LocalChange<E>> localChanges) {
-
-        public Change {
-            localChanges = List.copyOf(localChanges);
-        }
-
-        /**
-         * Creates a copy of this change using the given {@code transform} to map the elements.
-         *
-         * @param <T>       the new type for the elements
-         * @param transform the transform function to be applied to the elements
-         *
-         * @return  a copy of this change
-         *
-         * @deprecated  This is an unsupported method that may be removed at any time.
-         *
-         * @since   0.1.0
-         */
-        @Deprecated
-        public <T> Change<T> copy(Function<? super E, T> transform) {
-            return new Change<>(this.localChanges.stream().map(it -> it.copy(transform)).toList());
-        }
-
-        /**
-         * Returns a list of changes that are local to parts of the deque.
-         *
-         * <p><b>It is important to process local changes in order, since the order of the elements matters.</b></p>
-         *
-         * @return  a list of changes that are local to parts of the deque
-         *
-         * @deprecated  Deprecated in favor of canonical record accessor {@link #localChanges()}.
-         *
-         * @since   0.1.0
-         */
-        @Deprecated(since = "0.3.0", forRemoval = true)
-        public List<LocalChange<E>> getLocalChanges() {
-            return this.localChanges;
-        }
-
-    }
-
-    /**
-     * A change to a deque. This might either be an {@link Insertion}, or a {@link Removal}.
-     *
-     * <p>Using {@code instanceof} checks (or similar future pattern matching mechanisms) is recommended when working
-     * with {@code LocalChange} objects.</p>
-     *
-     * @param <E>   the type of the deque's elements
-     *
-     * @since   0.1.0
-     */
-    abstract class LocalChange<E> {
-
-        private final Site site;
-        private final List<E> elements;
-
-        // TODO This is an ideal candidate for a sealed record hierarchy.
-        private LocalChange(Site site, List<E> elements) {
-            this.site = site;
-            this.elements = elements;
-        }
-
-        @Deprecated
-        abstract <T> LocalChange<T> copy(Function<? super E, T> transform);
-
-        /**
-         * A list of elements related to this change. How this list should be interpreted is defined by an implementing
-         * class.
-         *
-         * @return  a list of elements related to this change
-         *
-         * @since   0.1.0
-         */
-        public final List<E> getElements() {
-            return this.elements;
-        }
-
-        /**
-         * The {@link Site site} of the deque to which the change applies.
-         *
-         * @return  site of the deque to which the change applies
-         *
-         * @since   0.1.0
-         */
-        public final Site getSite() {
-            return this.site;
-        }
-
-        /**
-         * Represents insertion of one or more subsequent {@link #getElements() elements} starting from a given
-         * {@link #getSite() site}.
-         *
-         * @since   0.1.0
-         */
-        public static final class Insertion<E> extends LocalChange<E> {
-
-            Insertion(Site site, List<E> elements) {
-                super(site, elements);
-            }
-
-            @Override
-            <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Insertion<>(this.getSite(), this.getElements().stream().map(transform).toList());
-            }
-
-        }
-
-        /**
-         * Represents removal of one or more subsequent {@link #getElements() elements} starting from a given
-         * {@link #getSite() site}.
-         *
-         * @since   0.1.0
-         */
-        public static final class Removal<E> extends LocalChange<E> {
-
-            Removal(Site site, List<E> elements) {
-                super(site, elements);
-            }
-
-            @Override
-            <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Removal<>(this.getSite(), this.getElements().stream().map(transform).toList());
-            }
-
-        }
-
-    }
-
-    /**
-     * A modifiable site of a deque.
-     *
-     * @since   0.1.0
-     */
-    enum Site {
-        /**
-         * The "head" (or "front") of the deque.
-         *
-         * @since   0.1.0
-         */
-        HEAD,
-        /**
-         * The "tail" (or "back") of the deque.
-         *
-         * @since   0.1.0
-         */
-        TAIL,
-        /**
-         * An opaque position in the deque.
-         *
-         * <p>Using operations which produce "opaque change" is discouraged.</p>
-         *
-         * @since   0.1.0
-         */
-        OPAQUE
-    }
 
 }

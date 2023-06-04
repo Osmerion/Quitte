@@ -34,12 +34,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
+import com.osmerion.quitte.collections.MapChangeListener;
 import com.osmerion.quitte.collections.ObservableMap;
+import com.osmerion.quitte.collections.ObservableSet;
 
 /**
  * A wrapper for an {@link ObservableMap} that blocks mutation.
@@ -66,18 +66,18 @@ public class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
 
     @Override public boolean addInvalidationListener(InvalidationListener listener) { return this.impl.addInvalidationListener(listener); }
     @Override public boolean removeInvalidationListener(InvalidationListener listener) { return this.impl.removeInvalidationListener(listener); }
-    @Override public boolean addChangeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) { return this.impl.addChangeListener(listener); }
-    @Override public boolean removeChangeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) { return this.impl.removeChangeListener(listener); }
+    @Override public boolean addChangeListener(MapChangeListener<? super K, ? super V> listener) { return this.impl.addChangeListener(listener); }
+    @Override public boolean removeChangeListener(MapChangeListener<? super K, ? super V> listener) { return this.impl.removeChangeListener(listener); }
 
     @Override public boolean containsKey(Object key) { return this.impl.containsKey(key); }
     @Override public boolean containsValue(Object value) { return this.impl.containsValue(value); }
 
     @Nullable
-    private transient Set<Entry<K, V>> entrySet;
+    private transient ObservableSet<Entry<K, V>> entrySet;
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
-        if (this.entrySet == null) this.entrySet = Collections.unmodifiableSet(this.impl.entrySet());
+    public ObservableSet<Entry<K, V>> entrySet() {
+        if (this.entrySet == null) this.entrySet = ObservableSet.unmodifiableViewOf(this.impl.entrySet());
         return this.entrySet;
     }
 
@@ -86,8 +86,8 @@ public class UnmodifiableObservableMap<K, V> implements ObservableMap<K, V> {
     @Override public boolean isEmpty() { return this.impl.isEmpty(); }
 
     @Override
-    public Set<K> keySet() {
-        return Collections.unmodifiableSet(this.impl.keySet());
+    public ObservableSet<K> keySet() {
+        return ObservableSet.unmodifiableViewOf(this.impl.keySet());
     }
 
     @Override public int size() { return this.impl.size(); }

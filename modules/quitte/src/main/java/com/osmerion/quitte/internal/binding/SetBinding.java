@@ -41,9 +41,9 @@ import java.util.stream.Collectors;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableSet;
-import com.osmerion.quitte.collections.WeakCollectionChangeListener;
+import com.osmerion.quitte.collections.SetChangeListener;
+import com.osmerion.quitte.collections.WeakSetChangeListener;
 
 /**
  * A specialized {@link Set} binding.
@@ -52,12 +52,12 @@ import com.osmerion.quitte.collections.WeakCollectionChangeListener;
  */
 public final class SetBinding<S, E> implements Binding {
 
-    private final Deque<ObservableSet.Change<? extends S>> changes = new ArrayDeque<>();
+    private final Deque<SetChangeListener.Change<? extends S>> changes = new ArrayDeque<>();
 
     private final ObservableSet<S> source;
 
     private final InvalidationListener invalidationListener;
-    private final CollectionChangeListener<ObservableSet.Change<? extends S>> changeListener;
+    private final SetChangeListener<S> changeListener;
 
     private final Function<S, E> transform;
 
@@ -66,18 +66,18 @@ public final class SetBinding<S, E> implements Binding {
         this.transform = transform;
 
         this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addChangeListener(new WeakSetChangeListener<>(this.changeListener = ((observable, change) -> this.changes.addLast(change))));
     }
 
-    public List<ObservableSet.Change<E>> getChanges() {
-        List<ObservableSet.Change<E>> changes = new ArrayList<>(this.changes.size());
-        Iterator<ObservableSet.Change<? extends S>> changeItr = this.changes.iterator();
+    public List<SetChangeListener.Change<E>> getChanges() {
+        List<SetChangeListener.Change<E>> changes = new ArrayList<>(this.changes.size());
+        Iterator<SetChangeListener.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            ObservableSet.Change<? extends S> change = changeItr.next();
+            SetChangeListener.Change<? extends S> change = changeItr.next();
             changeItr.remove();
 
-            ObservableSet.Change<E> transformedChange = new ObservableSet.Change<>(
+            SetChangeListener.Change<E> transformedChange = new SetChangeListener.Change<>(
                 change.addedElements().stream().map(this.transform).collect(Collectors.toUnmodifiableSet()),
                 change.removedElements().stream().map(this.transform).collect(Collectors.toUnmodifiableSet())
             );

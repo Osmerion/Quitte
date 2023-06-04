@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableSet;
 import com.osmerion.quitte.collections.ObservableSet;
+import com.osmerion.quitte.collections.SetChangeListener;
 import com.osmerion.quitte.internal.binding.SetBinding;
 
 /**
@@ -236,7 +237,7 @@ public class SetProperty<E> extends AbstractObservableSet<E> implements Writable
     void onBindingInvalidated() {
         assert (this.binding != null);
 
-        List<ObservableSet.Change<E>> changes = this.binding.getChanges();
+        List<SetChangeListener.Change<E>> changes = this.binding.getChanges();
 
         try {
             this.inBoundUpdate = true;

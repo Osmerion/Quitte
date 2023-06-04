@@ -36,7 +36,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
+import com.osmerion.quitte.collections.DequeChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
 
 /**
@@ -63,8 +63,8 @@ public class UnmodifiableObservableDeque<E> implements ObservableDeque<E> {
 
     @Override public boolean addInvalidationListener(InvalidationListener listener) { return this.impl.addInvalidationListener(listener); }
     @Override public boolean removeInvalidationListener(InvalidationListener listener) { return this.impl.removeInvalidationListener(listener); }
-    @Override public boolean addChangeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) { return this.impl.addChangeListener(listener); }
-    @Override public boolean removeChangeListener(CollectionChangeListener<? super ObservableDeque.Change<? extends E>> listener) { return this.impl.removeChangeListener(listener); }
+    @Override public boolean addChangeListener(DequeChangeListener<? super E> listener) { return this.impl.addChangeListener(listener); }
+    @Override public boolean removeChangeListener(DequeChangeListener<? super E> listener) { return this.impl.removeChangeListener(listener); }
 
     @Override public boolean contains(Object o) { return this.impl.contains(o); }
     @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }

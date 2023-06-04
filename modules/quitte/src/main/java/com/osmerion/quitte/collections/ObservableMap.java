@@ -30,10 +30,9 @@
  */
 package com.osmerion.quitte.collections;
 
-import java.util.Collections;
 import java.util.Map;
-import javax.annotation.Nullable;
 
+import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableMap;
 import com.osmerion.quitte.internal.collections.WrappingObservableMap;
 
@@ -47,7 +46,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableMap;
  *
  * @author  Leon Linhart
  */
-public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<ObservableMap.Change<? extends K, ? extends V>> {
+public interface ObservableMap<K, V> extends Map<K, V>, Observable {
 
     /**
      * Returns an observable view of the specified map. Query operations on the returned map "read and write through"
@@ -90,64 +89,67 @@ public interface ObservableMap<K, V> extends Map<K, V>, ObservableCollection<Obs
     }
 
     /**
-     * A change done to an {@link ObservableMap}.
+     * Attaches the given {@link MapChangeListener change listener} to this map.
      *
-     * @param <K>   the type of the map's elements
-     * @param <V>   the type of the map's elements
+     * <p>If the given listener is already attached to this map, this method does nothing and returns {@code false}.</p>
      *
-     * @since   0.1.0
+     * <p>While an {@code MapChangeListener} is attached to a map, it will be {@link MapChangeListener#onChanged(ObservableMap, MapChangeListener.Change)}
+     * notified} whenever the map is updated.</p>
+     *
+     * <p>This map stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeChangeListener(MapChangeListener)} or implicitly when this map discovers that the
+     * listener has become {@link MapChangeListener#isInvalid() invalid}. Generally, it is recommended to use an
+     * instance of {@link WeakMapChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this map
+     *
+     * @return  {@code true} if the listener was not previously attached to this map and has been successfully attached,
+     *          or {@code false} otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #removeChangeListener(MapChangeListener)
+     *
+     * @since   0.8.0
      */
-    record Change<K, V>(
-        Map<K, V> addedElements,
-        Map<K, V> removedElements,
-        Map<K, Update<V>> updatedElements
-    ) {
+    boolean addChangeListener(MapChangeListener<? super K, ? super V> listener);
 
-        public Change(@Nullable Map<K, V> addedElements, @Nullable Map<K, V> removedElements, @Nullable Map<K, Update<V>> updatedElements) {
-            this.addedElements = (addedElements != null) ? Collections.unmodifiableMap(addedElements) : Collections.emptyMap();
-            this.removedElements = (removedElements != null) ? Collections.unmodifiableMap(removedElements) : Collections.emptyMap();
-            this.updatedElements = (updatedElements != null) ? Collections.unmodifiableMap(updatedElements) : Collections.emptyMap();
-        }
+    /**
+     * Detaches the given {@link MapChangeListener change listener} from this map.
+     *
+     * <p>If the given listener is not attached to this map, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this map
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this map, or {@code false}
+     *          otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #addChangeListener(MapChangeListener)
+     *
+     * @since   0.8.0
+     */
+    boolean removeChangeListener(MapChangeListener<? super K, ? super V> listener);
 
-        /**
-         * Describes an update to a map entry's value.
-         *
-         * @since   0.1.0
-         */
-        public record Update<V>(@Nullable V oldValue, @Nullable V newValue) {
+    /**
+     * {@inheritDoc}
+     *
+     * @return an observable set view of the mappings contained in this map
+     *
+     * @since   0.8.0
+     */
+    @Override
+    ObservableSet<Entry<K, V>> entrySet();
 
-            /**
-             * Returns the old value.
-             *
-             * @return  the old value
-             *
-             * @deprecated  Deprecated in favor of canonical record accessor {@link #oldValue()}.
-             *
-             * @since   0.1.0
-             */
-            @Deprecated(since = "0.8.0", forRemoval = true)
-            @Nullable
-            public V getOldValue() {
-                return this.oldValue;
-            }
-
-            /**
-             * Returns the new value.
-             *
-             * @return  the new value
-             *
-             * @deprecated  Deprecated in favor of canonical record accessor {@link #newValue()}.
-             *
-             * @since   0.1.0
-             */
-            @Deprecated(since = "0.8.0", forRemoval = true)
-            @Nullable
-            public V getNewValue() {
-                return this.newValue;
-            }
-
-        }
-
-    }
+    /**
+     * {@inheritDoc}
+     *
+     * @return  an observable set view of the keys contained in this map
+     *
+     * @since   0.8.0
+     */
+    @Override
+    ObservableSet<K> keySet();
 
 }

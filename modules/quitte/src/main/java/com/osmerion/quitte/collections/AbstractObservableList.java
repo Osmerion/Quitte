@@ -61,7 +61,7 @@ import static java.lang.Math.*;
  */
 public abstract class AbstractObservableList<E> extends AbstractList<E> implements ObservableList<E> {
 
-    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super ObservableList.Change<? extends E>>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<ListChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -73,7 +73,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean addChangeListener(CollectionChangeListener<? super Change<? extends E>> listener) {
+    public final boolean addChangeListener(ListChangeListener<? super E> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
      * @since   0.1.0
      */
     @Override
-    public final boolean removeChangeListener(CollectionChangeListener<? super Change<? extends E>> listener) {
+    public final boolean removeChangeListener(ListChangeListener<? super E> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -423,7 +423,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                 AbstractObservableList.this.changeBuilder = null;
                 if (this.localChanges.isEmpty()) return;
 
-                ObservableList.Change<E> change = null;
+                ListChangeListener.Change<E> change = null;
 
                 /*
                  * Compressing changes is a non-trivial task and to keep the implementation relatively simple, only
@@ -541,15 +541,33 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                      * the resulting list just happened to be equal in size to the original ist.
                      */
                     if (expectedAdditions.values().stream().allMatch(List::isEmpty) && expectedRemovals.values().stream().allMatch(List::isEmpty)) {
-                        change = new ObservableList.Change.Permutation<>(IntStream.of(permutation).boxed().toList());
+                        boolean hasChanged = false;
+
+                        for (int i = 0; i < permutation.length; i++) {
+                            if (i != permutation[i]) {
+                                hasChanged = true;
+                                break;
+                            }
+                        }
+
+                        /*
+                         * If the permutation is the identity function, the list has not changed, and we do not notify
+                         * listeners.
+                         */
+                        if (!hasChanged) {
+                            return;
+                        }
+
+                        change = new ListChangeListener.Change.Permutation<>(IntStream.of(permutation).boxed().toList());
                     }
                 }
 
                 /* We couldn't reconstruct a permutation and need to "compress" local changes. */
                 if (change == null) {
-                    List<LocalChange<E>> localChanges = new ArrayList<>(this.localChanges.size());
+                    List<ListChangeListener.LocalChange<E>> localChanges = new ArrayList<>(this.localChanges.size());
 
-                    List<E> updateElements = new ArrayList<>();
+                    List<E> oldUpdateElements = new ArrayList<>();
+                    List<E> newUpdateElements = new ArrayList<>();
                     int updateFrom = -1;
 
                     List<E> batchElements = new ArrayList<>();
@@ -559,112 +577,91 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                     int batchType = 0;
 
                     for (WorkingLocalChange<E> wlc : this.localChanges) {
-                        if (wlc instanceof WorkingLocalChange.Insertion) {
+                        if (wlc instanceof WorkingLocalChange.Insertion<E> wlInsert) {
                             if (batchType != 1) {
                                 if (batchType == 2) {
-                                    if (batchFrom == wlc.from && batchElements.size() == ((WorkingLocalChange.Insertion<E>) wlc).elements.size()) {
-                                        if (!updateElements.isEmpty()) {
-                                            if (wlc.from <= updateFrom + updateElements.size() && updateFrom <= wlc.to) {
-                                                int offset = abs(wlc.from - updateFrom);
-
-                                                updateFrom = min(wlc.from, updateFrom);
-                                                updateElements.addAll(offset, ((WorkingLocalChange.Insertion<E>) wlc).elements);
-                                            } else {
-                                                localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
-                                                updateElements.clear();
-
-                                                updateFrom = batchFrom;
-                                                updateElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
-                                            }
-                                        } else {
-                                            updateFrom = batchFrom;
-                                            updateElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
-                                        }
+                                    if (batchFrom == wlc.from && batchElements.size() == wlInsert.elements.size()) {
+                                        updateFrom = batchFrom;
+                                        newUpdateElements.addAll(wlInsert.elements);
+                                        oldUpdateElements.addAll(batchElements);
 
                                         batchType = 0;
                                         batchElements.clear();
 
                                         continue;
                                     } else {
-                                        if (!updateElements.isEmpty()) {
-                                            localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
-                                            updateFrom = -1;
-                                            updateElements.clear();
-                                        }
-
-                                        localChanges.add(new LocalChange.Removal<>(batchFrom, new ArrayList<>(batchElements)));
+                                        localChanges.add(new ListChangeListener.LocalChange.Removal<>(batchFrom, new ArrayList<>(batchElements)));
                                         batchElements.clear();
                                     }
                                 }
 
                                 batchFrom = wlc.from;
                                 batchType = 1;
-                                batchElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
+                                batchElements.addAll(wlInsert.elements);
                             } else if (wlc.from <= batchFrom + batchElements.size() && batchFrom <= wlc.to) {
                                 int offset = abs(wlc.from - batchFrom);
 
                                 batchFrom = min(wlc.from, batchFrom);
-                                batchElements.addAll(offset, ((WorkingLocalChange.Insertion<E>) wlc).elements);
+                                batchElements.addAll(offset, wlInsert.elements);
                             } else {
-                                if (!updateElements.isEmpty()) {
-                                    localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                if (!newUpdateElements.isEmpty()) {
+                                    localChanges.add(new ListChangeListener.LocalChange.Update<>(updateFrom, new ArrayList<>(oldUpdateElements), new ArrayList<>(newUpdateElements)));
                                     updateFrom = -1;
-                                    updateElements.clear();
+                                    newUpdateElements.clear();
                                 }
 
-                                localChanges.add(new LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
+                                localChanges.add(new ListChangeListener.LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
                                 batchElements.clear();
 
                                 batchFrom = wlc.from;
-                                batchType = 1;
-                                batchElements.addAll(((WorkingLocalChange.Insertion<E>) wlc).elements);
+                                batchElements.addAll(wlInsert.elements);
                             }
-                        } else if (wlc instanceof WorkingLocalChange.Removal) {
+                        } else if (wlc instanceof WorkingLocalChange.Removal<E> wlRemove) {
                             if (batchType != 2) {
-                                if (!updateElements.isEmpty()) {
-                                    localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
+                                if (!newUpdateElements.isEmpty()) {
+                                    localChanges.add(new ListChangeListener.LocalChange.Update<>(updateFrom, new ArrayList<>(oldUpdateElements), new ArrayList<>(newUpdateElements)));
                                     updateFrom = -1;
-                                    updateElements.clear();
+                                    newUpdateElements.clear();
                                 }
 
-                                if (!batchElements.isEmpty()) localChanges.add(new LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
+                                if (!batchElements.isEmpty()) localChanges.add(new ListChangeListener.LocalChange.Insertion<>(batchFrom, new ArrayList<>(batchElements)));
                             } else if (wlc.from <= batchFrom + batchElements.size() && batchFrom <= wlc.to) {
                                 int offset = abs(wlc.from - batchFrom);
 
                                 batchFrom = min(wlc.from, batchFrom);
-                                batchElements.addAll(offset, ((WorkingLocalChange.Removal<E>) wlc).elements);
+                                batchElements.addAll(offset, wlRemove.elements);
 
                                 continue;
                             } else {
-                                if (!updateElements.isEmpty()) {
-                                    localChanges.add(new LocalChange.Update<>(updateFrom, new ArrayList<>(updateElements)));
-                                    updateFrom = -1;
-                                    updateElements.clear();
-                                }
-
-                                localChanges.add(new LocalChange.Removal<>(batchFrom, new ArrayList<>(batchElements)));
+                                localChanges.add(new ListChangeListener.LocalChange.Removal<>(batchFrom, new ArrayList<>(batchElements)));
                                 batchElements.clear();
                             }
 
                             batchFrom = wlc.from;
                             batchType = 2;
-                            batchElements.addAll(((WorkingLocalChange.Removal<E>) wlc).elements);
+                            batchElements.addAll(wlRemove.elements);
                         } else {
                             throw new IllegalStateException();
                         }
                     }
 
-                    if (!updateElements.isEmpty()) localChanges.add(new LocalChange.Update<>(updateFrom, updateElements));
+                    if (!newUpdateElements.isEmpty()) {
+                        localChanges.add(new ListChangeListener.LocalChange.Update<>(
+                            updateFrom,
+                            new ArrayList<>(oldUpdateElements),
+                            new ArrayList<>(newUpdateElements)
+                        ));
+                    }
 
                     if (!batchElements.isEmpty()) {
                         localChanges.add(switch (batchType) {
-                            case 1 -> new LocalChange.Insertion<>(batchFrom, batchElements);
-                            case 2 -> new LocalChange.Removal<>(batchFrom, batchElements);
+                            case 1 -> new ListChangeListener.LocalChange.Insertion<>(batchFrom, batchElements);
+                            case 2 -> new ListChangeListener.LocalChange.Removal<>(batchFrom, batchElements);
                             default -> throw new IllegalStateException();
                         });
                     }
 
-                    change = new ObservableList.Change.Update<>(List.copyOf(localChanges));
+                    change = new ListChangeListener.Change.Update<>(List.copyOf(localChanges));
                 }
 
                 for (var listener : AbstractObservableList.this.changeListeners) {
@@ -673,7 +670,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
                         continue;
                     }
 
-                    listener.onChanged(change);
+                    listener.onChanged(AbstractObservableList.this, change);
                     if (listener.isInvalid()) AbstractObservableList.this.changeListeners.remove(listener);
                 }
 

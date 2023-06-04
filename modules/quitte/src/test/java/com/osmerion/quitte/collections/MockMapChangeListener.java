@@ -30,59 +30,83 @@
  */
 package com.osmerion.quitte.collections;
 
+import java.util.AbstractMap;
 import java.util.ArrayDeque;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class MockMapChangeListener<K, V> implements CollectionChangeListener<ObservableMap.Change<? extends K, ? extends V>> {
+final class MockMapChangeListener<K, V> implements MapChangeListener<K, V> {
+
+    final MockSetChangeListener<Map.Entry<K, V>> entrySetListener = new MockSetChangeListener<>();
+    final MockSetChangeListener<K> keySetListener = new MockSetChangeListener<>();
 
     @Nullable
     private Context context;
 
     @Override
-    public void onChanged(ObservableMap.Change<? extends K, ? extends V> change) {
+    public void onChanged(ObservableMap<? extends K, ? extends V> observable, MapChangeListener.Change<? extends K, ? extends V> change) {
         if (this.context == null) return;
 
         change.addedElements().forEach((k, v) -> this.context.operations.add(new Addition(k, v)));
         change.removedElements().forEach((k, v) -> this.context.operations.add(new Removal(k, v)));
-        change.updatedElements().forEach((k, update) -> this.context.operations.add(new Update(k, update.getOldValue(), update.getNewValue())));
+        change.updatedElements().forEach((k, update) -> this.context.operations.add(new Update(k, update.oldValue(), update.newValue())));
     }
 
     public Context push() {
         if (this.context != null) throw new IllegalStateException();
-        return (this.context = new Context());
+        return (this.context = new Context(this.entrySetListener.push(), this.keySetListener.push()));
     }
 
     public final class Context implements AutoCloseable {
 
         private final ArrayDeque<Operation> operations = new ArrayDeque<>();
 
-        private Context() {}
+        private final MockSetChangeListener<Map.Entry<K, V>>.Context entrySetContext;
+        private final MockSetChangeListener<K>.Context keySetContext;
+
+        private Context(
+            MockSetChangeListener<Map.Entry<K, V>>.Context entrySetContext,
+            MockSetChangeListener<K>.Context keySetContext
+        ) {
+            this.entrySetContext = entrySetContext;
+            this.keySetContext = keySetContext;
+        }
 
         /** Closes this context and asserts that all operations have been consumed. */
         @Override
         public void close() {
+            this.entrySetContext.close();
+
             MockMapChangeListener.this.context = null;
             this.assertEmpty();
         }
 
         public void assertAddition(K key, V value) {
             assertTrue(this.operations.removeFirstOccurrence(new Addition(key, value)), "No unconsumed addition of element recorded");
+            this.entrySetContext.assertAddition(new AbstractMap.SimpleEntry<>(key, value));
+            this.keySetContext.assertAddition(key);
         }
 
         public void assertRemoval(K key, V value) {
             assertTrue(this.operations.removeFirstOccurrence(new Removal(key, value)), "No unconsumed removal of element recorded");
+            this.entrySetContext.assertRemoval(new AbstractMap.SimpleEntry<>(key, value));
+            this.keySetContext.assertRemoval(key);
         }
 
         public void assertUpdate(K key, V oldValue, V newValue) {
             assertTrue(this.operations.removeFirstOccurrence(new Update(key, oldValue, newValue)), "No unconsumed update of element recorded");
+            this.entrySetContext.assertRemoval(new AbstractMap.SimpleEntry<>(key, oldValue));
+            this.entrySetContext.assertAddition(new AbstractMap.SimpleEntry<>(key, newValue));
         }
 
         /** Asserts that there are no unconsumed operations left in the current context. */
         public void assertEmpty() {
             assertTrue(this.operations.isEmpty());
+            this.entrySetContext.assertEmpty();
+            this.keySetContext.assertEmpty();
         }
 
     }

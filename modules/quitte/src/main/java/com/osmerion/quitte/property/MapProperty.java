@@ -30,18 +30,11 @@
  */
 package com.osmerion.quitte.property;
 
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import javax.annotation.Nullable;
 
-import com.osmerion.quitte.collections.AbstractObservableMap;
-import com.osmerion.quitte.collections.ObservableMap;
+import com.osmerion.quitte.collections.*;
 import com.osmerion.quitte.internal.binding.MapBinding;
 
 /**
@@ -61,9 +54,6 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
     @Nullable
     private transient MapBinding<?, ?, K, V> binding;
     private transient boolean inBoundUpdate;
-
-    @Nullable
-    private transient Set<Entry<K, V>> entrySet;
 
     /**
      * Creates a new {@code MapProperty}.
@@ -162,8 +152,11 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
         return this.impl.put(key, value);
     }
 
+    @Nullable
+    private transient Set<Entry<K, V>> entrySet;
+
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    protected Set<Entry<K, V>> entrySetImpl() {
         if (this.entrySet == null) this.entrySet = new WrappingObservableEntrySet(this.impl.entrySet());
         return this.entrySet;
     }
@@ -171,7 +164,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
     void onBindingInvalidated() {
         assert (this.binding != null);
 
-        List<? extends ObservableMap.Change<K, V>> changes = this.binding.getChanges();
+        List<? extends MapChangeListener.Change<K, V>> changes = this.binding.getChanges();
 
         try {
             this.inBoundUpdate = true;
@@ -180,7 +173,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
                 for (var change : changes) {
                     this.putAll(change.addedElements());
                     change.removedElements().forEach(this::remove);
-                    change.updatedElements().forEach((k, u) -> this.put(k, u.getNewValue()));
+                    change.updatedElements().forEach((k, u) -> this.put(k, u.newValue()));
                 }
             }
         } finally {
@@ -193,7 +186,7 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
      *
      * @since   0.1.0
      */
-    protected final class WrappingObservableEntrySet extends AbstractSet<Entry<K, V>> {
+    protected final class WrappingObservableEntrySet extends AbstractObservableSet<Entry<K, V>> {
 
         private final Set<Entry<K, V>> impl;
 
@@ -232,14 +225,21 @@ public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements Wr
             };
         }
 
+        @Override
+        protected boolean addImpl(@Nullable Entry<K, V> element) {
+            throw new UnsupportedOperationException();
+        }
+
         @SuppressWarnings("unchecked")
         @Override
-        public boolean remove(Object element) {
+        protected boolean removeImpl(@Nullable Object element) {
             if (MapProperty.this.binding != null && !MapProperty.this.inBoundUpdate)
                 throw new IllegalStateException("A bound property's value may not be set explicitly");
 
-            if (this.impl.remove(element)) {
-                try (ChangeBuilder changeBuilder = MapProperty.this.beginChange()) {
+            Objects.requireNonNull(element);
+
+            if (this.impl.remove((Map.Entry<K, V>) element)) {
+                try (AbstractObservableMap<K, V>.ChangeBuilder changeBuilder = MapProperty.this.beginChange()) {
                     /*
                      * Technically, this cast is wrong and there is a tiny chance that it could fail if the EntrySet of
                      * the backing map implementation does not perform identity-checks in it's Set#remove(Object)

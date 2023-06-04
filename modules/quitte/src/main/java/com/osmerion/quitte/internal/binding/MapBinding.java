@@ -41,9 +41,9 @@ import java.util.stream.Collectors;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
+import com.osmerion.quitte.collections.MapChangeListener;
 import com.osmerion.quitte.collections.ObservableMap;
-import com.osmerion.quitte.collections.WeakCollectionChangeListener;
+import com.osmerion.quitte.collections.WeakMapChangeListener;
 
 /**
  * A specialized {@link Map} binding.
@@ -52,12 +52,12 @@ import com.osmerion.quitte.collections.WeakCollectionChangeListener;
  */
 public final class MapBinding<S, T, K, V> implements Binding {
 
-    private final Deque<ObservableMap.Change<? extends S, ? extends T>> changes = new ArrayDeque<>();
+    private final Deque<MapChangeListener.Change<? extends S, ? extends T>> changes = new ArrayDeque<>();
 
     private final ObservableMap<S, T> source;
 
     private final InvalidationListener invalidationListener;
-    private final CollectionChangeListener<ObservableMap.Change<? extends S, ? extends T>> changeListener;
+    private final MapChangeListener<S, T> changeListener;
 
     private final BiFunction<? super S, ? super T, Map.Entry<K, V>> transform;
 
@@ -66,25 +66,25 @@ public final class MapBinding<S, T, K, V> implements Binding {
         this.transform = transform;
 
         this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addChangeListener(new WeakMapChangeListener<>(this.changeListener = (observable, change) -> this.changes.addLast(change)));
     }
 
-    public List<ObservableMap.Change<K, V>> getChanges() {
-        List<ObservableMap.Change<K, V>> changes = new ArrayList<>(this.changes.size());
-        Iterator<ObservableMap.Change<? extends S, ? extends T>> changeItr = this.changes.iterator();
+    public List<MapChangeListener.Change<K, V>> getChanges() {
+        List<MapChangeListener.Change<K, V>> changes = new ArrayList<>(this.changes.size());
+        Iterator<MapChangeListener.Change<? extends S, ? extends T>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            ObservableMap.Change<? extends S, ? extends T> change = changeItr.next();
+            MapChangeListener.Change<? extends S, ? extends T> change = changeItr.next();
             changeItr.remove();
 
-            ObservableMap.Change<K, V> transformedChange = new ObservableMap.Change<>(
+            MapChangeListener.Change<K, V> transformedChange = new MapChangeListener.Change<>(
                 change.addedElements().entrySet().stream().map(e -> this.transform.apply(e.getKey(), e.getValue())).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)),
                 change.removedElements().entrySet().stream().map(e -> this.transform.apply(e.getKey(), e.getValue())).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)),
                 change.updatedElements().entrySet().stream().map(e -> {
                     Map.Entry<K, V> oldValue = this.transform.apply(e.getKey(), e.getValue().oldValue());
                     Map.Entry<K, V> newValue = this.transform.apply(e.getKey(), e.getValue().newValue());
 
-                    return Map.entry(newValue.getKey(), new ObservableMap.Change.Update<>(oldValue.getValue(), newValue.getValue()));
+                    return Map.entry(newValue.getKey(), new MapChangeListener.Change.Update<>(oldValue.getValue(), newValue.getValue()));
                 }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             );
 

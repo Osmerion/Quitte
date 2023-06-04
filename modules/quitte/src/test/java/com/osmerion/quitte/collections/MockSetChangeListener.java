@@ -31,23 +31,22 @@
 package com.osmerion.quitte.collections;
 
 import java.util.ArrayDeque;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class MockSetChangeListener<E> implements CollectionChangeListener<ObservableSet.Change<? extends E>> {
+final class MockSetChangeListener<E> implements SetChangeListener<E> {
 
     @Nullable
     private Context context;
 
     @Override
-    public void onChanged(ObservableSet.Change<? extends E> change) {
+    public void onChanged(ObservableSet<? extends E> observable, SetChangeListener.Change<? extends E> change) {
         if (this.context == null) return;
 
-        change.addedElements().forEach(e -> this.context.operations.add(new Addition(e)));
-        change.removedElements().forEach(e -> this.context.operations.add(new Removal(e)));
+        change.addedElements().forEach(e -> this.context.operations.add(new Addition<>(e)));
+        change.removedElements().forEach(e -> this.context.operations.add(new Removal<>(e)));
     }
 
     public Context push() {
@@ -57,7 +56,7 @@ final class MockSetChangeListener<E> implements CollectionChangeListener<Observa
 
     public final class Context implements AutoCloseable {
 
-        private final ArrayDeque<Operation> operations = new ArrayDeque<>();
+        private final ArrayDeque<Operation<E>> operations = new ArrayDeque<>();
 
         private Context() {}
 
@@ -69,11 +68,11 @@ final class MockSetChangeListener<E> implements CollectionChangeListener<Observa
         }
 
         public void assertAddition(E element) {
-            assertTrue(this.operations.removeFirstOccurrence(new Addition(element)), "No unconsumed addition of element recorded");
+            assertTrue(this.operations.removeFirstOccurrence(new Addition<>(element)), "No unconsumed addition of element recorded");
         }
 
         public void assertRemoval(E element) {
-            assertTrue(this.operations.removeFirstOccurrence(new Removal(element)), "No unconsumed removal of element recorded");
+            assertTrue(this.operations.removeFirstOccurrence(new Removal<>(element)), "No unconsumed removal of element recorded");
         }
 
         /** Asserts that there are no unconsumed operations left in the current context. */
@@ -83,35 +82,9 @@ final class MockSetChangeListener<E> implements CollectionChangeListener<Observa
 
     }
 
-    private abstract class Operation {
+    private sealed interface Operation<E> {}
 
-        private final E element;
-
-        Operation(E element) {
-            this.element = element;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-
-            if (this.getClass() == obj.getClass()) {
-                Operation other = (Operation) obj;
-                return Objects.equals(this.element, other.element);
-            }
-
-            return false;
-        }
-
-    }
-
-    private class Addition extends Operation {
-        Addition(E element) { super(element); }
-    }
-
-    private class Removal extends Operation {
-        Removal(E element) { super(element); }
-    }
+    private record Addition<E>(E element) implements Operation<E> {}
+    private record Removal<E>(E element) implements Operation<E> {}
 
 }

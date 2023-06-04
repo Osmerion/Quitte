@@ -35,8 +35,8 @@ import java.util.Iterator;
 import java.util.Objects;
 
 import com.osmerion.quitte.InvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
 import com.osmerion.quitte.collections.ObservableSet;
+import com.osmerion.quitte.collections.SetChangeListener;
 
 /**
  * A wrapper for an {@link ObservableSet} that blocks mutation.
@@ -62,8 +62,8 @@ public class UnmodifiableObservableSet<E> implements ObservableSet<E> {
 
     @Override public boolean addInvalidationListener(InvalidationListener listener) { return this.impl.addInvalidationListener(listener); }
     @Override public boolean removeInvalidationListener(InvalidationListener listener) { return this.impl.removeInvalidationListener(listener); }
-    @Override public boolean addChangeListener(CollectionChangeListener<? super Change<? extends E>> listener) { return this.impl.addChangeListener(listener); }
-    @Override public boolean removeChangeListener(CollectionChangeListener<? super ObservableSet.Change<? extends E>> listener) { return this.impl.removeChangeListener(listener); }
+    @Override public boolean addChangeListener(SetChangeListener<? super E> listener) { return this.impl.addChangeListener(listener); }
+    @Override public boolean removeChangeListener(SetChangeListener<? super E> listener) { return this.impl.removeChangeListener(listener); }
 
     @Override public boolean contains(Object o) { return this.impl.contains(o); }
     @Override public boolean containsAll(Collection<?> c) { return this.impl.containsAll(c); }

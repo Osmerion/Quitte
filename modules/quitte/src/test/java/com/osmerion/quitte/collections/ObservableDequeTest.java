@@ -63,14 +63,14 @@ public final class ObservableDequeTest {
     public void testClear() {
         try (var changeCtx = this.changeListener.push()) {
             this.observableDeque.addAll(List.of("foo", "bar"));
-            changeCtx.assertInsertion(ObservableDeque.Site.TAIL, List.of("foo", "bar"));
+            changeCtx.assertInsertion(DequeChangeListener.Site.TAIL, List.of("foo", "bar"));
             changeCtx.assertEmpty();
 
             this.observableDeque.add("foo");
-            changeCtx.assertInsertion(ObservableDeque.Site.TAIL, "foo");
+            changeCtx.assertInsertion(DequeChangeListener.Site.TAIL, "foo");
 
             this.observableDeque.clear();
-            changeCtx.assertRemoval(ObservableDeque.Site.OPAQUE, List.of("foo", "bar", "foo"));
+            changeCtx.assertRemoval(DequeChangeListener.Site.OPAQUE, List.of("foo", "bar", "foo"));
             changeCtx.assertEmpty();
         }
     }

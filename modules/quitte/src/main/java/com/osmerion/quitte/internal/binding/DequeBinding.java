@@ -30,18 +30,15 @@
  */
 package com.osmerion.quitte.internal.binding;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.WeakInvalidationListener;
-import com.osmerion.quitte.collections.CollectionChangeListener;
+import com.osmerion.quitte.collections.DequeChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
-import com.osmerion.quitte.collections.WeakCollectionChangeListener;
+import com.osmerion.quitte.collections.WeakDequeChangeListener;
 
 /**
  * A specialized {@link Deque} binding.
@@ -50,12 +47,12 @@ import com.osmerion.quitte.collections.WeakCollectionChangeListener;
  */
 public final class DequeBinding<S, E> implements Binding {
 
-    private final Deque<ObservableDeque.Change<? extends S>> changes = new ArrayDeque<>();
+    private final Deque<DequeChangeListener.Change<? extends S>> changes = new ArrayDeque<>();
 
     private final ObservableDeque<S> source;
 
     private final InvalidationListener invalidationListener;
-    private final CollectionChangeListener<ObservableDeque.Change<? extends S>> changeListener;
+    private final DequeChangeListener<S> changeListener;
 
     private final Function<? super S, E> transform;
 
@@ -64,18 +61,39 @@ public final class DequeBinding<S, E> implements Binding {
         this.transform = transform;
 
         this.source.addInvalidationListener(new WeakInvalidationListener(this.invalidationListener = (observable) -> invalidator.run()));
-        this.source.addChangeListener(new WeakCollectionChangeListener<>(this.changeListener = this.changes::addLast));
+        this.source.addChangeListener(new WeakDequeChangeListener<>(this.changeListener = ((observable, change) -> this.changes.addLast(change))));
     }
 
-    @SuppressWarnings("deprecation")
-    public List<ObservableDeque.Change<E>> getChanges() {
-        List<ObservableDeque.Change<E>> changes = new ArrayList<>(this.changes.size());
-        Iterator<ObservableDeque.Change<? extends S>> changeItr = this.changes.iterator();
+    public List<DequeChangeListener.Change<E>> getChanges() {
+        List<DequeChangeListener.Change<E>> changes = new ArrayList<>(this.changes.size());
+        Iterator<DequeChangeListener.Change<? extends S>> changeItr = this.changes.iterator();
 
         while (changeItr.hasNext()) {
-            ObservableDeque.Change<? extends S> change = changeItr.next();
-            changes.add(change.copy(this.transform));
+            DequeChangeListener.Change<? extends S> change = changeItr.next();
             changeItr.remove();
+
+            DequeChangeListener.Change<E> transformedChange = new DequeChangeListener.Change<>(
+                change.localChanges().stream()
+                    .map(it -> {
+                        if (it instanceof DequeChangeListener.LocalChange.Insertion<? extends S> localInsertion) {
+                            //noinspection SimplifyStreamApiCallChains
+                            return new DequeChangeListener.LocalChange.Insertion<>(
+                                localInsertion.site(),
+                                localInsertion.elements().stream().map(this.transform).collect(Collectors.toUnmodifiableList())
+                            );
+                        } else if (it instanceof DequeChangeListener.LocalChange.Removal<? extends S> localRemoval) {
+                            //noinspection SimplifyStreamApiCallChains
+                            return new DequeChangeListener.LocalChange.Removal<>(
+                                localRemoval.site(),
+                                localRemoval.elements().stream().map(this.transform).collect(Collectors.toUnmodifiableList())
+                            );
+                        } else {
+                            throw new IllegalStateException();
+                        }
+                    }
+            ).toList());
+
+            changes.add(transformedChange);
         }
 
         return changes;

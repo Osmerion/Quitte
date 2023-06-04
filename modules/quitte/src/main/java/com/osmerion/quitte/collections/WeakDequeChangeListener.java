@@ -30,41 +30,70 @@
  */
 package com.osmerion.quitte.collections;
 
+import java.lang.ref.WeakReference;
+import java.util.Objects;
+
 /**
- * A listener that may be used to subscribe to changes to one or more observable collections.
+ * A {@code WeakDequeChangeListener} may be used to wrap a listener that should only be referenced weakly from an
+ * {@link ObservableDeque}.
  *
- * @param <C>   the type of change this listener can process
+ * <p>This listener does not keep a strong reference to the wrapped listener.</p>
  *
- * @since   0.1.0
+ * @param <E>   the type of the deque elements
+ *
+ * @see WeakReference
+ *
+ * @since   0.8.0
  *
  * @author  Leon Linhart
  */
-public interface CollectionChangeListener<C> {
+public final class WeakDequeChangeListener<E> implements DequeChangeListener<E> {
+
+    private final WeakReference<DequeChangeListener<E>> ref;
+
+    private boolean wasGarbageCollected;
 
     /**
-     * Processes changes to an observable collection this listener is attached to.
+     * Wraps the given {@link DequeChangeListener listener}.
      *
-     * @param change    the change to process
+     * @param listener  the listener to wrap
      *
-     * @since   0.1.0
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @since   0.8.0
      */
-    void onChanged(C change);
+    public WeakDequeChangeListener(DequeChangeListener<E> listener) {
+        this.ref = new WeakReference<>(Objects.requireNonNull(listener));
+        this.wasGarbageCollected = false;
+    }
 
     /**
-     * Returns whether this listener is invalid.
+     * {@inheritDoc}
      *
-     * <p>Once an observable collection discovers that a listener is invalid, it will stop notifying the listener of
-     * updates and release all strong references to the listener.</p>
-     *
-     * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
-     * Breaking this contract may result in unexpected behavior.</p>
-     *
-     * @return  whether this listener is invalid
-     *
-     * @since   0.1.0
+     * @since   0.8.0
      */
-    default boolean isInvalid() {
-        return false;
+    @Override
+    public void onChanged(ObservableDeque<? extends E> observable, DequeChangeListener.Change<? extends E> change) {
+        var listener = this.ref.get();
+
+        if (listener != null) {
+            listener.onChanged(observable, change);
+        } else {
+            this.wasGarbageCollected = true;
+        }
+    }
+
+    /**
+     * {@return whether the underlying listener was garbage collected or has become invalid}
+     *
+     * @since   0.8.0
+     */
+    @Override
+    public boolean isInvalid() {
+        if (this.wasGarbageCollected) return true;
+
+        var listener = this.ref.get();
+        return (listener != null && listener.isInvalid());
     }
 
 }

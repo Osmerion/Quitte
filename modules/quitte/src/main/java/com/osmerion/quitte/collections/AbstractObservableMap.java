@@ -30,13 +30,7 @@
  */
 package com.osmerion.quitte.collections;
 
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
 
@@ -54,7 +48,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
-    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super Change<? extends K, ? extends V>>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<MapChangeListener<? super K, ? super V>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -66,7 +60,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public final boolean addChangeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
+    public final boolean addChangeListener(MapChangeListener<? super K, ? super V> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
@@ -76,7 +70,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      * @since   0.1.0
      */
     @Override
-    public final boolean removeChangeListener(CollectionChangeListener<? super Change<? extends K, ? extends V>> listener) {
+    public final boolean removeChangeListener(MapChangeListener<? super K, ? super V> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -113,6 +107,155 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
 
         return this.changeBuilder;
     }
+
+    @Nullable
+    private transient ObservableSet<Map.Entry<K, V>> entrySet;
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.8.0
+     */
+    @Override
+    public ObservableSet<Entry<K, V>> entrySet() {
+        ObservableSet<Map.Entry<K, V>> entrySet = this.entrySet;
+
+        if (entrySet == null) {
+            entrySet = new WrappingObservableEntrySet(this.entrySetImpl()) {
+
+                @SuppressWarnings({"FieldCanBeLocal", "unused"})
+                private final MapChangeListener<K, V> changeListener;
+
+                {
+                    AbstractObservableMap.this.addChangeListener(new WeakMapChangeListener<>(this.changeListener = (observable, change) -> {
+                        try (ChangeBuilder changeBuilder = this.beginChange()) {
+                            change.addedElements().forEach((key, value) -> changeBuilder.logAdd(new SimpleEntry<>(key, value)));
+                            change.removedElements().forEach((key, value) -> changeBuilder.logRemove(new SimpleEntry<>(key, value)));
+                            change.updatedElements().forEach((key, update) -> {
+                                changeBuilder.logRemove(new SimpleEntry<>(key, update.oldValue()));
+                                changeBuilder.logAdd(new SimpleEntry<>(key, update.newValue()));
+                            });
+                        }
+                    }));
+                }
+
+                @Override
+                protected boolean addImpl(@Nullable Entry<K, V> element) {
+                    return false;
+                }
+
+                @SuppressWarnings("unchecked")
+                @Override
+                protected boolean removeImpl(@Nullable Object element) {
+                    Objects.requireNonNull(element);
+
+                    if (AbstractObservableMap.this.entrySetImpl().remove((Map.Entry<K, V>) element)) {
+                        try (AbstractObservableMap<K, V>.ChangeBuilder changeBuilder = AbstractObservableMap.this.beginChange()) {
+                            /*
+                             * Technically, this cast is wrong and there is a tiny chance that it could fail if the EntrySet of
+                             * the backing map implementation does not perform identity-checks in it's Set#remove(Object)
+                             * method.
+                             *
+                             * However, since the possibility of encountering such an edge-case is extremely tiny and arguably
+                             * a misuse of the API, we will not provide a workaround at this time. Should this ever become a
+                             * more serious problem, this implementation will need to be reconsidered.
+                             */
+                            Entry<K, V> entry = (Entry<K, V>) element;
+                            changeBuilder.logRemove(entry.getKey(), entry.getValue());
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                }
+
+            };
+
+            this.entrySet = entrySet;
+        }
+
+        return entrySet;
+    }
+
+    @Nullable
+    private transient ObservableSet<K> keySet;
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since   0.8.0
+     */
+    @Override
+    public ObservableSet<K> keySet() {
+        ObservableSet<K> keySet = this.keySet;
+
+        if (keySet == null) {
+            keySet = new AbstractObservableSet<>() {
+
+                @SuppressWarnings({"FieldCanBeLocal", "unused"})
+                private final MapChangeListener<K, V> changeListener;
+
+                {
+                    AbstractObservableMap.this.addChangeListener(new WeakMapChangeListener<>(this.changeListener = (observable, change) -> {
+                        try (ChangeBuilder changeBuilder = this.beginChange()) {
+                            change.addedElements().keySet().forEach(changeBuilder::logAdd);
+                            change.removedElements().keySet().forEach(changeBuilder::logRemove);
+                        }
+                    }));
+                }
+
+                @Override
+                protected boolean addImpl(@Nullable K element) {
+                    throw new UnsupportedOperationException();
+                }
+
+                @Override
+                protected boolean removeImpl(@Nullable Object element) {
+                    int s = AbstractObservableMap.this.size();
+                    AbstractObservableMap.this.remove(element);
+
+                    return s != AbstractObservableMap.this.size();
+                }
+
+                @Override
+                public Iterator<K> iterator() {
+                    return new Iterator<>() {
+
+                        private final Iterator<ObservableMap.Entry<K, V>> impl = AbstractObservableMap.this.entrySetImpl().iterator();
+
+                        @Override
+                        public boolean hasNext() {
+                            return this.impl.hasNext();
+                        }
+
+                        @Override
+                        public K next() {
+                            return this.impl.next().getKey();
+                        }
+
+                        @Override
+                        public void remove() {
+                            this.impl.remove();
+                        }
+
+                    };
+                }
+
+                @Override
+                public int size() {
+                    return AbstractObservableMap.this.size();
+                }
+
+            };
+
+            this.keySet = keySet;
+        }
+
+        return keySet;
+    }
+
+    protected abstract Set<Entry<K, V>> entrySetImpl();
 
     @Nullable
     protected abstract V putImpl(@Nullable K key, @Nullable V value);
@@ -155,7 +298,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
         private HashMap<K, V> added, removed;
 
         @Nullable
-        private HashMap<K, Change.Update<V>> updated;
+        private HashMap<K, MapChangeListener.Change.Update<V>> updated;
 
         private int depth = 0;
 
@@ -181,15 +324,15 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
                     (this.removed == null || this.removed.isEmpty()) &&
                     (this.updated == null || this.updated.isEmpty())) return;
 
-                var change = new Change<>(this.added, this.removed, this.updated);
+                var change = new MapChangeListener.Change<>(this.added, this.removed, this.updated);
 
-                for (CollectionChangeListener<? super Change<? extends K, ? extends V>> listener : AbstractObservableMap.this.changeListeners) {
+                for (MapChangeListener<? super K, ? super V> listener : AbstractObservableMap.this.changeListeners) {
                     if (listener.isInvalid()) {
                         AbstractObservableMap.this.changeListeners.remove(listener);
                         continue;
                     }
 
-                    listener.onChanged(change);
+                    listener.onChanged(AbstractObservableMap.this, change);
                     if (listener.isInvalid()) AbstractObservableMap.this.changeListeners.remove(listener);
                 }
 
@@ -258,7 +401,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             }
 
             if (this.updated == null) this.updated = new HashMap<>();
-            this.updated.put(key, new Change.Update<>(oldValue, newValue));
+            this.updated.put(key, new MapChangeListener.Change.Update<>(oldValue, newValue));
         }
 
     }
@@ -268,7 +411,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      *
      * @since   0.1.0
      */
-    protected abstract class AbstractObservableEntrySet extends AbstractSet<Entry<K, V>> {
+    protected abstract class AbstractObservableEntrySet extends AbstractObservableSet<Entry<K, V>> implements ObservableSet<Entry<K, V>> {
 
         protected final Set<Entry<K, V>> impl;
 
@@ -308,6 +451,11 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
             };
         }
 
+        @Override
+        protected boolean addImpl(@Nullable Entry<K, V> element) {
+            throw new UnsupportedOperationException();
+        }
+
         @SuppressWarnings("unchecked")
         @Override
         public final Object[] toArray() {
@@ -341,35 +489,35 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
      *
      * @since   0.1.0
      */
-    protected final class WrappingObservableEntrySet extends AbstractObservableEntrySet {
+    protected abstract class WrappingObservableEntrySet extends AbstractObservableEntrySet {
 
         public WrappingObservableEntrySet(Set<Entry<K, V>> impl) {
             super(impl);
         }
 
-        @SuppressWarnings("unchecked")
-        @Override
-        public boolean remove(Object element) {
-            if (this.impl.remove(element)) {
-                try (ChangeBuilder changeBuilder = AbstractObservableMap.this.beginChange()) {
-                    /*
-                     * Technically, this cast is wrong and there is a tiny chance that it could fail if the EntrySet of
-                     * the backing map implementation does not perform identity-checks in it's Set#remove(Object)
-                     * method.
-                     *
-                     * However, since the possibility of encountering such an edge-case is extremely tiny and arguably
-                     * a misuse of the API, we will not provide a workaround at this time. Should this ever become a
-                     * more serious problem, this implementation will need to be reconsidered.
-                     */
-                    Entry<K, V> entry = (Entry<K, V>) element;
-                    changeBuilder.logRemove(entry.getKey(), entry.getValue());
-                }
-
-                return true;
-            }
-
-            return false;
-        }
+//        @SuppressWarnings("unchecked")
+//        @Override
+//        public boolean remove(Object element) {
+//            if (this.impl.remove(element)) {
+//                try (ChangeBuilder changeBuilder = AbstractObservableMap.this.beginChange()) {
+//                    /*
+//                     * Technically, this cast is wrong and there is a tiny chance that it could fail if the EntrySet of
+//                     * the backing map implementation does not perform identity-checks in it's Set#remove(Object)
+//                     * method.
+//                     *
+//                     * However, since the possibility of encountering such an edge-case is extremely tiny and arguably
+//                     * a misuse of the API, we will not provide a workaround at this time. Should this ever become a
+//                     * more serious problem, this implementation will need to be reconsidered.
+//                     */
+//                    Entry<K, V> entry = (Entry<K, V>) element;
+//                    changeBuilder.logRemove(entry.getKey(), entry.getValue());
+//                }
+//
+//                return true;
+//            }
+//
+//            return false;
+//        }
 
         @Override
         public Entry<K, V> wrap(Entry<K, V> entry) {

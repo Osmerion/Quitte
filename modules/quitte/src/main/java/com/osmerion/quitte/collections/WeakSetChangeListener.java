@@ -34,45 +34,50 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 /**
- * A {@code WeakCollectionChangeListener} may be used to wrap a listener that should only be referenced weakly from an
- * {@link ObservableCollection}.
+ * A {@code WeakSetChangeListener} may be used to wrap a listener that should only be referenced weakly from an
+ * {@link ObservableSet}.
+ *
+ * <p>This listener does not keep a strong reference to the wrapped listener.</p>
+ *
+ * @param <E>   the type of the set elements
  *
  * @see WeakReference
  *
- * @since   0.1.0
+ * @since   0.8.0
  *
  * @author  Leon Linhart
  */
-public final class WeakCollectionChangeListener<C> implements CollectionChangeListener<C> {
+public final class WeakSetChangeListener<E> implements SetChangeListener<E> {
 
-    private final WeakReference<CollectionChangeListener<C>> ref;
+    private final WeakReference<SetChangeListener<E>> ref;
 
     private boolean wasGarbageCollected;
 
     /**
-     * Wraps the given {@link CollectionChangeListener listener}.
+     * Wraps the given {@link SetChangeListener listener}.
      *
      * @param listener  the listener to wrap
      *
      * @throws NullPointerException if the given listener is {@code null}
      *
-     * @since   0.1.0
+     * @since   0.8.0
      */
-    public WeakCollectionChangeListener(CollectionChangeListener<C> listener) {
+    public WeakSetChangeListener(SetChangeListener<E> listener) {
         this.ref = new WeakReference<>(Objects.requireNonNull(listener));
+        this.wasGarbageCollected = false;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @since   0.1.0
+     * @since   0.8.0
      */
     @Override
-    public void onChanged(C change) {
-        CollectionChangeListener<C> listener = this.ref.get();
+    public void onChanged(ObservableSet<? extends E> observable, SetChangeListener.Change<? extends E> change) {
+        var listener = this.ref.get();
 
         if (listener != null) {
-            listener.onChanged(change);
+            listener.onChanged(observable, change);
         } else {
             this.wasGarbageCollected = true;
         }
@@ -81,7 +86,7 @@ public final class WeakCollectionChangeListener<C> implements CollectionChangeLi
     /**
      * {@return whether the underlying listener was garbage collected or has become invalid}
      *
-     * @since   0.1.0
+     * @since   0.8.0
      */
     @Override
     public boolean isInvalid() {

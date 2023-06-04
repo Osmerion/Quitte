@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableList;
+import com.osmerion.quitte.collections.ListChangeListener;
 import com.osmerion.quitte.collections.ObservableList;
 import com.osmerion.quitte.internal.binding.ListBinding;
 
@@ -218,15 +219,15 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
     void onBindingInvalidated() {
         assert (this.binding != null);
 
-        List<ObservableList.Change<E>> changes = this.binding.getChanges();
+        List<ListChangeListener.Change<E>> changes = this.binding.getChanges();
 
         try {
             this.inBoundUpdate = true;
 
             try (ChangeBuilder ignored = this.beginChange()) {
                 for (var change : changes) {
-                    if (change instanceof Change.Permutation<E> perm) {
-                        List<Integer> indices = perm.getIndices();
+                    if (change instanceof ListChangeListener.Change.Permutation<E> perm) {
+                        List<Integer> indices = perm.indices();
 
                         if (this.size() != indices.size()) throw new IndexOutOfBoundsException();
 
@@ -235,31 +236,31 @@ public class ListProperty<E> extends AbstractObservableList<E> implements Writab
                         for (int i = 0; i < this.size(); i++) {
                             this.set(indices.get(i), copy.get(i));
                         }
-                    } else if (change instanceof Change.Update<E> update) {
-                        for (var localChange : update.getLocalChanges()) {
-                            if (localChange instanceof LocalChange.Insertion<E> insertion) {
-                                if (this.size() < insertion.getIndex()) throw new IndexOutOfBoundsException();
+                    } else if (change instanceof ListChangeListener.Change.Update<E> update) {
+                        for (var localChange : update.localChanges()) {
+                            if (localChange instanceof ListChangeListener.LocalChange.Insertion<E> insertion) {
+                                if (this.size() < insertion.index()) throw new IndexOutOfBoundsException();
 
-                                List<E> elements = insertion.getElements();
-                                int offset = insertion.getIndex();
+                                List<E> elements = insertion.elements();
+                                int offset = insertion.index();
 
                                 for (int i = 0; i < elements.size(); i++) {
                                     this.addAll(offset + i, elements);
                                 }
-                            } else if (localChange instanceof LocalChange.Removal<E> removal) {
-                                if (this.size() < removal.getIndex() + removal.getElements().size()) throw new IndexOutOfBoundsException();
+                            } else if (localChange instanceof ListChangeListener.LocalChange.Removal<E> removal) {
+                                if (this.size() < removal.index() + removal.elements().size()) throw new IndexOutOfBoundsException();
 
-                                List<E> elements = removal.getElements();
-                                int offset = removal.getIndex();
+                                List<E> elements = removal.elements();
+                                int offset = removal.index();
 
                                 for (int i = 0; i < elements.size(); i++) {
                                     this.remove(offset);
                                 }
-                            } else if (localChange instanceof LocalChange.Update<E> localUpdate) {
-                                if (this.size() < localUpdate.getIndex() + localUpdate.getElements().size()) throw new IndexOutOfBoundsException();
+                            } else if (localChange instanceof ListChangeListener.LocalChange.Update<E> localUpdate) {
+                                if (this.size() < localUpdate.index() + localUpdate.newElements().size()) throw new IndexOutOfBoundsException();
 
-                                List<E> elements = localUpdate.getElements();
-                                int offset = localUpdate.getIndex();
+                                List<E> elements = localUpdate.newElements();
+                                int offset = localUpdate.index();
 
                                 for (int i = 0; i < elements.size(); i++) {
                                     this.set(offset + i, elements.get(i));

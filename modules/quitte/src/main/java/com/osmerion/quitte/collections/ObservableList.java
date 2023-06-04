@@ -32,10 +32,8 @@ package com.osmerion.quitte.collections;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.RandomAccess;
-import java.util.function.Function;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableList;
 import com.osmerion.quitte.internal.collections.UnmodifiableRandomAccessObservableList;
@@ -51,7 +49,7 @@ import com.osmerion.quitte.internal.collections.WrappingRandomAccessObservableLi
  *
  * @author  Leon Linhart
  */
-public interface ObservableList<E> extends List<E>, ObservableCollection<ObservableList.Change<? extends E>> {
+public interface ObservableList<E> extends List<E>, ObservableCollection<E> {
 
     /**
      * Returns an observable view of the specified list. Query operations on the returned list "read and write through"
@@ -90,6 +88,51 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
     static <T> ObservableList<T> unmodifiableViewOf(ObservableList<T> list) {
         return list instanceof RandomAccess ? new UnmodifiableRandomAccessObservableList<>(list) : new UnmodifiableObservableList<>(list);
     }
+
+    /**
+     * Attaches the given {@link ListChangeListener change listener} to this list.
+     *
+     * <p>If the given listener is already attached to this list, this method does nothing and returns {@code false}.
+     * </p>
+     *
+     * <p>While an {@code ListChangeListener} is attached to a list, it will be {@link ListChangeListener#onChanged(ObservableList, ListChangeListener.Change)}
+     * notified} whenever the list is updated.</p>
+     *
+     * <p>This list stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeChangeListener(ListChangeListener)} or implicitly when this list discovers that the
+     * listener has become {@link ListChangeListener#isInvalid() invalid}. Generally, it is recommended to use an
+     * instance of {@link WeakListChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this list
+     *
+     * @return  {@code true} if the listener was not previously attached to this list and has been successfully
+     *          attached, or {@code false} otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #removeChangeListener(ListChangeListener)
+     *
+     * @since   0.8.0
+     */
+    boolean addChangeListener(ListChangeListener<? super E> listener);
+
+    /**
+     * Detaches the given {@link ListChangeListener change listener} from this list.
+     *
+     * <p>If the given listener is not attached to this list, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this list
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this list, or {@code false}
+     *          otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #addChangeListener(ListChangeListener)
+     *
+     * @since   0.8.0
+     */
+    boolean removeChangeListener(ListChangeListener<? super E> listener);
 
     /**
      * See {@link #addAll(Collection)}.
@@ -191,268 +234,5 @@ public interface ObservableList<E> extends List<E>, ObservableCollection<Observa
      * @since   0.1.0
      */
     boolean setAll(Collection<E> elements);
-
-    /**
-     * A change to a list may either be a {@link Permutation permutation}, or one or more local updates to parts of the
-     * list (represented as {@link LocalChange}).
-     *
-     * <p>Using {@code instanceof} checks (or similar future pattern matching mechanisms) is recommended when working
-     * with {@code Change} objects.</p>
-     *
-     * @param <E>   the type of the list's elements
-     *
-     * @since   0.1.0
-     */
-    abstract class Change<E> {
-
-        private Change() {} // TODO This is an ideal candidate for a sealed record hierarchy.
-
-        /**
-         * Creates a copy of this change using the given {@code transform} to map the elements.
-         *
-         * @param <T>       the new type for the elements
-         * @param transform the transform function to be applied to the elements
-         *
-         * @return  a copy of this change
-         *
-         * @deprecated  This is an unsupported method that may be removed at any time.
-         *
-         * @since   0.1.0
-         */
-        @Deprecated
-        public abstract <T> Change<T> copy(Function<? super E, T> transform);
-
-        /**
-         * A change to a list in which its elements are rearranged.
-         *
-         * @since   0.1.0
-         */
-        public static final class Permutation<E> extends Change<E> {
-
-            private final List<Integer> indices;
-
-            Permutation(List<Integer> indices) {
-                this.indices = indices;
-            }
-
-            /**
-             * {@inheritDoc}
-             *
-             * @since   0.1.0
-             */
-            @SuppressWarnings("unchecked")
-            @Deprecated
-            @Override
-            public <T> Change<T> copy(Function<? super E, T> transform) {
-                return (Permutation<T>) this;
-            }
-
-            /**
-             * A list of integers that represents the mapping of indices used to create the current permutation.
-             *
-             * @return  a list of integers that represents the mapping of indices used to create the current permutation
-             *
-             * @since   0.1.0
-             */
-            public List<Integer> getIndices() {
-                return this.indices;
-            }
-
-        }
-
-        /**
-         * A change to a list that consists of one or more local changes to the list.
-         *
-         * @since   0.1.0
-         */
-        public static final class Update<E> extends Change<E> {
-
-            private final List<LocalChange<E>> localChanges;
-
-            Update(List<LocalChange<E>> localChanges) {
-                this.localChanges = localChanges;
-            }
-
-            /**
-             * {@inheritDoc}
-             *
-             * @since   0.1.0
-             */
-            @Deprecated
-            @Override
-            public <T> Change<T> copy(Function<? super E, T> transform) {
-                return new Update<>(this.localChanges.stream().map(it -> it.copy(transform)).toList());
-            }
-
-            /**
-             * Returns a list of changes that are local to parts of the list.
-             *
-             * <p><b>It is important to process local changes in order, since their indices depend on another.</b></p>
-             *
-             * @return  a list of changes that are local to parts of the list
-             *
-             * @since   0.1.0
-             */
-            public List<LocalChange<E>> getLocalChanges() {
-                return this.localChanges;
-            }
-
-        }
-
-    }
-
-    /**
-     * A change to a list. This might either be an {@link Insertion}, a {@link Removal}, or an {@link Update}.
-     *
-     * <p>Using {@code instanceof} checks (or similar future pattern matching mechanisms) is recommended when working
-     * with {@code LocalChange} objects.</p>
-     *
-     * @param <E>   the type of the list's elements
-     *
-     * @since   0.1.0
-     */
-    abstract class LocalChange<E> {
-
-        private final int index;
-        private final List<E> elements;
-
-        // TODO This is an ideal candidate for a sealed record hierarchy.
-        private LocalChange(int index, List<E> elements) {
-            this.index = index;
-            this.elements = Collections.unmodifiableList(elements);
-        }
-
-        @Deprecated
-        abstract <T> LocalChange<T> copy(Function<? super E, T> transform);
-
-        /**
-         * Returns the index of the first element affected by this change.
-         *
-         * @return  the index of the first element affected by this change
-         *
-         * @since   0.1.0
-         */
-        public final int getIndex() {
-            return this.index;
-        }
-
-        /**
-         * A list of elements related to this change. How this list should be interpreted is defined by an implementing
-         * class.
-         *
-         * @return  a list of elements related to this change
-         *
-         * @since   0.1.0
-         */
-        public final List<E> getElements() {
-            return this.elements;
-        }
-
-        /**
-         * Represents insertion of one or more subsequent {@link #getElements() elements} starting from a given
-         * {@link #getIndex() index}.
-         *
-         * <p><b>Example:</b></p>
-         * <pre>
-         * Initial
-         * Indices:   0 1 2 3 4 5
-         * Elements:  A B C D E F
-         *              ^
-         * Insertion    |
-         * Index:       1
-         * Elements:    X Y Z
-         *
-         * Result
-         * Indices:   0 1 2 3 4 5 6 7 8
-         * Elements:  A X Y Z B C D E F
-         *
-         * </pre>
-         *
-         * @since   0.1.0
-         */
-        public static final class Insertion<E> extends LocalChange<E> {
-
-            Insertion(int index, List<E> elements) {
-                super(index, elements);
-            }
-
-            @Override
-            <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Insertion<>(this.getIndex(), this.getElements().stream().map(transform).toList());
-            }
-
-        }
-
-        /**
-         * Represents removal of one or more subsequent {@link #getElements() elements} starting from a given
-         * {@link #getIndex() index}.
-         *
-         * <p><b>Example:</b></p>
-         * <pre>
-         * Initial
-         * Indices:   0 1 2 3 4 5
-         * Elements:  A B C D E F
-         *              ^
-         * Removal      |
-         * Index:       1
-         * Elements:    B C D
-         *
-         * Result
-         * Indices:   0 1 2
-         * Elements:  A E F
-         *
-         * </pre>
-         *
-         * @since   0.1.0
-         */
-        public static final class Removal<E> extends LocalChange<E> {
-
-            Removal(int index, List<E> elements) {
-                super(index, elements);
-            }
-
-            @Override
-            <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Removal<>(this.getIndex(), this.getElements().stream().map(transform).toList());
-            }
-
-        }
-
-        /**
-         * Represents an update of one or more subsequent {@link #getElements() elements} starting from a given
-         * {@link #getIndex() index}.
-         *
-         * <p><b>Example:</b></p>
-         * <pre>
-         * Initial
-         * Indices:   0 1 2 3 4 5
-         * Elements:  A B C D E F
-         *              ^
-         * Update       |
-         * Index:       1
-         * Elements:    X Y Z
-         *
-         * Result
-         * Indices:   0 1 2 3 4 5
-         * Elements:  A X Y Z E F
-         *
-         * </pre>
-         *
-         * @since   0.1.0
-         */
-        public static final class Update<E> extends LocalChange<E> {
-
-            Update(int index, List<E> elements) {
-                super(index, elements);
-            }
-
-            @Override
-            <T> LocalChange<T> copy(Function<? super E, T> transform) {
-                return new Update<>(this.getIndex(), this.getElements().stream().map(transform).toList());
-            }
-
-        }
-
-    }
 
 }

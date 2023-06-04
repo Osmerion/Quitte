@@ -168,6 +168,17 @@ public final class ObservableListTest {
     }
 
     @Test
+    public void testUpdate() {
+        this.observableList.add(0, "foo");
+        try (var changeCtx = this.changeListener.push()) {
+            this.observableList.set(0, "bar");
+            changeCtx.assertUpdate(0, "foo", "bar");
+
+            this.observableList.set(0, "bar"); // Ensure that no change is created
+        }
+    }
+
+    @Test
     @DisplayName("ObservableList#size() after modification of underlying List")
     public void testSizeWithUnderlyingModification() {
         assertEquals(0, this.underlyingList.size());

@@ -50,7 +50,7 @@ import com.osmerion.quitte.InvalidationListener;
  */
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private transient final CopyOnWriteArraySet<CollectionChangeListener<? super ObservableSet.Change<? extends E>>> changeListeners = new CopyOnWriteArraySet<>();
+    private transient final CopyOnWriteArraySet<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
@@ -59,20 +59,20 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     /**
      * {@inheritDoc}
      *
-     * @since   0.1.0
+     * @since   0.8.0
      */
     @Override
-    public final boolean addChangeListener(CollectionChangeListener<? super ObservableSet.Change<? extends E>> listener) {
+    public final boolean addChangeListener(SetChangeListener<? super E> listener) {
         return this.changeListeners.add(Objects.requireNonNull(listener));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @since   0.1.0
+     * @since   0.8.0
      */
     @Override
-    public final boolean removeChangeListener(CollectionChangeListener<? super ObservableSet.Change<? extends E>> listener) {
+    public final boolean removeChangeListener(SetChangeListener<? super E> listener) {
         return this.changeListeners.remove(Objects.requireNonNull(listener));
     }
 
@@ -115,7 +115,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      *
      * @param element   the element to add
      *
-     * @return  whether or not this set was modified as result of this operation
+     * @return  whether this set was modified as result of this operation
      *
      * @since   0.1.0
      */
@@ -126,7 +126,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      *
      * @param element   the element to remove
      *
-     * @return  whether or not this set was modified as result of this operation
+     * @return  whether this set was modified as result of this operation
      *
      * @since   0.1.0
      */
@@ -134,12 +134,11 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
 
     @Override
     public final boolean add(E e) {
-        if (this.addImpl(e)) {
-            try (ChangeBuilder changeBuilder = this.beginChange()) {
+        try (ChangeBuilder changeBuilder = this.beginChange()) {
+            if (this.addImpl(e)) {
                 changeBuilder.logAdd(e);
+                return true;
             }
-
-            return true;
         }
 
         return false;
@@ -148,12 +147,11 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     @Override
     @SuppressWarnings("unchecked")
     public final boolean remove(Object o) {
-        if (this.removeImpl(o)) {
-            try (ChangeBuilder changeBuilder = this.beginChange()) {
+        try (ChangeBuilder changeBuilder = this.beginChange()) {
+            if (this.removeImpl(o)) {
                 changeBuilder.logRemove((E) o);
+                return true;
             }
-
-            return true;
         }
 
         return false;
@@ -194,7 +192,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                 AbstractObservableSet.this.changeBuilder = null;
                 if ((this.added == null || this.added.isEmpty()) && (this.removed == null || this.removed.isEmpty())) return;
 
-                var change = new ObservableSet.Change<>(this.added, this.removed);
+                var change = new SetChangeListener.Change<>(this.added, this.removed);
 
                 for (var listener : AbstractObservableSet.this.changeListeners) {
                     if (listener.isInvalid()) {
@@ -202,7 +200,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
                         continue;
                     }
 
-                    listener.onChanged(change);
+                    listener.onChanged(AbstractObservableSet.this, change);
                     if (listener.isInvalid()) AbstractObservableSet.this.changeListeners.remove(listener);
                 }
 

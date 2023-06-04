@@ -30,9 +30,7 @@
  */
 package com.osmerion.quitte.collections;
 
-import java.util.Collections;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableSet;
 import com.osmerion.quitte.internal.collections.WrappingObservableSet;
@@ -46,7 +44,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableSet;
  *
  * @author  Leon Linhart
  */
-public interface ObservableSet<E> extends Set<E>, ObservableCollection<ObservableSet.Change<? extends E>> {
+public interface ObservableSet<E> extends Set<E>, ObservableCollection<E> {
 
     /**
      * Returns an observable view of the specified set. Query operations on the returned set "read and write through"
@@ -87,22 +85,47 @@ public interface ObservableSet<E> extends Set<E>, ObservableCollection<Observabl
     }
 
     /**
-     * A change done to an {@link ObservableSet}.
+     * Attaches the given {@link SetChangeListener change listener} to this set.
      *
-     * <p>Note that adding an element that is already in a set does not modify the set and therefore no change will be
-     * generated.</p>
+     * <p>If the given listener is already attached to this set, this method does nothing and returns {@code false}.</p>
      *
-     * @param <E>   the type of the set's elements
+     * <p>While an {@code SetChangeListener} is attached to a set, it will be {@link SetChangeListener#onChanged(ObservableSet, SetChangeListener.Change)}
+     * notified} whenever the set is updated.</p>
      *
-     * @since   0.1.0
+     * <p>This set stores a strong reference to the given listener until the listener is either removed explicitly by
+     * calling {@link #removeChangeListener(SetChangeListener)} or implicitly when this set discovers that the listener
+     * has become {@link SetChangeListener#isInvalid() invalid}. Generally, it is recommended to use an instance of
+     * {@link WeakSetChangeListener} when possible to avoid leaking instances.</p>
+     *
+     * @param listener  the listener to be attached to this set
+     *
+     * @return  {@code true} if the listener was not previously attached to this set and has been successfully attached,
+     *          or {@code false} otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #removeChangeListener(SetChangeListener)
+     *
+     * @since   0.8.0
      */
-    record Change<E>(Set<E> addedElements, Set<E> removedElements) {
+    boolean addChangeListener(SetChangeListener<? super E> listener);
 
-        public Change(@Nullable Set<E> addedElements, @Nullable Set<E> removedElements) {
-            this.addedElements = addedElements != null ? Collections.unmodifiableSet(addedElements) : Collections.emptySet();
-            this.removedElements = removedElements != null ? Collections.unmodifiableSet(removedElements) : Collections.emptySet();
-        }
-
-    }
+    /**
+     * Detaches the given {@link SetChangeListener change listener} from this set.
+     *
+     * <p>If the given listener is not attached to this set, this method does nothing and returns {@code false}.</p>
+     *
+     * @param listener  the listener to be detached from this set
+     *
+     * @return  {@code true} if the listener was attached to and has been detached from this set, or {@code false}
+     *          otherwise
+     *
+     * @throws NullPointerException if the given listener is {@code null}
+     *
+     * @see #addChangeListener(SetChangeListener)
+     *
+     * @since   0.8.0
+     */
+    boolean removeChangeListener(SetChangeListener<? super E> listener);
 
 }
