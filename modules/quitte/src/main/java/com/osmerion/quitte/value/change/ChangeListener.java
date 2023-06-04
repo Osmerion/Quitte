@@ -62,15 +62,13 @@ public interface ChangeListener<T> {
     void onChanged(ObservableValue<? extends T> observable, @Nullable T oldValue, @Nullable T newValue);
 
     /**
-     * Returns whether this listener is invalid.
+     * {@return whether this listener is invalid}.
      *
      * <p>Once an {@link Observable observable} discovers that a listener is invalid, it will stop notifying the
      * listener of updates and release all strong references to the listener.</p>
      *
      * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
      * Breaking this contract may result in unexpected behavior.</p>
-     *
-     * @return  whether this listener is invalid
      *
      * @since   0.1.0
      */

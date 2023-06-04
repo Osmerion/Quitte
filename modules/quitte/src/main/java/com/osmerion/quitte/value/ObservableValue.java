@@ -50,11 +50,9 @@ import com.osmerion.quitte.value.change.ChangeListener;
 public interface ObservableValue<T> extends Observable {
 
     /**
-     * Returns the value represented by this object.
+     * {@return the current value}.
      *
      * <p><b>Specialized versions of this method should be used whenever possible.</b></p>
-     *
-     * @return  the current value
      *
      * @since   0.1.0
      */

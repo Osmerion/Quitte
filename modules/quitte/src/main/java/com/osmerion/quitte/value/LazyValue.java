@@ -42,18 +42,14 @@ import com.osmerion.quitte.property.ReadableObjectProperty;
 public interface LazyValue {
 
     /**
-     * Returns a read-only view of the state of this lazy value.
-     *
-     * @return  a read-only view of the state of this lazy value
+     * {@return a read-only view of the state of this lazy value}
      *
      * @since   0.1.0
      */
     ReadableObjectProperty<State> stateProperty();
 
     /**
-     * Returns the state of this lazy value.
-     *
-     * @return  the state of this lazy value
+     * {@return the state of this lazy value}
      *
      * @since   0.1.0
      */
@@ -91,9 +87,7 @@ public interface LazyValue {
         INVALID;
 
         /**
-         * Returns whether this state describes a valid value.
-         *
-         * @return  whether this state describes a valid value
+         * {@return whether this state describes a valid value}
          *
          * @since   0.1.0
          */
