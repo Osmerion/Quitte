@@ -87,11 +87,9 @@ public abstract class I18nContext implements Observable {
     }
 
     /**
-     * Returns the {@link I18nFormat format} for the given localization key.
+     * {@return the {@link I18nFormat format} for the given localization key}
      *
      * @param key   the localization key
-     *
-     * @return  the {@code MessageFormat} for the given {@code key}
      *
      * @since   0.1.0
      */
