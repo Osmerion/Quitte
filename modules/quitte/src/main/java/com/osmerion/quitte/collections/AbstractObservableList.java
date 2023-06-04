@@ -290,6 +290,7 @@ public abstract class AbstractObservableList<E> extends AbstractList<E> implemen
 
         @Override
         public boolean containsAll(Collection<?> c) {
+            //noinspection SlowListContainsAll
             return this.subList.containsAll(c);
         }
 
