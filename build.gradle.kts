@@ -28,12 +28,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-/*
- * See
- * - https://github.com/gradle/gradle/issues/22797 for the warning, and
- * - https://github.com/gradle/gradle/issues/23784 for the scope
- */
-@file:Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
 }
