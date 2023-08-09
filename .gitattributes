@@ -1,1 +1,2 @@
-/modules/*/src/*-generated/** text=auto eol=lf
+/modules/*/src/*-generated/**   text=auto eol=lf
+gradlew                         text eol=lf
