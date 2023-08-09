@@ -63,7 +63,7 @@ public interface SetChangeListener<E> {
      * <p>Once this method returned {@code true}, it must never return {@code false} again for the same instance.
      * Breaking this contract may result in unexpected behavior.</p>
      *
-     * @since   0.1.0
+     * @since   0.8.0
      */
     default boolean isInvalid() {
         return false;
