@@ -49,9 +49,6 @@ module com.osmerion.quitte {
     exports com.osmerion.quitte.value.change;
 
     exports com.osmerion.quitte.internal to
-//        com.osmerion.quitte.holo,
         com.osmerion.quitte.i18n;
-
-//    exports com.osmerion.quitte.internal.addon to com.osmerion.quitte.holo;
 
 }
