@@ -30,11 +30,10 @@
  */
 import java.io.*
 
-@Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
 plugins {
+    alias(libs.plugins.gradle.toolchain.switches)
     id("com.osmerion.quitte.library-module-conventions")
     id("com.osmerion.quitte.generator")
-    alias(libs.plugins.gradle.toolchain.switches)
 }
 
 java {

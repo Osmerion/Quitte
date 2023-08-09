@@ -29,8 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 plugins {
-    `java-library`
     id("com.osmerion.quitte.base-conventions")
+    `java-library`
 }
 
 java {

@@ -28,10 +28,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
 plugins {
-    id("com.osmerion.quitte.library-module-conventions")
     alias(libs.plugins.gradle.toolchain.switches)
+    id("com.osmerion.quitte.library-module-conventions")
 }
 
 publishing {

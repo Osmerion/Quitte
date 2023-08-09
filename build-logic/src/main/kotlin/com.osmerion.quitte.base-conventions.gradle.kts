@@ -28,17 +28,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.osmerion.quitte.build.*
-import com.osmerion.quitte.build.BuildType
-
-group = "com.osmerion.quitte"
-
-val nextVersion = "0.8.0"
-version = when (deployment.type) {
-    BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
-    else -> nextVersion
-}
-
 repositories {
     mavenCentral()
 }

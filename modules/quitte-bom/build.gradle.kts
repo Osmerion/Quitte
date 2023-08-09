@@ -29,13 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 plugins {
-    `java-platform`
     id("com.osmerion.quitte.maven-publish-conventions")
+    `java-platform`
 }
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        register<MavenPublication>("mavenJava") {
             from(components["javaPlatform"])
             artifactId = "quitte-bom"
 
