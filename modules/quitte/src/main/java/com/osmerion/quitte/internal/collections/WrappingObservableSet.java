@@ -33,9 +33,9 @@ package com.osmerion.quitte.internal.collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableSet;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable wrapper for a {@link Set}.
@@ -48,7 +48,7 @@ import com.osmerion.quitte.collections.AbstractObservableSet;
  *
  * @author  Leon Linhart
  */
-public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
+public final class WrappingObservableSet<E extends @Nullable Object> extends AbstractObservableSet<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = 2971132266946625119L;
@@ -59,7 +59,7 @@ public final class WrappingObservableSet<E> extends AbstractObservableSet<E> {
         this.impl = Objects.requireNonNull(impl);
     }
 
-    @Override protected boolean addImpl(@Nullable E element) { return this.impl.add(element); }
+    @Override protected boolean addImpl(E element) { return this.impl.add(element); }
 
     @Override
     protected boolean removeImpl(@Nullable Object element) {

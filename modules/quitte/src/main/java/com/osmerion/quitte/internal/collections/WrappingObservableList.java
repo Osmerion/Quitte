@@ -32,9 +32,9 @@ package com.osmerion.quitte.internal.collections;
 
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable wrapper for a {@link List}.
@@ -47,7 +47,7 @@ import com.osmerion.quitte.collections.AbstractObservableList;
  *
  * @author  Leon Linhart
  */
-public class WrappingObservableList<E> extends AbstractObservableList<E> {
+public class WrappingObservableList<E extends @Nullable Object> extends AbstractObservableList<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = 8317257705662471582L;
@@ -58,9 +58,9 @@ public class WrappingObservableList<E> extends AbstractObservableList<E> {
         this.impl = Objects.requireNonNull(impl);
     }
 
-    @Override public void addImpl(int index, @Nullable E element) { this.impl.add(index, element); }
+    @Override public void addImpl(int index, E element) { this.impl.add(index, element); }
     @Override public E removeImpl(int index) { return this.impl.remove(index); }
-    @Override public E setImpl(int index, @Nullable E element) { return this.impl.set(index, element); }
+    @Override public E setImpl(int index, E element) { return this.impl.set(index, element); }
 
     @Override public E get(int index) { return this.impl.get(index); }
     @Override public int size() { return this.impl.size(); }

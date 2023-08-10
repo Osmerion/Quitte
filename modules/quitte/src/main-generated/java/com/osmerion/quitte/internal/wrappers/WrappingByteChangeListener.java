@@ -34,6 +34,7 @@ package com.osmerion.quitte.internal.wrappers;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
 
+
 /**
  * A wrapping change-listener.
  *
@@ -68,7 +69,7 @@ public final class WrappingByteChangeListener implements ByteChangeListener {
      *
      * @param listener  the listener to test for
      *
-     * @return  whether this wrapper is wrappping the given listener
+     * @return  whether this wrapper is wrapping the given listener
      */
     public boolean isWrapping(ChangeListener<Byte> listener) {
         return this.listener == listener;

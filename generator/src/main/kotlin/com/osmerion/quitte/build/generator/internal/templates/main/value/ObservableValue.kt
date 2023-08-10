@@ -37,14 +37,16 @@ import com.osmerion.quitte.build.generator.internal.Type
 object ObservableValue : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Observable${type.abbrevName}Value") {
             """
-package $PACKAGE_NAME;${if (type === Type.OBJECT) "\n\nimport javax.annotation.Nullable;" else ""}
+package $PACKAGE_NAME;
 
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.change.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 import static java.util.Objects.*;
 
@@ -72,7 +74,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @since   0.1.0
      */
-    static ${if(type === Type.OBJECT) "<T> " else ""}Observable${type.abbrevName}Value$typeParams wrap(${type.raw} value) {
+    static ${if(type === Type.OBJECT) "$typeParams " else ""}Observable${type.abbrevName}Value$typeArgs wrap(${type.raw} value) {
         return new ReadOnly${type.abbrevName}Wrapper${if(type === Type.OBJECT) "<>" else ""}(value);
     }
 
@@ -82,7 +84,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      * @return  the current value
      *
      * @since   0.1.0
-     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+     */
     ${type.raw} get();
 
     /**
@@ -118,7 +120,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @since   0.1.0
      */
-    boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener);
+    boolean addChangeListener(${type.abbrevName}ChangeListener$typeArgs listener);
 
     /**
      * {@inheritDoc}
@@ -147,7 +149,7 @@ public interface Observable${type.abbrevName}Value$typeParams extends Observable
      *
      * @since   0.1.0
      */
-    boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener);
+    boolean removeChangeListener(${type.abbrevName}ChangeListener$typeArgs listener);
 
 }
             """

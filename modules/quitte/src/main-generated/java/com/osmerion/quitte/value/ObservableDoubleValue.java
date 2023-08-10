@@ -34,6 +34,7 @@ package com.osmerion.quitte.value;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.change.*;
 
+
 import static java.util.Objects.*;
 
 /**

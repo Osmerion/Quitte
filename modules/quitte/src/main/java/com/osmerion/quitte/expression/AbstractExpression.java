@@ -33,12 +33,11 @@ package com.osmerion.quitte.expression;
 import java.util.IdentityHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.WeakInvalidationListener;
 import com.osmerion.quitte.functional.BoolSupplier;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An {@code AbstractExpression} is an expression with basic dependency management functionalities.

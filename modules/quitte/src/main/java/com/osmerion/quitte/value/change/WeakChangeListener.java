@@ -32,8 +32,8 @@ package com.osmerion.quitte.value.change;
 
 import java.lang.ref.WeakReference;
 import java.util.Objects;
-import javax.annotation.Nullable;
 import com.osmerion.quitte.value.ObservableValue;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@code WeakChangeListener} may be used to wrap a listener that should only be referenced weakly from an
@@ -49,7 +49,7 @@ import com.osmerion.quitte.value.ObservableValue;
  *
  * @author  Leon Linhart
  */
-public final class WeakChangeListener<T> implements ChangeListener<T> {
+public final class WeakChangeListener<T extends @Nullable Object> implements ChangeListener<T> {
 
     private final WeakReference<ChangeListener<T>> ref;
 
@@ -75,7 +75,7 @@ public final class WeakChangeListener<T> implements ChangeListener<T> {
      * @since   0.1.0
      */
     @Override
-    public void onChanged(ObservableValue<? extends T> observable, @Nullable T oldValue, @Nullable T newValue) {
+    public void onChanged(ObservableValue<? extends T> observable, T oldValue, T newValue) {
         var listener = this.ref.get();
 
         if (listener != null) {

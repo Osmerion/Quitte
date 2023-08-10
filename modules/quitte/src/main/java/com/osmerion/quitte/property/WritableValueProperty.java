@@ -34,6 +34,7 @@ import java.util.function.Function;
 
 import com.osmerion.quitte.value.ObservableValue;
 import com.osmerion.quitte.value.WritableValue;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A basic writable property for a single value.
@@ -46,7 +47,7 @@ import com.osmerion.quitte.value.WritableValue;
  *
  * @author  Leon Linhart
  */
-public interface WritableValueProperty<T> extends WritableProperty, WritableValue<T> {
+public interface WritableValueProperty<T extends @Nullable Object> extends WritableProperty, WritableValue<T> {
 
     /**
      * Binds this property to the given observable value.

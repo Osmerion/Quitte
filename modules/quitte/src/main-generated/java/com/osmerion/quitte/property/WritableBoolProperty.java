@@ -33,6 +33,7 @@ package com.osmerion.quitte.property;
 
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized writable {@code boolean} property.
@@ -212,6 +213,6 @@ public interface WritableBoolProperty extends WritableValueProperty<Boolean>, Re
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform);
+    <S extends @Nullable Object> void bindTo(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform);
 
 }

@@ -31,7 +31,7 @@
  */
 package com.osmerion.quitte.value;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized writable {@code byte} value.

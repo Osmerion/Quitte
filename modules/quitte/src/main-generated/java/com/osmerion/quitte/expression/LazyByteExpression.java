@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code byte} expression.
@@ -161,7 +160,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyByteExpression of(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform) {
+    public static <S extends @Nullable Object> LazyByteExpression of(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform) {
         return new Transform(ex -> new ObjectToByteBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -178,7 +177,7 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyByteExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableByteValue> selector) {
+    public static <S extends @Nullable Object> LazyByteExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableByteValue> selector) {
         return new LazyByteExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -220,7 +219,6 @@ public abstract class LazyByteExpression extends AbstractByteExpression implemen
 
     @Nullable
     private ByteSupplier provider = this::recomputeValue;
-
     private byte value;
 
     /**

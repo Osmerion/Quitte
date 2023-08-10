@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code boolean} expression.
@@ -161,7 +160,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyBoolExpression of(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform) {
+    public static <S extends @Nullable Object> LazyBoolExpression of(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform) {
         return new Transform(ex -> new ObjectToBoolBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -178,7 +177,7 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
+    public static <S extends @Nullable Object> LazyBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
         return new LazyBoolExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -220,7 +219,6 @@ public abstract class LazyBoolExpression extends AbstractBoolExpression implemen
 
     @Nullable
     private BoolSupplier provider = this::recomputeValue;
-
     private boolean value;
 
     /**

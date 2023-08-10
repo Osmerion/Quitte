@@ -30,9 +30,9 @@
  */
 package com.osmerion.quitte.collections;
 
-import java.util.ArrayDeque;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import java.util.ArrayDeque;
 
 import static org.junit.jupiter.api.Assertions.*;
 

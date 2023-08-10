@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides classes and interfaces for listening to observable values. */
-@NonNullApi
 package com.osmerion.quitte.value.change;
-
-import com.osmerion.quitte.internal.NonNullApi;

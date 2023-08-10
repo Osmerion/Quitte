@@ -30,10 +30,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package com.osmerion.quitte.internal.binding;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+
 
 /**
  * A specialized {@code byte} binding.

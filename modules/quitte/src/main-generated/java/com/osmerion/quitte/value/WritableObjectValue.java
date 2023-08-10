@@ -31,7 +31,7 @@
  */
 package com.osmerion.quitte.value;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.*;
 
 /**
  * A generic writable value.
@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  *
  * @author  Leon Linhart
  */
-public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObjectValue<T> {
+public interface WritableObjectValue<T extends @Nullable Object> extends WritableValue<T>, ObservableObjectValue<T> {
 
     /**
      * Updates the value represented by this object.
@@ -52,7 +52,7 @@ public interface WritableObjectValue<T> extends WritableValue<T>, ObservableObje
      *
      * @since   0.1.0
      */
-    void set(@Nullable T value);
+    void set(T value);
 
     /**
      * {@inheritDoc}

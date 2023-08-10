@@ -33,12 +33,11 @@ package com.osmerion.quitte.expression;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 import org.junit.jupiter.api.*;
 

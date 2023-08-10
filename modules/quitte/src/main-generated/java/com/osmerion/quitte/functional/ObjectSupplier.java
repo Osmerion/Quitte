@@ -31,7 +31,7 @@
  */
 package com.osmerion.quitte.functional;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.*;
 
 /**
  * Represents a supplier of results.
@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
  * @author  Leon Linhart
  */
 @FunctionalInterface
-public interface ObjectSupplier<T> {
+public interface ObjectSupplier<T extends @Nullable Object> {
 
     /**
      * Gets a result.
@@ -57,7 +57,6 @@ public interface ObjectSupplier<T> {
      *
      * @since   0.1.0
      */
-    @Nullable
     T get();
 
 }

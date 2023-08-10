@@ -46,12 +46,12 @@ object LazyExpression : TemplateProvider {
 package $PACKAGE_NAME;
 
 import java.util.concurrent.atomic.AtomicInteger;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
-
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;

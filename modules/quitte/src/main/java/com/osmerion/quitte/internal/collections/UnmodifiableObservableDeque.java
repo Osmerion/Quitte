@@ -33,11 +33,11 @@ package com.osmerion.quitte.internal.collections;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.collections.DequeChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A wrapper for an {@link ObservableDeque} that blocks mutation.
@@ -50,7 +50,7 @@ import com.osmerion.quitte.collections.ObservableDeque;
  *     
  * @author  Leon Linhart
  */
-public class UnmodifiableObservableDeque<E> implements ObservableDeque<E> {
+public class UnmodifiableObservableDeque<E extends @Nullable Object> implements ObservableDeque<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -1042323408562421394L;

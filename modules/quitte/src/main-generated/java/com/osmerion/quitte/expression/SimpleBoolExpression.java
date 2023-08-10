@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code boolean} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleBoolExpression of(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleBoolExpression of(ObservableObjectValue<S> observable, ObjectToBoolFunction<S> transform) {
         return new Transform(ex -> new ObjectToBoolBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleBoolExpression extends AbstractBoolExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
+    public static <S extends @Nullable Object> SimpleBoolExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableBoolValue> selector) {
         return new SimpleBoolExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();

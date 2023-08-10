@@ -37,13 +37,14 @@ import com.osmerion.quitte.build.generator.internal.Type
 object SimpleProperty : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Simple${type.abbrevName}Property") {
             """
 package $PACKAGE_NAME;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.osmerion.quitte.internal.addon.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 /**
  * ${if (type === Type.OBJECT)
@@ -56,8 +57,8 @@ import com.osmerion.quitte.internal.addon.*;
  *
  * @author  Leon Linhart
  */
-public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeParams {
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+public class Simple${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeArgs {
+
     private ${type.raw} value;
 
     /**
@@ -68,7 +69,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @since   0.1.0
      */
     @PrimaryConstructor
-    public Simple${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} initial) {
+    public Simple${type.abbrevName}Property(${type.raw} initial) {
         this.value = initial;
     }
 
@@ -77,23 +78,23 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     public final ${type.raw} get() {
         return this.getImpl();
     }
 
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     final ${type.raw} getImpl() {
         return this.value;
     }
 
     @Override
-    final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final void setImpl(${type.raw} value) {
         this.value = value;
     }
 
     @Override
-    final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final boolean setImplDeferrable(${type.raw} value) {
         return super.setImplDeferrable(this.intercept(value));
     }
 
@@ -105,8 +106,8 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @return  the result
      *
      * @since   0.1.0
-     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected ${type.raw} intercept(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+     */
+    protected ${type.raw} intercept(${type.raw} value) {
         return value;
     }
 

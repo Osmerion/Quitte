@@ -33,14 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a generic expression.
@@ -62,7 +60,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableBoolValue observable, BoolToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableBoolValue observable, BoolToObjectFunction<T> transform) {
         return new Transform<>(ex -> new BoolToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -77,7 +75,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableByteValue observable, ByteToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableByteValue observable, ByteToObjectFunction<T> transform) {
         return new Transform<>(ex -> new ByteToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -92,7 +90,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableShortValue observable, ShortToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableShortValue observable, ShortToObjectFunction<T> transform) {
         return new Transform<>(ex -> new ShortToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -107,7 +105,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableIntValue observable, IntToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableIntValue observable, IntToObjectFunction<T> transform) {
         return new Transform<>(ex -> new IntToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -122,7 +120,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableLongValue observable, LongToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableLongValue observable, LongToObjectFunction<T> transform) {
         return new Transform<>(ex -> new LongToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -137,7 +135,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableFloatValue observable, FloatToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableFloatValue observable, FloatToObjectFunction<T> transform) {
         return new Transform<>(ex -> new FloatToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -152,7 +150,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <T> SimpleObjectExpression<T> of(ObservableDoubleValue observable, DoubleToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableDoubleValue observable, DoubleToObjectFunction<T> transform) {
         return new Transform<>(ex -> new DoubleToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -168,7 +166,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <S, T> SimpleObjectExpression<T> of(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
+    public static <S extends @Nullable Object, T extends @Nullable Object> SimpleObjectExpression<T> of(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
         return new Transform<>(ex -> new ObjectToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -186,7 +184,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      *
      * @since   0.1.0
      */
-    public static <S, T> SimpleObjectExpression<T> ofNested(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
+    public static <S extends @Nullable Object, T extends @Nullable Object> SimpleObjectExpression<T> ofNested(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
         return new SimpleObjectExpression<>() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -226,12 +224,11 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @param selector      the function that selects the child property
      * @param <S>           the parent type
      * @param <T>           the child type
-    *
      * @return  a new simple expression which aliases a child property of an observable
      *
      * @since   0.1.0
      */
-    public static <S, T> SimpleObjectExpression<T> ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
+    public static <S extends @Nullable Object, T extends @Nullable Object> SimpleObjectExpression<T> ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
         return new SimpleObjectExpression<>() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -254,7 +251,6 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
 
-            @Nullable
             @Override
             protected T recomputeValue() {
                 var parent = observable.get();
@@ -264,7 +260,7 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
         };
     }
 
-    @Nullable
+
     private T value;
 
     /**
@@ -273,7 +269,6 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     @Override
-    @Nullable
     protected final T getImpl() {
         return this.value;
     }
@@ -284,12 +279,12 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
      * @since   0.1.0
      */
     @Override
-    protected final void setImpl(@Nullable T value) {
+    protected final void setImpl(T value) {
         this.value = value;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */
-    private static final class Transform<T> extends SimpleObjectExpression<T> {
+    private static final class Transform<T extends @Nullable Object> extends SimpleObjectExpression<T> {
 
         private final transient ObjectBinding<T> binding;
 
@@ -299,7 +294,6 @@ public abstract class SimpleObjectExpression<T> extends AbstractObjectExpression
         }
 
         @Override
-        @Nullable
         protected T recomputeValue() {
             return this.binding.get();
         }

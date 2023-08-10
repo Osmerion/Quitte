@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides interfaces for observables. */
-@NonNullApi
 package com.osmerion.quitte;
-
-import com.osmerion.quitte.internal.NonNullApi;

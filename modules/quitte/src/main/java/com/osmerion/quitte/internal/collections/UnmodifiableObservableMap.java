@@ -34,12 +34,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
 import com.osmerion.quitte.collections.MapChangeListener;
 import com.osmerion.quitte.collections.ObservableMap;
 import com.osmerion.quitte.collections.ObservableSet;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A wrapper for an {@link ObservableMap} that blocks mutation.

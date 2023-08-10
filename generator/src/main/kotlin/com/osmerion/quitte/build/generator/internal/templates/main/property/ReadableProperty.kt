@@ -37,7 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object ReadableProperty : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Readable${type.abbrevName}Property") {
             """
@@ -45,6 +46,7 @@ package $PACKAGE_NAME;
 
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 /**
  * ${if (type === Type.OBJECT)
@@ -59,14 +61,14 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface Readable${type.abbrevName}Property$typeParams extends ReadableValueProperty<${type.box}>, Observable${type.abbrevName}Value$typeParams {
+public interface Readable${type.abbrevName}Property$typeParams extends ReadableValueProperty<${type.box}>, Observable${type.abbrevName}Value$typeArgs {
 
     /**
      * {@inheritDoc}
      *
      * @since   0.1.0
      */
-    default Readable${type.abbrevName}Property$typeParams asReadOnlyProperty() {
+    default Readable${type.abbrevName}Property$typeArgs asReadOnlyProperty() {
         return (!(this instanceof ReadOnly${type.abbrevName}Property) ? new ReadOnly${type.abbrevName}Property${if (type === Type.OBJECT) "<>" else ""}(this) : this);
     }
 

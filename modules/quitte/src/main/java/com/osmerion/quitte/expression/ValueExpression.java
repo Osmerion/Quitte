@@ -32,6 +32,7 @@ package com.osmerion.quitte.expression;
 
 import com.osmerion.quitte.property.WritableValueProperty;
 import com.osmerion.quitte.value.ObservableValue;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@code ValueExpression} is an {@link ObservableValue observable value} which is derived from some state. Contrary
@@ -44,4 +45,4 @@ import com.osmerion.quitte.value.ObservableValue;
  *
  * @author  Leon Linhart
  */
-public interface ValueExpression<T> extends Expression, ObservableValue<T> {}
+public interface ValueExpression<T extends @Nullable Object> extends Expression, ObservableValue<T> {}

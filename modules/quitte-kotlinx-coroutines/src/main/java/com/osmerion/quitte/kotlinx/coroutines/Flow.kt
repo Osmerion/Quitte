@@ -57,7 +57,6 @@ import kotlinx.coroutines.flow.conflate
  *
  * @since   0.3.0
  */
-@Suppress("UNCHECKED_CAST")
 public fun <T> ObservableValue<T>.asFlow(): Flow<T> = callbackFlow {
     val listener = InvalidationListener {
         trySend(value as T)

@@ -35,12 +35,12 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableDeque;
 import com.osmerion.quitte.collections.DequeChangeListener;
 import com.osmerion.quitte.collections.ObservableDeque;
 import com.osmerion.quitte.internal.binding.DequeBinding;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link Deque} property.

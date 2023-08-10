@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code long} expression.
@@ -161,7 +160,7 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyLongExpression of(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform) {
+    public static <S extends @Nullable Object> LazyLongExpression of(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform) {
         return new Transform(ex -> new ObjectToLongBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -178,7 +177,7 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
      *
      * @since   0.1.0
      */
-    public static <S> LazyLongExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableLongValue> selector) {
+    public static <S extends @Nullable Object> LazyLongExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableLongValue> selector) {
         return new LazyLongExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -220,7 +219,6 @@ public abstract class LazyLongExpression extends AbstractLongExpression implemen
 
     @Nullable
     private LongSupplier provider = this::recomputeValue;
-
     private long value;
 
     /**

@@ -37,17 +37,17 @@ import com.osmerion.quitte.build.generator.internal.Type
 object ChangeListener : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
-        val valAnno = if (type === Type.OBJECT) "@Nullable " else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "${type.abbrevName}ChangeListener") {
             """
-package $PACKAGE_NAME;${if (type === Type.OBJECT) "\n\nimport javax.annotation.Nullable;" else ""}
+package $PACKAGE_NAME;
 
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
-
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 /**
  * ${if (type === Type.OBJECT)
                 """
@@ -72,14 +72,14 @@ public interface ${type.abbrevName}ChangeListener$typeParams {
     /**
      * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
      * shares a hashcode with it.
-     *${if (type === Type.OBJECT) "\n     * @param <T>       the type of the the type of the observable's value" else ""}
+     *${if (type === Type.OBJECT) "\n     * @param <T>       the type of the observable's value" else ""}
      * @param listener  the listener to be wrapped
      *
      * @return  the wrapper
      *
      * @since   0.1.0
      */
-    static $typeParams ${type.abbrevName}ChangeListener$typeParams wrap(ChangeListener<${type.box}> listener) {
+    static $typeParams ${type.abbrevName}ChangeListener$typeArgs wrap(ChangeListener<${type.box}> listener) {
         return new Wrapping${type.abbrevName}ChangeListener${if (type === Type.OBJECT) "<>" else ""}(listener);
     }
 
@@ -92,7 +92,7 @@ public interface ${type.abbrevName}ChangeListener$typeParams {
      *
      * @since   0.1.0
      */
-    void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue);
+    void onChanged(Observable${type.abbrevName}Value$typeArgs observable, ${type.raw} oldValue, ${type.raw} newValue);
 
     /**
      * Returns whether this listener is invalid.

@@ -61,5 +61,5 @@ publishing {
 }
 
 dependencies {
-    compileOnlyApi(libs.jsr305)
+    compileOnlyApi(libs.jspecify)
 }

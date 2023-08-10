@@ -37,7 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object LazyProperty : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Lazy${type.abbrevName}Property") {
             """
@@ -45,11 +46,10 @@ package $PACKAGE_NAME;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.addon.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -62,7 +62,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public class Lazy${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeParams implements LazyValue {
+public class Lazy${type.abbrevName}Property$typeParams extends Abstract${type.abbrevName}Property$typeArgs implements LazyValue {
 
     private final SimpleObjectProperty<State> state = new SimpleObjectProperty<>(State.UNINITIALIZED) {
 
@@ -75,8 +75,7 @@ public class Lazy${type.abbrevName}Property$typeParams extends Abstract${type.ab
     };
 
     @Nullable
-    private ${type.abbrevName}Supplier$typeParams provider;
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    private ${type.abbrevName}Supplier$typeArgs provider;
     protected ${type.raw} value;
 
     /**
@@ -87,7 +86,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @since   0.1.0
      */
     @PrimaryConstructor
-    public Lazy${type.abbrevName}Property(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} initial) {
+    public Lazy${type.abbrevName}Property(${type.raw} initial) {
         this.value = initial;
         this.state.set(State.INITIALIZED);
     }
@@ -103,7 +102,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    public Lazy${type.abbrevName}Property(${type.abbrevName}Supplier$typeParams initial) {
+    public Lazy${type.abbrevName}Property(${type.abbrevName}Supplier$typeArgs initial) {
         this.provider = initial;
     }
 
@@ -133,7 +132,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     public final ${type.raw} get() {
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) {
@@ -153,7 +152,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    public final void set(${type.abbrevName}Supplier$typeParams supplier) {
+    public final void set(${type.abbrevName}Supplier$typeArgs supplier) {
         if (this.isBound()) throw new IllegalStateException("A bound property's value may not be set explicitly");
 
         this.provider = supplier;
@@ -162,17 +161,17 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         if (this.state.get().isValid()) this.state.set(State.INVALID);
     }
 
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     final ${type.raw} getImpl() {
         return this.value;
     }
 
     @Override
-    final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final void setImpl(${type.raw} value) {
         this.value = value;
     }
 
-    final boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final boolean setImplDeferrable(${type.raw} value) {
         this.provider = () -> value;
 
         //noinspection ConstantConditions
@@ -190,7 +189,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     @Override
-    final boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    final boolean onChangedInternal(${type.raw} oldValue, ${type.raw} newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
             return true;
@@ -208,8 +207,8 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @return  the result
      *
      * @since   0.1.0
-     */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
-    protected ${type.raw} intercept(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+     */
+    protected ${type.raw} intercept(${type.raw} value) {
         return value;
     }
 

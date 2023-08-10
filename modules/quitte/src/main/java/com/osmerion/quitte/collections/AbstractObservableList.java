@@ -44,9 +44,9 @@ import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.IntStream;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
+import org.jspecify.annotations.Nullable;
 
 import static java.lang.Math.*;
 
@@ -59,7 +59,7 @@ import static java.lang.Math.*;
  *
  * @author  Leon Linhart
  */
-public abstract class AbstractObservableList<E> extends AbstractList<E> implements ObservableList<E> {
+public abstract class AbstractObservableList<E extends @Nullable Object> extends AbstractList<E> implements ObservableList<E> {
 
     private transient final CopyOnWriteArraySet<ListChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();

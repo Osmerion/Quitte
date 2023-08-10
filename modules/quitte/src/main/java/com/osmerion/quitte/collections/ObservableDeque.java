@@ -32,10 +32,10 @@ package com.osmerion.quitte.collections;
 
 import java.util.Deque;
 import java.util.Iterator;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableDeque;
 import com.osmerion.quitte.internal.collections.WrappingObservableDeque;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable deque with support for tracking changes to the deque's content.
@@ -46,7 +46,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableDeque;
  * 
  * @author  Leon Linhart
  */
-public interface ObservableDeque<E> extends Deque<E>, ObservableCollection<E> {
+public interface ObservableDeque<E extends @Nullable Object> extends Deque<E>, ObservableCollection<E> {
 
     /**
      * Returns an observable view of the specified deque. Query operations on the returned deque "read and write

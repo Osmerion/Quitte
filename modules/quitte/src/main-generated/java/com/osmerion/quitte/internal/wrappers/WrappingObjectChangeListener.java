@@ -31,10 +31,10 @@
  */
 package com.osmerion.quitte.internal.wrappers;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
+
 
 /**
  * A wrapping change-listener.
@@ -47,7 +47,7 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public final class WrappingObjectChangeListener<T> implements ObjectChangeListener<T> {
+public final class WrappingObjectChangeListener<T extends @Nullable Object> implements ObjectChangeListener<T> {
 
     private final ChangeListener<T> listener;
 
@@ -70,7 +70,7 @@ public final class WrappingObjectChangeListener<T> implements ObjectChangeListen
      *
      * @param listener  the listener to test for
      *
-     * @return  whether this wrapper is wrappping the given listener
+     * @return  whether this wrapper is wrapping the given listener
      */
     public boolean isWrapping(ChangeListener<T> listener) {
         return this.listener == listener;

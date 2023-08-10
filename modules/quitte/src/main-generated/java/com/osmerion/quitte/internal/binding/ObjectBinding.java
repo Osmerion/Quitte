@@ -30,21 +30,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package com.osmerion.quitte.internal.binding;
-
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
+
 
 /**
  * A generic binding.
  *
  * @author  Leon Linhart
  */
-public interface ObjectBinding<T> extends Binding {
+public interface ObjectBinding<T extends @Nullable Object> extends Binding {
 
-    @Nullable
     T get();
 
     final class Generic<T, R> implements ObjectBinding<R> {
@@ -61,7 +59,6 @@ public interface ObjectBinding<T> extends Binding {
         }
 
         @Override
-        @Nullable
         public R get() {
             return this.transform.apply(this.source.getValue());
         }

@@ -30,7 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ import java.util.Map;
  *
  * @author  Leon Linhart
  */
-public interface MapChangeListener<K, V>  {
+public interface MapChangeListener<K extends @Nullable Object, V extends @Nullable Object>  {
 
     /**
      * Processes changes to an {@link ObservableMap observable map} this listener is attached to.
@@ -102,7 +103,7 @@ public interface MapChangeListener<K, V>  {
          *
          * @since   0.8.0
          */
-        public record Update<V>(@Nullable V oldValue, @Nullable V newValue) {}
+        public record Update<V>(V oldValue, V newValue) {}
 
     }
 

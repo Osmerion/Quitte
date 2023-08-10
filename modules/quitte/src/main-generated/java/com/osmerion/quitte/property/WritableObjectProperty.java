@@ -33,6 +33,7 @@ package com.osmerion.quitte.property;
 
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A generic writable property.
@@ -41,7 +42,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface WritableObjectProperty<T> extends WritableValueProperty<T>, ReadableObjectProperty<T>, WritableObjectValue<T> {
+public interface WritableObjectProperty<T extends @Nullable Object> extends WritableValueProperty<T>, ReadableObjectProperty<T>, WritableObjectValue<T> {
 
     /**
      * Binds this property to the given observable value.
@@ -212,6 +213,6 @@ public interface WritableObjectProperty<T> extends WritableValueProperty<T>, Rea
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform);
+    <S extends @Nullable Object> void bindTo(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform);
 
 }

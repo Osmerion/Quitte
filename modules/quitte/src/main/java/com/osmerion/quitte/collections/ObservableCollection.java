@@ -31,6 +31,7 @@
 package com.osmerion.quitte.collections;
 
 import com.osmerion.quitte.Observable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -41,4 +42,4 @@ import java.util.Collection;
  *
  * @author  Leon Linhart
  */
-public interface ObservableCollection<E> extends Collection<E>, Observable {}
+public interface ObservableCollection<E extends @Nullable Object> extends Collection<E>, Observable {}

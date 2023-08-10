@@ -30,10 +30,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package com.osmerion.quitte.property;
-
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.internal.addon.*;
+import org.jspecify.annotations.*;
+
 
 /**
  * A generic writable property.
@@ -42,9 +41,8 @@ import com.osmerion.quitte.internal.addon.*;
  *
  * @author  Leon Linhart
  */
-public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
+public class SimpleObjectProperty<T extends @Nullable Object> extends AbstractObjectProperty<T> {
 
-    @Nullable
     private T value;
 
     /**
@@ -55,7 +53,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      * @since   0.1.0
      */
     @PrimaryConstructor
-    public SimpleObjectProperty(@Nullable T initial) {
+    public SimpleObjectProperty(T initial) {
         this.value = initial;
     }
 
@@ -65,24 +63,22 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      * @since   0.1.0
      */
     @Override
-    @Nullable
     public final T get() {
         return this.getImpl();
     }
 
     @Override
-    @Nullable
     final T getImpl() {
         return this.value;
     }
 
     @Override
-    final void setImpl(@Nullable T value) {
+    final void setImpl(T value) {
         this.value = value;
     }
 
     @Override
-    final boolean setImplDeferrable(@Nullable T value) {
+    final boolean setImplDeferrable(T value) {
         return super.setImplDeferrable(this.intercept(value));
     }
 
@@ -95,8 +91,7 @@ public class SimpleObjectProperty<T> extends AbstractObjectProperty<T> {
      *
      * @since   0.1.0
      */
-    @Nullable
-    protected T intercept(@Nullable T value) {
+    protected T intercept(T value) {
         return value;
     }
 

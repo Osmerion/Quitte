@@ -33,7 +33,7 @@ module com.osmerion.quitte.i18n {
 
     requires transitive com.osmerion.quitte;
 
-    requires static jsr305;
+    requires static org.jspecify;
 
     exports com.osmerion.quitte.i18n;
 

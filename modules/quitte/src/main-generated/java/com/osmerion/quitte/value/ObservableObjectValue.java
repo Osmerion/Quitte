@@ -31,10 +31,10 @@
  */
 package com.osmerion.quitte.value;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
+
 
 import static java.util.Objects.*;
 
@@ -47,7 +47,7 @@ import static java.util.Objects.*;
  *
  * @author  Leon Linhart
  */
-public interface ObservableObjectValue<T> extends ObservableValue<T> {
+public interface ObservableObjectValue<T extends @Nullable Object> extends ObservableValue<T> {
 
     /**
      * Returns an observable read-only view of the given {@code value}.
@@ -58,7 +58,7 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      *
      * @since   0.1.0
      */
-    static <T> ObservableObjectValue<T> wrap(T value) {
+    static <T extends @Nullable Object> ObservableObjectValue<T> wrap(T value) {
         return new ReadOnlyObjectWrapper<>(value);
     }
 
@@ -69,7 +69,6 @@ public interface ObservableObjectValue<T> extends ObservableValue<T> {
      *
      * @since   0.1.0
      */
-    @Nullable
     T get();
 
     /**

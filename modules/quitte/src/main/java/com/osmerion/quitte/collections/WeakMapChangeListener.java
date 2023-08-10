@@ -30,6 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
@@ -48,7 +50,7 @@ import java.util.Objects;
  *
  * @author  Leon Linhart
  */
-public final class WeakMapChangeListener<K, V> implements MapChangeListener<K, V> {
+public final class WeakMapChangeListener<K extends @Nullable Object, V extends @Nullable Object> implements MapChangeListener<K, V> {
 
     private final WeakReference<MapChangeListener<K, V>> ref;
 

@@ -33,6 +33,8 @@ package com.osmerion.quitte.property;
 
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
+
 
 /**
  * A generic readable property.
@@ -43,7 +45,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface ReadableObjectProperty<T> extends ReadableValueProperty<T>, ObservableObjectValue<T> {
+public interface ReadableObjectProperty<T extends @Nullable Object> extends ReadableValueProperty<T>, ObservableObjectValue<T> {
 
     /**
      * {@inheritDoc}

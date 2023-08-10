@@ -30,8 +30,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package com.osmerion.quitte.property;
-
 import com.osmerion.quitte.internal.addon.*;
+
 
 /**
  * A specialized writable {@code short} property.

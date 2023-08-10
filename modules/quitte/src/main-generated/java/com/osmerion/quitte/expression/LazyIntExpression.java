@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code int} expression.
@@ -161,7 +160,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static <S> LazyIntExpression of(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
+    public static <S extends @Nullable Object> LazyIntExpression of(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
         return new Transform(ex -> new ObjectToIntBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -178,7 +177,7 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
      *
      * @since   0.1.0
      */
-    public static <S> LazyIntExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableIntValue> selector) {
+    public static <S extends @Nullable Object> LazyIntExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableIntValue> selector) {
         return new LazyIntExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -220,7 +219,6 @@ public abstract class LazyIntExpression extends AbstractIntExpression implements
 
     @Nullable
     private IntSupplier provider = this::recomputeValue;
-
     private int value;
 
     /**

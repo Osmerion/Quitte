@@ -37,15 +37,17 @@ import com.osmerion.quitte.build.generator.internal.Type
 object WrappingChangeListener : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
         val valAnno = if (type === Type.OBJECT) "@Nullable " else ""
 
         Template(PACKAGE_NAME, "Wrapping${type.abbrevName}ChangeListener") {
             """
 package $PACKAGE_NAME;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 /**
  * A wrapping change-listener.
@@ -58,7 +60,7 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public final class Wrapping${type.abbrevName}ChangeListener$typeParams implements ${type.abbrevName}ChangeListener$typeParams {
+public final class Wrapping${type.abbrevName}ChangeListener$typeParams implements ${type.abbrevName}ChangeListener$typeArgs {
 
     private final ChangeListener<${type.box}> listener;
 
@@ -67,7 +69,7 @@ public final class Wrapping${type.abbrevName}ChangeListener$typeParams implement
     }
 
     @Override
-    public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue) {
+    public void onChanged(Observable${type.abbrevName}Value$typeArgs observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue) {
         this.listener.onChanged(observable, oldValue, newValue);
     }
 
@@ -81,7 +83,7 @@ public final class Wrapping${type.abbrevName}ChangeListener$typeParams implement
      *
      * @param listener  the listener to test for
      *
-     * @return  whether this wrapper is wrappping the given listener
+     * @return  whether this wrapper is wrapping the given listener
      */
     public boolean isWrapping(ChangeListener<${type.box}> listener) {
         return this.listener == listener;

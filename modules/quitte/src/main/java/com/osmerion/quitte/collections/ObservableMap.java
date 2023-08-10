@@ -35,6 +35,7 @@ import java.util.Map;
 import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableMap;
 import com.osmerion.quitte.internal.collections.WrappingObservableMap;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable map with support for tracking changes to the map's content.
@@ -46,7 +47,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableMap;
  *
  * @author  Leon Linhart
  */
-public interface ObservableMap<K, V> extends Map<K, V>, Observable {
+public interface ObservableMap<K extends @Nullable Object, V extends @Nullable Object> extends Map<K, V>, Observable {
 
     /**
      * Returns an observable view of the specified map. Query operations on the returned map "read and write through"

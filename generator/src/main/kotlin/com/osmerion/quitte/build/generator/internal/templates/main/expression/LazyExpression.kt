@@ -37,7 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object LazyExpression : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Lazy${type.abbrevName}Expression") {
             """
@@ -46,14 +47,13 @@ package $PACKAGE_NAME;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -66,10 +66,16 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class Lazy${type.abbrevName}Expression$typeParams extends Abstract${type.abbrevName}Expression$typeParams implements LazyValue {
+public abstract class Lazy${type.abbrevName}Expression$typeParams extends Abstract${type.abbrevName}Expression$typeArgs implements LazyValue {
 ${Type.values().joinToString(separator = "") { sourceType ->
-                val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
+                val sourceTypeArgs = if (sourceType === Type.OBJECT) "<S>" else ""
                 val transformTypeParams = when {
+                    sourceType === Type.OBJECT && type === Type.OBJECT -> "<S extends @Nullable Object, T extends @Nullable Object>"
+                    sourceType === Type.OBJECT -> "<S extends @Nullable Object>"
+                    type === Type.OBJECT -> "<T extends @Nullable Object>"
+                    else -> ""
+                }
+                val transformTypeArgs = when {
                     sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
                     sourceType === Type.OBJECT -> "<S>"
                     type === Type.OBJECT -> "<T>"
@@ -87,7 +93,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * @since   0.1.0
      */
-    public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Lazy${type.abbrevName}Expression$typeParams of(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform) {
+    public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Lazy${type.abbrevName}Expression$typeArgs of(Observable${sourceType.abbrevName}Value$sourceTypeArgs observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeArgs transform) {
         return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}To${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::doInvalidate, observable, transform));
     }
 """}}
@@ -104,7 +110,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * @since   0.1.0
      */
-    public static <${if (type === Type.OBJECT) "S, T" else "S"}> Lazy${type.abbrevName}Expression$typeParams ofNested(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
+    public static <${if (type === Type.OBJECT) "S extends @Nullable Object, T extends @Nullable Object" else "S extends @Nullable Object"}> Lazy${type.abbrevName}Expression$typeArgs ofNested(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeArgs> selector) {
         return new Lazy${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -145,8 +151,7 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
     };
 
     @Nullable
-    private ${type.abbrevName}Supplier$typeParams provider = this::recomputeValue;
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    private ${type.abbrevName}Supplier$typeArgs provider = this::recomputeValue;
     private ${type.raw} value;
 
     /**
@@ -179,7 +184,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     public final ${type.raw} get() {
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) { 
@@ -192,13 +197,13 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         return this.value;
     }
 
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     final ${type.raw} getImpl() {
         return this.value;
     }
 
     @Override
-    final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    final void setImpl(${type.raw} value) {
         this.value = value;
     }
 
@@ -211,7 +216,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     @Override
-    final boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    final boolean onChangedInternal(${type.raw} oldValue, ${type.raw} newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
             return true;
@@ -222,15 +227,15 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
     }
 
     /** A simple expression transforming a single value using the internal binding API. */
-    private static final class Transform$typeParams extends Lazy${type.abbrevName}Expression$typeParams {
+    private static final class Transform$typeParams extends Lazy${type.abbrevName}Expression$typeArgs {
 
-        private final transient ${type.abbrevName}Binding$typeParams binding;
+        private final transient ${type.abbrevName}Binding$typeArgs binding;
 
-        private Transform(Function<Lazy${type.abbrevName}Expression$typeParams, ${type.abbrevName}Binding$typeParams> factory) {
+        private Transform(Function<Lazy${type.abbrevName}Expression$typeArgs, ${type.abbrevName}Binding$typeArgs> factory) {
             this.binding = factory.apply(this);
         }
 
-        @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
+        @Override
         protected ${type.raw} recomputeValue() {
             return this.binding.get();
         }

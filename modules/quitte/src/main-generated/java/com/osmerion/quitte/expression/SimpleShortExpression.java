@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code short} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleShortExpression extends AbstractShortExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleShortExpression of(ObservableObjectValue<S> observable, ObjectToShortFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleShortExpression of(ObservableObjectValue<S> observable, ObjectToShortFunction<S> transform) {
         return new Transform(ex -> new ObjectToShortBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleShortExpression extends AbstractShortExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleShortExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableShortValue> selector) {
+    public static <S extends @Nullable Object> SimpleShortExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableShortValue> selector) {
         return new SimpleShortExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();

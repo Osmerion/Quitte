@@ -30,9 +30,9 @@
  */
 package com.osmerion.quitte.value.change;
 
-import javax.annotation.Nullable;
 import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.value.ObservableValue;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A listener that may be used to subscribe to changes of one or more {@link Observable observables}.
@@ -48,7 +48,7 @@ import com.osmerion.quitte.value.ObservableValue;
  * @author  Leon Linhart
  */
 @FunctionalInterface
-public interface ChangeListener<T> {
+public interface ChangeListener<T extends @Nullable Object> {
 
     /**
      * Processes a value change of an {@link ObservableValue} this listener is attached to.
@@ -59,7 +59,7 @@ public interface ChangeListener<T> {
      *
      * @since   0.1.0
      */
-    void onChanged(ObservableValue<? extends T> observable, @Nullable T oldValue, @Nullable T newValue);
+    void onChanged(ObservableValue<? extends T> observable, T oldValue, T newValue);
 
     /**
      * {@return whether this listener is invalid}.

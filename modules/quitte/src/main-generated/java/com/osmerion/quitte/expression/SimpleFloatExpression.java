@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code float} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleFloatExpression of(ObservableObjectValue<S> observable, ObjectToFloatFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleFloatExpression of(ObservableObjectValue<S> observable, ObjectToFloatFunction<S> transform) {
         return new Transform(ex -> new ObjectToFloatBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleFloatExpression extends AbstractFloatExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleFloatExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableFloatValue> selector) {
+    public static <S extends @Nullable Object> SimpleFloatExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableFloatValue> selector) {
         return new SimpleFloatExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();

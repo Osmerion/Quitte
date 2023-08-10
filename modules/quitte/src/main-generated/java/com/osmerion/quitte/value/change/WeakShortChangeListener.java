@@ -36,6 +36,7 @@ import java.util.Objects;
 
 import com.osmerion.quitte.value.*;
 
+
 /**
  * A {@code WeakShortChangeListener} may be used to wrap a listener that should only be referenced weakly
  * from an {@link ObservableValue}.

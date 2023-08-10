@@ -33,6 +33,7 @@ package com.osmerion.quitte.property;
 
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized writable {@code double} property.
@@ -212,6 +213,6 @@ public interface WritableDoubleProperty extends WritableValueProperty<Double>, R
      *
      * @since   0.1.0
      */
-    <S> void bindTo(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform);
+    <S extends @Nullable Object> void bindTo(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform);
 
 }

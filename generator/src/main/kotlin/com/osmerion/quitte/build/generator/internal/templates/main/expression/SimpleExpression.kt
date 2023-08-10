@@ -37,7 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object SimpleExpression : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Simple${type.abbrevName}Expression") {
             """
@@ -45,12 +46,12 @@ package $PACKAGE_NAME;
 
 import java.util.Objects;
 import java.util.function.Function;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -63,10 +64,16 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class Simple${type.abbrevName}Expression$typeParams extends Abstract${type.abbrevName}Expression$typeParams {
+public abstract class Simple${type.abbrevName}Expression$typeArgs extends Abstract${type.abbrevName}Expression$typeArgs {
 ${Type.values().joinToString(separator = "") { sourceType ->
-                val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
+                val sourceTypeArgs = if (sourceType === Type.OBJECT) "<S>" else ""
                 val transformTypeParams = when {
+                    sourceType === Type.OBJECT && type === Type.OBJECT -> "<S extends @Nullable Object, T extends @Nullable Object>"
+                    sourceType === Type.OBJECT -> "<S extends @Nullable Object>"
+                    type === Type.OBJECT -> "<T extends @Nullable Object>"
+                    else -> ""
+                }
+                val transformTypeArgs = when {
                     sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
                     sourceType === Type.OBJECT -> "<S>"
                     type === Type.OBJECT -> "<T>"
@@ -84,7 +91,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * @since   0.1.0
      */
-    public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Simple${type.abbrevName}Expression$typeParams of(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform) {
+    public static $transformTypeParams${if (transformTypeParams.isNotEmpty()) " " else ""}Simple${type.abbrevName}Expression$typeArgs of(Observable${sourceType.abbrevName}Value$sourceTypeArgs observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeArgs transform) {
         return new Transform${if (type === Type.OBJECT) "<>" else ""}(ex -> new ${sourceType.abbrevName}To${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(ex::doInvalidate, observable, transform));
     }
 """}}
@@ -101,7 +108,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * @since   0.1.0
      */
-    public static <${if (type === Type.OBJECT) "S, T" else "S"}> Simple${type.abbrevName}Expression$typeParams ofNested(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
+    public static <${if (type === Type.OBJECT) "S extends @Nullable Object, T extends @Nullable Object" else "S extends @Nullable Object"}> Simple${type.abbrevName}Expression$typeArgs ofNested(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeArgs> selector) {
         return new Simple${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -139,13 +146,13 @@ ${if (type === Type.OBJECT) """
      * @param observable    the parent observable
      * @param selector      the function that selects the child property
      * @param <S>           the parent type
-     * ${if (type === Type.OBJECT) "@param <T>           the child type\n    *" else ""}
+     * @param <T>           the child type
      * @return  a new simple expression which aliases a child property of an observable
      *
      * @since   0.1.0
      */
-    public static <${if (type === Type.OBJECT) "S, T" else "S"}> Simple${type.abbrevName}Expression$typeParams ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeParams> selector) {
-        return new Simple${type.abbrevName}Expression${if (type === Type.OBJECT) "<>" else ""}() {
+    public static <S extends @Nullable Object, T extends @Nullable Object> Simple${type.abbrevName}Expression$typeArgs ofNestedOrNull(ObservableObjectValue<S> observable, Function<S, Observable${type.abbrevName}Value$typeArgs> selector) {
+        return new Simple${type.abbrevName}Expression<>() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
 
@@ -166,7 +173,7 @@ ${if (type === Type.OBJECT) """
                 observable.addChangeListener(parentChangeListener);
                 parentChangeListener.onChanged(observable, null, observable.get());
             }
-${if (type === Type.OBJECT) "\n            @Nullable" else ""}
+
             @Override
             protected ${type.raw} recomputeValue() {
                 var parent = observable.get();
@@ -176,7 +183,7 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
         };
     }
 
-    @Nullable""" else ""}
+""" else ""}
     private ${type.raw} value;
 
     /**
@@ -184,7 +191,7 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     protected final ${type.raw} getImpl() {
         return this.value;
     }
@@ -195,21 +202,21 @@ ${if (type === Type.OBJECT) "\n            @Nullable" else ""}
      * @since   0.1.0
      */
     @Override
-    protected final void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    protected final void setImpl(${type.raw} value) {
         this.value = value;
     }
 
     /** A simple expression transforming a single value using the internal binding API. */
-    private static final class Transform$typeParams extends Simple${type.abbrevName}Expression$typeParams {
+    private static final class Transform$typeParams extends Simple${type.abbrevName}Expression$typeArgs {
 
-        private final transient ${type.abbrevName}Binding$typeParams binding;
+        private final transient ${type.abbrevName}Binding$typeArgs binding;
 
-        private Transform(Function<Simple${type.abbrevName}Expression$typeParams, ${type.abbrevName}Binding$typeParams> factory) {
+        private Transform(Function<Simple${type.abbrevName}Expression$typeArgs, ${type.abbrevName}Binding$typeArgs> factory) {
             this.binding = factory.apply(this);
             this.invalidate();
         }
 
-        @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
+        @Override
         protected ${type.raw} recomputeValue() {
             return this.binding.get();
         }

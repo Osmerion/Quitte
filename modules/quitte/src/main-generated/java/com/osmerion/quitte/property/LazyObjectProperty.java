@@ -33,11 +33,10 @@ package com.osmerion.quitte.property;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.addon.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A generic lazy property.
@@ -46,7 +45,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements LazyValue {
+public class LazyObjectProperty<T extends @Nullable Object> extends AbstractObjectProperty<T> implements LazyValue {
 
     private final SimpleObjectProperty<State> state = new SimpleObjectProperty<>(State.UNINITIALIZED) {
 
@@ -60,8 +59,6 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
 
     @Nullable
     private ObjectSupplier<T> provider;
-
-    @Nullable
     protected T value;
 
     /**
@@ -72,7 +69,7 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
      * @since   0.1.0
      */
     @PrimaryConstructor
-    public LazyObjectProperty(@Nullable T initial) {
+    public LazyObjectProperty(T initial) {
         this.value = initial;
         this.state.set(State.INITIALIZED);
     }
@@ -119,7 +116,6 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
      * @since   0.1.0
      */
     @Override
-    @Nullable
     public final T get() {
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) {
@@ -149,17 +145,16 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     @Override
-    @Nullable
     final T getImpl() {
         return this.value;
     }
 
     @Override
-    final void setImpl(@Nullable T value) {
+    final void setImpl(T value) {
         this.value = value;
     }
 
-    final boolean setImplDeferrable(@Nullable T value) {
+    final boolean setImplDeferrable(T value) {
         this.provider = () -> value;
 
         //noinspection ConstantConditions
@@ -177,7 +172,7 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
     }
 
     @Override
-    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+    final boolean onChangedInternal(T oldValue, T newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
             return true;
@@ -196,8 +191,7 @@ public class LazyObjectProperty<T> extends AbstractObjectProperty<T> implements 
      *
      * @since   0.1.0
      */
-    @Nullable
-    protected T intercept(@Nullable T value) {
+    protected T intercept(T value) {
         return value;
     }
 

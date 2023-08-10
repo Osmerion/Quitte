@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides classes for modeling functions and relations for observable properties. */
-@NonNullApi
 package com.osmerion.quitte.expression;
-
-import com.osmerion.quitte.internal.NonNullApi;

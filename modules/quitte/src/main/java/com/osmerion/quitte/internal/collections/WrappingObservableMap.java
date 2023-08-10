@@ -33,9 +33,9 @@ package com.osmerion.quitte.internal.collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableMap;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable wrapper for a {@link Map}.
@@ -49,7 +49,7 @@ import com.osmerion.quitte.collections.AbstractObservableMap;
  * 
  * @author  Leon Linhart
  */
-public final class WrappingObservableMap<K, V> extends AbstractObservableMap<K, V> {
+public final class WrappingObservableMap<K extends @Nullable Object, V extends @Nullable Object> extends AbstractObservableMap<K, V> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -3886697616002676509L;
@@ -61,6 +61,6 @@ public final class WrappingObservableMap<K, V> extends AbstractObservableMap<K, 
     }
 
     @Override protected Set<Entry<K, V>> entrySetImpl() { return this.impl.entrySet(); }
-    @Override public V putImpl(@Nullable K key, @Nullable V value) { return this.impl.put(key, value); }
+    @Override public V putImpl(K key, V value) { return this.impl.put(key, value); }
 
 }

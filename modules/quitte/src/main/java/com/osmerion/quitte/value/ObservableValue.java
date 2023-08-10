@@ -30,10 +30,9 @@
  */
 package com.osmerion.quitte.value;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.Observable;
 import com.osmerion.quitte.value.change.ChangeListener;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An {@code ObservableValue} object wraps a single value state and allows {@link #addBoxedChangeListener(ChangeListener)
@@ -47,7 +46,7 @@ import com.osmerion.quitte.value.change.ChangeListener;
  *
  * @author  Leon Linhart
  */
-public interface ObservableValue<T> extends Observable {
+public interface ObservableValue<T extends @Nullable Object> extends Observable {
 
     /**
      * {@return the current value}.
@@ -56,7 +55,6 @@ public interface ObservableValue<T> extends Observable {
      *
      * @since   0.1.0
      */
-    @Nullable
     T getValue();
 
     /**

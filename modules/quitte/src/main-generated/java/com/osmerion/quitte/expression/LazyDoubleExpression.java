@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code double} expression.
@@ -161,7 +160,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static <S> LazyDoubleExpression of(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
+    public static <S extends @Nullable Object> LazyDoubleExpression of(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
         return new Transform(ex -> new ObjectToDoubleBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -178,7 +177,7 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
      *
      * @since   0.1.0
      */
-    public static <S> LazyDoubleExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableDoubleValue> selector) {
+    public static <S extends @Nullable Object> LazyDoubleExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableDoubleValue> selector) {
         return new LazyDoubleExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -220,7 +219,6 @@ public abstract class LazyDoubleExpression extends AbstractDoubleExpression impl
 
     @Nullable
     private DoubleSupplier provider = this::recomputeValue;
-
     private double value;
 
     /**

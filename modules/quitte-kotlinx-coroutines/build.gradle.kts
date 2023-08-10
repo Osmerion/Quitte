@@ -46,7 +46,7 @@ kotlin {
                 apiVersion.set(KotlinVersion.KOTLIN_1_8)
                 languageVersion.set(KotlinVersion.KOTLIN_1_8)
 
-                freeCompilerArgs.add("-Xjsr305=strict")
+                freeCompilerArgs.add("-Xjspecify-annotations=strict")
             }
         }
     }
@@ -72,10 +72,6 @@ publishing {
             }
         }
     }
-}
-
-extraJavaModuleInfo {
-    failOnMissingModuleInfo.set(false)
 }
 
 dependencies {

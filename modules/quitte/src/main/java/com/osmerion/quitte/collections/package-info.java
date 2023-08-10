@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides observable collections and additional utilities. */
-@NonNullApi
 package com.osmerion.quitte.collections;
-
-import com.osmerion.quitte.internal.NonNullApi;

@@ -30,6 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
@@ -47,7 +49,7 @@ import java.util.Objects;
  *
  * @author  Leon Linhart
  */
-public final class WeakListChangeListener<E> implements ListChangeListener<E> {
+public final class WeakListChangeListener<E extends @Nullable Object> implements ListChangeListener<E> {
 
     private final WeakReference<ListChangeListener<E>> ref;
 

@@ -32,10 +32,10 @@ package com.osmerion.quitte.property;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.*;
 import com.osmerion.quitte.internal.binding.MapBinding;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link Map} property.
@@ -47,7 +47,7 @@ import com.osmerion.quitte.internal.binding.MapBinding;
  *
  * @author  Leon Linhart
  */
-public class MapProperty<K, V> extends AbstractObservableMap<K, V> implements WritableMapProperty<K, V> {
+public class MapProperty<K extends @Nullable Object, V extends @Nullable Object> extends AbstractObservableMap<K, V> implements WritableMapProperty<K, V> {
 
     private final Map<K, V> impl;
 

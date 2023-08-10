@@ -31,7 +31,7 @@
  */
 package com.osmerion.quitte.functional;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.*;;
 
 /**
  * Represents an operation that consumes a single argument and returns no result.
@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
  * @author  Leon Linhart
  */
 @FunctionalInterface
-public interface ObjectConsumer<T> {
+public interface ObjectConsumer<T extends @Nullable Object> {
 
     /**
      * Performs the operation on the given argument.

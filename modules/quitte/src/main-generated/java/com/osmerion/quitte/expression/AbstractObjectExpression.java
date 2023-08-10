@@ -33,11 +33,11 @@ package com.osmerion.quitte.expression;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
+
 
 /**
  * A basic implementation for a generic expression.
@@ -46,7 +46,7 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class AbstractObjectExpression<T> extends AbstractExpression implements ValueExpression<T>, ObservableObjectValue<T> {
+public abstract class AbstractObjectExpression<T extends @Nullable Object> extends AbstractExpression implements ValueExpression<T>, ObservableObjectValue<T> {
 
     private final transient CopyOnWriteArraySet<ObjectChangeListener<T>> changeListeners = new CopyOnWriteArraySet<>();
 
@@ -100,13 +100,11 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      * @since   0.1.0
      */
     @Override
-    @Nullable
     public T get() {
         return this.getImpl();
     }
 
     /** <b>This method must provide raw setter access and should not be called directly.</b> */
-    @Nullable
     abstract T getImpl();
 
     /**
@@ -114,17 +112,16 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      *
      * @param value the value
      */
-    abstract void setImpl(@Nullable T value);
+    abstract void setImpl(T value);
 
     @Override
     void doInvalidate() {
         if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
 
-    @Nullable
     protected abstract T recomputeValue();
 
-    final boolean updateValue(@Nullable T value, boolean notifyListeners) {
+    final boolean updateValue(T value, boolean notifyListeners) {
         var prev = this.getImpl();
         var changed = prev != value;
 
@@ -151,7 +148,7 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
         return changed;
     }
 
-    boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+    boolean onChangedInternal(T oldValue, @Nullable T newValue) {
         return true;
     }
 
@@ -163,7 +160,7 @@ public abstract class AbstractObjectExpression<T> extends AbstractExpression imp
      *
      * @since   0.1.0
      */
-    protected void onChanged(@Nullable T oldValue, @Nullable T newValue) {}
+    protected void onChanged(T oldValue, @Nullable T newValue) {}
 
     /**
      * Called when this expression was invalidated.

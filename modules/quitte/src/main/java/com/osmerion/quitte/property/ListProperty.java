@@ -35,12 +35,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableList;
 import com.osmerion.quitte.collections.ListChangeListener;
 import com.osmerion.quitte.collections.ObservableList;
 import com.osmerion.quitte.internal.binding.ListBinding;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link List} property.

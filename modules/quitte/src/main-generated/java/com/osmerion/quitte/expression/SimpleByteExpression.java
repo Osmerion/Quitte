@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code byte} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleByteExpression extends AbstractByteExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleByteExpression of(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleByteExpression of(ObservableObjectValue<S> observable, ObjectToByteFunction<S> transform) {
         return new Transform(ex -> new ObjectToByteBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleByteExpression extends AbstractByteExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleByteExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableByteValue> selector) {
+    public static <S extends @Nullable Object> SimpleByteExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableByteValue> selector) {
         return new SimpleByteExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();

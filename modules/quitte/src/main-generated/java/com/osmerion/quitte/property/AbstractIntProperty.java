@@ -35,14 +35,13 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized writable {@code int} property.
@@ -188,7 +187,7 @@ public abstract class AbstractIntProperty implements WritableIntProperty {
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
+    public final synchronized <S extends @Nullable Object> void bindTo(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ObjectToIntBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();

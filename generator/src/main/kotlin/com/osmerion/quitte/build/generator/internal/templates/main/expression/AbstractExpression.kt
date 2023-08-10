@@ -37,17 +37,19 @@ import com.osmerion.quitte.build.generator.internal.Type
 object AbstractExpression : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Abstract${type.abbrevName}Expression") {
             """
 package $PACKAGE_NAME;
 
 import java.util.concurrent.CopyOnWriteArraySet;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 /**
  * ${if (type === Type.OBJECT)
@@ -60,9 +62,9 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class Abstract${type.abbrevName}Expression$typeParams extends AbstractExpression implements ValueExpression<${type.box}>, Observable${type.abbrevName}Value$typeParams {
+public abstract class Abstract${type.abbrevName}Expression$typeParams extends AbstractExpression implements ValueExpression<${type.box}>, Observable${type.abbrevName}Value$typeArgs {
 
-    private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeParams> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeArgs> changeListeners = new CopyOnWriteArraySet<>();
 
     // package-private constructor for an effectively sealed class
     Abstract${type.abbrevName}Expression() {}
@@ -73,7 +75,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams extends Ab
      * @since   0.1.0
      */
     @Override
-    public final boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public final boolean addChangeListener(${type.abbrevName}ChangeListener$typeArgs listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -84,7 +86,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams extends Ab
      */
     @Override
     public final boolean addBoxedChangeListener(ChangeListener<${type.box}> listener) {
-        if (this.changeListeners.stream().anyMatch(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener))) return false;
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeArgs) it).isWrapping(listener))) return false;
         return this.changeListeners.add(${type.abbrevName}ChangeListener.wrap(listener));
     }
 
@@ -94,7 +96,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams extends Ab
      * @since   0.1.0
      */
     @Override
-    public final boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public final boolean removeChangeListener(${type.abbrevName}ChangeListener$typeArgs listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -105,7 +107,7 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams extends Ab
      */
     @Override
     public final boolean removeBoxedChangeListener(ChangeListener<${type.box}> listener) {
-        return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener));
+        return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeArgs) it).isWrapping(listener));
     }
 
     /**
@@ -113,12 +115,12 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams extends Ab
      *
      * @since   0.1.0
      */
-    @Override${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    @Override
     public ${type.raw} get() {
         return this.getImpl();
     }
 
-    /** <b>This method must provide raw setter access and should not be called directly.</b> */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    /** <b>This method must provide raw setter access and should not be called directly.</b> */
     abstract ${type.raw} getImpl();
 
     /**
@@ -126,16 +128,16 @@ public abstract class Abstract${type.abbrevName}Expression$typeParams extends Ab
      *
      * @param value the value
      */
-    abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
+    abstract void setImpl(${type.raw} value);
 
     @Override
     void doInvalidate() {
         if (this.updateValue(this.recomputeValue(), false)) this.notifyInvalidationListeners();
     }
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+
     protected abstract ${type.raw} recomputeValue();
 
-    final boolean updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value, boolean notifyListeners) {
+    final boolean updateValue(${type.raw} value, boolean notifyListeners) {
         var prev = this.getImpl();
         var changed = prev != value;
 
@@ -162,7 +164,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         return changed;
     }
 
-    boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    boolean onChangedInternal(${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
         return true;
     }
 
@@ -174,7 +176,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    protected void onChanged(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
+    protected void onChanged(${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
 
     /**
      * Called when this expression was invalidated.

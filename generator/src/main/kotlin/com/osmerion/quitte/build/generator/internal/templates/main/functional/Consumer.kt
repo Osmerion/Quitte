@@ -39,15 +39,12 @@ object Consumer : TemplateProvider {
     override fun provideTemplates(): List<Template> = Type.values().map { sourceType ->
         val className = "${sourceType.abbrevName}Consumer"
         val sourceTypeName = if (sourceType === Type.OBJECT) "T" else sourceType.raw
-        val typeParams = when {
-            sourceType === Type.OBJECT -> "<T>"
-            else -> ""
-        }
+        val typeParams = if (sourceType === Type.OBJECT) "<T extends @Nullable Object>" else ""
 
         Template(PACKAGE_NAME, "${sourceType.abbrevName}Consumer") {
             """
 package $PACKAGE_NAME;
-${if (sourceType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+${if (sourceType === Type.OBJECT) "\nimport org.jspecify.annotations.*;;\n" else ""}
 /**
  * Represents an operation that consumes a single argument and returns no result.
  *

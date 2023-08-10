@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code long} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleLongExpression extends AbstractLongExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleLongExpression of(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleLongExpression of(ObservableObjectValue<S> observable, ObjectToLongFunction<S> transform) {
         return new Transform(ex -> new ObjectToLongBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleLongExpression extends AbstractLongExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleLongExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableLongValue> selector) {
+    public static <S extends @Nullable Object> SimpleLongExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableLongValue> selector) {
         return new SimpleLongExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();

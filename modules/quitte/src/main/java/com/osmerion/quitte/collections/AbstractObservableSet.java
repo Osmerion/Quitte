@@ -35,9 +35,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A basic implementation for a modifiable {@link ObservableSet}.
@@ -48,7 +48,7 @@ import com.osmerion.quitte.InvalidationListener;
  *
  * @author  Leon Linhart
  */
-public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
+public abstract class AbstractObservableSet<E extends @Nullable Object> extends AbstractSet<E> implements ObservableSet<E> {
 
     private transient final CopyOnWriteArraySet<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
@@ -119,7 +119,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
      *
      * @since   0.1.0
      */
-    protected abstract boolean addImpl(@Nullable E element);
+    protected abstract boolean addImpl(E element);
 
     /**
      * See {@link Set#remove(Object)}.
@@ -223,7 +223,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
          *
          * @since   0.1.0
          */
-        public void logAdd(@Nullable E element) {
+        public void logAdd(E element) {
             if (this.added == null) this.added = new HashSet<>();
 
             /* Guard against spurious operations that add and remove the same element for whatever reason. */
@@ -237,7 +237,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
          *
          * @since   0.1.0
          */
-        public void logRemove(@Nullable E old) {
+        public void logRemove(E old) {
             if (this.removed == null) this.removed = new HashSet<>();
 
             /* Guard against spurious operations that add and remove the same element for whatever reason. */

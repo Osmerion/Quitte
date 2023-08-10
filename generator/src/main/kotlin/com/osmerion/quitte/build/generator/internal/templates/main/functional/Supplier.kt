@@ -40,14 +40,14 @@ object Supplier : TemplateProvider {
         val className = "${targetType.abbrevName}Supplier"
         val targetTypeName = if (targetType === Type.OBJECT) "T" else targetType.raw
         val typeParams = when {
-            targetType === Type.OBJECT -> "<T>"
+            targetType === Type.OBJECT -> "<T extends @Nullable Object>"
             else -> ""
         }
 
         Template(PACKAGE_NAME, "${targetType.abbrevName}Supplier") {
             """
 package $PACKAGE_NAME;
-${if (targetType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+${if (targetType === Type.OBJECT) "\nimport org.jspecify.annotations.*;\n" else ""}
 /**
  * Represents a supplier of results.
  *
@@ -74,7 +74,7 @@ public interface $className$typeParams {
      * @return  a result
      *
      * @since   0.1.0
-     */${if (targetType === Type.OBJECT) "\n    @Nullable" else ""}
+     */
     $targetTypeName get();
 
 }

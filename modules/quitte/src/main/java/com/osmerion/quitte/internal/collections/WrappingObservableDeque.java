@@ -32,11 +32,10 @@ package com.osmerion.quitte.internal.collections;
 
 import java.util.Deque;
 import java.util.Iterator;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableDeque;
 import com.osmerion.quitte.collections.DequeChangeListener;
-import com.osmerion.quitte.collections.ObservableDeque;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable wrapper for a {@link Deque}.
@@ -49,7 +48,7 @@ import com.osmerion.quitte.collections.ObservableDeque;
  *
  * @author  Leon Linhart
  */
-public final class WrappingObservableDeque<E> extends AbstractObservableDeque<E> {
+public final class WrappingObservableDeque<E extends @Nullable Object> extends AbstractObservableDeque<E> {
 
     @SuppressWarnings("unused")
     private static final long serialVersionUID = -4084123783773885840L;
@@ -60,10 +59,10 @@ public final class WrappingObservableDeque<E> extends AbstractObservableDeque<E>
         this.impl = impl;
     }
 
-    @Override protected void addFirstImpl(@Nullable E element) { this.impl.addFirst(element); }
-    @Override protected void addLastImpl(@Nullable E element) { this.impl.addLast(element); }
-    @Override protected boolean offerFirstImpl(@Nullable E element) { return this.impl.offerFirst(element); }
-    @Override protected boolean offerLastImpl(@Nullable E element) { return this.impl.offerLast(element); }
+    @Override protected void addFirstImpl(E element) { this.impl.addFirst(element); }
+    @Override protected void addLastImpl(E element) { this.impl.addLast(element); }
+    @Override protected boolean offerFirstImpl(E element) { return this.impl.offerFirst(element); }
+    @Override protected boolean offerLastImpl(E element) { return this.impl.offerLast(element); }
     @Override protected E removeFirstImpl() { return this.impl.removeFirst(); }
     @Override protected E removeLastImpl() { return this.impl.removeLast(); }
     @Override protected E pollFirstImpl() { return this.impl.pollFirst(); }

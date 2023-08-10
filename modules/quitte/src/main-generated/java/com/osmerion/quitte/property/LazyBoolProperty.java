@@ -33,11 +33,10 @@ package com.osmerion.quitte.property;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.addon.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code boolean} property.
@@ -60,7 +59,6 @@ public class LazyBoolProperty extends AbstractBoolProperty implements LazyValue 
 
     @Nullable
     private BoolSupplier provider;
-
     protected boolean value;
 
     /**

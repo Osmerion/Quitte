@@ -32,9 +32,9 @@ package com.osmerion.quitte.collections;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A basic implementation for a modifiable {@link ObservableMap}.
@@ -46,7 +46,7 @@ import com.osmerion.quitte.InvalidationListener;
  *
  * @author  Leon Linhart
  */
-public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
+public abstract class AbstractObservableMap<K extends @Nullable Object, V extends @Nullable Object> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
     private transient final CopyOnWriteArraySet<MapChangeListener<? super K, ? super V>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
@@ -206,7 +206,7 @@ public abstract class AbstractObservableMap<K, V> extends AbstractMap<K, V> impl
                 }
 
                 @Override
-                protected boolean addImpl(@Nullable K element) {
+                protected boolean addImpl(K element) {
                     throw new UnsupportedOperationException();
                 }
 

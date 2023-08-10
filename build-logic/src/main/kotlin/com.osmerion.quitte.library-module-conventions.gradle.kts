@@ -33,9 +33,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 plugins {
     id("com.osmerion.quitte.java-library-conventions")
     id("com.osmerion.quitte.maven-publish-conventions")
-    id("org.gradlex.extra-java-module-info")
 }
-
 
 val artifactName = project.name
 
@@ -91,10 +89,6 @@ publishing {
             artifactId = artifactName
         }
     }
-}
-
-extraJavaModuleInfo {
-    automaticModule("com.google.code.findbugs:jsr305", "jsr305")
 }
 
 dependencies {

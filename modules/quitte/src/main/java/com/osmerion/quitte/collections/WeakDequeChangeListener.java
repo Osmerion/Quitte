@@ -30,6 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
@@ -47,7 +49,7 @@ import java.util.Objects;
  *
  * @author  Leon Linhart
  */
-public final class WeakDequeChangeListener<E> implements DequeChangeListener<E> {
+public final class WeakDequeChangeListener<E extends @Nullable Object> implements DequeChangeListener<E> {
 
     private final WeakReference<DequeChangeListener<E>> ref;
 

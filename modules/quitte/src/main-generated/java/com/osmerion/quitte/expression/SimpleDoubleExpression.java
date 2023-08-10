@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code double} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleDoubleExpression of(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleDoubleExpression of(ObservableObjectValue<S> observable, ObjectToDoubleFunction<S> transform) {
         return new Transform(ex -> new ObjectToDoubleBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleDoubleExpression extends AbstractDoubleExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleDoubleExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableDoubleValue> selector) {
+    public static <S extends @Nullable Object> SimpleDoubleExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableDoubleValue> selector) {
         return new SimpleDoubleExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();

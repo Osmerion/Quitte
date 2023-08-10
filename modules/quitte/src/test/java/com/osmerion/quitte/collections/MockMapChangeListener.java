@@ -30,11 +30,12 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Objects;
-import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -30,6 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +46,7 @@ import java.util.function.Function;
  *
  * @author  Leon Linhart
  */
-public interface DequeChangeListener<E> {
+public interface DequeChangeListener<E extends @Nullable Object> {
 
     /**
      * Processes changes to an {@link ObservableDeque observable deque} this listener is attached to.

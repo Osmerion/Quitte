@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides classes and interfaces for properties. */
-@NonNullApi
 package com.osmerion.quitte.property;
-
-import com.osmerion.quitte.internal.NonNullApi;

@@ -30,9 +30,10 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.List;
-import javax.annotation.Nullable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,10 +116,10 @@ final class MockDequeChangeListener<E> implements DequeChangeListener<E> {
     private final class Operation {
 
         private final OpType type;
-        @Nullable private final DequeChangeListener.Site site;
+        private final DequeChangeListener.@Nullable Site site;
         private final List<? extends E> elements;
 
-        Operation(OpType type, @Nullable DequeChangeListener.Site site, List<? extends E> elements) {
+        Operation(OpType type, DequeChangeListener.@Nullable Site site, List<? extends E> elements) {
             this.type = type;
             this.site = site;
             this.elements = elements;

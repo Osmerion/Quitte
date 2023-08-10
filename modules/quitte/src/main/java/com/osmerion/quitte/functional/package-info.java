@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides specialized variants of some functional interfaces provided by {@link java.util.function}. */
-@NonNullApi
 package com.osmerion.quitte.functional;
-
-import com.osmerion.quitte.internal.NonNullApi;

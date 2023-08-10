@@ -30,7 +30,7 @@
  */
 package com.osmerion.quitte.value;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A basic writable value.
@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  *
  * @author  Leon Linhart
  */
-public interface WritableValue<T> extends ObservableValue<T> {
+public interface WritableValue<T extends @Nullable Object> extends ObservableValue<T> {
 
     /**
      * Updates the value represented by this object.
@@ -55,6 +55,6 @@ public interface WritableValue<T> extends ObservableValue<T> {
      *
      * @since   0.1.0
      */
-    void setValue(@Nullable T value);
+    void setValue(T value);
 
 }

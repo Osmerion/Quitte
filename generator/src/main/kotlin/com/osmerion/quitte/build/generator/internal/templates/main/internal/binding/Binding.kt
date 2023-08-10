@@ -37,15 +37,16 @@ import com.osmerion.quitte.build.generator.internal.Type
 object Binding : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "${type.abbrevName}Binding") {
             """
 package $PACKAGE_NAME;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 /**
  * ${if (type === Type.OBJECT)
@@ -57,7 +58,7 @@ import com.osmerion.quitte.value.*;
  * @author  Leon Linhart
  */
 public interface ${type.abbrevName}Binding$typeParams extends Binding {
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+
     ${type.raw} get();
 
     final class Generic${if (type === Type.OBJECT) "<T, R>" else "<T>" } implements ${type.abbrevName}Binding${if (type === Type.OBJECT) "<R>" else "" } {
@@ -73,7 +74,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
             this.source.addInvalidationListener(new WeakInvalidationListener(this.listener = (observable) -> invalidator.run()));
         }
 
-        @Override${if (type === Type.OBJECT) "\n        @Nullable" else ""}
+        @Override
         public ${if (type === Type.OBJECT) "R" else type.raw } get() {
             return this.transform.apply(this.source.getValue());
         }

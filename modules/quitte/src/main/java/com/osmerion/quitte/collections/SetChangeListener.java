@@ -30,7 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +43,7 @@ import java.util.Set;
  *
  * @since   0.8.0
  */
-public interface SetChangeListener<E> {
+public interface SetChangeListener<E extends @Nullable Object> {
 
     /**
      * Processes changes to an {@link ObservableSet observable set} this listener is attached to.

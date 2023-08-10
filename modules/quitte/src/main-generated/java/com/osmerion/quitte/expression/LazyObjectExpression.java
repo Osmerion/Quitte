@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A generic lazy expression.
@@ -50,7 +49,7 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T> implements LazyValue {
+public abstract class LazyObjectExpression<T extends @Nullable Object> extends AbstractObjectExpression<T> implements LazyValue {
 
     /**
      * Returns a new lazy expression which applies a given transformation to a given observable.
@@ -63,7 +62,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableBoolValue observable, BoolToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableBoolValue observable, BoolToObjectFunction<T> transform) {
         return new Transform<>(ex -> new BoolToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -78,7 +77,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableByteValue observable, ByteToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableByteValue observable, ByteToObjectFunction<T> transform) {
         return new Transform<>(ex -> new ByteToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -93,7 +92,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableShortValue observable, ShortToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableShortValue observable, ShortToObjectFunction<T> transform) {
         return new Transform<>(ex -> new ShortToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -108,7 +107,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableIntValue observable, IntToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableIntValue observable, IntToObjectFunction<T> transform) {
         return new Transform<>(ex -> new IntToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -123,7 +122,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableLongValue observable, LongToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableLongValue observable, LongToObjectFunction<T> transform) {
         return new Transform<>(ex -> new LongToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -138,7 +137,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableFloatValue observable, FloatToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableFloatValue observable, FloatToObjectFunction<T> transform) {
         return new Transform<>(ex -> new FloatToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -153,7 +152,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <T> LazyObjectExpression<T> of(ObservableDoubleValue observable, DoubleToObjectFunction<T> transform) {
+    public static <T extends @Nullable Object> LazyObjectExpression<T> of(ObservableDoubleValue observable, DoubleToObjectFunction<T> transform) {
         return new Transform<>(ex -> new DoubleToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -169,7 +168,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <S, T> LazyObjectExpression<T> of(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
+    public static <S extends @Nullable Object, T extends @Nullable Object> LazyObjectExpression<T> of(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
         return new Transform<>(ex -> new ObjectToObjectBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -187,7 +186,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      *
      * @since   0.1.0
      */
-    public static <S, T> LazyObjectExpression<T> ofNested(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
+    public static <S extends @Nullable Object, T extends @Nullable Object> LazyObjectExpression<T> ofNested(ObservableObjectValue<S> observable, Function<S, ObservableObjectValue<T>> selector) {
         return new LazyObjectExpression<>() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -230,8 +229,6 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
 
     @Nullable
     private ObjectSupplier<T> provider = this::recomputeValue;
-
-    @Nullable
     private T value;
 
     /**
@@ -265,7 +262,6 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
      * @since   0.1.0
      */
     @Override
-    @Nullable
     public final T get() {
         //noinspection ConstantConditions
         if (!this.state.get().isValid()) { 
@@ -279,13 +275,12 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     }
 
     @Override
-    @Nullable
     final T getImpl() {
         return this.value;
     }
 
     @Override
-    final void setImpl(@Nullable T value) {
+    final void setImpl(T value) {
         this.value = value;
     }
 
@@ -298,7 +293,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     }
 
     @Override
-    final boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+    final boolean onChangedInternal(T oldValue, T newValue) {
         if (this.state.get() != State.UNINITIALIZED) {
             this.state.set(State.VALID);
             return true;
@@ -309,7 +304,7 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
     }
 
     /** A simple expression transforming a single value using the internal binding API. */
-    private static final class Transform<T> extends LazyObjectExpression<T> {
+    private static final class Transform<T extends @Nullable Object> extends LazyObjectExpression<T> {
 
         private final transient ObjectBinding<T> binding;
 
@@ -318,7 +313,6 @@ public abstract class LazyObjectExpression<T> extends AbstractObjectExpression<T
         }
 
         @Override
-        @Nullable
         protected T recomputeValue() {
             return this.binding.get();
         }

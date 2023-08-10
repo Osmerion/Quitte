@@ -37,8 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object WeakChangeListener : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
-        val valAnno = if (type === Type.OBJECT) "@Nullable " else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Weak${type.abbrevName}ChangeListener") {
             """
@@ -46,8 +46,9 @@ package $PACKAGE_NAME;
 
 import java.lang.ref.WeakReference;
 import java.util.Objects;
-${if (type === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+
 import com.osmerion.quitte.value.*;
+${if (type === Type.OBJECT) "import org.jspecify.annotations.*;\n" else ""}
 
 /**
  * A {@code Weak${type.abbrevName}ChangeListener} may be used to wrap a listener that should only be referenced weakly
@@ -61,9 +62,9 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public final class Weak${type.abbrevName}ChangeListener$typeParams implements ${type.abbrevName}ChangeListener$typeParams {
+public final class Weak${type.abbrevName}ChangeListener$typeParams implements ${type.abbrevName}ChangeListener$typeArgs {
 
-    private final WeakReference<${type.abbrevName}ChangeListener$typeParams> ref;
+    private final WeakReference<${type.abbrevName}ChangeListener$typeArgs> ref;
 
     private boolean wasGarbageCollected;
 
@@ -76,7 +77,7 @@ public final class Weak${type.abbrevName}ChangeListener$typeParams implements ${
      *
      * @since   0.1.0
      */
-    public Weak${type.abbrevName}ChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public Weak${type.abbrevName}ChangeListener(${type.abbrevName}ChangeListener$typeArgs listener) {
         this.ref = new WeakReference<>(Objects.requireNonNull(listener));
         this.wasGarbageCollected = false;
     }
@@ -87,7 +88,7 @@ public final class Weak${type.abbrevName}ChangeListener$typeParams implements ${
      * @since   0.1.0
      */
     @Override
-    public void onChanged(Observable${type.abbrevName}Value$typeParams observable, $valAnno${type.raw} oldValue, $valAnno${type.raw} newValue) {
+    public void onChanged(Observable${type.abbrevName}Value$typeArgs observable, ${type.raw} oldValue, ${type.raw} newValue) {
         var listener = this.ref.get();
 
         if (listener != null) {

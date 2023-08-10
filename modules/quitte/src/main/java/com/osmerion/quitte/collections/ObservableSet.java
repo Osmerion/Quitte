@@ -34,6 +34,7 @@ import java.util.Set;
 
 import com.osmerion.quitte.internal.collections.UnmodifiableObservableSet;
 import com.osmerion.quitte.internal.collections.WrappingObservableSet;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable set with support for tracking changes to the set's content.
@@ -44,7 +45,7 @@ import com.osmerion.quitte.internal.collections.WrappingObservableSet;
  *
  * @author  Leon Linhart
  */
-public interface ObservableSet<E> extends Set<E>, ObservableCollection<E> {
+public interface ObservableSet<E extends @Nullable Object> extends Set<E>, ObservableCollection<E> {
 
     /**
      * Returns an observable view of the specified set. Query operations on the returned set "read and write through"

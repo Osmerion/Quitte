@@ -35,14 +35,13 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a generic writable property.
@@ -51,7 +50,7 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class AbstractObjectProperty<T> implements WritableObjectProperty<T> {
+public abstract class AbstractObjectProperty<T extends @Nullable Object> implements WritableObjectProperty<T> {
 
     private final transient CopyOnWriteArraySet<ObjectChangeListener<T>> changeListeners = new CopyOnWriteArraySet<>();
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
@@ -188,7 +187,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    public final synchronized <S> void bindTo(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
+    public final synchronized <S extends @Nullable Object> void bindTo(ObservableObjectValue<S> observable, ObjectToObjectFunction<S, T> transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ObjectToObjectBinding<>(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
@@ -289,10 +288,8 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
     }
 
     /** <b>This method must provide raw setter access and should not be called directly.</b> */
-    @Nullable
     abstract T getImpl();
 
-    @Nullable
     final T getBoundValue() {
         return Objects.requireNonNull(this.binding).get();
     }
@@ -303,13 +300,13 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      * @since   0.1.0
      */
     @Override
-    public final void set(@Nullable T value) {
+    public final void set(T value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
 
         this.setInternal(value);
     }
 
-    private void setInternal(@Nullable T value) {
+    private void setInternal(T value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }
 
@@ -318,14 +315,14 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      *
      * @param value the value
      */
-    abstract void setImpl(@Nullable T value);
+    abstract void setImpl(T value);
 
     /**
      * Attempts to set the value of this property and returns whether the current value was invalidated.
      *
      * @return  whether the value has been invalidated
      */
-    boolean setImplDeferrable(@Nullable T value) {
+    boolean setImplDeferrable(T value) {
         var prev = this.getImpl();
         if (prev == value) return false;
 
@@ -347,7 +344,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         }
     }
 
-    protected final void updateValue(@Nullable T value, boolean notifyListeners) {
+    protected final void updateValue(T value, boolean notifyListeners) {
         var prev = this.getImpl();
         var changed = prev != value;
 
@@ -376,7 +373,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
         this.setInternal(this.getBoundValue());
     }
 
-    boolean onChangedInternal(@Nullable T oldValue, @Nullable T newValue) {
+    boolean onChangedInternal(T oldValue, T newValue) {
         return true;
     }
 
@@ -388,7 +385,7 @@ public abstract class AbstractObjectProperty<T> implements WritableObjectPropert
      *
      * @since   0.1.0
      */
-    protected void onChanged(@Nullable T oldValue, @Nullable T newValue) {}
+    protected void onChanged(T oldValue, T newValue) {}
 
     /**
      * Called when this property was invalidated.

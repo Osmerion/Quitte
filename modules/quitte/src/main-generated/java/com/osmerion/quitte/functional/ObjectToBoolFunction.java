@@ -31,7 +31,7 @@
  */
 package com.osmerion.quitte.functional;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.*;;
 
 /**
  * Represents a function that accepts one argument and produces a result.
@@ -56,6 +56,6 @@ public interface ObjectToBoolFunction<T> {
      *
      * @since   0.1.0
      */
-    boolean apply(@Nullable T t);
+    boolean apply(T t);
 
 }

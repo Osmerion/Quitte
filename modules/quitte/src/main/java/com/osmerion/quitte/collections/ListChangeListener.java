@@ -30,6 +30,8 @@
  */
 package com.osmerion.quitte.collections;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +45,7 @@ import java.util.List;
  *
  * @author  Leon Linhart
  */
-public interface ListChangeListener<E> {
+public interface ListChangeListener<E extends @Nullable Object> {
 
     /**
      * Processes changes to an {@link ObservableList observable list} this listener is attached to.

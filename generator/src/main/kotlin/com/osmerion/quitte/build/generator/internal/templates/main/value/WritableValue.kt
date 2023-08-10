@@ -37,13 +37,14 @@ import com.osmerion.quitte.build.generator.internal.Type
 object WritableValue : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Writable${type.abbrevName}Value") {
             """
 package $PACKAGE_NAME;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -59,7 +60,7 @@ import javax.annotation.Nullable;
  *
  * @author  Leon Linhart
  */
-public interface Writable${type.abbrevName}Value$typeParams extends WritableValue<${type.box}>, Observable${type.abbrevName}Value$typeParams {
+public interface Writable${type.abbrevName}Value$typeParams extends WritableValue<${type.box}>, Observable${type.abbrevName}Value$typeArgs {
 
     /**
      * Updates the value represented by this object.
@@ -68,7 +69,7 @@ public interface Writable${type.abbrevName}Value$typeParams extends WritableValu
      *
      * @since   0.1.0
      */
-    void set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
+    void set(${type.raw} value);
 
     /**
      * {@inheritDoc}

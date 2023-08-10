@@ -33,8 +33,8 @@ package com.osmerion.quitte.build.generator.internal
 enum class Type(
     val abbrevName: String,
     val default: String,
-    val raw: String = abbrevName.toLowerCase(),
-    val box: String = raw.capitalize()
+    val raw: String = abbrevName.lowercase(),
+    val box: String = raw.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 ) {
     BOOL("Bool", "false", "boolean"),
     BYTE("Byte", "0"),

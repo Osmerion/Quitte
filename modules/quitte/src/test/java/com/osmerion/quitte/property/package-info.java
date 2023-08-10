@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@NonNullApi
+@NullMarked
 package com.osmerion.quitte.property;
 
-import com.osmerion.quitte.internal.NonNullApi;
+import org.jspecify.annotations.NullMarked;

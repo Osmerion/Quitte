@@ -39,6 +39,7 @@ import com.osmerion.quitte.internal.collections.UnmodifiableObservableList;
 import com.osmerion.quitte.internal.collections.UnmodifiableRandomAccessObservableList;
 import com.osmerion.quitte.internal.collections.WrappingObservableList;
 import com.osmerion.quitte.internal.collections.WrappingRandomAccessObservableList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An observable list with support for tracking changes to the list's content.
@@ -49,7 +50,7 @@ import com.osmerion.quitte.internal.collections.WrappingRandomAccessObservableLi
  *
  * @author  Leon Linhart
  */
-public interface ObservableList<E> extends List<E>, ObservableCollection<E> {
+public interface ObservableList<E extends @Nullable Object> extends List<E>, ObservableCollection<E> {
 
     /**
      * Returns an observable view of the specified list. Query operations on the returned list "read and write through"

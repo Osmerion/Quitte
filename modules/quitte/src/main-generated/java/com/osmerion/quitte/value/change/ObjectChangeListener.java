@@ -31,11 +31,10 @@
  */
 package com.osmerion.quitte.value.change;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A listener that may be used to subscribe to changes of one or more generic {@link Observable observables}.
@@ -50,20 +49,20 @@ import com.osmerion.quitte.value.*;
  * @author  Leon Linhart
  */
 @FunctionalInterface
-public interface ObjectChangeListener<T> {
+public interface ObjectChangeListener<T extends @Nullable Object> {
 
     /**
      * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
      * shares a hashcode with it.
      *
-     * @param <T>       the type of the the type of the observable's value
+     * @param <T>       the type of the observable's value
      * @param listener  the listener to be wrapped
      *
      * @return  the wrapper
      *
      * @since   0.1.0
      */
-    static <T> ObjectChangeListener<T> wrap(ChangeListener<T> listener) {
+    static <T extends @Nullable Object> ObjectChangeListener<T> wrap(ChangeListener<T> listener) {
         return new WrappingObjectChangeListener<>(listener);
     }
 
@@ -76,7 +75,7 @@ public interface ObjectChangeListener<T> {
      *
      * @since   0.1.0
      */
-    void onChanged(ObservableObjectValue<T> observable, @Nullable T oldValue, @Nullable T newValue);
+    void onChanged(ObservableObjectValue<T> observable, T oldValue, T newValue);
 
     /**
      * Returns whether this listener is invalid.

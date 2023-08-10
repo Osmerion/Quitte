@@ -34,14 +34,13 @@ package com.osmerion.quitte.expression;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.property.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code float} expression.
@@ -161,7 +160,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      *
      * @since   0.1.0
      */
-    public static <S> LazyFloatExpression of(ObservableObjectValue<S> observable, ObjectToFloatFunction<S> transform) {
+    public static <S extends @Nullable Object> LazyFloatExpression of(ObservableObjectValue<S> observable, ObjectToFloatFunction<S> transform) {
         return new Transform(ex -> new ObjectToFloatBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -178,7 +177,7 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
      *
      * @since   0.1.0
      */
-    public static <S> LazyFloatExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableFloatValue> selector) {
+    public static <S extends @Nullable Object> LazyFloatExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableFloatValue> selector) {
         return new LazyFloatExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
@@ -220,7 +219,6 @@ public abstract class LazyFloatExpression extends AbstractFloatExpression implem
 
     @Nullable
     private FloatSupplier provider = this::recomputeValue;
-
     private float value;
 
     /**

@@ -37,6 +37,7 @@ import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
 
+
 /**
  * A basic implementation for a specialized {@code int} expression.
  *

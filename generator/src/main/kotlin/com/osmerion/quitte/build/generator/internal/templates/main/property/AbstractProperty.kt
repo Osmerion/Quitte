@@ -37,7 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object AbstractProperty : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Abstract${type.abbrevName}Property") {
             """
@@ -47,14 +48,13 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -67,13 +67,13 @@ import com.osmerion.quitte.value.change.*;
  *
  * @author  Leon Linhart
  */
-public abstract class Abstract${type.abbrevName}Property$typeParams implements Writable${type.abbrevName}Property$typeParams {
+public abstract class Abstract${type.abbrevName}Property$typeParams implements Writable${type.abbrevName}Property$typeArgs {
 
-    private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeParams> changeListeners = new CopyOnWriteArraySet<>();
+    private final transient CopyOnWriteArraySet<${type.abbrevName}ChangeListener$typeArgs> changeListeners = new CopyOnWriteArraySet<>();
     private final transient CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     @Nullable
-    private transient ${type.abbrevName}Binding$typeParams binding;
+    private transient ${type.abbrevName}Binding$typeArgs binding;
 
     // package-private constructor for an effectively sealed class
     Abstract${type.abbrevName}Property() {}
@@ -108,13 +108,14 @@ public abstract class Abstract${type.abbrevName}Property$typeParams implements W
      * @since   0.1.0
      */
     @Override
-    public final synchronized void bindTo(Observable${type.abbrevName}Value$typeParams observable) {
+    public final synchronized void bindTo(Observable${type.abbrevName}Value$typeArgs observable) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ${type.abbrevName}To${type.abbrevName}Binding${if (type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, it -> it);
         this.onBindingInvalidated();
     }
 ${Type.values().joinToString(separator = "") { sourceType ->
-                val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
+                val sourceTypeParams = if (sourceType === Type.OBJECT) "<S extends @Nullable Object>" else ""
+                val sourceTypeArgs = if (sourceType === Type.OBJECT) "<S>" else ""
                 val transformTypeParams = when {
                     sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
                     sourceType === Type.OBJECT -> "<S>"
@@ -129,7 +130,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform) {
+    public final synchronized $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeArgs observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform) {
         if (this.isBound()) throw new IllegalStateException();
         this.binding = new ${sourceType.abbrevName}To${type.abbrevName}Binding${if (sourceType === Type.OBJECT || type === Type.OBJECT) "<>" else ""}(this::onBindingInvalidated, observable, transform);
         this.onBindingInvalidated();
@@ -174,7 +175,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final boolean addChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public final boolean addChangeListener(${type.abbrevName}ChangeListener$typeArgs listener) {
         return this.changeListeners.add(listener);
     }
 
@@ -185,7 +186,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      */
     @Override
     public final boolean addBoxedChangeListener(ChangeListener<${type.box}> listener) {
-        if (this.changeListeners.stream().anyMatch(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener))) return false;
+        if (this.changeListeners.stream().anyMatch(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeArgs) it).isWrapping(listener))) return false;
         return this.changeListeners.add(${type.abbrevName}ChangeListener.wrap(listener));
     }
 
@@ -195,7 +196,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      * @since   0.1.0
      */
     @Override
-    public final boolean removeChangeListener(${type.abbrevName}ChangeListener$typeParams listener) {
+    public final boolean removeChangeListener(${type.abbrevName}ChangeListener$typeArgs listener) {
         return this.changeListeners.remove(listener);
     }
 
@@ -206,7 +207,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      */
     @Override
     public final boolean removeBoxedChangeListener(ChangeListener<${type.box}> listener) {
-        return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeParams) it).isWrapping(listener));
+        return this.changeListeners.removeIf(it -> it instanceof Wrapping${type.abbrevName}ChangeListener && ((Wrapping${type.abbrevName}ChangeListener$typeArgs) it).isWrapping(listener));
     }
 
     /**
@@ -229,9 +230,9 @@ ${Type.values().joinToString(separator = "") { sourceType ->
         return this.invalidationListeners.remove(listener);
     }
 
-    /** <b>This method must provide raw setter access and should not be called directly.</b> */${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+    /** <b>This method must provide raw setter access and should not be called directly.</b> */
     abstract ${type.raw} getImpl();
-${if (type === Type.OBJECT) "\n    @Nullable" else ""}
+
     final ${type.raw} getBoundValue() {
         return Objects.requireNonNull(this.binding).get();
     }
@@ -242,13 +243,13 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      * @since   0.1.0
      */
     @Override
-    public final void set(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    public final void set(${type.raw} value) {
         if (this.binding != null) throw new IllegalStateException("A bound property's value may not be set explicitly");
 
         this.setInternal(value);
     }
 
-    private void setInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    private void setInternal(${type.raw} value) {
         if (this.setImplDeferrable(value)) this.invalidate();
     }
 
@@ -257,14 +258,14 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @param value the value
      */
-    abstract void setImpl(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value);
+    abstract void setImpl(${type.raw} value);
 
     /**
      * Attempts to set the value of this property and returns whether the current value was invalidated.
      *
      * @return  whether the value has been invalidated
      */
-    boolean setImplDeferrable(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value) {
+    boolean setImplDeferrable(${type.raw} value) {
         var prev = this.getImpl();
         if (prev == value) return false;
 
@@ -286,7 +287,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         }
     }
 
-    protected final void updateValue(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} value, boolean notifyListeners) {
+    protected final void updateValue(${type.raw} value, boolean notifyListeners) {
         var prev = this.getImpl();
         var changed = prev != value;
 
@@ -315,7 +316,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
         this.setInternal(this.getBoundValue());
     }
 
-    boolean onChangedInternal(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {
+    boolean onChangedInternal(${type.raw} oldValue, ${type.raw} newValue) {
         return true;
     }
 
@@ -327,7 +328,7 @@ ${if (type === Type.OBJECT) "\n    @Nullable" else ""}
      *
      * @since   0.1.0
      */
-    protected void onChanged(${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} oldValue, ${if (type === Type.OBJECT) "@Nullable " else ""}${type.raw} newValue) {}
+    protected void onChanged(${type.raw} oldValue, ${type.raw} newValue) {}
 
     /**
      * Called when this property was invalidated.

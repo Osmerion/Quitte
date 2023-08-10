@@ -33,11 +33,10 @@ package com.osmerion.quitte.property;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.addon.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * A specialized lazy {@code double} property.
@@ -60,7 +59,6 @@ public class LazyDoubleProperty extends AbstractDoubleProperty implements LazyVa
 
     @Nullable
     private DoubleSupplier provider;
-
     protected double value;
 
     /**

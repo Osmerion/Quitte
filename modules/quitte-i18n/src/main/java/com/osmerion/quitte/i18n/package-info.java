@@ -29,7 +29,4 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /** Provides the basic internationalization API for Quitte observables. */
-@NonNullApi
 package com.osmerion.quitte.i18n;
-
-import com.osmerion.quitte.internal.NonNullApi;

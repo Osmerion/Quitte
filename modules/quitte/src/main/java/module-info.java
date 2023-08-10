@@ -28,7 +28,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
+import org.jspecify.annotations.NullMarked;
+
 /** Defines APIs for observable properties and expressions, and observable collections. */
+@NullMarked
 @SuppressWarnings("module")
 module com.osmerion.quitte {
 
@@ -38,7 +42,7 @@ module com.osmerion.quitte {
      * warnings for the descriptor.
      */
 
-    requires static jsr305;
+    requires static org.jspecify;
 
     exports com.osmerion.quitte;
     exports com.osmerion.quitte.expression;
@@ -47,8 +51,5 @@ module com.osmerion.quitte {
     exports com.osmerion.quitte.property;
     exports com.osmerion.quitte.value;
     exports com.osmerion.quitte.value.change;
-
-    exports com.osmerion.quitte.internal to
-        com.osmerion.quitte.i18n;
 
 }

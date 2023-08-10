@@ -37,7 +37,8 @@ import com.osmerion.quitte.build.generator.internal.Type
 object WritableProperty : TemplateProvider {
 
     override fun provideTemplates(): List<Template> = Type.values().map { type ->
-        val typeParams = if (type === Type.OBJECT) "<T>" else ""
+        val typeParams = if (type === Type.OBJECT) "<T extends @Nullable Object>" else ""
+        val typeArgs = if (type === Type.OBJECT) "<T>" else ""
 
         Template(PACKAGE_NAME, "Writable${type.abbrevName}Property") {
             """
@@ -45,6 +46,7 @@ package $PACKAGE_NAME;
 
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.value.*;
+import org.jspecify.annotations.*;
 
 /**
  * ${if (type === Type.OBJECT)
@@ -57,7 +59,7 @@ import com.osmerion.quitte.value.*;
  *
  * @author  Leon Linhart
  */
-public interface Writable${type.abbrevName}Property$typeParams extends WritableValueProperty<${type.box}>, Readable${type.abbrevName}Property$typeParams, Writable${type.abbrevName}Value$typeParams {
+public interface Writable${type.abbrevName}Property$typeParams extends WritableValueProperty<${type.box}>, Readable${type.abbrevName}Property$typeArgs, Writable${type.abbrevName}Value$typeArgs {
 
     /**
      * Binds this property to the given observable value.
@@ -75,10 +77,11 @@ public interface Writable${type.abbrevName}Property$typeParams extends WritableV
      *
      * @since   0.1.0
      */
-    void bindTo(Observable${type.abbrevName}Value$typeParams observable);
+    void bindTo(Observable${type.abbrevName}Value$typeArgs observable);
 ${Type.values().joinToString(separator = "") { sourceType ->
-                val sourceTypeParams = if (sourceType === Type.OBJECT) "<S>" else ""
-                val transformTypeParams = when {
+                val sourceTypeParams = if (sourceType === Type.OBJECT) "<S extends @Nullable Object>" else ""
+                val sourceTypeArgs = if (sourceType === Type.OBJECT) "<S>" else ""
+                val transformTypeArgs = when {
                     sourceType === Type.OBJECT && type === Type.OBJECT -> "<S, T>"
                     sourceType === Type.OBJECT -> "<S>"
                     type === Type.OBJECT -> "<T>"
@@ -103,7 +106,7 @@ ${Type.values().joinToString(separator = "") { sourceType ->
      *
      * @since   0.1.0
      */
-    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeParams observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeParams transform);
+    $sourceTypeParams${if (sourceTypeParams.isNotEmpty()) " " else ""}void bindTo(Observable${sourceType.abbrevName}Value$sourceTypeArgs observable, ${sourceType.abbrevName}To${type.abbrevName}Function$transformTypeArgs transform);
 """}}
 }
             """

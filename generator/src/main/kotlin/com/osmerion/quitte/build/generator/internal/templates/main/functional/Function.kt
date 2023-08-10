@@ -51,7 +51,7 @@ object Function : TemplateProvider {
             Template(PACKAGE_NAME, className) {
                 """
 package $PACKAGE_NAME;
-${if (sourceType === Type.OBJECT || targetType === Type.OBJECT) "\nimport javax.annotation.Nullable;\n" else ""}
+${if (sourceType === Type.OBJECT || targetType === Type.OBJECT) "\nimport org.jspecify.annotations.*;;\n" else ""}
 /**
  * Represents a function that accepts one argument and produces a result.
  *${when {
@@ -85,8 +85,8 @@ public interface $className$typeParams {
      * @return  the function result
      *
      * @since   0.1.0
-     */${if (targetType === Type.OBJECT) "\n    @Nullable" else ""}
-    $targetTypeName apply(${if (sourceType === Type.OBJECT) "@Nullable " else ""}$sourceTypeName t);
+     */
+    $targetTypeName apply($sourceTypeName t);
 
 }
                 """

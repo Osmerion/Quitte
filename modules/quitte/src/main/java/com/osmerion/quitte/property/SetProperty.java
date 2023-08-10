@@ -37,12 +37,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableSet;
 import com.osmerion.quitte.collections.ObservableSet;
 import com.osmerion.quitte.collections.SetChangeListener;
 import com.osmerion.quitte.internal.binding.SetBinding;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link Set} property.

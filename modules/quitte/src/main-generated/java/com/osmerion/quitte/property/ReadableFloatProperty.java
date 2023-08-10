@@ -34,6 +34,7 @@ package com.osmerion.quitte.property;
 import com.osmerion.quitte.internal.wrappers.*;
 import com.osmerion.quitte.value.*;
 
+
 /**
  * A specialized readable {@code float} property.
  *

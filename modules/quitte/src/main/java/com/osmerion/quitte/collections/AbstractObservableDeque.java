@@ -32,9 +32,9 @@ package com.osmerion.quitte.collections;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
-import javax.annotation.Nullable;
 
 import com.osmerion.quitte.InvalidationListener;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A basic implementation for a modifiable {@link ObservableDeque}.
@@ -45,7 +45,7 @@ import com.osmerion.quitte.InvalidationListener;
  *
  * @author  Leon Linhart
  */
-public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> implements ObservableDeque<E> {
+public abstract class AbstractObservableDeque<E extends @Nullable Object> extends AbstractCollection<E> implements ObservableDeque<E> {
 
     private transient final CopyOnWriteArraySet<DequeChangeListener<? super E>> changeListeners = new CopyOnWriteArraySet<>();
     private transient final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
@@ -281,7 +281,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     }
 
     @Override
-    public final boolean offer(@Nullable E element) {
+    public final boolean offer(E element) {
         return this.offerLast(element);
     }
 
@@ -305,7 +305,7 @@ public abstract class AbstractObservableDeque<E> extends AbstractCollection<E> i
     }
 
     @Override
-    public final void push(@Nullable E element) {
+    public final void push(E element) {
         this.addFirst(element);
     }
 

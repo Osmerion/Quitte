@@ -33,12 +33,12 @@ package com.osmerion.quitte.expression;
 
 import java.util.Objects;
 import java.util.function.Function;
-
 import com.osmerion.quitte.*;
 import com.osmerion.quitte.functional.*;
 import com.osmerion.quitte.internal.binding.*;
 import com.osmerion.quitte.value.*;
 import com.osmerion.quitte.value.change.*;
+import org.jspecify.annotations.*;
 
 /**
  * A basic implementation for a specialized {@code int} expression.
@@ -158,7 +158,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleIntExpression of(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
+    public static <S extends @Nullable Object> SimpleIntExpression of(ObservableObjectValue<S> observable, ObjectToIntFunction<S> transform) {
         return new Transform(ex -> new ObjectToIntBinding<>(ex::doInvalidate, observable, transform));
     }
 
@@ -175,7 +175,7 @@ public abstract class SimpleIntExpression extends AbstractIntExpression {
      *
      * @since   0.1.0
      */
-    public static <S> SimpleIntExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableIntValue> selector) {
+    public static <S extends @Nullable Object> SimpleIntExpression ofNested(ObservableObjectValue<S> observable, Function<S, ObservableIntValue> selector) {
         return new SimpleIntExpression() {
 
             final InvalidationListener nestedPropertyListener = ignored -> this.doInvalidate();
