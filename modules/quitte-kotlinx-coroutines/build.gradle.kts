@@ -58,6 +58,10 @@ tasks {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
+
+    javadoc {
+        enabled = false
+    }
 }
 
 publishing {
