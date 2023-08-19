@@ -53,7 +53,7 @@ import com.osmerion.quitte.value.*;
                 """
             |A listener that may be used to subscribe to changes of one or more generic {@link Observable observables}.
             | * 
-            | * @param <T>   the type of the the type of the observable's value
+            | * @param <T>   the type of the observable's value
             """.trimMargin()
             else
                 "A listener that may be used to subscribe to changes of one or more specialized {@code ${type.raw}}-{@link Observable observables}.."
@@ -72,7 +72,7 @@ public interface ${type.abbrevName}ChangeListener$typeParams {
     /**
      * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
      * shares a hashcode with it.
-     *${if (type === Type.OBJECT) "\n     * @param <T>       the type of the the type of the observable's value" else ""}
+     *${if (type === Type.OBJECT) "\n     * @param <T>       the type of the observable's value" else ""}
      * @param listener  the listener to be wrapped
      *
      * @return  the wrapper

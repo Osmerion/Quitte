@@ -40,7 +40,7 @@ import com.osmerion.quitte.value.*;
 /**
  * A listener that may be used to subscribe to changes of one or more generic {@link Observable observables}.
  * 
- * @param <T>   the type of the the type of the observable's value
+ * @param <T>   the type of the observable's value
  *
  * @see ObservableValue
  * @see ObservableObjectValue
@@ -56,7 +56,7 @@ public interface ObjectChangeListener<T> {
      * Wraps the given listener into a specialized one that is {@link Object#equals(Object) equal} to the given one and
      * shares a hashcode with it.
      *
-     * @param <T>       the type of the the type of the observable's value
+     * @param <T>       the type of the observable's value
      * @param listener  the listener to be wrapped
      *
      * @return  the wrapper
