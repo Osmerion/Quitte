@@ -36,7 +36,6 @@ import javax.annotation.Nullable;
 
 import com.osmerion.quitte.collections.AbstractObservableDeque;
 import com.osmerion.quitte.collections.DequeChangeListener;
-import com.osmerion.quitte.collections.ObservableDeque;
 
 /**
  * An observable wrapper for a {@link Deque}.

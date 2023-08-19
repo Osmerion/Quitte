@@ -33,7 +33,6 @@ package com.osmerion.quitte.collections;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * A listener that may be used to subscribe to changes to one or more {@link ObservableDeque observable deque}.
