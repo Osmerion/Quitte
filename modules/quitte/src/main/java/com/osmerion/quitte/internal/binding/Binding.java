@@ -30,8 +30,14 @@
  */
 package com.osmerion.quitte.internal.binding;
 
+/**
+ * A binding.
+ *
+ * @author  Leon Linhart
+ */
 public interface Binding {
 
+    /** Releases this binding. */
     void release();
 
 }

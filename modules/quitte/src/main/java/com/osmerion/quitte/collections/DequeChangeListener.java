@@ -74,7 +74,8 @@ public interface DequeChangeListener<E> {
      * A change to a deque consists of one or more {@link LocalChange local updates} that apply to a specific
      * {@link Site site} of the deque.
      *
-     * @param <E>   the type of the deque's elements
+     * @param <E>           the type of the deque's elements
+     * @param localChanges  the local changes
      *
      * @since   0.8.0
      */
@@ -119,6 +120,10 @@ public interface DequeChangeListener<E> {
          * Represents insertion of one or more subsequent {@link #elements() elements} starting from a given
          * {@link #site() site}.
          *
+         * @param <E>       the type of the tracked elements
+         * @param site      the site of the change
+         * @param elements  the added elements
+         *
          * @since   0.8.0
          */
         record Insertion<E>(
@@ -136,6 +141,10 @@ public interface DequeChangeListener<E> {
         /**
          * Represents removal of one or more subsequent {@link #elements() elements} starting from a given
          * {@link #site() site}.
+         *
+         * @param <E>       the type of the tracked elements
+         * @param site      the site of the change
+         * @param elements  the removed elements
          *
          * @since   0.8.0
          */

@@ -86,6 +86,9 @@ public interface ListChangeListener<E> {
         /**
          * A change to a list in which its elements are rearranged.
          *
+         * @param <E>       the type of the tracked elements
+         * @param indices   the indices
+         *
          * @since   0.8.0
          */
         record Permutation<E>(
@@ -100,6 +103,9 @@ public interface ListChangeListener<E> {
 
         /**
          * A change to a list that consists of one or more local changes to the list.
+         *
+         * @param <E>           the type of the tracked elements
+         * @param localChanges  the local changes
          *
          * @since   0.8.0
          */
@@ -156,6 +162,7 @@ public interface ListChangeListener<E> {
          *
          * </pre>
          *
+         * @param <E>           the type of the tracked elements
          * @param index     the index of the first element affected by this change
          * @param elements  the list of inserted elements
          *
@@ -193,6 +200,7 @@ public interface ListChangeListener<E> {
          *
          * </pre>
          *
+         * @param <E>           the type of the tracked elements
          * @param index     the index of the first element affected by this change
          * @param elements  the list of removed elements
          *
@@ -230,6 +238,7 @@ public interface ListChangeListener<E> {
          *
          * </pre>
          *
+         * @param <E>           the type of the tracked elements
          * @param index         the index of the first element affected by this change
          * @param oldElements   the list of previous elements
          * @param newElements   the list of updated elements

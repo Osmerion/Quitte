@@ -37,6 +37,8 @@ import java.util.Collection;
 /**
  * An observable collection.
  *
+ * @param <E>   the type of elements in this collection
+ *
  * @since   0.1.0
  *
  * @author  Leon Linhart

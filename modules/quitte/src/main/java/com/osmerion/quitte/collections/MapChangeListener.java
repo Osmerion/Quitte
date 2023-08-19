@@ -100,6 +100,10 @@ public interface MapChangeListener<K, V>  {
         /**
          * Describes an update to a map entry's value.
          *
+         * @param <V>       the type of the tracked values
+         * @param oldValue  the old value
+         * @param newValue  the new value
+         *
          * @since   0.8.0
          */
         public record Update<V>(@Nullable V oldValue, @Nullable V newValue) {}

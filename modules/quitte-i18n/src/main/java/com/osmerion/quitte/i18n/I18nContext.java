@@ -52,6 +52,13 @@ public abstract class I18nContext implements Observable {
     private final CopyOnWriteArraySet<InvalidationListener> invalidationListeners = new CopyOnWriteArraySet<>();
 
     /**
+     * Creates a new {@code I18nContext}.
+     *
+     * @since   0.1.0
+     */
+    public I18nContext() {}
+
+    /**
      * {@inheritDoc}
      *
      * @since   0.1.0
