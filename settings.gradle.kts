@@ -35,10 +35,6 @@ pluginManagement {
 
     includeBuild("build-logic")
     includeBuild("generator")
-
-    repositories {
-        gradlePluginPortal()
-    }
 }
 
 plugins {
